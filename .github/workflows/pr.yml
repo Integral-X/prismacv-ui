@@ -4,6 +4,10 @@ on:
   pull_request:
     branches: [main]
 
+defaults:
+  run:
+    working-directory: ui
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -17,8 +21,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -30,14 +32,10 @@ jobs:
         with:
           node-version: '20'
           cache: 'pnpm'
+          cache-dependency-path: 'ui/pnpm-lock.yaml'
 
       - name: Install dependencies
-        run: |
-          if [ -f "pnpm-lock.yaml" ]; then
-            pnpm install --frozen-lockfile
-          else
-            pnpm install
-          fi
+        run: pnpm install --frozen-lockfile
 
       - name: Code formatting check
         run: pnpm format:check
@@ -46,7 +44,7 @@ jobs:
         run: pnpm lint
 
       - name: Type check
-        run: npx tsc --noEmit
+        run: pnpm tsc --noEmit
 
       - name: Run unit tests
         run: pnpm test --coverage --watchAll=false
@@ -70,14 +68,10 @@ jobs:
         with:
           node-version: '20'
           cache: 'pnpm'
+          cache-dependency-path: 'ui/pnpm-lock.yaml'
 
       - name: Install dependencies
-        run: |
-          if [ -f "pnpm-lock.yaml" ]; then
-            pnpm install --frozen-lockfile
-          else
-            pnpm install
-          fi
+        run: pnpm install --frozen-lockfile
 
       - name: Build application
         run: pnpm build
@@ -111,46 +105,20 @@ jobs:
         with:
           node-version: '20'
           cache: 'pnpm'
+          cache-dependency-path: 'ui/pnpm-lock.yaml'
 
       - name: Install dependencies
-        run: |
-          if [ -f "pnpm-lock.yaml" ]; then
-            pnpm install --frozen-lockfile
-          else
-            pnpm install
-          fi
+        run: pnpm install --frozen-lockfile
+
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps
 
-      - name: Build application for E2E tests
-        run: |
-          echo "Building application for E2E tests..."
-          pnpm build
-          echo "Verifying build output..."
-          ls -la .next/
-          if [ -f ".next/BUILD_ID" ]; then
-            echo "✅ BUILD_ID found: $(cat .next/BUILD_ID)"
-          else
-            echo "❌ BUILD_ID not found - build may have failed"
-            exit 1
-          fi
+      - name: Build application
+        run: pnpm build
+
       - name: Run E2E tests
-        run: |
-          echo "Running Playwright E2E tests..."
-          echo "Current directory: $(pwd)"
-          echo "Available endpoints:"
-          curl -s http://localhost:3000/api/health || echo "Health endpoint not available"
-          # Run the tests
-          pnpm test:e2e
-      - name: Stop application
-        if: always()
-        run: |
-          if [ -f .next_pid ]; then
-            kill $(cat .next_pid) || true
-            rm .next_pid
-          fi
-          # Fallback: kill any remaining Next.js processes
-          pkill -f "next start" || true
+        run: pnpm test:e2e
+
       - name: Upload E2E test results
         uses: actions/upload-artifact@v4
         if: failure()

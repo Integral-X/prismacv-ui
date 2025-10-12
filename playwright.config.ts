@@ -40,14 +40,12 @@ export default defineConfig({
     },
   ],
 
-  webServer: process.env.CI
-    ? undefined
-    : {
-        command: 'pnpm start',
-        url: 'http://localhost:3000',
-        reuseExistingServer: !process.env.CI,
-        timeout: 120 * 1000,
-        stderr: 'pipe',
-        stdout: 'pipe',
-      },
+  webServer: {
+    command: 'pnpm start',
+    url: 'http://localhost:3000',
+    reuseExistingServer: !process.env.CI,
+    timeout: 120 * 1000,
+    stderr: 'pipe',
+    stdout: 'pipe',
+  },
 });
