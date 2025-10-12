@@ -4,10 +4,6 @@ on:
   pull_request:
     branches: [main]
 
-defaults:
-  run:
-    working-directory: ui
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
