@@ -106,7 +106,7 @@ jobs:
           string: ${{ github.repository }}
 
       - name: Install semantic-release dependencies
-        run: npm install @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/changelog @semantic-release/npm @semantic-release/github
+        run: pnpm add @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/changelog @semantic-release/npm @semantic-release/github
 
       - name: Semantic Release
         id: semantic
