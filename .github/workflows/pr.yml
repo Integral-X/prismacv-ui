@@ -54,7 +54,6 @@ jobs:
   build-verification:
     name: Build Verification
     runs-on: ubuntu-latest
-    needs: quality-gates
     timeout-minutes: 10
 
     steps:
@@ -92,3 +91,69 @@ jobs:
             echo "❌ Build failed - no BUILD_ID found"
             exit 1
           fi
+
+  e2e-tests:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: |
+          if [ -f "pnpm-lock.yaml" ]; then
+            pnpm install --frozen-lockfile
+          else
+            pnpm install
+          fi
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps
+
+      - name: Build application for E2E tests
+        run: |
+          echo "Building application for E2E tests..."
+          pnpm build
+          echo "Verifying build output..."
+          ls -la .next/
+          if [ -f ".next/BUILD_ID" ]; then
+            echo "✅ BUILD_ID found: $(cat .next/BUILD_ID)"
+          else
+            echo "❌ BUILD_ID not found - build may have failed"
+            exit 1
+          fi
+      - name: Run E2E tests
+        run: |
+          echo "Running Playwright E2E tests..."
+          echo "Current directory: $(pwd)"
+          echo "Available endpoints:"
+          curl -s http://localhost:3000/api/health || echo "Health endpoint not available"
+          # Run the tests
+          pnpm test:e2e
+      - name: Stop application
+        if: always()
+        run: |
+          if [ -f .next_pid ]; then
+            kill $(cat .next_pid) || true
+            rm .next_pid
+          fi
+          # Fallback: kill any remaining Next.js processes
+          pkill -f "next start" || true
+      - name: Upload E2E test results
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: e2e-test-results
+          path: test-results/
