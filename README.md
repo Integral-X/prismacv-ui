@@ -1,14 +1,14 @@
-# CrackCV
+# PrismaCV
 
 A comprehensive CV building and job application tracking platform built with Next.js 15, TypeScript, and Feature-Sliced Design architecture.
 
 ## Project Overview
 
-CrackCV is an all-in-one platform that helps users create professional resumes, track job applications, prepare for interviews, and identify skill gaps. The platform provides AI-powered insights for resume optimization, personalized learning roadmaps, and a centralized dashboard for career management.
+PrismaCV is an all-in-one platform that helps users create professional resumes, track job applications, prepare for interviews, and identify skill gaps. The platform provides AI-powered insights for resume optimization, personalized learning roadmaps, and a centralized dashboard for career management.
 
 ### Key Features
 
-- **CrackCV**: AI-powered resume creation with multiple templates and real-time ATS scoring
+- **PrismaCV**: AI-powered resume creation with multiple templates and real-time ATS scoring
 - **Job Application Tracker**: Kanban-style tracking of job applications with status management
 - **Skill Gap Analysis**: AI-powered comparison of user skills against market requirements
 - **Learning Roadmap**: Personalized course recommendations and skill development paths
@@ -262,7 +262,7 @@ src/
 
    ```bash
    git clone <repository-url>
-   cd crack-cv-next
+   cd prisma-cv-next
    ```
 
 2. Install dependencies:
