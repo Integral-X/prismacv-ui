@@ -7,7 +7,10 @@ const NavigationMenu = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn('relative z-10 flex max-w-max flex-1 items-center justify-center', className)}
+    className={cn(
+      'relative z-10 flex max-w-max flex-1 items-center justify-center',
+      className
+    )}
     {...props}
   />
 ));
@@ -19,7 +22,10 @@ const NavigationMenuList = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ul
     ref={ref}
-    className={cn('group flex flex-1 list-none items-center justify-center', className)}
+    className={cn(
+      'group flex flex-1 list-none items-center justify-center',
+      className
+    )}
     {...props}
   />
 ));
@@ -37,11 +43,7 @@ const NavigationMenuLink = React.forwardRef<
   HTMLAnchorElement,
   React.AnchorHTMLAttributes<HTMLAnchorElement>
 >(({ className, children, ...props }, ref) => (
-  <a
-    ref={ref}
-    className={cn('', className)}
-    {...props}
-  >
+  <a ref={ref} className={cn('', className)} {...props}>
     {children}
   </a>
 ));
@@ -53,4 +55,3 @@ export {
   NavigationMenuItem,
   NavigationMenuLink,
 };
-

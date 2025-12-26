@@ -1,22 +1,22 @@
 'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
-} from "@/components/ui/navigation-menu";
+} from '@/components/ui/navigation-menu';
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from '@/components/ui/sheet';
 
-import { Button } from "../ui/button";
-import { Menu } from "lucide-react";
-import Image from "next/image";
+import { Button } from '../ui/button';
+import { Menu } from 'lucide-react';
+import Image from 'next/image';
 
 interface RouteProps {
   href: string;
@@ -25,16 +25,16 @@ interface RouteProps {
 
 const routeList: RouteProps[] = [
   {
-    href: "#templates",
-    label: "Templates",
+    href: '#templates',
+    label: 'Templates',
   },
   {
-    href: "#pricing",
-    label: "Pricing",
+    href: '#pricing',
+    label: 'Pricing',
   },
   {
-    href: "#faq",
-    label: "FAQ",
+    href: '#faq',
+    label: 'FAQ',
   },
 ];
 
@@ -62,10 +62,7 @@ export const Navbar = () => {
 
           {/* mobile */}
           <span className="flex md:hidden">
-            <Sheet
-              open={isOpen}
-              onOpenChange={setIsOpen}
-            >
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger className="px-2">
                 <Menu
                   className="flex md:hidden h-5 w-5"
@@ -75,7 +72,7 @@ export const Navbar = () => {
                 </Menu>
               </SheetTrigger>
 
-              <SheetContent side={"left"}>
+              <SheetContent side={'left'}>
                 <SheetHeader>
                   <SheetTitle className="font-bold text-xl">
                     PrismaCV
@@ -83,11 +80,7 @@ export const Navbar = () => {
                 </SheetHeader>
                 <nav className="flex flex-col justify-center items-center gap-2 mt-4">
                   {routeList.map(({ href, label }: RouteProps) => (
-                    <Button
-                      key={label}
-                      variant="ghost"
-                      asChild
-                    >
+                    <Button key={label} variant="ghost" asChild>
                       <a
                         rel="noreferrer noopener"
                         href={href}
@@ -97,15 +90,8 @@ export const Navbar = () => {
                       </a>
                     </Button>
                   ))}
-                  <Button
-                    variant="default"
-                    className="w-[110px]"
-                    asChild
-                  >
-                    <a
-                      href="/login"
-                      onClick={() => setIsOpen(false)}
-                    >
+                  <Button variant="default" className="w-[110px]" asChild>
+                    <a href="/login" onClick={() => setIsOpen(false)}>
                       Get Started
                     </a>
                   </Button>
@@ -123,10 +109,7 @@ export const Navbar = () => {
                 className="text-[17px]"
                 asChild
               >
-                <a
-                  rel="noreferrer noopener"
-                  href={route.href}
-                >
+                <a rel="noreferrer noopener" href={route.href}>
                   {route.label}
                 </a>
               </Button>
@@ -135,9 +118,7 @@ export const Navbar = () => {
 
           <div className="hidden md:flex gap-2">
             <Button variant="default" asChild>
-              <a href="/login">
-                Get Started
-              </a>
+              <a href="/login">Get Started</a>
             </Button>
           </div>
         </NavigationMenuList>

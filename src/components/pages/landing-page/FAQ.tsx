@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from "react";
-import Image from "next/image";
-import { Button } from "../../ui/button";
+import { useState } from 'react';
+import Image from 'next/image';
+import { Button } from '../../ui/button';
 
 interface FAQItem {
   question: string;
@@ -11,32 +11,39 @@ interface FAQItem {
 
 const faqData: FAQItem[] = [
   {
-    question: "What is the definition of a resume?",
-    answer: "A resume is a formal document that provides an overview of your professional qualifications, including your work experience, education, skills, and achievements. It's typically used when applying for jobs to showcase your background to potential employers.",
+    question: 'What is the definition of a resume?',
+    answer:
+      "A resume is a formal document that provides an overview of your professional qualifications, including your work experience, education, skills, and achievements. It's typically used when applying for jobs to showcase your background to potential employers.",
   },
   {
-    question: "How do I choose the right resume template?",
-    answer: "Choose a resume template based on your industry, experience level, and the job you're applying for. Creative fields may allow for more design flexibility, while corporate positions typically require traditional formats. Consider templates that highlight your strengths and are ATS-friendly.",
+    question: 'How do I choose the right resume template?',
+    answer:
+      "Choose a resume template based on your industry, experience level, and the job you're applying for. Creative fields may allow for more design flexibility, while corporate positions typically require traditional formats. Consider templates that highlight your strengths and are ATS-friendly.",
   },
   {
-    question: "What does an ATS-friendly resume mean?",
-    answer: "An ATS-friendly resume is designed to be easily read by Applicant Tracking Systems - software that many companies use to screen resumes. This means using standard formatting, avoiding complex graphics, using common section headings, and including relevant keywords from the job description.",
+    question: 'What does an ATS-friendly resume mean?',
+    answer:
+      'An ATS-friendly resume is designed to be easily read by Applicant Tracking Systems - software that many companies use to screen resumes. This means using standard formatting, avoiding complex graphics, using common section headings, and including relevant keywords from the job description.',
   },
   {
-    question: "What resume file format can I download in?",
-    answer: "You can download your resume in multiple formats including PDF, Word (DOCX), and plain text. PDF is the most recommended format as it preserves your formatting across all devices and is universally accepted by employers.",
+    question: 'What resume file format can I download in?',
+    answer:
+      'You can download your resume in multiple formats including PDF, Word (DOCX), and plain text. PDF is the most recommended format as it preserves your formatting across all devices and is universally accepted by employers.',
   },
   {
-    question: "Is it worth paying for a resume builder?",
-    answer: "A paid resume builder can be worth it if you want access to premium templates, advanced features like ATS optimization, cover letter builders, and expert guidance. It saves time and helps ensure your resume follows best practices, potentially increasing your chances of landing interviews.",
+    question: 'Is it worth paying for a resume builder?',
+    answer:
+      'A paid resume builder can be worth it if you want access to premium templates, advanced features like ATS optimization, cover letter builders, and expert guidance. It saves time and helps ensure your resume follows best practices, potentially increasing your chances of landing interviews.',
   },
   {
-    question: "Should I make a different resume for every job application?",
-    answer: "Yes, you should customize your resume for each job application. Tailor your experience, skills, and keywords to match the specific job description. This shows employers you're genuinely interested in the position and helps your resume pass through ATS systems.",
+    question: 'Should I make a different resume for every job application?',
+    answer:
+      "Yes, you should customize your resume for each job application. Tailor your experience, skills, and keywords to match the specific job description. This shows employers you're genuinely interested in the position and helps your resume pass through ATS systems.",
   },
   {
-    question: "What makes Prisma CV the best resume builder?",
-    answer: "Prisma CV offers AI-powered resume optimization, ATS scoring, a wide variety of professional templates, grammar checking, and personalized content suggestions. Our platform is designed to help you create a standout resume that gets past applicant tracking systems and impresses hiring managers.",
+    question: 'What makes Prisma CV the best resume builder?',
+    answer:
+      'Prisma CV offers AI-powered resume optimization, ATS scoring, a wide variety of professional templates, grammar checking, and personalized content suggestions. Our platform is designed to help you create a standout resume that gets past applicant tracking systems and impresses hiring managers.',
   },
 ];
 
@@ -72,7 +79,7 @@ export const FAQ = () => {
                   </span>
                   <div
                     className={`flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center transition-transform duration-300 ${
-                      openIndex === index ? "rotate-45" : ""
+                      openIndex === index ? 'rotate-45' : ''
                     }`}
                   >
                     <svg
@@ -94,7 +101,9 @@ export const FAQ = () => {
                 </button>
                 <div
                   className={`grid transition-all duration-300 ease-in-out ${
-                    openIndex === index ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                    openIndex === index
+                      ? 'grid-rows-[1fr] opacity-100'
+                      : 'grid-rows-[0fr] opacity-0'
                   }`}
                 >
                   <div className="overflow-hidden">
@@ -125,11 +134,10 @@ export const FAQ = () => {
             {/* Contact Section */}
             <div className="text-center lg:text-left max-w-md">
               <p className="text-base md:text-lg text-muted-foreground mb-6">
-                Can&apos;t find the answer to your question? Send us an email and we&apos;ll get back to you as soon as possible
+                Can&apos;t find the answer to your question? Send us an email
+                and we&apos;ll get back to you as soon as possible
               </p>
-              <Button 
-                className="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-md"
-              >
+              <Button className="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-md">
                 Ask Any Thing
               </Button>
             </div>
@@ -139,4 +147,3 @@ export const FAQ = () => {
     </section>
   );
 };
-

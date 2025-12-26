@@ -1,6 +1,6 @@
 'use client';
 
-import Image from "next/image";
+import Image from 'next/image';
 
 const CheckIcon = () => (
   <svg
@@ -24,15 +24,15 @@ const CheckIcon = () => (
 );
 
 const features1 = [
-  "Wording and readability analysis",
-  "Eliminate typos and grammatical errors",
-  "Content siggestions based on your job and experience",
+  'Wording and readability analysis',
+  'Eliminate typos and grammatical errors',
+  'Content siggestions based on your job and experience',
 ];
 
 const features2 = [
-  "Wording and readability analysis",
-  "Eliminate typos and grammatical errors",
-  "Content siggestions based on your job and experience",
+  'Wording and readability analysis',
+  'Eliminate typos and grammatical errors',
+  'Content siggestions based on your job and experience',
 ];
 
 export const Features2 = () => {
@@ -47,7 +47,8 @@ export const Features2 = () => {
               Ensure your resume is free of grammar and punctuation errors.
             </h2>
             <p className="text-lg text-muted-foreground">
-              A built in - content cheacker tool helping you stay on top grammer errors and analysis
+              A built in - content cheacker tool helping you stay on top grammer
+              errors and analysis
             </p>
             <ul className="space-y-4">
               {features1.map((feature, index) => (
@@ -92,7 +93,8 @@ export const Features2 = () => {
               Personalize Your Resume for Each Application
             </h2>
             <p className="text-lg text-muted-foreground">
-              A built in - content cheacker tool helping you stay on top grammer errors and analysis
+              A built in - content cheacker tool helping you stay on top grammer
+              errors and analysis
             </p>
             <ul className="space-y-4">
               {features2.map((feature, index) => (
@@ -108,4 +110,3 @@ export const Features2 = () => {
     </div>
   );
 };
-

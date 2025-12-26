@@ -17,7 +17,13 @@ This guide demonstrates how to use the design tokens in your components.
 ### TypeScript/JavaScript
 
 ```typescript
-import { colors, spacing, radii, typography, theme } from '@/design-system/tokens';
+import {
+  colors,
+  spacing,
+  radii,
+  typography,
+  theme,
+} from '@/design-system/tokens';
 ```
 
 ### CSS
@@ -35,7 +41,7 @@ CSS variables are automatically available globally after importing `tokens.css` 
 <div className="bg-surface-page">       {/* #F3F4F6 - Page background */}
 <div className="bg-surface-card">       {/* #FFFFFF - Card background */}
 
-// Content/Text colors  
+// Content/Text colors
 <p className="text-content-primary">    {/* #000000 - Primary text */}
 <p className="text-content-secondary">  {/* #374151 - Secondary text */}
 <p className="text-content-tertiary">   {/* #9CA3AF - Tertiary text */}
@@ -84,7 +90,7 @@ When you need dynamic values or can't use Tailwind utilities:
 
 ```tsx
 // Inline styles
-<div 
+<div
   style={{
     backgroundColor: 'var(--color-surface-card)',
     padding: 'var(--spacing-lg)',
@@ -93,7 +99,7 @@ When you need dynamic values or can't use Tailwind utilities:
   }}
 >
   Card content
-</div>
+</div>;
 
 // With styled-components or emotion
 const Card = styled.div`
@@ -101,7 +107,7 @@ const Card = styled.div`
   padding: var(--spacing-lg);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
-  
+
   &:hover {
     box-shadow: var(--shadow-card-hover);
   }
@@ -127,9 +133,7 @@ const buttonStyles = {
 };
 
 // Conditional styling
-const textColor = isError 
-  ? colors.feedback.error 
-  : colors.content.primary;
+const textColor = isError ? colors.feedback.error : colors.content.primary;
 
 // Theme object
 import { theme } from '@/design-system/tokens';
@@ -147,7 +151,7 @@ import { Button } from '@/components/ui/button';
 
 export function MyButton() {
   return (
-    <Button 
+    <Button
       className="
         bg-primary 
         text-primary-foreground 
@@ -169,7 +173,8 @@ export function MyButton() {
 ```tsx
 export function Card({ children }: { children: React.ReactNode }) {
   return (
-    <div className="
+    <div
+      className="
       bg-surface-card 
       p-8 
       rounded-lg 
@@ -178,7 +183,8 @@ export function Card({ children }: { children: React.ReactNode }) {
       shadow-card 
       hover:shadow-card-hover 
       transition-shadow
-    ">
+    "
+    >
       {children}
     </div>
   );
@@ -191,7 +197,7 @@ export function Card({ children }: { children: React.ReactNode }) {
 export function Input({ label, error, ...props }: InputProps) {
   return (
     <div style={{ marginBottom: 'var(--spacing-lg)' }}>
-      <label 
+      <label
         style={{
           display: 'block',
           marginBottom: 'var(--spacing-xs)',
@@ -216,7 +222,7 @@ export function Input({ label, error, ...props }: InputProps) {
         {...props}
       />
       {error && (
-        <span 
+        <span
           style={{
             display: 'block',
             marginTop: 'var(--spacing-xs)',
@@ -235,11 +241,17 @@ export function Input({ label, error, ...props }: InputProps) {
 ### Example 4: Login Card (TypeScript Tokens)
 
 ```tsx
-import { colors, spacing, radii, shadows, DIMENSIONS } from '@/design-system/tokens';
+import {
+  colors,
+  spacing,
+  radii,
+  shadows,
+  DIMENSIONS,
+} from '@/design-system/tokens';
 
 export function LoginCard() {
   return (
-    <div 
+    <div
       style={{
         width: DIMENSIONS.width.card,
         padding: `${spacing['10']} ${spacing['12']}`,
@@ -248,7 +260,7 @@ export function LoginCard() {
         boxShadow: shadows.card,
       }}
     >
-      <h2 
+      <h2
         style={{
           fontSize: '24px',
           fontWeight: typography.fontWeight.semibold,
@@ -258,13 +270,13 @@ export function LoginCard() {
       >
         Welcome Back
       </h2>
-      
+
       <p style={{ color: colors.content.secondary }}>
         Please sign in to continue
       </p>
-      
+
       {/* Form fields here */}
-      
+
       <button
         style={{
           width: '100%',
@@ -311,7 +323,7 @@ export function Alert({ type, children }: AlertProps) {
   };
 
   return (
-    <div 
+    <div
       className="p-4 rounded-md border"
       style={{
         backgroundColor: `${colorMap[type]}10`, // 10% opacity
@@ -336,8 +348,8 @@ import { COLORS, SPACING, DIMENSIONS } from '@/design-system/tokens';
 
 // Old way (still works)
 const oldStyle = {
-  color: COLORS.primary,              // '#17A2B8'
-  padding: SPACING.cardPaddingX,      // '48px'
+  color: COLORS.primary, // '#17A2B8'
+  padding: SPACING.cardPaddingX, // '48px'
   borderRadius: DIMENSIONS.cardBorderRadius, // '12px'
 };
 
@@ -345,9 +357,9 @@ const oldStyle = {
 import { colors, spacing, radii } from '@/design-system/tokens';
 
 const newStyle = {
-  color: colors.primary.DEFAULT,      // '#17A2B8'
-  padding: spacing['12'],             // '48px'
-  borderRadius: radii.lg,             // '12px'
+  color: colors.primary.DEFAULT, // '#17A2B8'
+  padding: spacing['12'], // '48px'
+  borderRadius: radii.lg, // '12px'
 };
 ```
 
@@ -356,12 +368,13 @@ const newStyle = {
 ## Best Practices
 
 ### 1. **Prefer Tailwind utilities for static styles**
+
 ```tsx
 // ✅ Good - Simple and readable
 <div className="bg-surface-card p-lg rounded-lg">
 
 // ❌ Avoid - Unnecessarily verbose
-<div style={{ 
+<div style={{
   backgroundColor: 'var(--color-surface-card)',
   padding: 'var(--spacing-lg)',
   borderRadius: 'var(--radius-lg)'
@@ -369,10 +382,11 @@ const newStyle = {
 ```
 
 ### 2. **Use CSS variables for dynamic values**
+
 ```tsx
 // ✅ Good - Dynamic color based on state
-<div style={{ 
-  color: isError ? 'var(--color-feedback-error)' : 'var(--color-content-primary)' 
+<div style={{
+  color: isError ? 'var(--color-feedback-error)' : 'var(--color-content-primary)'
 }}>
 
 // ❌ Avoid - Hard to maintain
@@ -380,6 +394,7 @@ const newStyle = {
 ```
 
 ### 3. **Use TypeScript tokens for computed values**
+
 ```tsx
 import { spacing } from '@/design-system/tokens';
 
@@ -388,6 +403,7 @@ const dynamicPadding = `${parseInt(spacing.lg) * 2}px`;
 ```
 
 ### 4. **Keep semantic naming consistent**
+
 ```tsx
 // ✅ Good - Semantic and purpose-driven
 <div className="bg-surface-card text-content-primary border-subtle">
@@ -424,4 +440,3 @@ const myColor: keyof Colors = 'primary'; // ✅ Autocomplete works!
 - Check the `tokens.ts` file for all available tokens
 - Check the `tokens.css` file for all CSS variable names
 - Refer to Tailwind CSS v4 documentation for utility class usage
-

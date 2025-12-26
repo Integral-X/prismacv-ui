@@ -14,7 +14,14 @@ A comprehensive, semantic, and scale-based design token system for PrismaCV.
 ### 1. Import in TypeScript/JavaScript
 
 ```typescript
-import { colors, spacing, radii, shadows, typography, theme } from '@/design-system/tokens';
+import {
+  colors,
+  spacing,
+  radii,
+  shadows,
+  typography,
+  theme,
+} from '@/design-system/tokens';
 
 // Use in your code
 const buttonStyle = {
@@ -35,10 +42,12 @@ const buttonStyle = {
 ### 3. Use CSS Variables
 
 ```tsx
-<div style={{ 
-  color: 'var(--color-content-primary)',
-  padding: 'var(--spacing-lg)' 
-}}>
+<div
+  style={{
+    color: 'var(--color-content-primary)',
+    padding: 'var(--spacing-lg)',
+  }}
+>
   Content
 </div>
 ```
@@ -46,6 +55,7 @@ const buttonStyle = {
 ## 🎨 Token Categories
 
 ### Colors (Semantic)
+
 - **Primary**: Brand colors (`colors.primary`)
 - **Surface**: Backgrounds (`colors.surface.page`, `colors.surface.card`)
 - **Content**: Text colors (`colors.content.primary`, `colors.content.secondary`)
@@ -54,34 +64,39 @@ const buttonStyle = {
 - **Feedback**: Error, success, warning, info (`colors.feedback.error`)
 
 ### Spacing (Scale-based)
+
 ```typescript
 spacing = {
   '0': '0',
   '1': '4px',
-  '2': '8px',   // xs
-  '3': '12px',  // sm
-  '4': '16px',  // md
-  '6': '24px',  // lg
-  '8': '32px',  // xl
+  '2': '8px', // xs
+  '3': '12px', // sm
+  '4': '16px', // md
+  '6': '24px', // lg
+  '8': '32px', // xl
   '10': '40px', // 2xl
   '12': '48px', // 3xl
   // ... up to '20': '80px'
-}
+};
 ```
 
 ### Radii (Border Radius)
+
 - `none`, `sm` (4px), `md` (8px), `lg` (12px), `xl` (16px), `2xl` (24px), `full`
 
 ### Shadows
+
 - `sm`, `md`, `lg`, `xl`, `2xl`, `inner`, `card`, `button`, `modal`
 
 ### Typography
+
 - Font families: `sans`, `mono`
 - Font sizes: `xs` to `7xl` (with line heights)
 - Font weights: `normal`, `medium`, `semibold`, `bold`
 - Letter spacing: `tight`, `normal`, `wide`
 
 ### Z-Index
+
 - Layered stacking: `dropdown`, `sticky`, `fixed`, `modal`, `popover`, `tooltip`
 
 ## 📋 Token Structure
@@ -92,14 +107,14 @@ Tokens use **purpose-based naming** instead of visual properties:
 
 ```typescript
 // ✅ Good - Semantic
-colors.content.primary    // "What is it for?"
-colors.surface.card       // "Where is it used?"
-colors.feedback.error     // "What does it mean?"
+colors.content.primary; // "What is it for?"
+colors.surface.card; // "Where is it used?"
+colors.feedback.error; // "What does it mean?"
 
 // ❌ Avoid - Visual naming
-colors.black              // Not semantic
-colors.gray100            // Not purpose-driven
-colors.red500             // Doesn't convey meaning
+colors.black; // Not semantic
+colors.gray100; // Not purpose-driven
+colors.red500; // Doesn't convey meaning
 ```
 
 ### Scale-Based System
@@ -125,7 +140,7 @@ spacing: {
 // src/design-system/tokens.ts
 export const colors = {
   primary: {
-    DEFAULT: '#17A2B8',  // ← Change this
+    DEFAULT: '#17A2B8', // ← Change this
     hover: '#138496',
   },
   // ...
@@ -143,6 +158,7 @@ This regenerates `tokens.css` from `tokens.ts`. The script runs automatically be
 ### Step 3: Use Updated Tokens
 
 Changes are immediately available in:
+
 - TypeScript imports
 - Tailwind utilities (after rebuild)
 - CSS variables (after regeneration)
@@ -151,12 +167,12 @@ Changes are immediately available in:
 
 ### When to Use Each Method
 
-| Scenario | Method | Example |
-|----------|--------|---------|
-| Static styling | Tailwind classes | `className="bg-primary p-4"` |
-| Dynamic values | CSS variables | `style={{ color: 'var(--color-primary)' }}` |
-| Computed values | TypeScript tokens | `padding: ${spacing.lg * 2}` |
-| Component variants | TypeScript + CVA | See button.tsx |
+| Scenario           | Method            | Example                                     |
+| ------------------ | ----------------- | ------------------------------------------- |
+| Static styling     | Tailwind classes  | `className="bg-primary p-4"`                |
+| Dynamic values     | CSS variables     | `style={{ color: 'var(--color-primary)' }}` |
+| Computed values    | TypeScript tokens | `padding: ${spacing.lg * 2}`                |
+| Component variants | TypeScript + CVA  | See button.tsx                              |
 
 ### Migration Strategy
 
@@ -193,9 +209,7 @@ Design tokens work seamlessly with shadcn/ui:
 ```tsx
 import { Button } from '@/components/ui/button';
 
-<Button className="bg-primary hover:bg-primary/90">
-  Click Me
-</Button>
+<Button className="bg-primary hover:bg-primary/90">Click Me</Button>;
 ```
 
 ## 🎨 Design Tools
@@ -232,6 +246,7 @@ When adding new tokens:
 ## 📝 Examples
 
 See [USAGE.md](./USAGE.md) for:
+
 - Button component examples
 - Card component examples
 - Form input examples
@@ -241,4 +256,3 @@ See [USAGE.md](./USAGE.md) for:
 ---
 
 **Built with ❤️ for PrismaCV**
-

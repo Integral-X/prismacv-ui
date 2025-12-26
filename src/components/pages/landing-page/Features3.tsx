@@ -1,6 +1,6 @@
 'use client';
 
-import Image from "next/image";
+import Image from 'next/image';
 
 const CheckIcon = () => (
   <svg
@@ -24,23 +24,26 @@ const CheckIcon = () => (
 );
 
 const courseFeatures = [
-  "Curated Couses",
-  "Role-Based Learning",
-  "Verified Platforms",
+  'Curated Couses',
+  'Role-Based Learning',
+  'Verified Platforms',
 ];
 
 const skillGapFeatures = [
   {
-    title: "Role-Based Assessment",
-    description: "Choose from 50+ roles and get a personalized skill gap analysis tailored to industry standards.",
+    title: 'Role-Based Assessment',
+    description:
+      'Choose from 50+ roles and get a personalized skill gap analysis tailored to industry standards.',
   },
   {
-    title: "Real-Time Recommendations",
-    description: "Receive instant course suggestions and learning paths based on your current skill level.",
+    title: 'Real-Time Recommendations',
+    description:
+      'Receive instant course suggestions and learning paths based on your current skill level.',
   },
   {
-    title: "Track Your Progress",
-    description: "Monitor your skill development with detailed analytics and achievement milestones.",
+    title: 'Track Your Progress',
+    description:
+      'Monitor your skill development with detailed analytics and achievement milestones.',
   },
 ];
 
@@ -53,11 +56,13 @@ export const Features3 = () => {
           {/* Left Content */}
           <div className="space-y-6">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight">
-              Course Recommendations{" "}
+              Course Recommendations{' '}
               <span className="text-primary">Just for You</span>
             </h2>
             <p className="text-lg text-muted-foreground">
-              We match you with top-rated courses tailored to your goals and skill level, so you always know what to learn next from beginner basics to advanced mastery.
+              We match you with top-rated courses tailored to your goals and
+              skill level, so you always know what to learn next from beginner
+              basics to advanced mastery.
             </p>
             <ul className="space-y-4">
               {courseFeatures.map((feature, index) => (
@@ -102,7 +107,8 @@ export const Features3 = () => {
               Identify Your Skill Gaps Instantly
             </h2>
             <p className="text-lg text-muted-foreground">
-              Select your target role and get a comprehensive analysis of your skills with personalized learning paths.
+              Select your target role and get a comprehensive analysis of your
+              skills with personalized learning paths.
             </p>
             <ul className="space-y-6">
               {skillGapFeatures.map((feature, index) => (
@@ -125,4 +131,3 @@ export const Features3 = () => {
     </div>
   );
 };
-

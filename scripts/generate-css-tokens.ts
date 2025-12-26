@@ -1,9 +1,9 @@
 /**
  * Generate CSS Variables from Design Tokens
- * 
+ *
  * This script reads the TypeScript design tokens and generates CSS custom properties
  * that can be used in Tailwind's theme configuration and directly in components.
- * 
+ *
  * Run with: npm run tokens:generate
  */
 
@@ -54,7 +54,10 @@ function flattenObject(
 /**
  * Converts a flat object to CSS custom properties
  */
-function generateCSSVariables(tokens: Record<string, string>, prefix: string): string {
+function generateCSSVariables(
+  tokens: Record<string, string>,
+  prefix: string
+): string {
   const lines = Object.entries(tokens).map(([key, value]) => {
     // Remove 'DEFAULT' from key names as they're already flattened
     const cleanKey = key.replace(/-DEFAULT$/, '');
@@ -114,7 +117,7 @@ ${generateCSSVariables(flattenObject(zIndex), 'z')}
 
   // Write the CSS file
   const outputPath = path.join(__dirname, '../src/design-system/tokens.css');
-  
+
   // Ensure directory exists
   const dir = path.dirname(outputPath);
   if (!fs.existsSync(dir)) {
@@ -122,7 +125,7 @@ ${generateCSSVariables(flattenObject(zIndex), 'z')}
   }
 
   fs.writeFileSync(outputPath, cssContent, 'utf-8');
-  
+
   console.log('✅ Design tokens CSS generated successfully!');
   console.log(`📝 Output: ${outputPath}`);
   console.log('\n💡 Import this file in your globals.css:');
@@ -136,4 +139,3 @@ try {
   console.error('❌ Error generating CSS tokens:', error);
   process.exit(1);
 }
-

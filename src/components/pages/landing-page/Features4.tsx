@@ -1,6 +1,6 @@
 'use client';
 
-import Image from "next/image";
+import Image from 'next/image';
 
 const CheckIcon = () => (
   <svg
@@ -26,56 +26,101 @@ const CheckIcon = () => (
 const customizationFeatures = [
   {
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0">
-        <text x="6" y="18" fontSize="16" fill="#4ECCA3" fontWeight="bold">T</text>
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="flex-shrink-0"
+      >
+        <text x="6" y="18" fontSize="16" fill="#4ECCA3" fontWeight="bold">
+          T
+        </text>
       </svg>
     ),
-    title: "Custom Typography",
-    description: "Select from premium fonts and customize text styles to match your personal brand.",
+    title: 'Custom Typography',
+    description:
+      'Select from premium fonts and customize text styles to match your personal brand.',
   },
   {
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0">
-        <circle cx="12" cy="12" r="8" fill="none" stroke="#4ECCA3" strokeWidth="2"/>
-        <circle cx="8" cy="12" r="2" fill="#4ECCA3"/>
-        <circle cx="16" cy="12" r="2" fill="#E28957"/>
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="flex-shrink-0"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="8"
+          fill="none"
+          stroke="#4ECCA3"
+          strokeWidth="2"
+        />
+        <circle cx="8" cy="12" r="2" fill="#4ECCA3" />
+        <circle cx="16" cy="12" r="2" fill="#E28957" />
       </svg>
     ),
-    title: "Color Customization",
-    description: "Pick your perfect color scheme with our intuitive palette selector and live preview.",
+    title: 'Color Customization',
+    description:
+      'Pick your perfect color scheme with our intuitive palette selector and live preview.',
   },
   {
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0">
-        <circle cx="12" cy="12" r="8" fill="none" stroke="#4ECCA3" strokeWidth="2"/>
-        <path d="M12 8V12L15 15" stroke="#4ECCA3" strokeWidth="2" strokeLinecap="round"/>
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="flex-shrink-0"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="8"
+          fill="none"
+          stroke="#4ECCA3"
+          strokeWidth="2"
+        />
+        <path
+          d="M12 8V12L15 15"
+          stroke="#4ECCA3"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
       </svg>
     ),
-    title: "Easy Configuration",
-    description: "Fine-tune every detail with simple, intuitive controls for a truly personalized result.",
+    title: 'Easy Configuration',
+    description:
+      'Fine-tune every detail with simple, intuitive controls for a truly personalized result.',
   },
 ];
 
 const atsFeatures = [
-  "Integrate relevant keywords that match job descriptions and industry standards.",
-  "Automatically adjust your resume to be ATS-friendly, improving your chances of landing an interview.",
-  "Automatically adjust your resume to be ATS-friendly, improving your chances of landing an interview.",
+  'Integrate relevant keywords that match job descriptions and industry standards.',
+  'Automatically adjust your resume to be ATS-friendly, improving your chances of landing an interview.',
+  'Automatically adjust your resume to be ATS-friendly, improving your chances of landing an interview.',
 ];
 
 const resumeSections = [
   {
-    text: "Professional sections like ",
-    highlights: ["Experience", "Skills", "Summary", "Education"],
+    text: 'Professional sections like ',
+    highlights: ['Experience', 'Skills', 'Summary', 'Education'],
   },
   {
-    text: "Personal sections like ",
-    highlights: ["Strengths", "Quotes", "Books", "Interests", "My Time"],
+    text: 'Personal sections like ',
+    highlights: ['Strengths', 'Quotes', 'Books', 'Interests', 'My Time'],
   },
   {
-    text: "Other sections like ",
-    highlights: ["Certifications", "Awards", "Achievements", "Languages"],
-    extraText: " and ",
-    extraHighlights: ["References"],
+    text: 'Other sections like ',
+    highlights: ['Certifications', 'Awards', 'Achievements', 'Languages'],
+    extraText: ' and ',
+    extraHighlights: ['References'],
   },
 ];
 
@@ -91,7 +136,8 @@ export const Features4 = () => {
               Customize Every Detail
             </h2>
             <p className="text-lg text-muted-foreground">
-              Create a resume that stands out with powerful customization tools designed for
+              Create a resume that stands out with powerful customization tools
+              designed for
             </p>
             <ul className="space-y-6">
               {customizationFeatures.map((feature, index) => (
@@ -143,7 +189,8 @@ export const Features4 = () => {
               Boost Your Resume&apos;s ATS Score
             </h2>
             <p className="text-lg text-muted-foreground">
-              Make sure your resume gets past applicant tracking systems and lands in the recruiter&apos;s hands.
+              Make sure your resume gets past applicant tracking systems and
+              lands in the recruiter&apos;s hands.
             </p>
             <ul className="space-y-4">
               {atsFeatures.map((feature, index) => (
@@ -170,18 +217,28 @@ export const Features4 = () => {
                 <li key={index} className="flex items-start gap-3">
                   <CheckIcon />
                   <div className="text-base md:text-lg">
-                    <span className="text-muted-foreground">{section.text}</span>
+                    <span className="text-muted-foreground">
+                      {section.text}
+                    </span>
                     {section.highlights.map((highlight, idx) => (
                       <span key={idx}>
-                        <span className="text-primary font-medium">{highlight}</span>
-                        {idx < section.highlights.length - 1 && <span className="text-muted-foreground">, </span>}
+                        <span className="text-primary font-medium">
+                          {highlight}
+                        </span>
+                        {idx < section.highlights.length - 1 && (
+                          <span className="text-muted-foreground">, </span>
+                        )}
                       </span>
                     ))}
                     {section.extraText && (
                       <>
-                        <span className="text-muted-foreground">{section.extraText}</span>
+                        <span className="text-muted-foreground">
+                          {section.extraText}
+                        </span>
                         {section.extraHighlights?.map((highlight, idx) => (
-                          <span key={idx} className="text-primary font-medium">{highlight}</span>
+                          <span key={idx} className="text-primary font-medium">
+                            {highlight}
+                          </span>
                         ))}
                       </>
                     )}
@@ -206,4 +263,3 @@ export const Features4 = () => {
     </div>
   );
 };
-

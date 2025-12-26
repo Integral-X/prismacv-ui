@@ -10,41 +10,41 @@
      COLORS
      ======================================================================== */
   /* Primary colors */
-  --color-primary: #17A2B8;
+  --color-primary: #17a2b8;
   --color-primary-hover: #138496;
-  --color-primary-foreground: #FFFFFF;
-  
+  --color-primary-foreground: #ffffff;
+
   /* Surface/Background colors */
-  --color-surface-page: #F3F4F6;
-  --color-surface-card: #FFFFFF;
-  --color-surface-elevated: #FFFFFF;
-  
+  --color-surface-page: #f3f4f6;
+  --color-surface-card: #ffffff;
+  --color-surface-elevated: #ffffff;
+
   /* Content/Text colors */
   --color-content-primary: #000000;
   --color-content-secondary: #374151;
-  --color-content-tertiary: #9CA3AF;
-  --color-content-muted: #6B7280;
-  --color-content-inverse: #FFFFFF;
-  
+  --color-content-tertiary: #9ca3af;
+  --color-content-muted: #6b7280;
+  --color-content-inverse: #ffffff;
+
   /* Border colors */
-  --color-border-subtle: #E5E7EB;
-  --color-border: #D1D5DB;
-  --color-border-strong: #9CA3AF;
-  --color-border-interactive: #17A2B8;
-  
+  --color-border-subtle: #e5e7eb;
+  --color-border: #d1d5db;
+  --color-border-strong: #9ca3af;
+  --color-border-interactive: #17a2b8;
+
   /* Interactive colors */
-  --color-interactive-link: #17A2B8;
+  --color-interactive-link: #17a2b8;
   --color-interactive-link-hover: #138496;
-  
+
   /* Feedback colors */
-  --color-feedback-error: #EF4444;
-  --color-feedback-success: #10B981;
-  --color-feedback-warning: #F59E0B;
-  --color-feedback-info: #3B82F6;
-  
+  --color-feedback-error: #ef4444;
+  --color-feedback-success: #10b981;
+  --color-feedback-warning: #f59e0b;
+  --color-feedback-info: #3b82f6;
+
   /* Checkbox colors */
-  --color-checkbox-border: #D1D5DB;
-  --color-checkbox-checked: #17A2B8;
+  --color-checkbox-border: #d1d5db;
+  --color-checkbox-checked: #17a2b8;
 
   /* ========================================================================
      SPACING
@@ -62,7 +62,7 @@
   --spacing-12: 48px;
   --spacing-16: 64px;
   --spacing-20: 80px;
-  
+
   /* Semantic spacing */
   --spacing-xs: 8px;
   --spacing-sm: 12px;
@@ -92,13 +92,18 @@
   --shadow-none: none;
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
   --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
-  --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-  --shadow-card-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-card:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-card-hover:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
   --shadow-button: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-modal: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 
@@ -106,9 +111,13 @@
      TYPOGRAPHY
      ======================================================================== */
   /* Font families */
-  --font-family-sans: var(--font-geist-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-family-mono: var(--font-geist-mono), ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
-  
+  --font-family-sans:
+    var(--font-geist-sans), system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, sans-serif;
+  --font-family-mono:
+    var(--font-geist-mono), ui-monospace, 'Cascadia Code', 'Source Code Pro',
+    Menlo, Consolas, monospace;
+
   /* Font sizes */
   --font-size-xs: 12px;
   --font-size-xs-line-height: 16px;
@@ -132,13 +141,13 @@
   --font-size-6xl-line-height: 1;
   --font-size-7xl: 72px;
   --font-size-7xl-line-height: 1;
-  
+
   /* Font weights */
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
-  
+
   /* Letter spacing */
   --font-letter-spacing-tight: -0.025em;
   --font-letter-spacing-normal: 0;
@@ -156,4 +165,3 @@
   --z-popover: 1060;
   --z-tooltip: 1070;
 }
-
