@@ -1,9 +1,11 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@import '../design-system/tokens.css';
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* Existing shadcn/ui colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -41,6 +43,38 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* ========================================================================
+     EXTENDED DESIGN SYSTEM TOKENS FOR TAILWIND
+     These extend Tailwind utilities with our design tokens
+     ======================================================================== */
+  
+  /* Surface colors (use as bg-surface-page, bg-surface-card, etc.) */
+  --color-surface-page: var(--color-surface-page);
+  --color-surface-card: var(--color-surface-card);
+  --color-surface-elevated: var(--color-surface-elevated);
+  
+  /* Content colors (use as text-content-primary, text-content-secondary, etc.) */
+  --color-content-primary: var(--color-content-primary);
+  --color-content-secondary: var(--color-content-secondary);
+  --color-content-tertiary: var(--color-content-tertiary);
+  --color-content-muted: var(--color-content-muted);
+  --color-content-inverse: var(--color-content-inverse);
+  
+  /* Border colors (use as border-subtle, border-interactive, etc.) */
+  --color-border-subtle: var(--color-border-subtle);
+  --color-border-strong: var(--color-border-strong);
+  --color-border-interactive: var(--color-border-interactive);
+  
+  /* Interactive colors (use as text-interactive-link, hover:text-interactive-link-hover) */
+  --color-interactive-link: var(--color-interactive-link);
+  --color-interactive-link-hover: var(--color-interactive-link-hover);
+  
+  /* Feedback colors (use as bg-feedback-error, text-feedback-success, etc.) */
+  --color-feedback-error: var(--color-feedback-error);
+  --color-feedback-success: var(--color-feedback-success);
+  --color-feedback-warning: var(--color-feedback-warning);
+  --color-feedback-info: var(--color-feedback-info);
 }
 
 :root {

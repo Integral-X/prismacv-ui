@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from "./ui/button";
+import { Button } from "../../ui/button";
 import Image from "next/image";
 
 export const Hero = () => {
@@ -41,8 +41,10 @@ export const Hero = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Button className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 rounded-md">
-                Build Your Resume
+              <Button className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 rounded-md" asChild>
+                <a href="/login">
+                  Build Your Resume
+                </a>
               </Button>
 
               <Button variant="outline" className="w-full sm:w-auto border-primary text-primary hover:bg-primary/10 rounded-md">

@@ -14,7 +14,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { Menu } from "lucide-react";
 import Image from "next/image";
 
@@ -25,12 +25,8 @@ interface RouteProps {
 
 const routeList: RouteProps[] = [
   {
-    href: "#features",
-    label: "Features",
-  },
-  {
-    href: "#testimonials",
-    label: "Testimonials",
+    href: "#templates",
+    label: "Templates",
   },
   {
     href: "#pricing",
@@ -107,7 +103,7 @@ export const Navbar = () => {
                     asChild
                   >
                     <a
-                      href="#pricing"
+                      href="/login"
                       onClick={() => setIsOpen(false)}
                     >
                       Get Started
@@ -139,7 +135,7 @@ export const Navbar = () => {
 
           <div className="hidden md:flex gap-2">
             <Button variant="default" asChild>
-              <a href="#pricing">
+              <a href="/login">
                 Get Started
               </a>
             </Button>
