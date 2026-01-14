@@ -91,7 +91,7 @@ export const Navbar = () => {
                     </Button>
                   ))}
                   <Button variant="default" className="w-[110px]" asChild>
-                    <a href="/login" onClick={() => setIsOpen(false)}>
+                    <a href="/onboarding" onClick={() => setIsOpen(false)}>
                       Get Started
                     </a>
                   </Button>
@@ -118,7 +118,7 @@ export const Navbar = () => {
 
           <div className="hidden md:flex gap-2">
             <Button variant="default" asChild>
-              <a href="/login">Get Started</a>
+              <a href="/onboarding">Get Started</a>
             </Button>
           </div>
         </NavigationMenuList>
