@@ -43,8 +43,8 @@ src/
 1. Clone the repository:
 
    ```bash
-   git clone <repository-url>
-   cd prisma-cv-next
+   git clone https://github.com/Integral-X/prismacv-ui.git
+   cd prismacv-ui
    ```
 
 2. Install dependencies:
