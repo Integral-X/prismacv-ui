@@ -20,3 +20,15 @@ build/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Lock files (auto-generated)
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Docker files
+Dockerfile
+.dockerignore
+
+# Git files
+.gitignore

@@ -113,6 +113,15 @@ export default [
     },
   },
 
+  // Scripts directory - allow Node.js patterns
+  {
+    files: ['scripts/**/*.js'],
+    rules: {
+      'no-console': 'off',
+      '@typescript-eslint/no-require-imports': 'off',
+    },
+  },
+
   // Prettier configuration (must be last to override other configs)
   prettierConfigs,
 ];
