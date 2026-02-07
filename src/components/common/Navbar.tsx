@@ -67,9 +67,8 @@ export const Navbar = () => {
                 <Menu
                   className="flex md:hidden h-5 w-5"
                   onClick={() => setIsOpen(true)}
-                >
-                  <span className="sr-only">Menu Icon</span>
-                </Menu>
+                />
+                <span className="sr-only">Menu Icon</span>
               </SheetTrigger>
 
               <SheetContent side={'left'}>
