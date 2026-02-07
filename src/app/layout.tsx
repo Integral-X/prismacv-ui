@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 
@@ -11,7 +12,7 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'PrismaCV - Build Your Professional Resume',
   description:
     'Create professional resumes with AI-powered insights, track job applications, and identify skill gaps. Stand out at leading companies with PrismaCV.',
