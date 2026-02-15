@@ -32,13 +32,23 @@ export const TemplateGrid = ({
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {templates.map((template) => (
+    <div
+      role="radiogroup"
+      aria-label="Choose a template"
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+    >
+      {templates.map((template, index) => (
         <div
           key={template.id}
-          role="button"
-          tabIndex={0}
-          aria-label={`Select ${template.name} template`}
+          role="radio"
+          tabIndex={
+            selectedTemplate === template.id ||
+            (selectedTemplate === null && index === 0)
+              ? 0
+              : -1
+          }
+          aria-checked={selectedTemplate === template.id}
+          aria-label={`${template.name} template`}
           onClick={() => onSelect(template.id)}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {

@@ -32,6 +32,18 @@ export const FileUpload = ({
     file: File;
     formattedFile: UploadedFile;
   } | null>(null);
+  const errorResetTimeoutRef = React.useRef<ReturnType<
+    typeof setTimeout
+  > | null>(null);
+
+  React.useEffect(() => {
+    return () => {
+      if (errorResetTimeoutRef.current !== null) {
+        clearTimeout(errorResetTimeoutRef.current);
+        errorResetTimeoutRef.current = null;
+      }
+    };
+  }, []);
 
   const {
     progress,
@@ -52,9 +64,14 @@ export const FileUpload = ({
     const validation = validateFile(file, acceptedFormats, maxSizeMB);
 
     if (!validation.valid) {
+      if (errorResetTimeoutRef.current !== null) {
+        clearTimeout(errorResetTimeoutRef.current);
+        errorResetTimeoutRef.current = null;
+      }
       setState('error');
       setErrorMessage(validation.error || 'Invalid file');
-      setTimeout(() => {
+      errorResetTimeoutRef.current = setTimeout(() => {
+        errorResetTimeoutRef.current = null;
         setState('idle');
         setErrorMessage('');
       }, ERROR_DISPLAY_DURATION_MS);

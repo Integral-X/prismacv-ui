@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 
 interface UseProgressSimulationOptions {
   intervalMs?: number;
@@ -16,15 +16,37 @@ export const useProgressSimulation = (
   const { intervalMs = 200, increment = 10, onComplete } = options;
   const [progress, setProgress] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const clearIntervalSafe = useCallback(() => {
+    if (intervalRef.current !== null) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    setIsRunning(false);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current !== null) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+  }, []);
 
   const start = useCallback(() => {
+    clearIntervalSafe();
     setProgress(0);
     setIsRunning(true);
 
-    const interval = setInterval(() => {
+    intervalRef.current = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
-          clearInterval(interval);
+          if (intervalRef.current !== null) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+          }
           setIsRunning(false);
           onComplete?.();
           return 100;
@@ -32,18 +54,12 @@ export const useProgressSimulation = (
         return prev + increment;
       });
     }, intervalMs);
-
-    // Return cleanup function
-    return () => {
-      clearInterval(interval);
-      setIsRunning(false);
-    };
-  }, [intervalMs, increment, onComplete]);
+  }, [intervalMs, increment, onComplete, clearIntervalSafe]);
 
   const reset = useCallback(() => {
+    clearIntervalSafe();
     setProgress(0);
-    setIsRunning(false);
-  }, []);
+  }, [clearIntervalSafe]);
 
   return {
     progress,

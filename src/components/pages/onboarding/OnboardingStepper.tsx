@@ -60,9 +60,7 @@ export const OnboardingStepper = ({
                   <div
                     className={cn(
                       'h-full transition-all duration-500',
-                      isCompleted || (isActive && index === currentStep - 1)
-                        ? 'bg-primary'
-                        : 'bg-gray-200'
+                      index < currentStep - 1 ? 'bg-primary' : 'bg-gray-200'
                     )}
                   />
                 </div>

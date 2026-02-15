@@ -53,9 +53,9 @@ export const normalizeLinkedInUrl = (url: string): string => {
 };
 
 /**
- * Extracts display name from LinkedIn URL
+ * Extracts display name from LinkedIn URL (supports both /in/ and /pub/ paths)
  */
 export const extractLinkedInDisplayName = (url: string): string => {
-  const match = url.match(/linkedin\.com\/in\/([\w-]+)/i);
+  const match = url.match(/linkedin\.com\/(?:in|pub)\/([\w-]+)/i);
   return match ? match[1] : 'LinkedIn Profile';
 };

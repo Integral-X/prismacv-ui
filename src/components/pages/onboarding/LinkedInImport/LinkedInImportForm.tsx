@@ -78,7 +78,7 @@ export const LinkedInImportForm = ({
             <h3 className="text-lg font-semibold text-gray-900">
               {state === 'error'
                 ? 'Import Failed'
-                : 'Drop your linkedin profile here'}
+                : 'Drop your LinkedIn profile here'}
             </h3>
             {state === 'error' && (
               <p className="text-sm text-red-600">{errorMessage}</p>

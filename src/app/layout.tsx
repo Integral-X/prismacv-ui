@@ -40,6 +40,16 @@ export const metadata: Metadata = {
         sizes: '32x32',
         type: 'image/png',
       },
+      {
+        url: '/images/favicon/android-chrome-192x192.png',
+        sizes: '192x192',
+        type: 'image/png',
+      },
+      {
+        url: '/images/favicon/android-chrome-512x512.png',
+        sizes: '512x512',
+        type: 'image/png',
+      },
       { url: '/images/favicon/favicon.ico', sizes: 'any' },
     ],
     apple: [
@@ -47,16 +57,6 @@ export const metadata: Metadata = {
         url: '/images/favicon/apple-touch-icon.png',
         sizes: '180x180',
         type: 'image/png',
-      },
-    ],
-    other: [
-      {
-        rel: 'android-chrome-192x192',
-        url: '/images/favicon/android-chrome-192x192.png',
-      },
-      {
-        rel: 'android-chrome-512x512',
-        url: '/images/favicon/android-chrome-512x512.png',
       },
     ],
   },

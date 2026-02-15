@@ -25,6 +25,18 @@ export const LinkedInImport = ({
   const [importedProfile, setImportedProfile] =
     React.useState<ImportedProfile | null>(null);
   const pendingUrlRef = React.useRef<string | null>(null);
+  const errorResetTimeoutRef = React.useRef<ReturnType<
+    typeof setTimeout
+  > | null>(null);
+
+  React.useEffect(() => {
+    return () => {
+      if (errorResetTimeoutRef.current !== null) {
+        clearTimeout(errorResetTimeoutRef.current);
+        errorResetTimeoutRef.current = null;
+      }
+    };
+  }, []);
 
   const {
     progress,
@@ -50,9 +62,14 @@ export const LinkedInImport = ({
     const validation = validateLinkedInUrl(linkedInUrl);
 
     if (!validation.valid) {
+      if (errorResetTimeoutRef.current !== null) {
+        clearTimeout(errorResetTimeoutRef.current);
+        errorResetTimeoutRef.current = null;
+      }
       setState('error');
       setErrorMessage(validation.error || 'Invalid LinkedIn URL');
-      setTimeout(() => {
+      errorResetTimeoutRef.current = setTimeout(() => {
+        errorResetTimeoutRef.current = null;
         setState('idle');
         setErrorMessage('');
       }, ERROR_DISPLAY_DURATION_MS);
