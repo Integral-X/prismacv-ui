@@ -9,10 +9,23 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 import { API_ENDPOINTS } from '@/lib/api/endpoints';
+import { checkRateLimit } from '@/lib/security/rateLimit';
+import { AUTH_RATE_LIMITS } from '@/lib/security/rateLimit.config';
+import { setAuthToken } from '@/lib/auth/cookies';
+import { createApiClient, HttpError } from '@/lib/http';
+
+// Create HTTP client instance for backend API calls
+const apiClient = createApiClient(API_ENDPOINTS.MAIN);
 
 export async function POST(request: NextRequest) {
+  // Check rate limit: 5 login attempts per 15 minutes per IP
+  const rateLimitResponse = checkRateLimit(request, AUTH_RATE_LIMITS.LOGIN);
+
+  if (rateLimitResponse) {
+    return rateLimitResponse;
+  }
+
   try {
     const body = await request.json();
     const { email, password } = body;
@@ -29,34 +42,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Call your backend auth service
-    const response = await fetch(`${API_ENDPOINTS.MAIN}/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    });
-
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({
-        error: { code: 'AUTH_ERROR', message: 'Authentication failed' },
-      }));
-      return NextResponse.json(error, { status: response.status });
-    }
-
-    const data = await response.json();
+    // Call backend auth service - no auth token required for login
+    const data = await apiClient.post<{ token: string; user: unknown }>(
+      '/auth/login',
+      { email, password },
+      { requireAuth: false }
+    );
 
     // Set httpOnly cookie with JWT token
     // This is secure - JavaScript cannot access httpOnly cookies
-    const cookieStore = await cookies();
-    cookieStore.set('auth-token', data.token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-      path: '/',
-    });
+    await setAuthToken(data.token);
 
     // Return user data (without token)
     return NextResponse.json({
@@ -65,6 +60,20 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
+    // Handle HTTP client errors
+    if (error instanceof HttpError) {
+      return NextResponse.json(
+        {
+          error: {
+            code: error.code,
+            message: error.message,
+          },
+        },
+        { status: error.status }
+      );
+    }
+
+    // Handle unexpected errors
     // eslint-disable-next-line no-console
     console.error('Login error:', error);
     return NextResponse.json(

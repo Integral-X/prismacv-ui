@@ -4,28 +4,8 @@ const nextConfig: NextConfig = {
   // Optimize for production
   poweredByHeader: false,
 
-  // Security headers
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin',
-          },
-        ],
-      },
-    ];
-  },
+  // Security headers are now handled in proxy.ts (Next.js 16 pattern)
+  // This allows for dynamic CSP nonces and per-request header generation
 
   // Experimental features for better performance
   experimental: {

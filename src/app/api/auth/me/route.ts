@@ -3,14 +3,27 @@
  * Reads JWT from httpOnly cookie and fetches user data from backend
  */
 
-import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
+import { NextRequest, NextResponse } from 'next/server';
 import { API_ENDPOINTS } from '@/lib/api/endpoints';
+import { checkRateLimit } from '@/lib/security/rateLimit';
+import { AUTH_RATE_LIMITS } from '@/lib/security/rateLimit.config';
+import { getAuthToken } from '@/lib/auth/cookies';
+import { createApiClient, HttpError } from '@/lib/http';
+import type { User } from '@/lib/api/services/auth.interface';
 
-export async function GET() {
+// Create HTTP client instance for backend API calls
+const apiClient = createApiClient(API_ENDPOINTS.MAIN);
+
+export async function GET(request: NextRequest) {
+  // Check rate limit: 30 requests per minute per IP
+  const rateLimitResponse = checkRateLimit(request, AUTH_RATE_LIMITS.ME);
+
+  if (rateLimitResponse) {
+    return rateLimitResponse;
+  }
+
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('auth-token')?.value;
+    const token = await getAuthToken();
 
     if (!token) {
       return NextResponse.json(
@@ -24,32 +37,27 @@ export async function GET() {
       );
     }
 
-    // Call your backend service with JWT token
-    const response = await fetch(`${API_ENDPOINTS.MAIN}/auth/me`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      if (response.status === 401) {
-        // Token expired or invalid - clear cookie
-        cookieStore.delete('auth-token');
-      }
-      const error = await response.json().catch(() => ({
-        error: { code: 'AUTH_ERROR', message: 'Failed to fetch user' },
-      }));
-      return NextResponse.json(error, { status: response.status });
-    }
-
-    const data = await response.json();
+    // Call backend service - auth token is automatically included
+    const data = await apiClient.get<{ user: User } | User>('/auth/me');
 
     return NextResponse.json({
-      data: data.user || data,
+      data: 'user' in data ? data.user : data,
     });
   } catch (error) {
+    // Handle HTTP client errors
+    if (error instanceof HttpError) {
+      return NextResponse.json(
+        {
+          error: {
+            code: error.code,
+            message: error.message,
+          },
+        },
+        { status: error.status }
+      );
+    }
+
+    // Handle unexpected errors
     // eslint-disable-next-line no-console
     console.error('Get user error:', error);
     return NextResponse.json(

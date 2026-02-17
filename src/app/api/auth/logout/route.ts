@@ -3,13 +3,21 @@
  * Clears the httpOnly auth cookie
  */
 
-import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
+import { NextRequest, NextResponse } from 'next/server';
+import { checkRateLimit } from '@/lib/security/rateLimit';
+import { AUTH_RATE_LIMITS } from '@/lib/security/rateLimit.config';
+import { deleteAuthToken } from '@/lib/auth/cookies';
 
-export async function POST() {
+export async function POST(request: NextRequest) {
+  // Check rate limit: 10 logout requests per minute per IP
+  const rateLimitResponse = checkRateLimit(request, AUTH_RATE_LIMITS.LOGOUT);
+
+  if (rateLimitResponse) {
+    return rateLimitResponse;
+  }
+
   try {
-    const cookieStore = await cookies();
-    cookieStore.delete('auth-token');
+    await deleteAuthToken();
 
     return NextResponse.json({
       data: { message: 'Logged out successfully' },
