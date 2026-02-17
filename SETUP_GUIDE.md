@@ -1,4 +1,4 @@
-# CrackCV - Setup Guide
+# PrismaCV - Setup Guide
 
 ## Prerequisites
 
@@ -22,7 +22,7 @@ Before you begin, ensure you have the following installed on your system:
 
 ```bash
 git clone <repository-url>
-cd crack-cv-next
+cd prismacv-ui
 ```
 
 ### 2. Install Dependencies
