@@ -140,7 +140,7 @@ export const Team = () => {
                 </CardDescription>
               </CardHeader>
 
-              <CardContent className="text-center pb-2 flex-grow">
+              <CardContent className="text-center pb-2 grow">
                 <p className="text-muted-foreground">{description}</p>
               </CardContent>
 
