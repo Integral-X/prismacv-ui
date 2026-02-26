@@ -4,25 +4,21 @@
  */
 
 /**
- * Get API base URL from environment variables
- * Falls back to relative URLs in production (same-origin)
+ * Get API base URL from environment variables.
+ * Required in all environments so BFF route handlers can proxy to the backend.
+ * Returning empty string would make fetch() use same-origin URLs and break auth.
  */
 function getApiBaseUrl(service: string): string {
   const envKey = `NEXT_PUBLIC_${service.toUpperCase()}_API_URL`;
   const url = process.env[envKey];
 
-  if (!url) {
-    // In production, use relative URLs (same-origin)
-    if (process.env.NODE_ENV === 'production') {
-      return '';
-    }
-    // In development, throw error if not configured
+  if (!url || url.trim() === '') {
     throw new Error(
-      `Missing environment variable: ${envKey}. Please add it to your .env.local file.`
+      `Missing environment variable: ${envKey}. Required for backend proxy. Add it to .env.local (development) or your production environment.`
     );
   }
 
-  return url;
+  return url.replace(/\/$/, ''); // strip trailing slash for consistent URL building
 }
 
 /**

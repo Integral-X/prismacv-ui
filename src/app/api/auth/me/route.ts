@@ -6,6 +6,7 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { API_ENDPOINTS } from '@/lib/api/endpoints';
+import { BACKEND_API_ENDPOINTS } from '@/lib/api/backend-endpoints';
 
 export async function GET() {
   try {
@@ -25,13 +26,16 @@ export async function GET() {
     }
 
     // Call your backend service with JWT token
-    const response = await fetch(`${API_ENDPOINTS.MAIN}/auth/me`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await fetch(
+      `${API_ENDPOINTS.MAIN}${BACKEND_API_ENDPOINTS.auth.me}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
 
     if (!response.ok) {
       if (response.status === 401) {
