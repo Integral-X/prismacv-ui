@@ -56,6 +56,12 @@ GITHUB_CLIENT_SECRET=your-github-client-secret
 
 # API keys for external services
 GOOGLE_DOCUMENT_AI_KEY=your-google-document-ai-key
+
+# Backend API endpoints
+NEXT_PUBLIC_MAIN_API_URL=http://localhost:3001/api
+NEXT_PUBLIC_RESUME_API_URL=http://localhost:3002/api
+NEXT_PUBLIC_PAYMENTS_API_URL=http://localhost:3003/api
+NEXT_PUBLIC_INTEGRATIONS_API_URL=http://localhost:3004/api
 ```
 
 For development, you can generate a NEXTAUTH_SECRET with:

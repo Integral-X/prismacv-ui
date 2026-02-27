@@ -11,9 +11,17 @@ import { authService } from '@/lib/api/services/auth.service';
 import type { LoginCredentials } from '@/lib/api/services/auth.interface';
 import { queryKeys } from '@/lib/query/keys';
 
-export function useAuth() {
+interface UseAuthOptions {
+  loginRedirectPath?: string;
+  logoutRedirectPath?: string;
+}
+
+export function useAuth(options?: UseAuthOptions) {
   const queryClient = useQueryClient();
   const router = useRouter();
+
+  const loginRedirectPath = options?.loginRedirectPath ?? '/dashboard';
+  const logoutRedirectPath = options?.logoutRedirectPath ?? '/';
 
   /**
    * Get current user
@@ -38,7 +46,7 @@ export function useAuth() {
     onSuccess: () => {
       // Invalidate and refetch user data
       queryClient.invalidateQueries({ queryKey: queryKeys.auth.all });
-      router.push('/dashboard'); // Redirect after login
+      router.push(loginRedirectPath); // Redirect after login
     },
   });
 
@@ -50,7 +58,7 @@ export function useAuth() {
     onSuccess: () => {
       // Clear all queries
       queryClient.clear();
-      router.push('/');
+      router.push(logoutRedirectPath);
     },
   });
 
