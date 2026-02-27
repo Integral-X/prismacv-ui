@@ -90,7 +90,7 @@ export const LoginForm = ({ className, onSubmit }: LoginFormProps) => {
           <Input
             id="password"
             type={showPassword ? 'text' : 'password'}
-            placeholder="Your@email.com"
+            placeholder="Enter your password"
             aria-invalid={!!errors.password}
             disabled={isLoading}
             {...register('password')}
