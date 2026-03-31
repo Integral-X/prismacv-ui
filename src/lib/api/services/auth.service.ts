@@ -25,8 +25,8 @@ export const authService = {
   },
 
   /**
-   * Refresh JWT token
-   * Uses refresh token from httpOnly cookie
+   * Refresh JWT via BFF (`/api/auth/refresh`).
+   * Browser sends httpOnly `auth-token`; route proxies to backend and returns `data.token`.
    */
   refresh: async (): Promise<{ token: string }> => {
     return api.post<{ token: string }>(INTERNAL_API_ROUTES.auth.refresh);

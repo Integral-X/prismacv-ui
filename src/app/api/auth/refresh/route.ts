@@ -1,19 +1,22 @@
 /**
- * Refresh JWT Token Route Handler
- * Uses existing auth-token cookie, calls backend refresh endpoint,
- * and updates the httpOnly auth-token cookie.
+ * Refresh JWT Token Route Handler (BFF)
+ * Reads JWT from httpOnly `auth-token` cookie, calls backend refresh,
+ * updates the cookie, returns the new token in the JSON body (client uses `data.token`).
  */
 
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { API_ENDPOINTS } from '@/lib/api/endpoints';
 import { BACKEND_API_ENDPOINTS } from '@/lib/api/backend-endpoints';
-import { AUTH_COOKIE_MAX_AGE } from '@/lib/api/services/auth.constants';
-import { api } from '@/lib/api/client';
-import { ApiError } from '@/lib/api/types';
+import {
+  AUTH_BACKEND_FETCH_TIMEOUT_MS,
+  AUTH_COOKIE_MAX_AGE,
+} from '@/lib/api/services/auth.constants';
 
-interface RefreshResponse {
-  token: string;
+function extractTokenFromRefreshBody(raw: unknown): string | undefined {
+  if (typeof raw !== 'object' || raw === null) return undefined;
+  const o = raw as { data?: { token?: string }; token?: string };
+  return o.data?.token ?? o.token;
 }
 
 export async function POST() {
@@ -33,65 +36,77 @@ export async function POST() {
       );
     }
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(
+      () => controller.abort(),
+      AUTH_BACKEND_FETCH_TIMEOUT_MS
+    );
+
+    let response: Response;
     try {
-      const data = await api.post<RefreshResponse>(
+      response = await fetch(
         `${API_ENDPOINTS.MAIN}${BACKEND_API_ENDPOINTS.auth.refresh}`,
-        undefined,
         {
+          method: 'POST',
           headers: {
             Authorization: `Bearer ${currentToken}`,
             'Content-Type': 'application/json',
           },
+          signal: controller.signal,
         }
       );
-
-      if (!data.token) {
-        return NextResponse.json(
-          {
-            error: {
-              code: 'AUTH_ERROR',
-              message: 'Token refresh failed: no token returned by server',
-            },
-          },
-          { status: 502 }
-        );
-      }
-
-      // Update httpOnly cookie with new JWT token
-      const secure = process.env.NODE_ENV === 'production';
-      cookieStore.set('auth-token', data.token, {
-        httpOnly: true,
-        secure,
-        sameSite: 'lax',
-        maxAge: AUTH_COOKIE_MAX_AGE,
-        path: '/',
-      });
-
-      return NextResponse.json({
-        data: { token: data.token },
-      });
-    } catch (error) {
-      if (error instanceof ApiError) {
-        if (error.status === 401) {
-          // Backend indicates token/refresh is invalid - clear cookie
-          cookieStore.delete('auth-token');
-        }
-
-        return NextResponse.json(
-          {
-            error: {
-              code: error.code || 'AUTH_ERROR',
-              message: error.message,
-              details: error.details,
-            },
-          },
-          { status: error.status }
-        );
-      }
-
-      throw error;
+    } finally {
+      clearTimeout(timeoutId);
     }
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        cookieStore.delete('auth-token');
+      }
+      const error = await response.json().catch(() => ({
+        error: { code: 'AUTH_ERROR', message: 'Token refresh failed' },
+      }));
+      return NextResponse.json(error, { status: response.status });
+    }
+
+    const raw = await response.json();
+    const newToken = extractTokenFromRefreshBody(raw);
+
+    if (!newToken) {
+      return NextResponse.json(
+        {
+          error: {
+            code: 'AUTH_ERROR',
+            message: 'Token refresh failed: no token returned by server',
+          },
+        },
+        { status: 502 }
+      );
+    }
+
+    cookieStore.set('auth-token', newToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: AUTH_COOKIE_MAX_AGE,
+      path: '/',
+    });
+
+    return NextResponse.json({
+      data: { token: newToken },
+    });
   } catch (error) {
+    if (error instanceof Error && error.name === 'AbortError') {
+      return NextResponse.json(
+        {
+          error: {
+            code: 'UPSTREAM_TIMEOUT',
+            message: 'Auth service did not respond in time',
+          },
+        },
+        { status: 504 }
+      );
+    }
     // eslint-disable-next-line no-console
     console.error('Refresh token error:', error);
     return NextResponse.json(

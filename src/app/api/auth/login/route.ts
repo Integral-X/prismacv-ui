@@ -12,7 +12,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { API_ENDPOINTS } from '@/lib/api/endpoints';
 import { BACKEND_API_ENDPOINTS } from '@/lib/api/backend-endpoints';
-import { AUTH_COOKIE_MAX_AGE } from '@/lib/api/services/auth.constants';
+import {
+  AUTH_BACKEND_FETCH_TIMEOUT_MS,
+  AUTH_COOKIE_MAX_AGE,
+} from '@/lib/api/services/auth.constants';
 
 export async function POST(request: NextRequest) {
   try {
@@ -31,17 +34,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Call your backend auth service
-    const response = await fetch(
-      `${API_ENDPOINTS.MAIN}${BACKEND_API_ENDPOINTS.auth.login}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      }
+    // Call your backend auth service (bounded wait so hung upstream cannot stall forever)
+    const controller = new AbortController();
+    const timeoutId = setTimeout(
+      () => controller.abort(),
+      AUTH_BACKEND_FETCH_TIMEOUT_MS
     );
+
+    let response: Response;
+    try {
+      response = await fetch(
+        `${API_ENDPOINTS.MAIN}${BACKEND_API_ENDPOINTS.auth.login}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+          signal: controller.signal,
+        }
+      );
+    } finally {
+      clearTimeout(timeoutId);
+    }
 
     if (!response.ok) {
       const error = await response.json().catch(() => ({
@@ -82,6 +97,17 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
+    if (error instanceof Error && error.name === 'AbortError') {
+      return NextResponse.json(
+        {
+          error: {
+            code: 'UPSTREAM_TIMEOUT',
+            message: 'Login service did not respond in time',
+          },
+        },
+        { status: 504 }
+      );
+    }
     // eslint-disable-next-line no-console
     console.error('Login error:', error);
     return NextResponse.json(
