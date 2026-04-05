@@ -1,25 +1,27 @@
-const vars = {
-  NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
-} as const;
+type PublicEnvInput = {
+  NEXT_PUBLIC_API_URL: string | undefined;
+};
 
-function assertEnv(
-  vars: Record<string, string | undefined>
-): asserts vars is Record<string, string> {
-  const missing = Object.entries(vars)
-    .filter(([, value]) => !value)
-    .map(([key]) => key);
+type PublicEnv = {
+  NEXT_PUBLIC_API_URL: string;
+};
 
-  if (missing.length > 0) {
+function assertPublicEnv(input: PublicEnvInput): asserts input is PublicEnv {
+  if (!input.NEXT_PUBLIC_API_URL) {
     throw new Error(
-      `Missing required environment variables: ${missing.join(', ')}.\n` +
+      'Missing required environment variables: NEXT_PUBLIC_API_URL.\n' +
         'Check your .env.local file.'
     );
   }
 }
 
-assertEnv(vars);
+const publicEnv: PublicEnvInput = {
+  NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+};
 
-const apiOrigin = vars.NEXT_PUBLIC_API_URL.replace(/\/$/, '');
+assertPublicEnv(publicEnv);
+
+const apiOrigin = publicEnv.NEXT_PUBLIC_API_URL.replace(/\/$/, '');
 
 export const env = {
   /**
