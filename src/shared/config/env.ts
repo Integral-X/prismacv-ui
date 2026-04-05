@@ -19,6 +19,12 @@ function assertEnv(
 
 assertEnv(vars);
 
+const apiOrigin = vars.NEXT_PUBLIC_API_URL.replace(/\/$/, '');
+
 export const env = {
-  apiBaseUrl: `${vars.NEXT_PUBLIC_API_URL}/api/v1`,
+  /**
+   * Trailing slash is required: `new URL('auth/...', base)` replaces the last
+   * path segment of a base without a trailing slash, which would drop `v1`.
+   */
+  apiBaseUrl: `${apiOrigin}/api/v1/`,
 } as const;

@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers';
-import type { UserProfile } from './mappers';
+import { parseUserProfileFromJson, type UserProfile } from './mappers';
 
 /**
  * Returns the current authenticated user's profile from the session cookie,
@@ -19,7 +19,8 @@ export async function getCurrentUser(): Promise<UserProfile | null> {
   if (!raw) return null;
 
   try {
-    return JSON.parse(raw) as UserProfile;
+    const parsed: unknown = JSON.parse(raw);
+    return parseUserProfileFromJson(parsed);
   } catch {
     return null;
   }

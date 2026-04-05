@@ -36,6 +36,53 @@ export interface OtpResendResult {
 
 // ─── Mappers ──────────────────────────────────────────────────────────────────
 
+function parseDateField(value: unknown): Date | null {
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value;
+  }
+  if (typeof value === 'string' || typeof value === 'number') {
+    const d = new Date(value);
+    return Number.isNaN(d.getTime()) ? null : d;
+  }
+  return null;
+}
+
+function parseUserRole(value: unknown): UserRole | null {
+  if (value === 'regular' || value === 'admin') return value;
+  if (value === 'REGULAR') return 'regular';
+  if (value === 'PLATFORM_ADMIN') return 'admin';
+  return null;
+}
+
+/**
+ * Restores a `UserProfile` from `JSON.parse` output (e.g. session cookie).
+ * `Date` instances are not preserved by JSON — this converts date fields explicitly.
+ */
+export function parseUserProfileFromJson(value: unknown): UserProfile | null {
+  if (typeof value !== 'object' || value === null) return null;
+  const o = value as Record<string, unknown>;
+
+  if (typeof o.id !== 'string' || typeof o.email !== 'string') return null;
+  if (typeof o.emailVerified !== 'boolean') return null;
+
+  const role = parseUserRole(o.role);
+  if (!role) return null;
+
+  const createdAt = parseDateField(o.createdAt);
+  const updatedAt = parseDateField(o.updatedAt);
+  if (!createdAt || !updatedAt) return null;
+
+  return {
+    id: o.id,
+    email: o.email,
+    name: typeof o.name === 'string' ? o.name : undefined,
+    role,
+    emailVerified: o.emailVerified,
+    createdAt,
+    updatedAt,
+  };
+}
+
 function toUserRole(role: UserRoleContract): UserRole {
   return role === 'PLATFORM_ADMIN' ? 'admin' : 'regular';
 }

@@ -3,7 +3,11 @@ import type { HttpClient } from './http-client';
 import type { ApiEnvelope, ApiErrorEnvelope, RequestConfig } from './types';
 
 export class FetchHttpClient implements HttpClient {
-  constructor(private readonly baseUrl: string) {}
+  private readonly baseUrl: string;
+
+  constructor(baseUrl: string) {
+    this.baseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+  }
 
   private buildUrl(
     endpoint: string,
