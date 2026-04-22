@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
@@ -8,7 +9,7 @@ import { OtpForm } from "@/components/pages/auth/OtpForm";
 import type { OtpFormData } from "@/lib/validations/auth";
 import { resendOtpAction, verifyOtpAction } from "@/modules/auth/data/actions";
 
-export default function OtpPage() {
+function OtpPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email") ?? "";
@@ -69,5 +70,21 @@ export default function OtpPage() {
         <OtpForm onResend={handleResend} onSubmit={handleVerify} />
       </Card>
     </AuthFormLayout>
+  );
+}
+
+export default function OtpPage() {
+  return (
+    <Suspense
+      fallback={
+        <AuthFormLayout>
+          <Card className="w-full max-w-[440px] bg-white shadow-card p-8">
+            <p className="text-sm text-content-secondary">Loading…</p>
+          </Card>
+        </AuthFormLayout>
+      }
+    >
+      <OtpPageContent />
+    </Suspense>
   );
 }

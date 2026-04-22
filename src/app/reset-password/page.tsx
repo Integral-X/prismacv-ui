@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
@@ -8,7 +9,7 @@ import { ResetPasswordForm } from "@/components/pages/auth/ResetPasswordForm";
 import type { ResetPasswordFormData } from "@/lib/validations/auth";
 import { resetPasswordAction } from "@/modules/auth/data/actions";
 
-export default function ResetPasswordPage() {
+function ResetPasswordPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const resetToken = searchParams.get("token") ?? "";
@@ -46,5 +47,21 @@ export default function ResetPasswordPage() {
         <ResetPasswordForm onSubmit={handleReset} />
       </Card>
     </AuthFormLayout>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense
+      fallback={
+        <AuthFormLayout>
+          <Card className="w-full max-w-[440px] bg-white shadow-card p-8">
+            <p className="text-sm text-content-secondary">Loading…</p>
+          </Card>
+        </AuthFormLayout>
+      }
+    >
+      <ResetPasswordPageContent />
+    </Suspense>
   );
 }
