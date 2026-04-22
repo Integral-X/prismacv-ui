@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { Navbar } from "@/components/common/Navbar";
 import { Footer } from "@/components/common/Footer";
 import { OnboardingStepper } from "@/components/pages/onboarding/OnboardingStepper";
 import { WavyPattern } from "@/components/common/WavyPattern";
@@ -10,7 +9,7 @@ import { FileUpload } from "@/components/pages/onboarding/FileUpload";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
-export default function UploadCVPage() {
+export function UploadCVPageClient() {
   const router = useRouter();
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
 
@@ -39,9 +38,7 @@ export default function UploadCVPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
-      <Navbar />
-
+    <>
       <main className="flex-1 flex flex-col py-8 md:py-12 px-4 relative">
         <div className="container max-w-4xl mx-auto animate-fade-in w-full">
           {/* Stepper */}
@@ -112,6 +109,6 @@ export default function UploadCVPage() {
       </div>
 
       <Footer />
-    </div>
+    </>
   );
 }

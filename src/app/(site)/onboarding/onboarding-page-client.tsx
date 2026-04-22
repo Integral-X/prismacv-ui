@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { Navbar } from "@/components/common/Navbar";
 import { Footer } from "@/components/common/Footer";
 import { OnboardingStepper } from "@/components/pages/onboarding/OnboardingStepper";
 import { OnboardingCard } from "@/components/pages/onboarding/OnboardingCard";
@@ -11,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Upload, Linkedin, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export default function OnboardingPage() {
+export function OnboardingPageClient() {
   const router = useRouter();
   const [selectedOption, setSelectedOption] = React.useState<string | null>(
     null
@@ -55,9 +54,7 @@ export default function OnboardingPage() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
-      <Navbar />
-
+    <>
       <main className="flex-1 flex flex-col items-center py-12 md:py-16 px-4 relative">
         <div className="container max-w-5xl mx-auto animate-fade-in w-full">
           {/* Stepper */}
@@ -112,6 +109,6 @@ export default function OnboardingPage() {
       </div>
 
       <Footer />
-    </div>
+    </>
   );
 }

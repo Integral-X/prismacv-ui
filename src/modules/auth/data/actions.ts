@@ -1,5 +1,7 @@
 "use server";
 
+import { redirect } from "next/navigation";
+
 import { HttpError } from "@/shared/http/http-error";
 import {
   forgotPassword,
@@ -244,4 +246,9 @@ export async function resetPasswordAction(input: {
   } catch (error) {
     return toFailureResult(error, "Unable to reset your password right now.");
   }
+}
+
+export async function logoutUserAction(): Promise<void> {
+  await clearAuthSession();
+  redirect("/login");
 }

@@ -28,5 +28,5 @@ export const env = {
    * Trailing slash is required: `new URL('auth/...', base)` replaces the last
    * path segment of a base without a trailing slash, which would drop `v1`.
    */
-  apiBaseUrl: `${apiBaseUrl}/`,
+  apiBaseUrl: `${apiBaseUrl}/v1/`,
 } as const;

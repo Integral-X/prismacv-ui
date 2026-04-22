@@ -1,6 +1,5 @@
 "use client";
 
-import { Navbar } from "@/components/common/Navbar";
 import { Hero } from "@/components/pages/landing-page/Hero";
 import { TemplatePicker } from "@/components/pages/landing-page/TemplatePicker";
 import { Features2 } from "@/components/pages/landing-page/Features2";
@@ -14,10 +13,9 @@ import { FAQ } from "@/components/pages/landing-page/FAQ";
 import { Footer } from "@/components/common/Footer";
 import { ScrollToTop } from "@/components/pages/landing-page/ScrollToTop";
 
-export default function Home() {
+export function LandingPageClient() {
   return (
     <>
-      <Navbar />
       <Hero />
       <TemplatePicker />
       <Features2 />
