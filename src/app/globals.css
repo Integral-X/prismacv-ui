@@ -1,6 +1,6 @@
-@import 'tailwindcss';
-@import 'tw-animate-css';
-@import '../design-system/tokens.css';
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "../design-system/tokens.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -184,7 +184,7 @@ html {
 
 /* Hero section background gradient */
 body::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 50%;
