@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
 const trackingCards = [
   {
     id: 1,
-    letter: 'S',
-    title: 'aved',
-    fullTitle: 'Saved',
+    letter: "S",
+    title: "aved",
+    fullTitle: "Saved",
     description:
-      'Save job opportunities you are interested in and review them later.',
-    bgColor: 'bg-[#B8DFE6]',
-    textColor: 'text-[#4A9BA8]',
+      "Save job opportunities you are interested in and review them later.",
+    bgColor: "bg-[#B8DFE6]",
+    textColor: "text-[#4A9BA8]",
     icon: (
       <svg
         className="w-6 h-6"
@@ -28,12 +28,12 @@ const trackingCards = [
   },
   {
     id: 2,
-    letter: 'A',
-    title: 'pplied',
-    fullTitle: 'Applied',
-    description: 'Track all the jobs you have applied for in one place.',
-    bgColor: 'bg-[#C8E6C9]',
-    textColor: 'text-[#4CAF50]',
+    letter: "A",
+    title: "pplied",
+    fullTitle: "Applied",
+    description: "Track all the jobs you have applied for in one place.",
+    bgColor: "bg-[#C8E6C9]",
+    textColor: "text-[#4CAF50]",
     icon: (
       <svg
         className="w-6 h-6"
@@ -52,12 +52,12 @@ const trackingCards = [
   },
   {
     id: 3,
-    letter: 'I',
-    title: 'nterview',
-    fullTitle: 'Interview',
-    description: 'Keep your interview dates, notes, and follow-ups organized.',
-    bgColor: 'bg-[#D4C5F9]',
-    textColor: 'text-[#7E57C2]',
+    letter: "I",
+    title: "nterview",
+    fullTitle: "Interview",
+    description: "Keep your interview dates, notes, and follow-ups organized.",
+    bgColor: "bg-[#D4C5F9]",
+    textColor: "text-[#7E57C2]",
     icon: (
       <svg
         className="w-6 h-6"
@@ -76,12 +76,12 @@ const trackingCards = [
   },
   {
     id: 4,
-    letter: 'O',
-    title: 'ffer',
-    fullTitle: 'Offer',
-    description: 'Record the job offers you receive and compare easily.',
-    bgColor: 'bg-[#C8E6C9]',
-    textColor: 'text-[#4CAF50]',
+    letter: "O",
+    title: "ffer",
+    fullTitle: "Offer",
+    description: "Record the job offers you receive and compare easily.",
+    bgColor: "bg-[#C8E6C9]",
+    textColor: "text-[#4CAF50]",
     icon: (
       <svg
         className="w-6 h-6"
@@ -100,13 +100,13 @@ const trackingCards = [
   },
   {
     id: 5,
-    letter: 'R',
-    title: 'ejected',
-    fullTitle: 'Rejected',
+    letter: "R",
+    title: "ejected",
+    fullTitle: "Rejected",
     description:
-      'See which applications were rejected and learn where to improve.',
-    bgColor: 'bg-[#FFCDD2]',
-    textColor: 'text-[#E57373]',
+      "See which applications were rejected and learn where to improve.",
+    bgColor: "bg-[#FFCDD2]",
+    textColor: "text-[#E57373]",
     icon: (
       <svg
         className="w-6 h-6"
@@ -131,7 +131,7 @@ export const JobTracking = () => {
       className="py-16 md:py-20"
       style={{
         background:
-          'linear-gradient(179.84deg, #FFFFFF 0%, rgba(57, 177, 185, 0.15) 100%)',
+          "linear-gradient(179.84deg, #FFFFFF 0%, rgba(57, 177, 185, 0.15) 100%)",
       }}
     >
       <div className="container mx-auto px-4">

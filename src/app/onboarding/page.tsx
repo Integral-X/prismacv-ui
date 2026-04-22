@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { useRouter } from 'next/navigation';
-import { Navbar } from '@/components/common/Navbar';
-import { Footer } from '@/components/common/Footer';
-import { OnboardingStepper } from '@/components/pages/onboarding/OnboardingStepper';
-import { OnboardingCard } from '@/components/pages/onboarding/OnboardingCard';
-import { WavyPattern } from '@/components/common/WavyPattern';
-import { Button } from '@/components/ui/button';
-import { Upload, Linkedin, FileText } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { Navbar } from "@/components/common/Navbar";
+import { Footer } from "@/components/common/Footer";
+import { OnboardingStepper } from "@/components/pages/onboarding/OnboardingStepper";
+import { OnboardingCard } from "@/components/pages/onboarding/OnboardingCard";
+import { WavyPattern } from "@/components/common/WavyPattern";
+import { Button } from "@/components/ui/button";
+import { Upload, Linkedin, FileText } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -22,11 +22,11 @@ export default function OnboardingPage() {
   };
 
   const handleContinue = () => {
-    if (selectedOption === 'upload') {
-      router.push('/onboarding/upload-cv');
-    } else if (selectedOption === 'linkedin') {
-      router.push('/onboarding/import-linkedin');
-    } else if (selectedOption === 'scratch') {
+    if (selectedOption === "upload") {
+      router.push("/onboarding/upload-cv");
+    } else if (selectedOption === "linkedin") {
+      router.push("/onboarding/import-linkedin");
+    } else if (selectedOption === "scratch") {
       // TODO: Navigate to manual entry page
       // router.push('/onboarding/manual-entry');
     }
@@ -34,22 +34,22 @@ export default function OnboardingPage() {
 
   const cardOptions = [
     {
-      id: 'upload',
-      title: 'Upload Existing CV',
+      id: "upload",
+      title: "Upload Existing CV",
       description:
         "Have a resume? We'll parse it and fill in the details for you.",
       icon: <Upload className="w-10 h-10" strokeWidth={1.5} />,
     },
     {
-      id: 'linkedin',
-      title: 'Import from LinkedIn',
-      description: 'Get a head start by importing your profile from LinkedIn.',
+      id: "linkedin",
+      title: "Import from LinkedIn",
+      description: "Get a head start by importing your profile from LinkedIn.",
       icon: <Linkedin className="w-10 h-10" strokeWidth={1.5} />,
     },
     {
-      id: 'scratch',
-      title: 'Start from Scratch',
-      description: 'Build your resume step-by-step with our guided process.',
+      id: "scratch",
+      title: "Start from Scratch",
+      description: "Build your resume step-by-step with our guided process.",
       icon: <FileText className="w-10 h-10" strokeWidth={1.5} />,
     },
   ];
@@ -81,7 +81,7 @@ export default function OnboardingPage() {
                 onClick={() => handleCardClick(option.id)}
                 className={cn(
                   selectedOption === option.id &&
-                    'border-primary shadow-lg scale-[1.02] md:scale-105'
+                    "border-primary shadow-lg scale-[1.02] md:scale-105"
                 )}
               />
             ))}

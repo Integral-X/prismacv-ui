@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
-} from '@/components/ui/navigation-menu';
+} from "@/components/ui/navigation-menu";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/components/ui/sheet';
+} from "@/components/ui/sheet";
 
-import { Button } from '../ui/button';
-import { Menu } from 'lucide-react';
-import Image from 'next/image';
+import { Button } from "../ui/button";
+import { Menu } from "lucide-react";
+import Image from "next/image";
 
 interface RouteProps {
   href: string;
@@ -25,16 +25,16 @@ interface RouteProps {
 
 const routeList: RouteProps[] = [
   {
-    href: '#templates',
-    label: 'Templates',
+    href: "#templates",
+    label: "Templates",
   },
   {
-    href: '#pricing',
-    label: 'Pricing',
+    href: "#pricing",
+    label: "Pricing",
   },
   {
-    href: '#faq',
-    label: 'FAQ',
+    href: "#faq",
+    label: "FAQ",
   },
 ];
 
@@ -71,7 +71,7 @@ export const Navbar = () => {
                 <span className="sr-only">Menu Icon</span>
               </SheetTrigger>
 
-              <SheetContent side={'left'}>
+              <SheetContent side={"left"}>
                 <SheetHeader>
                   <SheetTitle className="font-bold text-xl">
                     PrismaCV

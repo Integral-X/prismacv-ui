@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Button } from '../../ui/button';
+import { useState } from "react";
+import { Button } from "../../ui/button";
 
 interface PricingTier {
   name: string;
@@ -15,52 +15,52 @@ interface PricingTier {
 
 const pricingTiers: PricingTier[] = [
   {
-    name: 'Free',
+    name: "Free",
     description:
-      'Ideal for individuals who need quick access to basic features.',
+      "Ideal for individuals who need quick access to basic features.",
     monthlyPrice: 0,
     yearlyPrice: 0,
     features: [
-      'All resume templates',
-      'Basic resume sections',
-      'Crackcv branding',
-      'Maximum 15 section items',
-      'Access to all design tools',
+      "All resume templates",
+      "Basic resume sections",
+      "Crackcv branding",
+      "Maximum 15 section items",
+      "Access to all design tools",
     ],
-    buttonText: 'Get Started Now',
+    buttonText: "Get Started Now",
   },
   {
-    name: 'Professional',
+    name: "Professional",
     description:
-      'Ideal for individuals who who need advanced features and tools.',
+      "Ideal for individuals who who need advanced features and tools.",
     monthlyPrice: 25,
     yearlyPrice: 19,
     features: [
-      '150 resumes and cover letters',
-      'All resume templates',
-      'Real-time content suggestions',
-      'ATS check (Applicant Tracking System)',
-      'Pro resume sections',
-      'Unlimited section items',
+      "150 resumes and cover letters",
+      "All resume templates",
+      "Real-time content suggestions",
+      "ATS check (Applicant Tracking System)",
+      "Pro resume sections",
+      "Unlimited section items",
     ],
-    buttonText: 'Get Started Now',
+    buttonText: "Get Started Now",
     featured: true,
   },
   {
-    name: 'Ultimate',
+    name: "Ultimate",
     description:
-      'Ideal for individuals who need quick access to basic features.',
+      "Ideal for individuals who need quick access to basic features.",
     monthlyPrice: 30,
     yearlyPrice: 23,
     features: [
-      '150 resumes and cover letters',
-      'All resume templates',
-      'Real-time content suggestions',
-      'ATS check',
-      'Pro resume sections',
-      'Unlimited section items',
+      "150 resumes and cover letters",
+      "All resume templates",
+      "Real-time content suggestions",
+      "ATS check",
+      "Pro resume sections",
+      "Unlimited section items",
     ],
-    buttonText: 'Get Started Now',
+    buttonText: "Get Started Now",
   },
 ];
 
@@ -77,11 +77,11 @@ const CheckIcon = ({ featured }: { featured?: boolean }) => (
       cx="10"
       cy="10"
       r="10"
-      fill={featured ? 'rgba(255, 255, 255, 0.2)' : '#E0F2F1'}
+      fill={featured ? "rgba(255, 255, 255, 0.2)" : "#E0F2F1"}
     />
     <path
       d="M6 10L9 13L14 7"
-      stroke={featured ? 'white' : '#4ECCA3'}
+      stroke={featured ? "white" : "#4ECCA3"}
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -116,8 +116,8 @@ export const Pricing = () => {
                 onClick={() => setIsYearly(false)}
                 className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
                   !isYearly
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'bg-transparent text-gray-600'
+                    ? "bg-white text-gray-900 shadow-sm"
+                    : "bg-transparent text-gray-600"
                 }`}
               >
                 Monthly
@@ -126,8 +126,8 @@ export const Pricing = () => {
                 onClick={() => setIsYearly(true)}
                 className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
                   isYearly
-                    ? 'bg-primary text-white shadow-sm'
-                    : 'bg-transparent text-gray-600'
+                    ? "bg-primary text-white shadow-sm"
+                    : "bg-transparent text-gray-600"
                 }`}
               >
                 Yearly
@@ -156,19 +156,19 @@ export const Pricing = () => {
               key={tier.name}
               className={`rounded-2xl p-8 transition-all duration-300 ${
                 tier.featured
-                  ? 'bg-primary text-white scale-105 shadow-2xl'
-                  : 'bg-white border-2 border-primary/20 shadow-lg hover:shadow-xl'
+                  ? "bg-primary text-white scale-105 shadow-2xl"
+                  : "bg-white border-2 border-primary/20 shadow-lg hover:shadow-xl"
               }`}
             >
               {/* Card Header */}
               <div className="mb-6">
                 <h3
-                  className={`text-2xl font-semibold mb-2 ${tier.featured ? 'text-white' : 'text-gray-900'}`}
+                  className={`text-2xl font-semibold mb-2 ${tier.featured ? "text-white" : "text-gray-900"}`}
                 >
                   {tier.name}
                 </h3>
                 <p
-                  className={`text-sm ${tier.featured ? 'text-white/80' : 'text-muted-foreground'}`}
+                  className={`text-sm ${tier.featured ? "text-white/80" : "text-muted-foreground"}`}
                 >
                   {tier.description}
                 </p>
@@ -178,12 +178,12 @@ export const Pricing = () => {
               <div className="mb-6">
                 <div className="flex items-baseline gap-2">
                   <span
-                    className={`text-5xl font-bold ${tier.featured ? 'text-white' : 'text-gray-900'}`}
+                    className={`text-5xl font-bold ${tier.featured ? "text-white" : "text-gray-900"}`}
                   >
                     ${isYearly ? tier.yearlyPrice : tier.monthlyPrice}
                   </span>
                   <span
-                    className={`text-lg ${tier.featured ? 'text-white/70' : 'text-muted-foreground'}`}
+                    className={`text-lg ${tier.featured ? "text-white/70" : "text-muted-foreground"}`}
                   >
                     / Month
                   </span>
@@ -194,8 +194,8 @@ export const Pricing = () => {
               <Button
                 className={`w-full mb-8 py-6 rounded-lg text-base font-medium transition-all ${
                   tier.featured
-                    ? 'bg-white text-primary hover:bg-gray-100'
-                    : 'bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-white'
+                    ? "bg-white text-primary hover:bg-gray-100"
+                    : "bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-white"
                 }`}
                 asChild
               >
@@ -208,7 +208,7 @@ export const Pricing = () => {
                   <li key={index} className="flex items-start gap-3">
                     <CheckIcon featured={tier.featured} />
                     <span
-                      className={`text-sm ${tier.featured ? 'text-white' : 'text-gray-700'}`}
+                      className={`text-sm ${tier.featured ? "text-white" : "text-gray-700"}`}
                     >
                       {feature}
                     </span>

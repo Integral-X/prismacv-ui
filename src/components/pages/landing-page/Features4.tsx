@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
+import Image from "next/image";
 
 const CheckIcon = () => (
   <svg
@@ -39,9 +39,9 @@ const customizationFeatures = [
         </text>
       </svg>
     ),
-    title: 'Custom Typography',
+    title: "Custom Typography",
     description:
-      'Select from premium fonts and customize text styles to match your personal brand.',
+      "Select from premium fonts and customize text styles to match your personal brand.",
   },
   {
     icon: (
@@ -65,9 +65,9 @@ const customizationFeatures = [
         <circle cx="16" cy="12" r="2" fill="#E28957" />
       </svg>
     ),
-    title: 'Color Customization',
+    title: "Color Customization",
     description:
-      'Pick your perfect color scheme with our intuitive palette selector and live preview.',
+      "Pick your perfect color scheme with our intuitive palette selector and live preview.",
   },
   {
     icon: (
@@ -95,32 +95,32 @@ const customizationFeatures = [
         />
       </svg>
     ),
-    title: 'Easy Configuration',
+    title: "Easy Configuration",
     description:
-      'Fine-tune every detail with simple, intuitive controls for a truly personalized result.',
+      "Fine-tune every detail with simple, intuitive controls for a truly personalized result.",
   },
 ];
 
 const atsFeatures = [
-  'Integrate relevant keywords that match job descriptions and industry standards.',
-  'Automatically adjust your resume to be ATS-friendly, improving your chances of landing an interview.',
-  'Automatically adjust your resume to be ATS-friendly, improving your chances of landing an interview.',
+  "Integrate relevant keywords that match job descriptions and industry standards.",
+  "Automatically adjust your resume to be ATS-friendly, improving your chances of landing an interview.",
+  "Automatically adjust your resume to be ATS-friendly, improving your chances of landing an interview.",
 ];
 
 const resumeSections = [
   {
-    text: 'Professional sections like ',
-    highlights: ['Experience', 'Skills', 'Summary', 'Education'],
+    text: "Professional sections like ",
+    highlights: ["Experience", "Skills", "Summary", "Education"],
   },
   {
-    text: 'Personal sections like ',
-    highlights: ['Strengths', 'Quotes', 'Books', 'Interests', 'My Time'],
+    text: "Personal sections like ",
+    highlights: ["Strengths", "Quotes", "Books", "Interests", "My Time"],
   },
   {
-    text: 'Other sections like ',
-    highlights: ['Certifications', 'Awards', 'Achievements', 'Languages'],
-    extraText: ' and ',
-    extraHighlights: ['References'],
+    text: "Other sections like ",
+    highlights: ["Certifications", "Awards", "Achievements", "Languages"],
+    extraText: " and ",
+    extraHighlights: ["References"],
   },
 ];
 

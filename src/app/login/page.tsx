@@ -1,16 +1,37 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Card } from '@/components/ui/card';
-import { AuthFormLayout } from '@/components/layouts/AuthFormLayout';
-import { LoginForm } from '@/components/pages/login/LoginForm';
-import { SocialAuthButtons } from '@/components/pages/login/SocialAuthButtons';
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Card } from "@/components/ui/card";
+import { AuthFormLayout } from "@/components/layouts/AuthFormLayout";
+import { LoginForm } from "@/components/pages/login/LoginForm";
+import { SocialAuthButtons } from "@/components/pages/login/SocialAuthButtons";
+import type { LoginFormData } from "@/lib/validations/auth";
+import { loginUserAction } from "@/modules/auth/data/actions";
 
 export default function LoginPage() {
-  const handleLogin = async () => {
-    // TODO: Implement actual API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    // router.push('/dashboard');
+  const router = useRouter();
+
+  const handleLogin = async (data: LoginFormData) => {
+    const result = await loginUserAction({
+      email: data.email,
+      password: data.password,
+      rememberMe: data.rememberMe,
+    });
+
+    if (!result.ok) {
+      if (result.code === "email_not_verified" && result.email) {
+        router.push(
+          `/otp?mode=signup&email=${encodeURIComponent(result.email)}`
+        );
+        return;
+      }
+
+      toast.error(result.message);
+      return;
+    }
+
+    router.push(result.redirectTo ?? "/onboarding");
   };
 
   return (

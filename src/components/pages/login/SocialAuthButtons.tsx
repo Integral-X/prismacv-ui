@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface SocialAuthButtonsProps {
   className?: string;
@@ -26,7 +26,7 @@ export const SocialAuthButtons = ({
   };
 
   return (
-    <div className={cn('flex flex-row gap-3', className)}>
+    <div className={cn("flex flex-row gap-3", className)}>
       <Button
         type="button"
         variant="outline"

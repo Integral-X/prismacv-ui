@@ -1,5 +1,5 @@
-import { cookies } from 'next/headers';
-import { parseUserProfileFromJson, type UserProfile } from './mappers';
+import { cookies } from "next/headers";
+import { parseUserProfileFromJson, type UserProfile } from "./mappers";
 
 /**
  * Returns the current authenticated user's profile from the session cookie,
@@ -14,7 +14,7 @@ import { parseUserProfileFromJson, type UserProfile } from './mappers';
  */
 export async function getCurrentUser(): Promise<UserProfile | null> {
   const cookieStore = await cookies();
-  const raw = cookieStore.get('user-profile')?.value;
+  const raw = cookieStore.get("user-profile")?.value;
 
   if (!raw) return null;
 
@@ -32,5 +32,5 @@ export async function getCurrentUser(): Promise<UserProfile | null> {
  */
 export async function isAuthenticated(): Promise<boolean> {
   const cookieStore = await cookies();
-  return cookieStore.has('access-token');
+  return cookieStore.has("access-token");
 }

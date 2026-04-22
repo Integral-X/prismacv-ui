@@ -11,9 +11,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 
-const fs = require('fs');
-const path = require('path');
-const tokens = require('../src/design-system/tokens');
+const fs = require("fs");
+const path = require("path");
+const tokens = require("../src/design-system/tokens");
 
 const { colors, spacing, radii, shadows, typography, zIndex } = tokens;
 
@@ -23,20 +23,20 @@ const { colors, spacing, radii, shadows, typography, zIndex } = tokens;
  */
 function flattenObject(
   obj: any,
-  prefix: string = '',
-  separator: string = '-'
+  prefix: string = "",
+  separator: string = "-"
 ): Record<string, string> {
   const result: Record<string, string> = {};
 
   for (const [key, value] of Object.entries(obj)) {
     const newKey = prefix ? `${prefix}${separator}${key}` : key;
 
-    if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+    if (typeof value === "object" && value !== null && !Array.isArray(value)) {
       // Handle special cases like fontSize which has { size, lineHeight }
-      if ('size' in value && 'lineHeight' in value) {
+      if ("size" in value && "lineHeight" in value) {
         result[newKey] = (value as any).size;
         result[`${newKey}-line-height`] = (value as any).lineHeight;
-      } else if (key === 'DEFAULT') {
+      } else if (key === "DEFAULT") {
         // Handle DEFAULT keys - merge up to parent level
         result[prefix] = String(value);
       } else {
@@ -60,11 +60,11 @@ function generateCSSVariables(
 ): string {
   const lines = Object.entries(tokens).map(([key, value]) => {
     // Remove 'DEFAULT' from key names as they're already flattened
-    const cleanKey = key.replace(/-DEFAULT$/, '');
+    const cleanKey = key.replace(/-DEFAULT$/, "");
     return `  --${prefix}-${cleanKey}: ${value};`;
   });
 
-  return lines.join('\n');
+  return lines.join("\n");
 }
 
 /**
@@ -86,37 +86,37 @@ function generateTokensCSS() {
   /* ========================================================================
      COLORS
      ======================================================================== */
-${generateCSSVariables(flattenObject(colors), 'color')}
+${generateCSSVariables(flattenObject(colors), "color")}
 
   /* ========================================================================
      SPACING
      ======================================================================== */
-${generateCSSVariables(flattenObject(spacing), 'spacing')}
+${generateCSSVariables(flattenObject(spacing), "spacing")}
 
   /* ========================================================================
      RADII (Border Radius)
      ======================================================================== */
-${generateCSSVariables(flattenObject(radii), 'radius')}
+${generateCSSVariables(flattenObject(radii), "radius")}
 
   /* ========================================================================
      SHADOWS
      ======================================================================== */
-${generateCSSVariables(flattenObject(shadows), 'shadow')}
+${generateCSSVariables(flattenObject(shadows), "shadow")}
 
   /* ========================================================================
      TYPOGRAPHY
      ======================================================================== */
-${generateCSSVariables(flattenObject(typography), 'font')}
+${generateCSSVariables(flattenObject(typography), "font")}
 
   /* ========================================================================
      Z-INDEX
      ======================================================================== */
-${generateCSSVariables(flattenObject(zIndex), 'z')}
+${generateCSSVariables(flattenObject(zIndex), "z")}
 }
 `;
 
   // Write the CSS file
-  const outputPath = path.join(__dirname, '../src/design-system/tokens.css');
+  const outputPath = path.join(__dirname, "../src/design-system/tokens.css");
 
   // Ensure directory exists
   const dir = path.dirname(outputPath);
@@ -124,11 +124,11 @@ ${generateCSSVariables(flattenObject(zIndex), 'z')}
     fs.mkdirSync(dir, { recursive: true });
   }
 
-  fs.writeFileSync(outputPath, cssContent, 'utf-8');
+  fs.writeFileSync(outputPath, cssContent, "utf-8");
 
-  console.log('✅ Design tokens CSS generated successfully!');
+  console.log("✅ Design tokens CSS generated successfully!");
   console.log(`📝 Output: ${outputPath}`);
-  console.log('\n💡 Import this file in your globals.css:');
+  console.log("\n💡 Import this file in your globals.css:");
   console.log('   @import "./design-system/tokens.css";');
 }
 
@@ -136,6 +136,6 @@ ${generateCSSVariables(flattenObject(zIndex), 'z')}
 try {
   generateTokensCSS();
 } catch (error) {
-  console.error('❌ Error generating CSS tokens:', error);
+  console.error("❌ Error generating CSS tokens:", error);
   process.exit(1);
 }

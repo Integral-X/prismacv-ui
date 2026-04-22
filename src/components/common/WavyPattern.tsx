@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
 interface WavyPatternProps {
   className?: string;
@@ -8,7 +8,7 @@ interface WavyPatternProps {
 
 export const WavyPattern = ({ className, height = 200 }: WavyPatternProps) => {
   return (
-    <div className={cn('relative w-full overflow-hidden', className)}>
+    <div className={cn("relative w-full overflow-hidden", className)}>
       <svg
         className="w-full"
         viewBox="0 0 1440 200"

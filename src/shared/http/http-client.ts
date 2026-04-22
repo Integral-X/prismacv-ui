@@ -1,4 +1,4 @@
-import type { RequestConfig } from './types';
+import type { RequestConfig } from "./types";
 
 export interface HttpClient {
   get<T>(endpoint: string, config?: RequestConfig): Promise<T>;

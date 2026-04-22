@@ -1,30 +1,35 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { useForm, type Resolver } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import Link from 'next/link';
-import { Eye, EyeOff } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
-import { loginSchema, type LoginFormData } from '@/lib/validations/auth';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import { useForm, type Resolver } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { Eye, EyeOff } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { loginSchema, type LoginFormData } from "@/lib/validations/auth";
+import { cn } from "@/lib/utils";
 
 interface LoginFormProps {
   className?: string;
+  errorMessage?: string;
   onSubmit?: (data: LoginFormData) => void | Promise<void>;
 }
 
-export const LoginForm = ({ className, onSubmit }: LoginFormProps) => {
+export const LoginForm = ({
+  className,
+  errorMessage,
+  onSubmit,
+}: LoginFormProps) => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema) as Resolver<LoginFormData>,
     defaultValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
       rememberMe: false,
     },
   });
@@ -35,7 +40,7 @@ export const LoginForm = ({ className, onSubmit }: LoginFormProps) => {
     setValue,
     watch,
   } = form;
-  const rememberMe = watch('rememberMe');
+  const rememberMe = watch("rememberMe");
 
   const handleFormSubmit = async (data: LoginFormData) => {
     try {
@@ -53,7 +58,7 @@ export const LoginForm = ({ className, onSubmit }: LoginFormProps) => {
   return (
     <form
       onSubmit={form.handleSubmit(handleFormSubmit)}
-      className={cn('flex flex-col gap-6', className)}
+      className={cn("flex flex-col gap-6", className)}
     >
       {/* Email Field */}
       <div className="flex flex-col gap-2">
@@ -69,7 +74,7 @@ export const LoginForm = ({ className, onSubmit }: LoginFormProps) => {
           placeholder="Enter your email"
           aria-invalid={!!errors.email}
           disabled={isLoading}
-          {...register('email')}
+          {...register("email")}
         />
         {errors.email && (
           <p className="text-sm text-feedback-error" role="alert">
@@ -89,18 +94,18 @@ export const LoginForm = ({ className, onSubmit }: LoginFormProps) => {
         <div className="relative">
           <Input
             id="password"
-            type={showPassword ? 'text' : 'password'}
+            type={showPassword ? "text" : "password"}
             placeholder="Enter your password"
             aria-invalid={!!errors.password}
             disabled={isLoading}
-            {...register('password')}
+            {...register("password")}
             className="pr-10"
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-content-tertiary hover:text-content-primary transition-colors"
-            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            aria-label={showPassword ? "Hide password" : "Show password"}
             disabled={isLoading}
           >
             {showPassword ? (
@@ -124,7 +129,7 @@ export const LoginForm = ({ className, onSubmit }: LoginFormProps) => {
             id="rememberMe"
             checked={rememberMe}
             onCheckedChange={(checked) =>
-              setValue('rememberMe', checked as boolean)
+              setValue("rememberMe", checked as boolean)
             }
             disabled={isLoading}
           />
@@ -150,12 +155,18 @@ export const LoginForm = ({ className, onSubmit }: LoginFormProps) => {
         disabled={isLoading}
         className="w-full h-12 bg-[#069EA8] hover:bg-[#058a93] text-white font-medium text-base"
       >
-        {isLoading ? 'Logging in...' : 'Login'}
+        {isLoading ? "Logging in..." : "Login"}
       </Button>
+
+      {errorMessage ? (
+        <p className="text-sm text-feedback-error text-center" role="alert">
+          {errorMessage}
+        </p>
+      ) : null}
 
       {/* Sign Up Link */}
       <p className="text-center text-sm text-content-secondary">
-        First time here?{' '}
+        First time here?{" "}
         <Link
           href="/signup"
           className="text-interactive-link hover:text-interactive-link-hover font-medium transition-colors"

@@ -1,14 +1,40 @@
-'use client';
+"use client";
 
-import { Card } from '@/components/ui/card';
-import { AuthFormLayout } from '@/components/layouts/AuthFormLayout';
-import { ResetPasswordForm } from '@/components/pages/auth/ResetPasswordForm';
+import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
+import { Card } from "@/components/ui/card";
+import { AuthFormLayout } from "@/components/layouts/AuthFormLayout";
+import { ResetPasswordForm } from "@/components/pages/auth/ResetPasswordForm";
+import type { ResetPasswordFormData } from "@/lib/validations/auth";
+import { resetPasswordAction } from "@/modules/auth/data/actions";
 
 export default function ResetPasswordPage() {
-  const handleReset = async () => {
-    // TODO: Implement API (use token from URL/query)
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    // router.push('/login');
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const resetToken = searchParams.get("token") ?? "";
+
+  const handleReset = async (data: ResetPasswordFormData) => {
+    if (!resetToken) {
+      toast.error("Missing or invalid password reset token.");
+      return;
+    }
+
+    const result = await resetPasswordAction({
+      confirmPassword: data.confirmPassword,
+      newPassword: data.password,
+      resetToken,
+    });
+
+    if (!result.ok) {
+      toast.error(result.message);
+      return;
+    }
+
+    if (result.message) {
+      toast.success(result.message);
+    }
+
+    router.push(result.redirectTo ?? "/login");
   };
 
   return (

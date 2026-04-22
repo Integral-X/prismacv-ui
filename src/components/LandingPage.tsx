@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import Link from 'next/link';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from "next/link";
 import {
   FileText,
   Target,
@@ -9,70 +9,70 @@ import {
   Users,
   Lightbulb,
   Clock,
-} from 'lucide-react';
-import Image from 'next/image';
+} from "lucide-react";
+import Image from "next/image";
 
 export default function LandingPage() {
   const features = [
     {
-      title: 'AI-Powered Resume Builder',
+      title: "AI-Powered Resume Builder",
       description:
-        'Create professional resumes with AI assistance that optimizes content for ATS systems and industry standards.',
+        "Create professional resumes with AI assistance that optimizes content for ATS systems and industry standards.",
       icon: FileText,
     },
     {
-      title: 'ATS Optimization',
+      title: "ATS Optimization",
       description:
-        'Ensure your resume passes through Applicant Tracking Systems with our built-in optimization tools.',
+        "Ensure your resume passes through Applicant Tracking Systems with our built-in optimization tools.",
       icon: Target,
     },
     {
-      title: 'Skill Gap Analysis',
+      title: "Skill Gap Analysis",
       description:
-        'Identify missing skills in your profile compared to market requirements and get personalized recommendations.',
+        "Identify missing skills in your profile compared to market requirements and get personalized recommendations.",
       icon: BarChart3,
     },
     {
-      title: 'Job Application Tracker',
+      title: "Job Application Tracker",
       description:
-        'Track all your job applications in one place with status updates and follow-up reminders.',
+        "Track all your job applications in one place with status updates and follow-up reminders.",
       icon: Clock,
     },
     {
-      title: 'Learning Roadmap',
+      title: "Learning Roadmap",
       description:
-        'Get personalized learning paths to bridge skill gaps and advance your career.',
+        "Get personalized learning paths to bridge skill gaps and advance your career.",
       icon: Lightbulb,
     },
     {
-      title: 'Interview Preparation',
+      title: "Interview Preparation",
       description:
-        'Practice with AI-generated interview questions tailored to your experience and target roles.',
+        "Practice with AI-generated interview questions tailored to your experience and target roles.",
       icon: Users,
     },
   ];
 
   const testimonials = [
     {
-      name: 'Sarah Johnson',
-      role: 'Marketing Manager',
+      name: "Sarah Johnson",
+      role: "Marketing Manager",
       content:
-        'CrackCV Builder helped me land my dream job at Google! The ATS optimization feature ensured my resume made it through their system.',
-      avatar: '/images/user1.jpg',
+        "CrackCV Builder helped me land my dream job at Google! The ATS optimization feature ensured my resume made it through their system.",
+      avatar: "/images/user1.jpg",
     },
     {
-      name: 'Michael Chen',
-      role: 'Software Engineer',
+      name: "Michael Chen",
+      role: "Software Engineer",
       content:
-        'The skill gap analysis feature showed me exactly what I was missing compared to senior roles. The personalized learning roadmap helped me bridge those gaps.',
-      avatar: '/images/user2.jpg',
+        "The skill gap analysis feature showed me exactly what I was missing compared to senior roles. The personalized learning roadmap helped me bridge those gaps.",
+      avatar: "/images/user2.jpg",
     },
     {
-      name: 'Emma Rodriguez',
-      role: 'Product Designer',
+      name: "Emma Rodriguez",
+      role: "Product Designer",
       content:
         "I've tried many resume builders, but CrackCV is the first that truly understands what recruiters are looking for.",
-      avatar: '/images/user3.jpg',
+      avatar: "/images/user3.jpg",
     },
   ];
 

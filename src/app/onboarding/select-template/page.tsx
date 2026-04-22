@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { useRouter } from 'next/navigation';
-import { Navbar } from '@/components/common/Navbar';
-import { Footer } from '@/components/common/Footer';
-import { OnboardingStepper } from '@/components/pages/onboarding/OnboardingStepper';
-import { WavyPattern } from '@/components/common/WavyPattern';
-import { TemplateSelector } from '@/components/pages/onboarding/TemplateSelector';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { Navbar } from "@/components/common/Navbar";
+import { Footer } from "@/components/common/Footer";
+import { OnboardingStepper } from "@/components/pages/onboarding/OnboardingStepper";
+import { WavyPattern } from "@/components/common/WavyPattern";
+import { TemplateSelector } from "@/components/pages/onboarding/TemplateSelector";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
 export default function SelectTemplatePage() {
   const router = useRouter();

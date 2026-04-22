@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { Button } from '../../ui/button';
-import Image from 'next/image';
+import { Button } from "../../ui/button";
+import Image from "next/image";
 
 export const Hero = () => {
   return (

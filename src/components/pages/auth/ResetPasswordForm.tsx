@@ -1,25 +1,27 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { useForm, type Resolver } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import Link from 'next/link';
-import { Eye, EyeOff } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import * as React from "react";
+import { useForm, type Resolver } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { Eye, EyeOff } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   resetPasswordSchema,
   type ResetPasswordFormData,
-} from '@/lib/validations/auth';
-import { cn } from '@/lib/utils';
+} from "@/lib/validations/auth";
+import { cn } from "@/lib/utils";
 
 interface ResetPasswordFormProps {
   className?: string;
+  errorMessage?: string;
   onSubmit?: (data: ResetPasswordFormData) => void | Promise<void>;
 }
 
 export const ResetPasswordForm = ({
   className,
+  errorMessage,
   onSubmit,
 }: ResetPasswordFormProps) => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -30,7 +32,7 @@ export const ResetPasswordForm = ({
     resolver: zodResolver(
       resetPasswordSchema
     ) as Resolver<ResetPasswordFormData>,
-    defaultValues: { password: '', confirmPassword: '' },
+    defaultValues: { password: "", confirmPassword: "" },
   });
 
   const handleFormSubmit = async (data: ResetPasswordFormData) => {
@@ -48,7 +50,7 @@ export const ResetPasswordForm = ({
   return (
     <form
       onSubmit={form.handleSubmit(handleFormSubmit)}
-      className={cn('flex flex-col gap-5', className)}
+      className={cn("flex flex-col gap-5", className)}
     >
       <div className="flex flex-col gap-2">
         <label
@@ -60,18 +62,18 @@ export const ResetPasswordForm = ({
         <div className="relative">
           <Input
             id="password"
-            type={showPassword ? 'text' : 'password'}
+            type={showPassword ? "text" : "password"}
             placeholder="Enter your password"
             aria-invalid={!!form.formState.errors.password}
             disabled={isLoading}
-            {...form.register('password')}
+            {...form.register("password")}
             className="pr-10"
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-content-tertiary hover:text-content-primary transition-colors"
-            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            aria-label={showPassword ? "Hide password" : "Show password"}
             disabled={isLoading}
           >
             {showPassword ? (
@@ -98,18 +100,18 @@ export const ResetPasswordForm = ({
         <div className="relative">
           <Input
             id="confirmPassword"
-            type={showConfirmPassword ? 'text' : 'password'}
+            type={showConfirmPassword ? "text" : "password"}
             placeholder="Enter your password"
             aria-invalid={!!form.formState.errors.confirmPassword}
             disabled={isLoading}
-            {...form.register('confirmPassword')}
+            {...form.register("confirmPassword")}
             className="pr-10"
           />
           <button
             type="button"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-content-tertiary hover:text-content-primary transition-colors"
-            aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+            aria-label={showConfirmPassword ? "Hide password" : "Show password"}
             disabled={isLoading}
           >
             {showConfirmPassword ? (
@@ -131,8 +133,14 @@ export const ResetPasswordForm = ({
         disabled={isLoading}
         className="w-full h-12 bg-[#069EA8] hover:bg-[#058a93] text-white font-medium text-base"
       >
-        {isLoading ? 'Resetting...' : 'Reset password'}
+        {isLoading ? "Resetting..." : "Reset password"}
       </Button>
+
+      {errorMessage ? (
+        <p className="text-sm text-feedback-error text-center" role="alert">
+          {errorMessage}
+        </p>
+      ) : null}
 
       <p className="text-center text-sm text-content-secondary">
         <Link

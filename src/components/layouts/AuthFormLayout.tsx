@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { WavyPattern } from '@/components/common/WavyPattern';
+import * as React from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { WavyPattern } from "@/components/common/WavyPattern";
 
 interface AuthFormLayoutProps {
   children: React.ReactNode;

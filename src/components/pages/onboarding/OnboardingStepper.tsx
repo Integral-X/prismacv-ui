@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
 interface OnboardingStepperProps {
   currentStep: number;
@@ -26,12 +26,12 @@ export const OnboardingStepper = ({
               <div className="flex flex-col items-center relative z-10">
                 <div
                   className={cn(
-                    'w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm transition-all duration-300',
+                    "w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm transition-all duration-300",
                     isActive
-                      ? 'bg-primary text-primary-foreground shadow-md scale-110'
+                      ? "bg-primary text-primary-foreground shadow-md scale-110"
                       : isCompleted
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-gray-200 text-gray-500'
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-gray-200 text-gray-500"
                   )}
                 >
                   {isCompleted ? (
@@ -59,8 +59,8 @@ export const OnboardingStepper = ({
                 <div className="flex-1 h-0.5 mx-2 relative">
                   <div
                     className={cn(
-                      'h-full transition-all duration-500',
-                      index < currentStep - 1 ? 'bg-primary' : 'bg-gray-200'
+                      "h-full transition-all duration-500",
+                      index < currentStep - 1 ? "bg-primary" : "bg-gray-200"
                     )}
                   />
                 </div>

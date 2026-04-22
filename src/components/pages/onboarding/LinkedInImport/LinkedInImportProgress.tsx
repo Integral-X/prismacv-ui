@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { Loader2 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface LinkedInImportProgressProps {
   progress: number;
@@ -13,7 +13,7 @@ export const LinkedInImportProgress = ({
   className,
 }: LinkedInImportProgressProps) => {
   return (
-    <div className={cn('w-full', className)}>
+    <div className={cn("w-full", className)}>
       <div className="relative border-2 border-dashed border-gray-300 rounded-lg p-8 bg-white">
         <div className="flex flex-col items-center gap-4">
           <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center animate-pulse">

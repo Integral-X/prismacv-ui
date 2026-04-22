@@ -1,15 +1,33 @@
-'use client';
+"use client";
 
-import { Card } from '@/components/ui/card';
-import { AuthFormLayout } from '@/components/layouts/AuthFormLayout';
-import { SignupForm } from '@/components/pages/signup/SignupForm';
-import { SocialAuthButtons } from '@/components/pages/login/SocialAuthButtons';
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Card } from "@/components/ui/card";
+import { AuthFormLayout } from "@/components/layouts/AuthFormLayout";
+import { SignupForm } from "@/components/pages/signup/SignupForm";
+import { SocialAuthButtons } from "@/components/pages/login/SocialAuthButtons";
+import type { SignupFormData } from "@/lib/validations/auth";
+import { signupUserAction } from "@/modules/auth/data/actions";
 
 export default function SignupPage() {
-  const handleSignup = async () => {
-    // TODO: Implement actual API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    // router.push('/login');
+  const router = useRouter();
+
+  const handleSignup = async (data: SignupFormData) => {
+    const result = await signupUserAction({
+      email: data.email,
+      name: `${data.firstName} ${data.lastName}`.trim(),
+      password: data.password,
+    });
+
+    if (!result.ok) {
+      toast.error(result.message);
+      return;
+    }
+
+    router.push(
+      result.redirectTo ??
+        `/otp?mode=signup&email=${encodeURIComponent(data.email)}`
+    );
   };
 
   return (

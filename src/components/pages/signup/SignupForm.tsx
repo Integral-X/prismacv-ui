@@ -1,22 +1,27 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { useForm, type Resolver } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import Link from 'next/link';
-import { Eye, EyeOff } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
-import { signupSchema, type SignupFormData } from '@/lib/validations/auth';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import { useForm, type Resolver } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { Eye, EyeOff } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { signupSchema, type SignupFormData } from "@/lib/validations/auth";
+import { cn } from "@/lib/utils";
 
 interface SignupFormProps {
   className?: string;
+  errorMessage?: string;
   onSubmit?: (data: SignupFormData) => void | Promise<void>;
 }
 
-export const SignupForm = ({ className, onSubmit }: SignupFormProps) => {
+export const SignupForm = ({
+  className,
+  errorMessage,
+  onSubmit,
+}: SignupFormProps) => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -24,11 +29,11 @@ export const SignupForm = ({ className, onSubmit }: SignupFormProps) => {
   const form = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema) as Resolver<SignupFormData>,
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
       termsAccepted: false,
       marketingEmails: false,
     },
@@ -40,8 +45,8 @@ export const SignupForm = ({ className, onSubmit }: SignupFormProps) => {
     setValue,
     watch,
   } = form;
-  const termsAccepted = watch('termsAccepted');
-  const marketingEmails = watch('marketingEmails');
+  const termsAccepted = watch("termsAccepted");
+  const marketingEmails = watch("marketingEmails");
 
   const handleFormSubmit = async (data: SignupFormData) => {
     try {
@@ -58,7 +63,7 @@ export const SignupForm = ({ className, onSubmit }: SignupFormProps) => {
   return (
     <form
       onSubmit={form.handleSubmit(handleFormSubmit)}
-      className={cn('flex flex-col gap-5', className)}
+      className={cn("flex flex-col gap-5", className)}
     >
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-2">
@@ -74,7 +79,7 @@ export const SignupForm = ({ className, onSubmit }: SignupFormProps) => {
             placeholder="Jon"
             aria-invalid={!!errors.firstName}
             disabled={isLoading}
-            {...register('firstName')}
+            {...register("firstName")}
           />
           {errors.firstName && (
             <p className="text-sm text-feedback-error" role="alert">
@@ -95,7 +100,7 @@ export const SignupForm = ({ className, onSubmit }: SignupFormProps) => {
             placeholder="jon"
             aria-invalid={!!errors.lastName}
             disabled={isLoading}
-            {...register('lastName')}
+            {...register("lastName")}
           />
           {errors.lastName && (
             <p className="text-sm text-feedback-error" role="alert">
@@ -118,7 +123,7 @@ export const SignupForm = ({ className, onSubmit }: SignupFormProps) => {
           placeholder="Enter your email"
           aria-invalid={!!errors.email}
           disabled={isLoading}
-          {...register('email')}
+          {...register("email")}
         />
         {errors.email && (
           <p className="text-sm text-feedback-error" role="alert">
@@ -137,18 +142,18 @@ export const SignupForm = ({ className, onSubmit }: SignupFormProps) => {
         <div className="relative">
           <Input
             id="password"
-            type={showPassword ? 'text' : 'password'}
+            type={showPassword ? "text" : "password"}
             placeholder="Enter your password"
             aria-invalid={!!errors.password}
             disabled={isLoading}
-            {...register('password')}
+            {...register("password")}
             className="pr-10"
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-content-tertiary hover:text-content-primary transition-colors"
-            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            aria-label={showPassword ? "Hide password" : "Show password"}
             disabled={isLoading}
           >
             {showPassword ? (
@@ -175,18 +180,18 @@ export const SignupForm = ({ className, onSubmit }: SignupFormProps) => {
         <div className="relative">
           <Input
             id="confirmPassword"
-            type={showConfirmPassword ? 'text' : 'password'}
+            type={showConfirmPassword ? "text" : "password"}
             placeholder="Enter your password"
             aria-invalid={!!errors.confirmPassword}
             disabled={isLoading}
-            {...register('confirmPassword')}
+            {...register("confirmPassword")}
             className="pr-10"
           />
           <button
             type="button"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-content-tertiary hover:text-content-primary transition-colors"
-            aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+            aria-label={showConfirmPassword ? "Hide password" : "Show password"}
             disabled={isLoading}
           >
             {showConfirmPassword ? (
@@ -208,7 +213,7 @@ export const SignupForm = ({ className, onSubmit }: SignupFormProps) => {
           id="termsAccepted"
           checked={!!termsAccepted}
           onCheckedChange={(checked) =>
-            setValue('termsAccepted', checked === true)
+            setValue("termsAccepted", checked === true)
           }
           disabled={isLoading}
         />
@@ -216,11 +221,11 @@ export const SignupForm = ({ className, onSubmit }: SignupFormProps) => {
           htmlFor="termsAccepted"
           className="text-sm text-content-secondary cursor-pointer select-none leading-tight"
         >
-          I agree to the{' '}
+          I agree to the{" "}
           <Link href="/terms" className="text-interactive-link hover:underline">
             Terms of Service
-          </Link>{' '}
-          and{' '}
+          </Link>{" "}
+          and{" "}
           <Link
             href="/privacy"
             className="text-interactive-link hover:underline"
@@ -240,7 +245,7 @@ export const SignupForm = ({ className, onSubmit }: SignupFormProps) => {
           id="marketingEmails"
           checked={!!marketingEmails}
           onCheckedChange={(checked) =>
-            setValue('marketingEmails', checked === true)
+            setValue("marketingEmails", checked === true)
           }
           disabled={isLoading}
         />
@@ -257,11 +262,17 @@ export const SignupForm = ({ className, onSubmit }: SignupFormProps) => {
         disabled={isLoading}
         className="w-full h-12 bg-[#069EA8] hover:bg-[#058a93] text-white font-medium text-base uppercase tracking-wide"
       >
-        {isLoading ? 'Creating account...' : 'Create an account'}
+        {isLoading ? "Creating account..." : "Create an account"}
       </Button>
 
+      {errorMessage ? (
+        <p className="text-sm text-feedback-error text-center" role="alert">
+          {errorMessage}
+        </p>
+      ) : null}
+
       <p className="text-center text-sm text-content-secondary">
-        Already have an account?{' '}
+        Already have an account?{" "}
         <Link
           href="/login"
           className="text-interactive-link hover:text-interactive-link-hover font-medium transition-colors"

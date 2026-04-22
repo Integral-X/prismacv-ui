@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { useRouter } from 'next/navigation';
-import { Navbar } from '@/components/common/Navbar';
-import { Footer } from '@/components/common/Footer';
-import { OnboardingStepper } from '@/components/pages/onboarding/OnboardingStepper';
-import { WavyPattern } from '@/components/common/WavyPattern';
-import { LinkedInImport } from '@/components/pages/onboarding/LinkedInImport';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { Navbar } from "@/components/common/Navbar";
+import { Footer } from "@/components/common/Footer";
+import { OnboardingStepper } from "@/components/pages/onboarding/OnboardingStepper";
+import { WavyPattern } from "@/components/common/WavyPattern";
+import { LinkedInImport } from "@/components/pages/onboarding/LinkedInImport";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
 export default function ImportLinkedInPage() {
   const router = useRouter();
@@ -25,12 +25,12 @@ export default function ImportLinkedInPage() {
   const handleContinue = () => {
     if (importedUrl) {
       // Navigate to template selection (Step 3)
-      router.push('/onboarding/select-template');
+      router.push("/onboarding/select-template");
     }
   };
 
   const handleBack = () => {
-    router.push('/onboarding');
+    router.push("/onboarding");
   };
 
   const handleSkip = () => {

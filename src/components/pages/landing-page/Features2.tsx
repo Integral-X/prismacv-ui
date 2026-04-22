@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
+import Image from "next/image";
 
 const CheckIcon = () => (
   <svg
@@ -24,15 +24,15 @@ const CheckIcon = () => (
 );
 
 const features1 = [
-  'Wording and readability analysis',
-  'Eliminate typos and grammatical errors',
-  'Content siggestions based on your job and experience',
+  "Wording and readability analysis",
+  "Eliminate typos and grammatical errors",
+  "Content siggestions based on your job and experience",
 ];
 
 const features2 = [
-  'Wording and readability analysis',
-  'Eliminate typos and grammatical errors',
-  'Content siggestions based on your job and experience',
+  "Wording and readability analysis",
+  "Eliminate typos and grammatical errors",
+  "Content siggestions based on your job and experience",
 ];
 
 export const Features2 = () => {

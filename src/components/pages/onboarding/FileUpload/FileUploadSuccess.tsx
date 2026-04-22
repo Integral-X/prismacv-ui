@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { X, CheckCircle } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { UploadedFile } from './types';
+import { X, CheckCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { UploadedFile } from "./types";
 import {
   getUploadBorderColor,
   getUploadBackgroundColor,
-} from '../shared/utils/stateStyles';
-import type { UploadState } from '../shared/utils/stateStyles';
+} from "../shared/utils/stateStyles";
+import type { UploadState } from "../shared/utils/stateStyles";
 
 interface FileUploadSuccessProps {
   uploadedFile: UploadedFile;
@@ -24,10 +24,10 @@ export const FileUploadSuccess = ({
   className,
 }: FileUploadSuccessProps) => {
   return (
-    <div className={cn('w-full', className)}>
+    <div className={cn("w-full", className)}>
       <div
         className={cn(
-          'relative border-2 rounded-lg p-6 transition-all duration-300',
+          "relative border-2 rounded-lg p-6 transition-all duration-300",
           getUploadBorderColor(state),
           getUploadBackgroundColor(state)
         )}

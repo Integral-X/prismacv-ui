@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
+import Link from "next/link";
 
 const roadmapSteps = [
   {
     id: 1,
-    title: 'Choose Your Track',
+    title: "Choose Your Track",
     description:
-      'learning paths tailored to your career goals and current skill level',
+      "learning paths tailored to your career goals and current skill level",
     icon: (
       <svg
         className="w-8 h-8 text-white"
@@ -27,9 +27,9 @@ const roadmapSteps = [
   },
   {
     id: 2,
-    title: 'Master the Basics',
+    title: "Master the Basics",
     description:
-      'Build a strong foundation with fundamentals covering essential concepts and best',
+      "Build a strong foundation with fundamentals covering essential concepts and best",
     icon: (
       <svg
         className="w-8 h-8 text-white"
@@ -48,9 +48,9 @@ const roadmapSteps = [
   },
   {
     id: 3,
-    title: 'Build Real Project',
+    title: "Build Real Project",
     description:
-      'learning paths tailored to your career goals and current skill level',
+      "learning paths tailored to your career goals and current skill level",
     icon: (
       <svg
         className="w-8 h-8 text-white"
@@ -69,9 +69,9 @@ const roadmapSteps = [
   },
   {
     id: 4,
-    title: 'Validate Skills & Grow',
+    title: "Validate Skills & Grow",
     description:
-      'Apply your skills to real- world projects that you can add to your portfolio immediately',
+      "Apply your skills to real- world projects that you can add to your portfolio immediately",
     icon: (
       <svg
         className="w-8 h-8 text-white"

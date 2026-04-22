@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Upload, AlertCircle } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
+import * as React from "react";
+import { Upload, AlertCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   getUploadBorderColor,
   getUploadBackgroundColor,
-} from '../shared/utils/stateStyles';
-import type { UploadState } from '../shared/utils/stateStyles';
+} from "../shared/utils/stateStyles";
+import type { UploadState } from "../shared/utils/stateStyles";
 
 interface FileUploadDropzoneProps {
   state: UploadState;
@@ -46,7 +46,7 @@ export const FileUploadDropzone = ({
   className,
 }: FileUploadDropzoneProps) => {
   return (
-    <div className={cn('w-full', className)}>
+    <div className={cn("w-full", className)}>
       <div
         role="button"
         tabIndex={0}
@@ -59,18 +59,18 @@ export const FileUploadDropzone = ({
         onMouseLeave={onMouseLeave}
         onKeyDown={onKeyDown}
         className={cn(
-          'relative border-2 rounded-lg p-8 transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
+          "relative border-2 rounded-lg p-8 transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
           getUploadBorderColor(state),
           getUploadBackgroundColor(state),
-          state === 'hover' && 'border-primary/50 bg-primary/5',
-          state === 'dragover' && 'scale-[1.02]'
+          state === "hover" && "border-primary/50 bg-primary/5",
+          state === "dragover" && "scale-[1.02]"
         )}
         onClick={onBrowseClick}
       >
         <input
           ref={fileInputRef}
           type="file"
-          accept={acceptedFormats.join(',')}
+          accept={acceptedFormats.join(",")}
           onChange={onFileInput}
           className="hidden"
         />
@@ -79,19 +79,19 @@ export const FileUploadDropzone = ({
           {/* Icon */}
           <div
             className={cn(
-              'w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300',
-              state === 'error' ? 'bg-red-100' : 'bg-primary/10',
-              state === 'hover' && 'scale-110',
-              state === 'dragover' && 'scale-110 bg-primary/20'
+              "w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300",
+              state === "error" ? "bg-red-100" : "bg-primary/10",
+              state === "hover" && "scale-110",
+              state === "dragover" && "scale-110 bg-primary/20"
             )}
           >
-            {state === 'error' ? (
+            {state === "error" ? (
               <AlertCircle className="w-10 h-10 text-red-600" />
             ) : (
               <Upload
                 className={cn(
-                  'w-10 h-10 text-primary transition-transform duration-300',
-                  state === 'dragover' && 'scale-110'
+                  "w-10 h-10 text-primary transition-transform duration-300",
+                  state === "dragover" && "scale-110"
                 )}
               />
             )}
@@ -100,9 +100,9 @@ export const FileUploadDropzone = ({
           {/* Text */}
           <div className="space-y-2">
             <h3 className="text-lg font-semibold text-gray-900">
-              {state === 'error' ? 'Upload Failed' : 'Drag & drop your CV here'}
+              {state === "error" ? "Upload Failed" : "Drag & drop your CV here"}
             </h3>
-            {state === 'error' ? (
+            {state === "error" ? (
               <p className="text-sm text-red-600">{errorMessage}</p>
             ) : (
               <p className="text-sm text-gray-600">or click to browse</p>
@@ -111,7 +111,7 @@ export const FileUploadDropzone = ({
 
           {/* File format info */}
           <p className="text-xs text-gray-500">
-            Supports {acceptedFormats.join(', ').toUpperCase()} (Max {maxSizeMB}
+            Supports {acceptedFormats.join(", ").toUpperCase()} (Max {maxSizeMB}
             MB)
           </p>
 

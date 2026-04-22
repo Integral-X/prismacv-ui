@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
+import Image from "next/image";
 
 const CheckIcon = () => (
   <svg
@@ -24,26 +24,26 @@ const CheckIcon = () => (
 );
 
 const courseFeatures = [
-  'Curated Couses',
-  'Role-Based Learning',
-  'Verified Platforms',
+  "Curated Couses",
+  "Role-Based Learning",
+  "Verified Platforms",
 ];
 
 const skillGapFeatures = [
   {
-    title: 'Role-Based Assessment',
+    title: "Role-Based Assessment",
     description:
-      'Choose from 50+ roles and get a personalized skill gap analysis tailored to industry standards.',
+      "Choose from 50+ roles and get a personalized skill gap analysis tailored to industry standards.",
   },
   {
-    title: 'Real-Time Recommendations',
+    title: "Real-Time Recommendations",
     description:
-      'Receive instant course suggestions and learning paths based on your current skill level.',
+      "Receive instant course suggestions and learning paths based on your current skill level.",
   },
   {
-    title: 'Track Your Progress',
+    title: "Track Your Progress",
     description:
-      'Monitor your skill development with detailed analytics and achievement milestones.',
+      "Monitor your skill development with detailed analytics and achievement milestones.",
   },
 ];
 
@@ -56,7 +56,7 @@ export const Features3 = () => {
           {/* Left Content */}
           <div className="space-y-6">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight">
-              Course Recommendations{' '}
+              Course Recommendations{" "}
               <span className="text-primary">Just for You</span>
             </h2>
             <p className="text-lg text-muted-foreground">

@@ -1,5 +1,5 @@
-import { cookies } from 'next/headers';
-import { apiClient } from '@/shared/http/api-client';
+import { apiClient } from "@/shared/http/api-client";
+import { HttpError } from "@/shared/http/http-error";
 import type {
   ChangePasswordContract,
   ChangePasswordRequest,
@@ -7,48 +7,83 @@ import type {
   ForgotPasswordRequest,
   OtpResendContract,
   OtpVerificationContract,
+  RefreshTokenContract,
+  RefreshTokenRequest,
   ResetPasswordContract,
   ResetPasswordRequest,
   ResendSignupOtpRequest,
   UserAuthContract,
+  UserLoginContract,
   UserLoginRequest,
   UserSignupRequest,
   VerifyResetOtpContract,
   VerifyResetOtpRequest,
   VerifySignupOtpRequest,
-} from './contracts';
+} from "./contracts";
 import {
   toAuthResult,
   toOtpResendResult,
   toOtpVerificationResult,
+  toSignupResult,
   type AuthResult,
   type OtpResendResult,
   type OtpVerificationResult,
-} from './mappers';
+  type SignupResult,
+} from "./mappers";
+import {
+  clearAuthSession,
+  getAccessToken,
+  getRefreshToken,
+  persistAuthSession,
+  shouldPersistSession,
+} from "./session";
 
-// ─── Token helpers ────────────────────────────────────────────────────────────
+async function executeAuthenticatedRequest<T>(
+  operation: (headers: Record<string, string>) => Promise<T>
+): Promise<T> {
+  const accessToken = await getAccessToken();
 
-async function readAuthHeader(): Promise<Record<string, string>> {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get('access-token')?.value;
+  if (!accessToken) {
+    throw new HttpError(401, "Unauthorized", "Authentication required");
+  }
 
-  if (!accessToken) return {};
+  try {
+    return await operation({ Authorization: `Bearer ${accessToken}` });
+  } catch (error) {
+    if (!(error instanceof HttpError) || !error.isUnauthorized) {
+      throw error;
+    }
 
-  return { Authorization: `Bearer ${accessToken}` };
+    const refreshToken = await getRefreshToken();
+
+    if (!refreshToken) {
+      await clearAuthSession();
+      throw error;
+    }
+
+    try {
+      const refreshedSession = await refreshUserToken({ refreshToken });
+
+      await persistAuthSession(refreshedSession, await shouldPersistSession());
+
+      return await operation({
+        Authorization: `Bearer ${refreshedSession.accessToken}`,
+      });
+    } catch (refreshError) {
+      await clearAuthSession();
+      throw refreshError;
+    }
+  }
 }
 
 // ─── Auth mutations ───────────────────────────────────────────────────────────
 
 /**
  * Authenticates a regular user.
- *
- * NOTE: The backend currently does not mark this endpoint as @Public(),
- * so it requires a Bearer token to call — which regular users cannot
- * obtain yet. This will work once the backend is fixed.
  */
 export async function loginUser(body: UserLoginRequest): Promise<AuthResult> {
-  const contract = await apiClient.post<UserAuthContract, UserLoginRequest>(
-    'auth/user/login',
+  const contract = await apiClient.post<UserLoginContract, UserLoginRequest>(
+    "auth/user/login",
     body
   );
 
@@ -58,16 +93,17 @@ export async function loginUser(body: UserLoginRequest): Promise<AuthResult> {
 /**
  * Registers a new regular user.
  *
- * NOTE: Same @Public() issue as loginUser — backend fix required.
  * After successful signup, backend sends a verification OTP to the email.
  */
-export async function signupUser(body: UserSignupRequest): Promise<AuthResult> {
+export async function signupUser(
+  body: UserSignupRequest
+): Promise<SignupResult> {
   const contract = await apiClient.post<UserAuthContract, UserSignupRequest>(
-    'auth/user/signup',
+    "auth/user/signup",
     body
   );
 
-  return toAuthResult(contract);
+  return toSignupResult(contract);
 }
 
 /**
@@ -77,12 +113,10 @@ export async function signupUser(body: UserSignupRequest): Promise<AuthResult> {
 export async function verifySignupOtp(
   body: VerifySignupOtpRequest
 ): Promise<OtpVerificationResult> {
-  const headers = await readAuthHeader();
-
   const contract = await apiClient.post<
     OtpVerificationContract,
     VerifySignupOtpRequest
-  >('otp/verify-signup', body, { headers });
+  >("otp/verify-signup", body);
 
   return toOtpVerificationResult(contract);
 }
@@ -94,12 +128,10 @@ export async function verifySignupOtp(
 export async function resendSignupOtp(
   body: ResendSignupOtpRequest
 ): Promise<OtpResendResult> {
-  const headers = await readAuthHeader();
-
   const contract = await apiClient.post<
     OtpResendContract,
     ResendSignupOtpRequest
-  >('otp/resend-signup', body, { headers });
+  >("otp/resend-signup", body);
 
   return toOtpResendResult(contract);
 }
@@ -112,7 +144,7 @@ export async function forgotPassword(
   body: ForgotPasswordRequest
 ): Promise<ForgotPasswordContract> {
   return apiClient.post<ForgotPasswordContract, ForgotPasswordRequest>(
-    'auth/user/forgot-password',
+    "auth/user/forgot-password",
     body
   );
 }
@@ -124,13 +156,24 @@ export async function forgotPassword(
 export async function verifyResetOtp(
   body: VerifyResetOtpRequest
 ): Promise<VerifyResetOtpContract> {
-  const headers = await readAuthHeader();
-
   return apiClient.post<VerifyResetOtpContract, VerifyResetOtpRequest>(
-    'otp/verify-reset',
-    body,
-    { headers }
+    "otp/verify-reset",
+    body
   );
+}
+
+/**
+ * Refreshes the authenticated regular user's access token using the refresh token.
+ */
+export async function refreshUserToken(
+  body: RefreshTokenRequest
+): Promise<AuthResult> {
+  const contract = await apiClient.post<
+    RefreshTokenContract,
+    RefreshTokenRequest
+  >("auth/user/refresh", body);
+
+  return toAuthResult(contract);
 }
 
 /**
@@ -140,7 +183,7 @@ export async function resetPassword(
   body: ResetPasswordRequest
 ): Promise<ResetPasswordContract> {
   return apiClient.post<ResetPasswordContract, ResetPasswordRequest>(
-    'auth/user/reset-password',
+    "auth/user/reset-password",
     body
   );
 }
@@ -152,11 +195,11 @@ export async function resetPassword(
 export async function changePassword(
   body: ChangePasswordRequest
 ): Promise<ChangePasswordContract> {
-  const headers = await readAuthHeader();
-
-  return apiClient.post<ChangePasswordContract, ChangePasswordRequest>(
-    'auth/user/change-password',
-    body,
-    { headers }
+  return executeAuthenticatedRequest((headers) =>
+    apiClient.post<ChangePasswordContract, ChangePasswordRequest>(
+      "auth/user/change-password",
+      body,
+      { headers }
+    )
   );
 }

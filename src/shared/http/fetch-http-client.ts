@@ -1,12 +1,13 @@
-import { HttpError } from './http-error';
-import type { HttpClient } from './http-client';
-import type { ApiEnvelope, ApiErrorEnvelope, RequestConfig } from './types';
+import { logger } from "@/shared/logger/logger";
+import { HttpError } from "./http-error";
+import type { HttpClient } from "./http-client";
+import type { ApiEnvelope, ApiErrorEnvelope, RequestConfig } from "./types";
 
 export class FetchHttpClient implements HttpClient {
   private readonly baseUrl: string;
 
   constructor(baseUrl: string) {
-    this.baseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+    this.baseUrl = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
   }
 
   private buildUrl(
@@ -33,9 +34,12 @@ export class FetchHttpClient implements HttpClient {
     const url = this.buildUrl(endpoint, config.params);
 
     const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...config.headers,
     };
+
+    const start = Date.now();
+    logger.debug({ method, url, body });
 
     const response = await fetch(url, {
       method,
@@ -49,6 +53,13 @@ export class FetchHttpClient implements HttpClient {
 
     if (!response.ok) {
       const errorBody = json as ApiErrorEnvelope;
+      logger.error({
+        method,
+        url,
+        status: response.status,
+        durationMs: Date.now() - start,
+        error: errorBody,
+      });
       throw new HttpError(
         response.status,
         errorBody.error ?? response.statusText,
@@ -57,26 +68,34 @@ export class FetchHttpClient implements HttpClient {
       );
     }
 
+    logger.debug({
+      method,
+      url,
+      status: response.status,
+      durationMs: Date.now() - start,
+      data: json,
+    });
+
     return (json as ApiEnvelope<T>).data;
   }
 
   get<T>(endpoint: string, config?: RequestConfig): Promise<T> {
-    return this.execute<T>('GET', endpoint, undefined, config);
+    return this.execute<T>("GET", endpoint, undefined, config);
   }
 
   post<T, B>(endpoint: string, body: B, config?: RequestConfig): Promise<T> {
-    return this.execute<T>('POST', endpoint, body, config);
+    return this.execute<T>("POST", endpoint, body, config);
   }
 
   put<T, B>(endpoint: string, body: B, config?: RequestConfig): Promise<T> {
-    return this.execute<T>('PUT', endpoint, body, config);
+    return this.execute<T>("PUT", endpoint, body, config);
   }
 
   patch<T, B>(endpoint: string, body: B, config?: RequestConfig): Promise<T> {
-    return this.execute<T>('PATCH', endpoint, body, config);
+    return this.execute<T>("PATCH", endpoint, body, config);
   }
 
   delete<T>(endpoint: string, config?: RequestConfig): Promise<T> {
-    return this.execute<T>('DELETE', endpoint, undefined, config);
+    return this.execute<T>("DELETE", endpoint, undefined, config);
   }
 }

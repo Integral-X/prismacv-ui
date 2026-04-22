@@ -1,24 +1,24 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import Image from 'next/image';
+import * as React from "react";
+import Image from "next/image";
 
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   type CarouselApi,
-} from '@/components/ui/carousel';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/carousel";
+import { cn } from "@/lib/utils";
 
 const templateImages = [
-  '/images/landing-page/cv_1.svg',
-  '/images/landing-page/cv_2.svg',
-  '/images/landing-page/cv_3.svg',
-  '/images/landing-page/cv_1.svg',
-  '/images/landing-page/cv_2.svg',
+  "/images/landing-page/cv_1.svg",
+  "/images/landing-page/cv_2.svg",
+  "/images/landing-page/cv_3.svg",
+  "/images/landing-page/cv_1.svg",
+  "/images/landing-page/cv_2.svg",
 ];
 
 export const TemplatePicker = () => {
@@ -32,7 +32,7 @@ export const TemplatePicker = () => {
 
     setCurrent(api.selectedScrollSnap());
 
-    api.on('select', () => {
+    api.on("select", () => {
       setCurrent(api.selectedScrollSnap());
     });
   }, [api]);
@@ -52,7 +52,7 @@ export const TemplatePicker = () => {
             className="w-full"
             opts={{
               loop: true,
-              align: 'center',
+              align: "center",
               slidesToScroll: 1,
             }}
           >
@@ -65,10 +65,10 @@ export const TemplatePicker = () => {
                   <div className="relative">
                     <Card
                       className={cn(
-                        'overflow-hidden transition-all duration-500 shadow-lg bg-[#E6F5F6] border-0 p-0 py-2',
+                        "overflow-hidden transition-all duration-500 shadow-lg bg-[#E6F5F6] border-0 p-0 py-2",
                         current === index
-                          ? 'scale-100 z-10 border-2 border-[#069098]'
-                          : 'scale-90 opacity-70'
+                          ? "scale-100 z-10 border-2 border-[#069098]"
+                          : "scale-90 opacity-70"
                       )}
                     >
                       <CardContent className="p-0 aspect-3/4 relative bg-[#E6F5F6]">
@@ -94,10 +94,10 @@ export const TemplatePicker = () => {
                 key={index}
                 onClick={() => api?.scrollTo(index)}
                 className={cn(
-                  'w-4 h-4 rounded-full cursor-pointer transition-all duration-300',
+                  "w-4 h-4 rounded-full cursor-pointer transition-all duration-300",
                   current === index
-                    ? 'bg-primary'
-                    : 'bg-gray-300 hover:bg-gray-400'
+                    ? "bg-primary"
+                    : "bg-gray-300 hover:bg-gray-400"
                 )}
                 aria-label={`Go to slide ${index + 1}`}
               />

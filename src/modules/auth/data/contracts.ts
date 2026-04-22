@@ -1,6 +1,6 @@
 // ─── Shared ──────────────────────────────────────────────────────────────────
 
-export type UserRoleContract = 'REGULAR' | 'PLATFORM_ADMIN';
+export type UserRoleContract = "REGULAR" | "PLATFORM_ADMIN";
 
 export interface UserProfileContract {
   id: string;
@@ -36,7 +36,6 @@ export interface ResetPasswordRequest {
 }
 
 export interface ChangePasswordRequest {
-  userId: string;
   currentPassword: string;
   newPassword: string;
   confirmPassword: string;
@@ -62,11 +61,20 @@ export interface RefreshTokenRequest {
 
 // ─── Response contracts ───────────────────────────────────────────────────────
 
+export interface TokenPairContract {
+  accessToken: string;
+  refreshToken: string;
+}
+
 export interface UserAuthContract {
   user: UserProfileContract;
 }
 
-export interface OtpVerificationContract {
+export interface UserLoginContract extends TokenPairContract {
+  user: UserProfileContract;
+}
+
+export interface OtpVerificationContract extends TokenPairContract {
   message: string;
   user: UserProfileContract;
 }
@@ -91,3 +99,5 @@ export interface ChangePasswordContract {
 export interface VerifyResetOtpContract {
   resetToken: string;
 }
+
+export type RefreshTokenContract = UserLoginContract;

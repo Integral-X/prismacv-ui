@@ -3,28 +3,28 @@
  */
 
 export type UploadState =
-  | 'idle'
-  | 'hover'
-  | 'dragover'
-  | 'uploading'
-  | 'success'
-  | 'error';
+  | "idle"
+  | "hover"
+  | "dragover"
+  | "uploading"
+  | "success"
+  | "error";
 
-export type ImportState = 'idle' | 'hover' | 'importing' | 'success' | 'error';
+export type ImportState = "idle" | "hover" | "importing" | "success" | "error";
 
 /**
  * Gets border color class based on upload state
  */
 export const getUploadBorderColor = (state: UploadState): string => {
   switch (state) {
-    case 'dragover':
-      return 'border-primary';
-    case 'error':
-      return 'border-red-500';
-    case 'success':
-      return 'border-green-500';
+    case "dragover":
+      return "border-primary";
+    case "error":
+      return "border-red-500";
+    case "success":
+      return "border-green-500";
     default:
-      return 'border-dashed border-gray-300';
+      return "border-dashed border-gray-300";
   }
 };
 
@@ -33,14 +33,14 @@ export const getUploadBorderColor = (state: UploadState): string => {
  */
 export const getUploadBackgroundColor = (state: UploadState): string => {
   switch (state) {
-    case 'dragover':
-      return 'bg-primary/5';
-    case 'error':
-      return 'bg-red-50';
-    case 'success':
-      return 'bg-green-50';
+    case "dragover":
+      return "bg-primary/5";
+    case "error":
+      return "bg-red-50";
+    case "success":
+      return "bg-green-50";
     default:
-      return 'bg-white';
+      return "bg-white";
   }
 };
 
@@ -49,14 +49,14 @@ export const getUploadBackgroundColor = (state: UploadState): string => {
  */
 export const getImportBorderColor = (state: ImportState): string => {
   switch (state) {
-    case 'hover':
-      return 'border-primary/50';
-    case 'error':
-      return 'border-red-500';
-    case 'success':
-      return 'border-green-500';
+    case "hover":
+      return "border-primary/50";
+    case "error":
+      return "border-red-500";
+    case "success":
+      return "border-green-500";
     default:
-      return 'border-dashed border-gray-300';
+      return "border-dashed border-gray-300";
   }
 };
 
@@ -65,13 +65,13 @@ export const getImportBorderColor = (state: ImportState): string => {
  */
 export const getImportBackgroundColor = (state: ImportState): string => {
   switch (state) {
-    case 'hover':
-      return 'bg-primary/5';
-    case 'error':
-      return 'bg-red-50';
-    case 'success':
-      return 'bg-green-50';
+    case "hover":
+      return "bg-primary/5";
+    case "error":
+      return "bg-red-50";
+    case "success":
+      return "bg-green-50";
     default:
-      return 'bg-white';
+      return "bg-white";
   }
 };

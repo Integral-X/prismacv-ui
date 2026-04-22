@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Linkedin, AlertCircle } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import * as React from "react";
+import { Linkedin, AlertCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   getImportBorderColor,
   getImportBackgroundColor,
-} from '../shared/utils/stateStyles';
-import type { ImportState } from '../shared/utils/stateStyles';
+} from "../shared/utils/stateStyles";
+import type { ImportState } from "../shared/utils/stateStyles";
 
 interface LinkedInImportFormProps {
   state: ImportState;
@@ -35,7 +35,7 @@ export const LinkedInImportForm = ({
   className,
 }: LinkedInImportFormProps) => {
   return (
-    <div className={cn('w-full', className)}>
+    <div className={cn("w-full", className)}>
       <div
         role="button"
         tabIndex={0}
@@ -44,15 +44,15 @@ export const LinkedInImportForm = ({
         onMouseLeave={onMouseLeave}
         onKeyDown={onKeyDown}
         className={cn(
-          'relative border-2 rounded-lg p-8 transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
+          "relative border-2 rounded-lg p-8 transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
           getImportBorderColor(state),
           getImportBackgroundColor(state),
-          state === 'hover' && 'scale-[1.01]'
+          state === "hover" && "scale-[1.01]"
         )}
         onClick={(e) => {
           // Only focus input if clicking on the card itself, not the input/button
           if (e.target === e.currentTarget) {
-            const input = e.currentTarget.querySelector('input');
+            const input = e.currentTarget.querySelector("input");
             input?.focus();
           }
         }}
@@ -61,12 +61,12 @@ export const LinkedInImportForm = ({
           {/* LinkedIn Icon */}
           <div
             className={cn(
-              'w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300',
-              state === 'error' ? 'bg-red-100' : 'bg-[#0077B5]/10',
-              state === 'hover' && 'scale-110 bg-[#0077B5]/20'
+              "w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300",
+              state === "error" ? "bg-red-100" : "bg-[#0077B5]/10",
+              state === "hover" && "scale-110 bg-[#0077B5]/20"
             )}
           >
-            {state === 'error' ? (
+            {state === "error" ? (
               <AlertCircle className="w-10 h-10 text-red-600" />
             ) : (
               <Linkedin className="w-10 h-10 text-[#0077B5]" />
@@ -76,11 +76,11 @@ export const LinkedInImportForm = ({
           {/* Text */}
           <div className="space-y-2">
             <h3 className="text-lg font-semibold text-gray-900">
-              {state === 'error'
-                ? 'Import Failed'
-                : 'Drop your LinkedIn profile here'}
+              {state === "error"
+                ? "Import Failed"
+                : "Drop your LinkedIn profile here"}
             </h3>
-            {state === 'error' && (
+            {state === "error" && (
               <p className="text-sm text-red-600">{errorMessage}</p>
             )}
           </div>
@@ -98,8 +98,8 @@ export const LinkedInImportForm = ({
                 onChange={(e) => onUrlChange(e.target.value)}
                 onKeyDown={onKeyDown}
                 className={cn(
-                  'pl-10 pr-4 py-6 text-base',
-                  state === 'error' && 'border-red-500 focus:border-red-500'
+                  "pl-10 pr-4 py-6 text-base",
+                  state === "error" && "border-red-500 focus:border-red-500"
                 )}
                 aria-label="LinkedIn profile URL"
               />

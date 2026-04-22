@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { cn } from '@/lib/utils';
-import { Card, CardContent } from '@/components/ui/card';
+import * as React from "react";
+import { cn } from "@/lib/utils";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface OnboardingCardProps {
   title: string;
@@ -20,7 +20,7 @@ export const OnboardingCard = ({
   className,
 }: OnboardingCardProps) => {
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
+    if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       onClick?.();
     }
@@ -32,11 +32,11 @@ export const OnboardingCard = ({
       tabIndex={0}
       aria-label={`${title}. ${description}`}
       className={cn(
-        'group cursor-pointer transition-all duration-300',
-        'hover:-translate-y-2 hover:shadow-lg',
-        'border-2 hover:border-primary/30',
-        'bg-white',
-        'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
+        "group cursor-pointer transition-all duration-300",
+        "hover:-translate-y-2 hover:shadow-lg",
+        "border-2 hover:border-primary/30",
+        "bg-white",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
         className
       )}
       onClick={onClick}

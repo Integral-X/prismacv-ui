@@ -2,13 +2,14 @@ import type {
   OtpResendContract,
   OtpVerificationContract,
   UserAuthContract,
+  UserLoginContract,
   UserProfileContract,
   UserRoleContract,
-} from './contracts';
+} from "./contracts";
 
 // ─── Domain types ─────────────────────────────────────────────────────────────
 
-export type UserRole = 'regular' | 'admin';
+export type UserRole = "regular" | "admin";
 
 export interface UserProfile {
   id: string;
@@ -22,11 +23,19 @@ export interface UserProfile {
 
 export interface AuthResult {
   user: UserProfile;
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface SignupResult {
+  user: UserProfile;
 }
 
 export interface OtpVerificationResult {
   message: string;
   user: UserProfile;
+  accessToken: string;
+  refreshToken: string;
 }
 
 export interface OtpResendResult {
@@ -40,7 +49,7 @@ function parseDateField(value: unknown): Date | null {
   if (value instanceof Date && !Number.isNaN(value.getTime())) {
     return value;
   }
-  if (typeof value === 'string' || typeof value === 'number') {
+  if (typeof value === "string" || typeof value === "number") {
     const d = new Date(value);
     return Number.isNaN(d.getTime()) ? null : d;
   }
@@ -48,9 +57,9 @@ function parseDateField(value: unknown): Date | null {
 }
 
 function parseUserRole(value: unknown): UserRole | null {
-  if (value === 'regular' || value === 'admin') return value;
-  if (value === 'REGULAR') return 'regular';
-  if (value === 'PLATFORM_ADMIN') return 'admin';
+  if (value === "regular" || value === "admin") return value;
+  if (value === "REGULAR") return "regular";
+  if (value === "PLATFORM_ADMIN") return "admin";
   return null;
 }
 
@@ -59,11 +68,11 @@ function parseUserRole(value: unknown): UserRole | null {
  * `Date` instances are not preserved by JSON — this converts date fields explicitly.
  */
 export function parseUserProfileFromJson(value: unknown): UserProfile | null {
-  if (typeof value !== 'object' || value === null) return null;
+  if (typeof value !== "object" || value === null) return null;
   const o = value as Record<string, unknown>;
 
-  if (typeof o.id !== 'string' || typeof o.email !== 'string') return null;
-  if (typeof o.emailVerified !== 'boolean') return null;
+  if (typeof o.id !== "string" || typeof o.email !== "string") return null;
+  if (typeof o.emailVerified !== "boolean") return null;
 
   const role = parseUserRole(o.role);
   if (!role) return null;
@@ -75,7 +84,7 @@ export function parseUserProfileFromJson(value: unknown): UserProfile | null {
   return {
     id: o.id,
     email: o.email,
-    name: typeof o.name === 'string' ? o.name : undefined,
+    name: typeof o.name === "string" ? o.name : undefined,
     role,
     emailVerified: o.emailVerified,
     createdAt,
@@ -84,7 +93,7 @@ export function parseUserProfileFromJson(value: unknown): UserProfile | null {
 }
 
 function toUserRole(role: UserRoleContract): UserRole {
-  return role === 'PLATFORM_ADMIN' ? 'admin' : 'regular';
+  return role === "PLATFORM_ADMIN" ? "admin" : "regular";
 }
 
 export function toUserProfile(contract: UserProfileContract): UserProfile {
@@ -99,9 +108,17 @@ export function toUserProfile(contract: UserProfileContract): UserProfile {
   };
 }
 
-export function toAuthResult(contract: UserAuthContract): AuthResult {
+export function toSignupResult(contract: UserAuthContract): SignupResult {
   return {
     user: toUserProfile(contract.user),
+  };
+}
+
+export function toAuthResult(contract: UserLoginContract): AuthResult {
+  return {
+    user: toUserProfile(contract.user),
+    accessToken: contract.accessToken,
+    refreshToken: contract.refreshToken,
   };
 }
 
@@ -111,6 +128,8 @@ export function toOtpVerificationResult(
   return {
     message: contract.message,
     user: toUserProfile(contract.user),
+    accessToken: contract.accessToken,
+    refreshToken: contract.refreshToken,
   };
 }
 

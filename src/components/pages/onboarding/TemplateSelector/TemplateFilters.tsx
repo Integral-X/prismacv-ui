@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { User, Columns, Layout, Check } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { TemplateLayout } from './types';
+import { User, Columns, Layout, Check } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { TemplateLayout } from "./types";
 
 interface TemplateFiltersProps {
   headshotFilter: boolean | null;
@@ -37,18 +37,18 @@ export const TemplateFilters = ({
           <button
             onClick={onHeadshotToggle}
             className={cn(
-              'inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all',
-              'border-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
+              "inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all",
+              "border-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
               headshotFilter === true
-                ? 'bg-primary text-white border-primary shadow-sm'
-                : 'bg-white text-gray-700 border-gray-300 hover:border-primary hover:text-primary'
+                ? "bg-primary text-white border-primary shadow-sm"
+                : "bg-white text-gray-700 border-gray-300 hover:border-primary hover:text-primary"
             )}
             aria-label="Filter templates with headshot"
           >
             <User
               className={cn(
-                'w-4 h-4',
-                headshotFilter === true ? 'text-white' : 'text-gray-500'
+                "w-4 h-4",
+                headshotFilter === true ? "text-white" : "text-gray-500"
               )}
             />
             <span>With Headshot</span>
@@ -59,47 +59,47 @@ export const TemplateFilters = ({
 
           {/* Layout Filters */}
           <button
-            onClick={() => onLayoutToggle('single')}
+            onClick={() => onLayoutToggle("single")}
             className={cn(
-              'inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all',
-              'border-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
-              layoutFilter === 'single'
-                ? 'bg-primary text-white border-primary shadow-sm'
-                : 'bg-white text-gray-700 border-gray-300 hover:border-primary hover:text-primary'
+              "inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all",
+              "border-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+              layoutFilter === "single"
+                ? "bg-primary text-white border-primary shadow-sm"
+                : "bg-white text-gray-700 border-gray-300 hover:border-primary hover:text-primary"
             )}
             aria-label="Filter single column templates"
           >
             <Layout
               className={cn(
-                'w-4 h-4',
-                layoutFilter === 'single' ? 'text-white' : 'text-gray-500'
+                "w-4 h-4",
+                layoutFilter === "single" ? "text-white" : "text-gray-500"
               )}
             />
             <span>Single Column</span>
-            {layoutFilter === 'single' && (
+            {layoutFilter === "single" && (
               <Check className="w-4 h-4 text-white" />
             )}
           </button>
 
           <button
-            onClick={() => onLayoutToggle('two-column')}
+            onClick={() => onLayoutToggle("two-column")}
             className={cn(
-              'inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all',
-              'border-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
-              layoutFilter === 'two-column'
-                ? 'bg-primary text-white border-primary shadow-sm'
-                : 'bg-white text-gray-700 border-gray-300 hover:border-primary hover:text-primary'
+              "inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all",
+              "border-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+              layoutFilter === "two-column"
+                ? "bg-primary text-white border-primary shadow-sm"
+                : "bg-white text-gray-700 border-gray-300 hover:border-primary hover:text-primary"
             )}
             aria-label="Filter two column templates"
           >
             <Columns
               className={cn(
-                'w-4 h-4',
-                layoutFilter === 'two-column' ? 'text-white' : 'text-gray-500'
+                "w-4 h-4",
+                layoutFilter === "two-column" ? "text-white" : "text-gray-500"
               )}
             />
             <span>Two Column</span>
-            {layoutFilter === 'two-column' && (
+            {layoutFilter === "two-column" && (
               <Check className="w-4 h-4 text-white" />
             )}
           </button>

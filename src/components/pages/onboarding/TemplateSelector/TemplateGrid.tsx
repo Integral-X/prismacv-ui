@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import Image from 'next/image';
-import { Check } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Template } from './types';
+import * as React from "react";
+import Image from "next/image";
+import { Check } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Template } from "./types";
 
 interface TemplateGridProps {
   templates: Template[];
@@ -51,17 +51,17 @@ export const TemplateGrid = ({
           aria-label={`${template.name} template`}
           onClick={() => onSelect(template.id)}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
+            if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
               onSelect(template.id);
             }
           }}
           className={cn(
-            'group cursor-pointer transition-all duration-300 overflow-hidden',
-            'hover:shadow-lg hover:-translate-y-1',
-            'relative',
-            'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
-            selectedTemplate === template.id && 'shadow-lg'
+            "group cursor-pointer transition-all duration-300 overflow-hidden",
+            "hover:shadow-lg hover:-translate-y-1",
+            "relative",
+            "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+            selectedTemplate === template.id && "shadow-lg"
           )}
         >
           {/* Template Image */}

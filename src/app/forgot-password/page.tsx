@@ -1,14 +1,30 @@
-'use client';
+"use client";
 
-import { Card } from '@/components/ui/card';
-import { AuthFormLayout } from '@/components/layouts/AuthFormLayout';
-import { ForgotPasswordForm } from '@/components/pages/auth/ForgotPasswordForm';
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Card } from "@/components/ui/card";
+import { AuthFormLayout } from "@/components/layouts/AuthFormLayout";
+import { ForgotPasswordForm } from "@/components/pages/auth/ForgotPasswordForm";
+import type { ForgotPasswordFormData } from "@/lib/validations/auth";
+import { forgotPasswordAction } from "@/modules/auth/data/actions";
 
 export default function ForgotPasswordPage() {
-  const handleSubmit = async () => {
-    // TODO: Implement API - send reset email
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    // router.push('/otp');
+  const router = useRouter();
+
+  const handleSubmit = async (data: ForgotPasswordFormData) => {
+    const result = await forgotPasswordAction({
+      email: data.email,
+    });
+
+    if (!result.ok) {
+      toast.error(result.message);
+      return;
+    }
+
+    router.push(
+      result.redirectTo ??
+        `/otp?mode=reset&email=${encodeURIComponent(data.email)}`
+    );
   };
 
   return (

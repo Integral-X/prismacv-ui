@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { useRouter } from 'next/navigation';
-import { Navbar } from '@/components/common/Navbar';
-import { Footer } from '@/components/common/Footer';
-import { OnboardingStepper } from '@/components/pages/onboarding/OnboardingStepper';
-import { WavyPattern } from '@/components/common/WavyPattern';
-import { FileUpload } from '@/components/pages/onboarding/FileUpload';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { Navbar } from "@/components/common/Navbar";
+import { Footer } from "@/components/common/Footer";
+import { OnboardingStepper } from "@/components/pages/onboarding/OnboardingStepper";
+import { WavyPattern } from "@/components/common/WavyPattern";
+import { FileUpload } from "@/components/pages/onboarding/FileUpload";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
 export default function UploadCVPage() {
   const router = useRouter();
@@ -25,12 +25,12 @@ export default function UploadCVPage() {
   const handleContinue = () => {
     if (selectedFile) {
       // Navigate to template selection (Step 3)
-      router.push('/onboarding/select-template');
+      router.push("/onboarding/select-template");
     }
   };
 
   const handleBack = () => {
-    router.push('/onboarding');
+    router.push("/onboarding");
   };
 
   const handleSkip = () => {
@@ -76,7 +76,7 @@ export default function UploadCVPage() {
               onFileSelect={handleFileSelect}
               onFileRemove={handleFileRemove}
               maxSizeMB={5}
-              acceptedFormats={['.pdf', '.doc', '.docx']}
+              acceptedFormats={[".pdf", ".doc", ".docx"]}
             />
           </div>
 
