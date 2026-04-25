@@ -17,8 +17,8 @@
 const primitiveColors = {
   // Cyan/Teal - Primary brand color
   cyan: {
-    400: '#17A2B8', // Primary
-    500: '#138496', // Primary hover/darker
+    400: '#069EA8', // Primary (matches --primary CSS var)
+    500: '#058A93', // Primary hover/darker
   },
 
   // Grays - Neutral palette

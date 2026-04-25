@@ -67,7 +67,7 @@ export const TemplatePicker = () => {
                       className={cn(
                         'overflow-hidden transition-all duration-500 shadow-lg bg-[#E6F5F6] border-0 p-0 py-2',
                         current === index
-                          ? 'scale-100 z-10 border-2 border-[#069098]'
+                          ? 'scale-100 z-10 border-2 border-primary'
                           : 'scale-90 opacity-70'
                       )}
                     >

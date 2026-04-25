@@ -77,7 +77,7 @@ export const ForgotPasswordForm = ({
       <Button
         type='submit'
         disabled={isLoading}
-        className='w-full h-12 bg-[#069EA8] hover:bg-[#058a93] text-white font-medium text-base'
+        className='w-full h-12 bg-primary hover:bg-primary/85 text-primary-foreground font-medium text-base'
       >
         {isLoading ? 'Sending...' : 'Send'}
       </Button>
