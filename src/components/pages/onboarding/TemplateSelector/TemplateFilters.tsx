@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { User, Columns, Layout, Check } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { TemplateLayout } from "./types";
+import { User, Columns, Layout, Check } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { TemplateLayout } from './types';
 
 interface TemplateFiltersProps {
   headshotFilter: boolean | null;
@@ -26,10 +26,10 @@ export const TemplateFilters = ({
   const hasActiveFilters = headshotFilter !== null || layoutFilter !== null;
 
   return (
-    <div className="mb-8">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-gray-200">
-        <div className="flex flex-wrap items-center gap-3">
-          <span className="text-sm font-medium text-gray-700 mr-2">
+    <div className='mb-8'>
+      <div className='flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-gray-200'>
+        <div className='flex flex-wrap items-center gap-3'>
+          <span className='text-sm font-medium text-gray-700 mr-2'>
             Filter by:
           </span>
 
@@ -37,70 +37,70 @@ export const TemplateFilters = ({
           <button
             onClick={onHeadshotToggle}
             className={cn(
-              "inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all",
-              "border-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+              'inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all',
+              'border-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
               headshotFilter === true
-                ? "bg-primary text-white border-primary shadow-sm"
-                : "bg-white text-gray-700 border-gray-300 hover:border-primary hover:text-primary"
+                ? 'bg-primary text-white border-primary shadow-sm'
+                : 'bg-white text-gray-700 border-gray-300 hover:border-primary hover:text-primary'
             )}
-            aria-label="Filter templates with headshot"
+            aria-label='Filter templates with headshot'
           >
             <User
               className={cn(
-                "w-4 h-4",
-                headshotFilter === true ? "text-white" : "text-gray-500"
+                'w-4 h-4',
+                headshotFilter === true ? 'text-white' : 'text-gray-500'
               )}
             />
             <span>With Headshot</span>
             {headshotFilter === true && (
-              <Check className="w-4 h-4 text-white" />
+              <Check className='w-4 h-4 text-white' />
             )}
           </button>
 
           {/* Layout Filters */}
           <button
-            onClick={() => onLayoutToggle("single")}
+            onClick={() => onLayoutToggle('single')}
             className={cn(
-              "inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all",
-              "border-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
-              layoutFilter === "single"
-                ? "bg-primary text-white border-primary shadow-sm"
-                : "bg-white text-gray-700 border-gray-300 hover:border-primary hover:text-primary"
+              'inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all',
+              'border-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
+              layoutFilter === 'single'
+                ? 'bg-primary text-white border-primary shadow-sm'
+                : 'bg-white text-gray-700 border-gray-300 hover:border-primary hover:text-primary'
             )}
-            aria-label="Filter single column templates"
+            aria-label='Filter single column templates'
           >
             <Layout
               className={cn(
-                "w-4 h-4",
-                layoutFilter === "single" ? "text-white" : "text-gray-500"
+                'w-4 h-4',
+                layoutFilter === 'single' ? 'text-white' : 'text-gray-500'
               )}
             />
             <span>Single Column</span>
-            {layoutFilter === "single" && (
-              <Check className="w-4 h-4 text-white" />
+            {layoutFilter === 'single' && (
+              <Check className='w-4 h-4 text-white' />
             )}
           </button>
 
           <button
-            onClick={() => onLayoutToggle("two-column")}
+            onClick={() => onLayoutToggle('two-column')}
             className={cn(
-              "inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all",
-              "border-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
-              layoutFilter === "two-column"
-                ? "bg-primary text-white border-primary shadow-sm"
-                : "bg-white text-gray-700 border-gray-300 hover:border-primary hover:text-primary"
+              'inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all',
+              'border-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
+              layoutFilter === 'two-column'
+                ? 'bg-primary text-white border-primary shadow-sm'
+                : 'bg-white text-gray-700 border-gray-300 hover:border-primary hover:text-primary'
             )}
-            aria-label="Filter two column templates"
+            aria-label='Filter two column templates'
           >
             <Columns
               className={cn(
-                "w-4 h-4",
-                layoutFilter === "two-column" ? "text-white" : "text-gray-500"
+                'w-4 h-4',
+                layoutFilter === 'two-column' ? 'text-white' : 'text-gray-500'
               )}
             />
             <span>Two Column</span>
-            {layoutFilter === "two-column" && (
-              <Check className="w-4 h-4 text-white" />
+            {layoutFilter === 'two-column' && (
+              <Check className='w-4 h-4 text-white' />
             )}
           </button>
         </div>
@@ -109,7 +109,7 @@ export const TemplateFilters = ({
         {hasActiveFilters && (
           <button
             onClick={onClearFilters}
-            className="text-sm text-gray-600 hover:text-primary transition-colors underline"
+            className='text-sm text-gray-600 hover:text-primary transition-colors underline'
           >
             Clear filters
           </button>
@@ -117,7 +117,7 @@ export const TemplateFilters = ({
       </div>
 
       {/* Results Count */}
-      <div className="mt-4 text-sm text-gray-600">
+      <div className='mt-4 text-sm text-gray-600'>
         Showing {filteredCount} of {totalCount} templates
       </div>
     </div>

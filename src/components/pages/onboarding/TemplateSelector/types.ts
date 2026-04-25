@@ -7,7 +7,7 @@ export interface Template {
   name: string;
   image: string;
   hasHeadshot: boolean;
-  layout: "single" | "two-column";
+  layout: 'single' | 'two-column';
   category: string;
 }
 
@@ -16,4 +16,4 @@ export interface TemplateSelectorProps {
   selectedTemplate?: string | null;
 }
 
-export type TemplateLayout = "single" | "two-column";
+export type TemplateLayout = 'single' | 'two-column';

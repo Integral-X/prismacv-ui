@@ -24,7 +24,7 @@ export const validateLinkedInUrl = (url: string): ValidationResult => {
   if (!url.trim()) {
     return {
       valid: false,
-      error: "Please enter a LinkedIn profile URL",
+      error: 'Please enter a LinkedIn profile URL',
     };
   }
 
@@ -34,7 +34,7 @@ export const validateLinkedInUrl = (url: string): ValidationResult => {
     return {
       valid: false,
       error:
-        "Please enter a valid LinkedIn profile URL (e.g., https://linkedin.com/in/username)",
+        'Please enter a valid LinkedIn profile URL (e.g., https://linkedin.com/in/username)',
     };
   }
 
@@ -46,7 +46,7 @@ export const validateLinkedInUrl = (url: string): ValidationResult => {
  */
 export const normalizeLinkedInUrl = (url: string): string => {
   let normalized = url.trim();
-  if (!normalized.startsWith("http://") && !normalized.startsWith("https://")) {
+  if (!normalized.startsWith('http://') && !normalized.startsWith('https://')) {
     normalized = `https://${normalized}`;
   }
   return normalized;
@@ -57,5 +57,5 @@ export const normalizeLinkedInUrl = (url: string): string => {
  */
 export const extractLinkedInDisplayName = (url: string): string => {
   const match = url.match(/linkedin\.com\/(?:in|pub)\/([\w-]+)/i);
-  return match ? match[1] : "LinkedIn Profile";
+  return match ? match[1] : 'LinkedIn Profile';
 };

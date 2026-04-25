@@ -1,2 +1,2 @@
-export { LinkedInImport } from "./LinkedInImport";
-export type { LinkedInImportProps, ImportedProfile } from "./types";
+export { LinkedInImport } from './LinkedInImport';
+export type { LinkedInImportProps, ImportedProfile } from './types';

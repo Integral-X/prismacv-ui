@@ -1,13 +1,13 @@
-import { logger } from "@/shared/logger/logger";
-import { HttpError } from "./http-error";
-import type { HttpClient } from "./http-client";
-import type { ApiEnvelope, ApiErrorEnvelope, RequestConfig } from "./types";
+import { logger } from '@/shared/logger/logger';
+import { HttpError } from './http-error';
+import type { HttpClient } from './http-client';
+import type { ApiEnvelope, ApiErrorEnvelope, RequestConfig } from './types';
 
 export class FetchHttpClient implements HttpClient {
   private readonly baseUrl: string;
 
   constructor(baseUrl: string) {
-    this.baseUrl = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
+    this.baseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
   }
 
   private buildUrl(
@@ -34,7 +34,7 @@ export class FetchHttpClient implements HttpClient {
     const url = this.buildUrl(endpoint, config.params);
 
     const headers: Record<string, string> = {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       ...config.headers,
     };
 
@@ -80,22 +80,22 @@ export class FetchHttpClient implements HttpClient {
   }
 
   get<T>(endpoint: string, config?: RequestConfig): Promise<T> {
-    return this.execute<T>("GET", endpoint, undefined, config);
+    return this.execute<T>('GET', endpoint, undefined, config);
   }
 
   post<T, B>(endpoint: string, body: B, config?: RequestConfig): Promise<T> {
-    return this.execute<T>("POST", endpoint, body, config);
+    return this.execute<T>('POST', endpoint, body, config);
   }
 
   put<T, B>(endpoint: string, body: B, config?: RequestConfig): Promise<T> {
-    return this.execute<T>("PUT", endpoint, body, config);
+    return this.execute<T>('PUT', endpoint, body, config);
   }
 
   patch<T, B>(endpoint: string, body: B, config?: RequestConfig): Promise<T> {
-    return this.execute<T>("PATCH", endpoint, body, config);
+    return this.execute<T>('PATCH', endpoint, body, config);
   }
 
   delete<T>(endpoint: string, config?: RequestConfig): Promise<T> {
-    return this.execute<T>("DELETE", endpoint, undefined, config);
+    return this.execute<T>('DELETE', endpoint, undefined, config);
   }
 }

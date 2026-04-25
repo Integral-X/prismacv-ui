@@ -1,5 +1,5 @@
-import { apiClient } from "@/shared/http/api-client";
-import { HttpError } from "@/shared/http/http-error";
+import { apiClient } from '@/shared/http/api-client';
+import { HttpError } from '@/shared/http/http-error';
 import type {
   ChangePasswordContract,
   ChangePasswordRequest,
@@ -19,7 +19,7 @@ import type {
   VerifyResetOtpContract,
   VerifyResetOtpRequest,
   VerifySignupOtpRequest,
-} from "./contracts";
+} from './contracts';
 import {
   toAuthResult,
   toOtpResendResult,
@@ -29,14 +29,14 @@ import {
   type OtpResendResult,
   type OtpVerificationResult,
   type SignupResult,
-} from "./mappers";
+} from './mappers';
 import {
   clearAuthSession,
   getAccessToken,
   getRefreshToken,
   persistAuthSession,
   shouldPersistSession,
-} from "./session";
+} from './session';
 
 async function executeAuthenticatedRequest<T>(
   operation: (headers: Record<string, string>) => Promise<T>
@@ -44,7 +44,7 @@ async function executeAuthenticatedRequest<T>(
   const accessToken = await getAccessToken();
 
   if (!accessToken) {
-    throw new HttpError(401, "Unauthorized", "Authentication required");
+    throw new HttpError(401, 'Unauthorized', 'Authentication required');
   }
 
   try {
@@ -83,7 +83,7 @@ async function executeAuthenticatedRequest<T>(
  */
 export async function loginUser(body: UserLoginRequest): Promise<AuthResult> {
   const contract = await apiClient.post<UserLoginContract, UserLoginRequest>(
-    "auth/user/login",
+    'auth/user/login',
     body
   );
 
@@ -99,7 +99,7 @@ export async function signupUser(
   body: UserSignupRequest
 ): Promise<SignupResult> {
   const contract = await apiClient.post<UserAuthContract, UserSignupRequest>(
-    "auth/user/signup",
+    'auth/user/signup',
     body
   );
 
@@ -116,7 +116,7 @@ export async function verifySignupOtp(
   const contract = await apiClient.post<
     OtpVerificationContract,
     VerifySignupOtpRequest
-  >("otp/verify-signup", body);
+  >('otp/verify-signup', body);
 
   return toOtpVerificationResult(contract);
 }
@@ -131,7 +131,7 @@ export async function resendSignupOtp(
   const contract = await apiClient.post<
     OtpResendContract,
     ResendSignupOtpRequest
-  >("otp/resend-signup", body);
+  >('otp/resend-signup', body);
 
   return toOtpResendResult(contract);
 }
@@ -144,7 +144,7 @@ export async function forgotPassword(
   body: ForgotPasswordRequest
 ): Promise<ForgotPasswordContract> {
   return apiClient.post<ForgotPasswordContract, ForgotPasswordRequest>(
-    "auth/user/forgot-password",
+    'auth/user/forgot-password',
     body
   );
 }
@@ -157,7 +157,7 @@ export async function verifyResetOtp(
   body: VerifyResetOtpRequest
 ): Promise<VerifyResetOtpContract> {
   return apiClient.post<VerifyResetOtpContract, VerifyResetOtpRequest>(
-    "otp/verify-reset",
+    'otp/verify-reset',
     body
   );
 }
@@ -171,7 +171,7 @@ export async function refreshUserToken(
   const contract = await apiClient.post<
     RefreshTokenContract,
     RefreshTokenRequest
-  >("auth/user/refresh", body);
+  >('auth/user/refresh', body);
 
   return toAuthResult(contract);
 }
@@ -183,7 +183,7 @@ export async function resetPassword(
   body: ResetPasswordRequest
 ): Promise<ResetPasswordContract> {
   return apiClient.post<ResetPasswordContract, ResetPasswordRequest>(
-    "auth/user/reset-password",
+    'auth/user/reset-password',
     body
   );
 }
@@ -197,7 +197,7 @@ export async function changePassword(
 ): Promise<ChangePasswordContract> {
   return executeAuthenticatedRequest((headers) =>
     apiClient.post<ChangePasswordContract, ChangePasswordRequest>(
-      "auth/user/change-password",
+      'auth/user/change-password',
       body,
       { headers }
     )

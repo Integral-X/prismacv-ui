@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { Card } from "@/components/ui/card";
-import { AuthFormLayout } from "@/components/layouts/AuthFormLayout";
-import { LoginForm } from "@/components/pages/login/LoginForm";
-import { SocialAuthButtons } from "@/components/pages/login/SocialAuthButtons";
-import type { LoginFormData } from "@/lib/validations/auth";
-import { loginUserAction } from "@/modules/auth/data/actions";
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { Card } from '@/components/ui/card';
+import { AuthFormLayout } from '@/components/layouts/AuthFormLayout';
+import { LoginForm } from '@/components/pages/login/LoginForm';
+import { SocialAuthButtons } from '@/components/pages/login/SocialAuthButtons';
+import type { LoginFormData } from '@/lib/validations/auth';
+import { loginUserAction } from '@/modules/auth/data/actions';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -20,7 +20,7 @@ export default function LoginPage() {
     });
 
     if (!result.ok) {
-      if (result.code === "email_not_verified" && result.email) {
+      if (result.code === 'email_not_verified' && result.email) {
         router.push(
           `/otp?mode=signup&email=${encodeURIComponent(result.email)}`
         );
@@ -31,26 +31,26 @@ export default function LoginPage() {
       return;
     }
 
-    router.push(result.redirectTo ?? "/onboarding");
+    router.push(result.redirectTo ?? '/onboarding');
   };
 
   return (
     <AuthFormLayout>
-      <Card className="w-full max-w-[440px] bg-white shadow-card p-8">
-        <h2 className="text-xl text-center font-semibold text-content-primary mb-4">
+      <Card className='w-full max-w-[440px] bg-white shadow-card p-8'>
+        <h2 className='text-xl text-center font-semibold text-content-primary mb-4'>
           Sign in your account
         </h2>
 
-        <div className="mb-2">
+        <div className='mb-2'>
           <SocialAuthButtons />
         </div>
 
-        <div className="relative mb-2">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-border-subtle" />
+        <div className='relative mb-2'>
+          <div className='absolute inset-0 flex items-center'>
+            <div className='w-full border-t border-border-subtle' />
           </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="px-4 bg-white text-content-tertiary">Or</span>
+          <div className='relative flex justify-center text-sm'>
+            <span className='px-4 bg-white text-content-tertiary'>Or</span>
           </div>
         </div>
 

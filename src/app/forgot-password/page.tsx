@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { Card } from "@/components/ui/card";
-import { AuthFormLayout } from "@/components/layouts/AuthFormLayout";
-import { ForgotPasswordForm } from "@/components/pages/auth/ForgotPasswordForm";
-import type { ForgotPasswordFormData } from "@/lib/validations/auth";
-import { forgotPasswordAction } from "@/modules/auth/data/actions";
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { Card } from '@/components/ui/card';
+import { AuthFormLayout } from '@/components/layouts/AuthFormLayout';
+import { ForgotPasswordForm } from '@/components/pages/auth/ForgotPasswordForm';
+import type { ForgotPasswordFormData } from '@/lib/validations/auth';
+import { forgotPasswordAction } from '@/modules/auth/data/actions';
 
 export default function ForgotPasswordPage() {
   const router = useRouter();
@@ -29,8 +29,8 @@ export default function ForgotPasswordPage() {
 
   return (
     <AuthFormLayout>
-      <Card className="w-full max-w-[440px] bg-white shadow-card p-8">
-        <h2 className="text-xl font-semibold text-content-primary mb-4">
+      <Card className='w-full max-w-[440px] bg-white shadow-card p-8'>
+        <h2 className='text-xl font-semibold text-content-primary mb-4'>
           Restore your password
         </h2>
         <ForgotPasswordForm onSubmit={handleSubmit} />

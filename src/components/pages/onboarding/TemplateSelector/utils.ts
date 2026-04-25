@@ -2,7 +2,7 @@
  * TemplateSelector utility functions
  */
 
-import { Template, TemplateLayout } from "./types";
+import { Template, TemplateLayout } from './types';
 
 export interface TemplateFilters {
   headshotFilter: boolean | null;

@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { FileUploadProps, UploadedFile } from "./types";
+import * as React from 'react';
+import { FileUploadProps, UploadedFile } from './types';
 import {
   DEFAULT_MAX_SIZE_MB,
   DEFAULT_ACCEPTED_FORMATS,
   ERROR_DISPLAY_DURATION_MS,
-} from "./constants";
-import { validateFile } from "../shared/utils/fileValidation";
-import { formatFileSize } from "../shared/utils/fileFormatting";
-import { useProgressSimulation } from "../shared/hooks/useProgressSimulation";
-import type { UploadState } from "../shared/utils/stateStyles";
-import { FileUploadSuccess } from "./FileUploadSuccess";
-import { FileUploadProgress } from "./FileUploadProgress";
-import { FileUploadDropzone } from "./FileUploadDropzone";
+} from './constants';
+import { validateFile } from '../shared/utils/fileValidation';
+import { formatFileSize } from '../shared/utils/fileFormatting';
+import { useProgressSimulation } from '../shared/hooks/useProgressSimulation';
+import type { UploadState } from '../shared/utils/stateStyles';
+import { FileUploadSuccess } from './FileUploadSuccess';
+import { FileUploadProgress } from './FileUploadProgress';
+import { FileUploadDropzone } from './FileUploadDropzone';
 
 export const FileUpload = ({
   onFileSelect,
@@ -22,11 +22,11 @@ export const FileUpload = ({
   acceptedFormats = DEFAULT_ACCEPTED_FORMATS,
   className,
 }: FileUploadProps) => {
-  const [state, setState] = React.useState<UploadState>("idle");
+  const [state, setState] = React.useState<UploadState>('idle');
   const [uploadedFile, setUploadedFile] = React.useState<UploadedFile | null>(
     null
   );
-  const [errorMessage, setErrorMessage] = React.useState<string>("");
+  const [errorMessage, setErrorMessage] = React.useState<string>('');
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const pendingFileRef = React.useRef<{
     file: File;
@@ -53,7 +53,7 @@ export const FileUpload = ({
     onComplete: () => {
       if (pendingFileRef.current) {
         setUploadedFile(pendingFileRef.current.formattedFile);
-        setState("success");
+        setState('success');
         onFileSelect?.(pendingFileRef.current.file);
         pendingFileRef.current = null;
       }
@@ -68,17 +68,17 @@ export const FileUpload = ({
         clearTimeout(errorResetTimeoutRef.current);
         errorResetTimeoutRef.current = null;
       }
-      setState("error");
-      setErrorMessage(validation.error || "Invalid file");
+      setState('error');
+      setErrorMessage(validation.error || 'Invalid file');
       errorResetTimeoutRef.current = setTimeout(() => {
         errorResetTimeoutRef.current = null;
-        setState("idle");
-        setErrorMessage("");
+        setState('idle');
+        setErrorMessage('');
       }, ERROR_DISPLAY_DURATION_MS);
       return;
     }
 
-    setState("uploading");
+    setState('uploading');
 
     const formattedFile: UploadedFile = {
       file,
@@ -93,16 +93,16 @@ export const FileUpload = ({
   const handleDragEnter = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (state !== "success") {
-      setState("dragover");
+    if (state !== 'success') {
+      setState('dragover');
     }
   };
 
   const handleDragLeave = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (state === "dragover") {
-      setState("idle");
+    if (state === 'dragover') {
+      setState('idle');
     }
   };
 
@@ -114,7 +114,7 @@ export const FileUpload = ({
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setState("idle");
+    setState('idle');
 
     const files = e.dataTransfer.files;
     if (files && files.length > 0) {
@@ -131,10 +131,10 @@ export const FileUpload = ({
 
   const handleRemove = () => {
     setUploadedFile(null);
-    setState("idle");
+    setState('idle');
     resetProgress();
     if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+      fileInputRef.current.value = '';
     }
     onFileRemove?.();
   };
@@ -144,14 +144,14 @@ export const FileUpload = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" || e.key === " ") {
+    if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       handleBrowseClick();
     }
   };
 
   // Success state
-  if (state === "success" && uploadedFile) {
+  if (state === 'success' && uploadedFile) {
     return (
       <FileUploadSuccess
         uploadedFile={uploadedFile}
@@ -163,7 +163,7 @@ export const FileUpload = ({
   }
 
   // Uploading state
-  if (state === "uploading") {
+  if (state === 'uploading') {
     return <FileUploadProgress progress={progress} className={className} />;
   }
 
@@ -179,8 +179,8 @@ export const FileUpload = ({
       onDragLeave={handleDragLeave}
       onDragOver={handleDragOver}
       onDrop={handleDrop}
-      onMouseEnter={() => state === "idle" && setState("hover")}
-      onMouseLeave={() => state === "hover" && setState("idle")}
+      onMouseEnter={() => state === 'idle' && setState('hover')}
+      onMouseLeave={() => state === 'hover' && setState('idle')}
       onKeyDown={handleKeyDown}
       onBrowseClick={handleBrowseClick}
       onFileInput={handleFileInput}

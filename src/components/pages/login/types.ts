@@ -1,4 +1,4 @@
-import type { LoginFormData } from "@/lib/validations/auth";
+import type { LoginFormData } from '@/lib/validations/auth';
 
 export type { LoginFormData };
 

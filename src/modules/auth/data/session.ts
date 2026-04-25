@@ -1,12 +1,12 @@
-import "server-only";
+import 'server-only';
 
-import { cookies } from "next/headers";
-import type { AuthResult, UserProfile } from "./mappers";
+import { cookies } from 'next/headers';
+import type { AuthResult, UserProfile } from './mappers';
 
-const ACCESS_TOKEN_COOKIE = "access-token";
-const REFRESH_TOKEN_COOKIE = "refresh-token";
-const USER_PROFILE_COOKIE = "user-profile";
-const SESSION_PERSISTENT_COOKIE = "session-persistent";
+const ACCESS_TOKEN_COOKIE = 'access-token';
+const REFRESH_TOKEN_COOKIE = 'refresh-token';
+const USER_PROFILE_COOKIE = 'user-profile';
+const SESSION_PERSISTENT_COOKIE = 'session-persistent';
 
 const ACCESS_TOKEN_MAX_AGE_SECONDS = 60 * 15;
 const REFRESH_TOKEN_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
@@ -14,9 +14,9 @@ const REFRESH_TOKEN_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
 function buildCookieOptions(rememberMe: boolean, maxAge?: number) {
   return {
     httpOnly: true,
-    path: "/",
-    sameSite: "lax" as const,
-    secure: process.env.NODE_ENV === "production",
+    path: '/',
+    sameSite: 'lax' as const,
+    secure: process.env.NODE_ENV === 'production',
     ...(rememberMe && maxAge ? { maxAge } : {}),
   };
 }
@@ -52,7 +52,7 @@ export async function persistAuthSession(
   );
   cookieStore.set(
     SESSION_PERSISTENT_COOKIE,
-    rememberMe ? "true" : "false",
+    rememberMe ? 'true' : 'false',
     buildCookieOptions(rememberMe, REFRESH_TOKEN_MAX_AGE_SECONDS)
   );
 }
@@ -78,5 +78,5 @@ export async function getRefreshToken(): Promise<string | null> {
 
 export async function shouldPersistSession(): Promise<boolean> {
   const cookieStore = await cookies();
-  return cookieStore.get(SESSION_PERSISTENT_COOKIE)?.value === "true";
+  return cookieStore.get(SESSION_PERSISTENT_COOKIE)?.value === 'true';
 }

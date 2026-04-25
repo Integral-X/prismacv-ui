@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { TemplateSelectorProps, TemplateLayout } from "./types";
-import { templates } from "./constants";
-import { filterTemplates } from "./utils";
-import { TemplateFilters } from "./TemplateFilters";
-import { TemplateGrid } from "./TemplateGrid";
+import * as React from 'react';
+import { TemplateSelectorProps, TemplateLayout } from './types';
+import { templates } from './constants';
+import { filterTemplates } from './utils';
+import { TemplateFilters } from './TemplateFilters';
+import { TemplateGrid } from './TemplateGrid';
 
 export const TemplateSelector = ({
   onSelect,
@@ -47,7 +47,7 @@ export const TemplateSelector = ({
   };
 
   return (
-    <div className="w-full">
+    <div className='w-full'>
       <TemplateFilters
         headshotFilter={headshotFilter}
         layoutFilter={layoutFilter}

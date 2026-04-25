@@ -1,6 +1,6 @@
-import { getCurrentUser } from "@/modules/auth/data/queries";
+import { getCurrentUser } from '@/modules/auth/data/queries';
 
-import { NavbarClient, type NavbarUser } from "./navbar-client";
+import { NavbarClient, type NavbarUser } from './navbar-client';
 
 export async function Navbar() {
   const currentUser = await getCurrentUser();

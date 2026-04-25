@@ -9,8 +9,8 @@ type PublicEnv = {
 function assertPublicEnv(input: PublicEnvInput): asserts input is PublicEnv {
   if (!input.NEXT_PUBLIC_API_URL) {
     throw new Error(
-      "Missing required environment variables: NEXT_PUBLIC_API_URL.\n" +
-        "Check your .env.local file."
+      'Missing required environment variables: NEXT_PUBLIC_API_URL.\n' +
+        'Check your .env.local file.'
     );
   }
 }
@@ -21,7 +21,7 @@ const publicEnv: PublicEnvInput = {
 
 assertPublicEnv(publicEnv);
 
-const apiBaseUrl = publicEnv.NEXT_PUBLIC_API_URL.replace(/\/$/, "");
+const apiBaseUrl = publicEnv.NEXT_PUBLIC_API_URL.replace(/\/$/, '');
 
 export const env = {
   /**
