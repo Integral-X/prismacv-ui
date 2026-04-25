@@ -93,7 +93,7 @@ export const OtpForm = ({
       <Button
         type='submit'
         disabled={isLoading}
-        className='w-full h-12 bg-primary hover:bg-primary/85 text-white font-medium text-base'
+        className='w-full h-12 bg-primary hover:bg-primary/85 text-primary-foreground font-medium text-base'
       >
         {isLoading ? 'Verifying...' : 'Verify'}
       </Button>
