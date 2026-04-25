@@ -13,8 +13,8 @@ export const OnboardingStepper = ({
   totalSteps = 3,
 }: OnboardingStepperProps) => {
   return (
-    <div className="flex items-center justify-center w-full mb-12">
-      <div className="flex items-center w-full max-w-md">
+    <div className='flex items-center justify-center w-full mb-12'>
+      <div className='flex items-center w-full max-w-md'>
         {Array.from({ length: totalSteps }).map((_, index) => {
           const stepNumber = index + 1;
           const isActive = stepNumber === currentStep;
@@ -23,7 +23,7 @@ export const OnboardingStepper = ({
           return (
             <React.Fragment key={stepNumber}>
               {/* Step Circle */}
-              <div className="flex flex-col items-center relative z-10">
+              <div className='flex flex-col items-center relative z-10'>
                 <div
                   className={cn(
                     'w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm transition-all duration-300',
@@ -36,16 +36,16 @@ export const OnboardingStepper = ({
                 >
                   {isCompleted ? (
                     <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+                      className='w-5 h-5'
+                      fill='none'
+                      stroke='currentColor'
+                      viewBox='0 0 24 24'
                     >
                       <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
                         strokeWidth={2}
-                        d="M5 13l4 4L19 7"
+                        d='M5 13l4 4L19 7'
                       />
                     </svg>
                   ) : (
@@ -56,7 +56,7 @@ export const OnboardingStepper = ({
 
               {/* Connector Line */}
               {index < totalSteps - 1 && (
-                <div className="flex-1 h-0.5 mx-2 relative">
+                <div className='flex-1 h-0.5 mx-2 relative'>
                   <div
                     className={cn(
                       'h-full transition-all duration-500',

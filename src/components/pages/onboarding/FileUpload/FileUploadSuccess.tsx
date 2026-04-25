@@ -32,29 +32,29 @@ export const FileUploadSuccess = ({
           getUploadBackgroundColor(state)
         )}
       >
-        <div className="flex items-center gap-4">
-          <div className="shrink-0 w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-            <CheckCircle className="w-6 h-6 text-green-600" />
+        <div className='flex items-center gap-4'>
+          <div className='shrink-0 w-12 h-12 rounded-full bg-green-100 flex items-center justify-center'>
+            <CheckCircle className='w-6 h-6 text-green-600' />
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">
+          <div className='flex-1 min-w-0'>
+            <p className='text-sm font-medium text-gray-900 truncate'>
               {uploadedFile.name}
             </p>
-            <p className="text-sm text-gray-500">{uploadedFile.size}</p>
+            <p className='text-sm text-gray-500'>{uploadedFile.size}</p>
           </div>
           <Button
-            variant="ghost"
-            size="icon"
+            variant='ghost'
+            size='icon'
             onClick={onRemove}
-            className="shrink-0"
+            className='shrink-0'
           >
-            <X className="w-5 h-5 text-gray-500" />
+            <X className='w-5 h-5 text-gray-500' />
           </Button>
         </div>
 
         {/* Parsing status */}
-        <div className="mt-4 flex items-center gap-2 text-sm text-green-700">
-          <div className="shrink-0 w-2 h-2 rounded-full bg-green-600 animate-pulse" />
+        <div className='mt-4 flex items-center gap-2 text-sm text-green-700'>
+          <div className='shrink-0 w-2 h-2 rounded-full bg-green-600 animate-pulse' />
           <span>Analyzing your CV...</span>
         </div>
       </div>

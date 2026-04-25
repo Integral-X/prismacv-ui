@@ -48,9 +48,9 @@ export const FileUploadDropzone = ({
   return (
     <div className={cn('w-full', className)}>
       <div
-        role="button"
+        role='button'
         tabIndex={0}
-        aria-label="Upload CV file - drag and drop or click to browse"
+        aria-label='Upload CV file - drag and drop or click to browse'
         onDragEnter={onDragEnter}
         onDragLeave={onDragLeave}
         onDragOver={onDragOver}
@@ -69,13 +69,13 @@ export const FileUploadDropzone = ({
       >
         <input
           ref={fileInputRef}
-          type="file"
+          type='file'
           accept={acceptedFormats.join(',')}
           onChange={onFileInput}
-          className="hidden"
+          className='hidden'
         />
 
-        <div className="flex flex-col items-center text-center space-y-4">
+        <div className='flex flex-col items-center text-center space-y-4'>
           {/* Icon */}
           <div
             className={cn(
@@ -86,7 +86,7 @@ export const FileUploadDropzone = ({
             )}
           >
             {state === 'error' ? (
-              <AlertCircle className="w-10 h-10 text-red-600" />
+              <AlertCircle className='w-10 h-10 text-red-600' />
             ) : (
               <Upload
                 className={cn(
@@ -98,28 +98,28 @@ export const FileUploadDropzone = ({
           </div>
 
           {/* Text */}
-          <div className="space-y-2">
-            <h3 className="text-lg font-semibold text-gray-900">
+          <div className='space-y-2'>
+            <h3 className='text-lg font-semibold text-gray-900'>
               {state === 'error' ? 'Upload Failed' : 'Drag & drop your CV here'}
             </h3>
             {state === 'error' ? (
-              <p className="text-sm text-red-600">{errorMessage}</p>
+              <p className='text-sm text-red-600'>{errorMessage}</p>
             ) : (
-              <p className="text-sm text-gray-600">or click to browse</p>
+              <p className='text-sm text-gray-600'>or click to browse</p>
             )}
           </div>
 
           {/* File format info */}
-          <p className="text-xs text-gray-500">
+          <p className='text-xs text-gray-500'>
             Supports {acceptedFormats.join(', ').toUpperCase()} (Max {maxSizeMB}
             MB)
           </p>
 
           {/* Browse button */}
           <Button
-            type="button"
-            variant="default"
-            className="mt-4"
+            type='button'
+            variant='default'
+            className='mt-4'
             onClick={(e) => {
               e.stopPropagation();
               onBrowseClick();

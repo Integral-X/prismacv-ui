@@ -38,31 +38,31 @@ export const TemplatePicker = () => {
   }, [api]);
 
   return (
-    <section className="py-16 md:py-20 bg-linear-to-b from-[#E8F5E9] to-white relative overflow-hidden">
-      <div className="container mx-auto px-4">
+    <section className='py-16 md:py-20 bg-linear-to-b from-[#E8F5E9] to-white relative overflow-hidden'>
+      <div className='container mx-auto px-4'>
         {/* Section Title */}
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-center mb-8 text-gray-900">
+        <h2 className='text-3xl md:text-4xl lg:text-5xl font-semibold text-center mb-8 text-gray-900'>
           Pick the Perfect Resume Template
         </h2>
 
         {/* Carousel Container */}
-        <div className="mx-auto max-w-6xl relative">
+        <div className='mx-auto max-w-6xl relative'>
           <Carousel
             setApi={setApi}
-            className="w-full"
+            className='w-full'
             opts={{
               loop: true,
               align: 'center',
               slidesToScroll: 1,
             }}
           >
-            <CarouselContent className="-ml-2 md:-ml-4 py-8">
+            <CarouselContent className='-ml-2 md:-ml-4 py-8'>
               {templateImages.map((image, index) => (
                 <CarouselItem
                   key={index}
-                  className="pl-2 md:pl-4 basis-full md:basis-1/3"
+                  className='pl-2 md:pl-4 basis-full md:basis-1/3'
                 >
-                  <div className="relative">
+                  <div className='relative'>
                     <Card
                       className={cn(
                         'overflow-hidden transition-all duration-500 shadow-lg bg-[#E6F5F6] border-0 p-0 py-2',
@@ -71,12 +71,12 @@ export const TemplatePicker = () => {
                           : 'scale-90 opacity-70'
                       )}
                     >
-                      <CardContent className="p-0 aspect-3/4 relative bg-[#E6F5F6]">
+                      <CardContent className='p-0 aspect-3/4 relative bg-[#E6F5F6]'>
                         <Image
                           src={image}
                           alt={`Resume template ${index + 1}`}
                           fill
-                          className="object-contain"
+                          className='object-contain'
                           priority={index === 0}
                         />
                       </CardContent>
@@ -88,7 +88,7 @@ export const TemplatePicker = () => {
           </Carousel>
 
           {/* Pagination Dots */}
-          <div className="flex justify-center items-center gap-2 mt-8">
+          <div className='flex justify-center items-center gap-2 mt-8'>
             {templateImages.map((_, index) => (
               <button
                 key={index}
@@ -105,13 +105,13 @@ export const TemplatePicker = () => {
           </div>
 
           {/* Browse More Button */}
-          <div className="flex justify-center mt-8">
+          <div className='flex justify-center mt-8'>
             <Button
-              variant="outline"
-              className="border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8 py-6 rounded-lg text-base font-medium transition-all"
+              variant='outline'
+              className='border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8 py-6 rounded-lg text-base font-medium transition-all'
               asChild
             >
-              <a href="#templates">Browse More</a>
+              <a href='#templates'>Browse More</a>
             </Button>
           </div>
         </div>
