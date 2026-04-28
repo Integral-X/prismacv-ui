@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 
 import { HttpError } from '@/shared/http/http-error';
 import {
+  changePassword,
   forgotPassword,
   loginUser,
   resendSignupOtp,
@@ -104,7 +105,7 @@ export async function loginUserAction(input: {
 
     return {
       ok: true,
-      redirectTo: '/onboarding',
+      redirectTo: '/dashboard',
     };
   } catch (error) {
     const message = getErrorMessage(
@@ -163,7 +164,7 @@ export async function verifyOtpAction(input: {
       return {
         ok: true,
         message: result.message,
-        redirectTo: '/onboarding',
+        redirectTo: '/dashboard',
       };
     }
 
@@ -245,6 +246,21 @@ export async function resetPasswordAction(input: {
     };
   } catch (error) {
     return toFailureResult(error, 'Unable to reset your password right now.');
+  }
+}
+
+export async function changePasswordAction(input: {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}): Promise<ActionResult> {
+  try {
+    await changePassword(input);
+    return { ok: true, message: 'Password changed successfully' };
+  } catch (error) {
+    return toFailureResult(error, 'Failed to change password', {
+      unauthorizedCode: 'invalid_credentials',
+    });
   }
 }
 
