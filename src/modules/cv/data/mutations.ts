@@ -2,6 +2,12 @@ import { apiClient } from '@/shared/http/api-client';
 import { env } from '@/shared/config/env';
 import { HttpError } from '@/shared/http/http-error';
 import { executeAuthenticatedRequest } from '@/shared/auth/execute-authenticated-request';
+
+function assertSafeCvId(cvId: string): void {
+  if (!/^[A-Za-z0-9_-]{1,128}$/.test(cvId)) {
+    throw new HttpError(400, 'Bad Request', 'Invalid CV id');
+  }
+}
 import type {
   BulkUpsertCertificationsRequest,
   BulkUpsertCustomSectionsRequest,
@@ -225,11 +231,14 @@ export async function importLinkedInToCv(
 }
 
 export async function exportCvPdf(cvId: string): Promise<Blob> {
+  assertSafeCvId(cvId);
+
   return executeAuthenticatedRequest(async (headers) => {
     const baseUrl = env.apiBaseUrl.endsWith('/')
       ? env.apiBaseUrl
       : `${env.apiBaseUrl}/`;
-    const url = `${baseUrl}cv/${cvId}/export/pdf`;
+    const safeCvId = encodeURIComponent(cvId);
+    const url = `${baseUrl}cv/${safeCvId}/export/pdf`;
 
     const response = await fetch(url, {
       method: 'GET',
