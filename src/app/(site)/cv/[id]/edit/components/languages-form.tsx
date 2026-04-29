@@ -78,19 +78,9 @@ export function LanguagesForm({
 
       if (result.ok) {
         toast.success(result.message ?? 'Languages saved.');
-        onSaved(
-          items.map((item, i) => ({
-            id: initialData[i]?.id ?? '',
-            name: item.name,
-            proficiency: (item.proficiency?.toLowerCase() ?? 'basic') as
-              | 'basic'
-              | 'intermediate'
-              | 'advanced'
-              | 'fluent'
-              | 'native',
-            sortOrder: item.sortOrder ?? i,
-          }))
-        );
+        if (result.data) {
+          onSaved(result.data);
+        }
       } else {
         toast.error(result.message);
       }

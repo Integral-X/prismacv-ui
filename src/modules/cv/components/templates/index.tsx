@@ -15,19 +15,35 @@ interface TemplateConfig {
 }
 
 const TEMPLATE_MAP: Record<string, TemplateConfig> = {
-  '1': { layout: 'single', category: 'professional', accentColor: '#1a1a2e' },
-  '2': { layout: 'two-column', category: 'modern', accentColor: '#0ea5e9' },
-  '3': { layout: 'two-column', category: 'creative', accentColor: '#8b5cf6' },
-  '4': { layout: 'single', category: 'professional', accentColor: '#374151' },
-  '5': { layout: 'single', category: 'modern', accentColor: '#0d9488' },
-  '6': { layout: 'two-column', category: 'creative', accentColor: '#e11d48' },
-  '7': {
+  classic: {
+    layout: 'single',
+    category: 'professional',
+    accentColor: '#1a1a2e',
+  },
+  horizon: {
     layout: 'two-column',
     category: 'professional',
     accentColor: '#1e40af',
   },
-  '8': { layout: 'single', category: 'modern', accentColor: '#475569' },
-  '9': { layout: 'single', category: 'creative', accentColor: '#c026d3' },
+  prism: { layout: 'two-column', category: 'modern', accentColor: '#0ea5e9' },
+  executive: {
+    layout: 'single',
+    category: 'professional',
+    accentColor: '#374151',
+  },
+  nova: { layout: 'single', category: 'modern', accentColor: '#0d9488' },
+  mosaic: {
+    layout: 'two-column',
+    category: 'creative',
+    accentColor: '#e11d48',
+  },
+  pinnacle: {
+    layout: 'two-column',
+    category: 'professional',
+    accentColor: '#1e40af',
+  },
+  slate: { layout: 'single', category: 'modern', accentColor: '#475569' },
+  vivid: { layout: 'single', category: 'creative', accentColor: '#c026d3' },
 };
 
 export interface TemplateProps {
@@ -36,7 +52,7 @@ export interface TemplateProps {
 }
 
 export function resolveTemplate(templateId: string | null | undefined) {
-  const config = TEMPLATE_MAP[templateId ?? ''] ?? TEMPLATE_MAP['1'];
+  const config = TEMPLATE_MAP[templateId ?? ''] ?? TEMPLATE_MAP['classic'];
   return config;
 }
 

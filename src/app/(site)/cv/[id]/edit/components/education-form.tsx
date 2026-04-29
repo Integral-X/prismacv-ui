@@ -82,19 +82,9 @@ export function EducationForm({
 
       if (result.ok) {
         toast.success(result.message ?? 'Education saved.');
-        onSaved(
-          items.map((item, i) => ({
-            id: initialData[i]?.id ?? '',
-            institution: item.institution,
-            degree: item.degree,
-            field: item.field ?? null,
-            startDate: new Date(item.startDate),
-            endDate: item.endDate ? new Date(item.endDate) : null,
-            gpa: item.gpa ?? null,
-            description: item.description ?? null,
-            sortOrder: item.sortOrder ?? i,
-          }))
-        );
+        if (result.data) {
+          onSaved(result.data);
+        }
       } else {
         toast.error(result.message);
       }

@@ -45,7 +45,7 @@ export function ChangePasswordClient() {
 
       if (result.ok) {
         toast.success(result.message ?? 'Password changed successfully');
-        router.push('/settings');
+        router.push(result.redirectTo ?? '/login');
       } else {
         toast.error(result.message);
       }

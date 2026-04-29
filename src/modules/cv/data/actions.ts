@@ -25,6 +25,16 @@ import {
   updateSkills,
 } from './mutations';
 import type {
+  Certification,
+  CustomSection,
+  Education,
+  Experience,
+  Language,
+  PersonalInfo,
+  Project,
+  Skill,
+} from './mappers';
+import type {
   CertificationItemRequest,
   CustomSectionItemRequest,
   EducationItemRequest,
@@ -43,10 +53,11 @@ export type CvActionCode =
   | 'unauthorized'
   | 'unknown';
 
-export interface ActionSuccessResult {
+export interface ActionSuccessResult<T = undefined> {
   ok: true;
   message?: string;
   redirectTo?: string;
+  data?: T;
 }
 
 export interface ActionFailureResult {
@@ -55,7 +66,9 @@ export interface ActionFailureResult {
   message: string;
 }
 
-export type ActionResult = ActionSuccessResult | ActionFailureResult;
+export type ActionResult<T = undefined> =
+  | ActionSuccessResult<T>
+  | ActionFailureResult;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -162,11 +175,11 @@ export async function duplicateCvAction(id: string): Promise<ActionResult> {
 export async function updatePersonalInfoAction(
   cvId: string,
   data: UpsertPersonalInfoRequest
-): Promise<ActionResult> {
+): Promise<ActionResult<PersonalInfo>> {
   try {
-    await updatePersonalInfo(cvId, data);
+    const personalInfo = await updatePersonalInfo(cvId, data);
 
-    return { ok: true, message: 'Personal info updated.' };
+    return { ok: true, message: 'Personal info updated.', data: personalInfo };
   } catch (error) {
     return toFailureResult(error, 'Unable to update personal info right now.');
   }
@@ -181,33 +194,50 @@ type SectionName =
   | 'languages'
   | 'custom-sections';
 
-export async function updateSectionAction(
+type SectionDataMap = {
+  experiences: Experience[];
+  education: Education[];
+  skills: Skill[];
+  certifications: Certification[];
+  projects: Project[];
+  languages: Language[];
+  'custom-sections': CustomSection[];
+};
+
+export async function updateSectionAction<T extends SectionName>(
   cvId: string,
-  section: SectionName,
+  section: T,
   items: unknown[]
-): Promise<ActionResult> {
+): Promise<ActionResult<SectionDataMap[T]>> {
   try {
+    let data: unknown;
     switch (section) {
       case 'experiences':
-        await updateExperiences(cvId, items as ExperienceItemRequest[]);
+        data = await updateExperiences(cvId, items as ExperienceItemRequest[]);
         break;
       case 'education':
-        await updateEducation(cvId, items as EducationItemRequest[]);
+        data = await updateEducation(cvId, items as EducationItemRequest[]);
         break;
       case 'skills':
-        await updateSkills(cvId, items as SkillItemRequest[]);
+        data = await updateSkills(cvId, items as SkillItemRequest[]);
         break;
       case 'certifications':
-        await updateCertifications(cvId, items as CertificationItemRequest[]);
+        data = await updateCertifications(
+          cvId,
+          items as CertificationItemRequest[]
+        );
         break;
       case 'projects':
-        await updateProjects(cvId, items as ProjectItemRequest[]);
+        data = await updateProjects(cvId, items as ProjectItemRequest[]);
         break;
       case 'languages':
-        await updateLanguages(cvId, items as LanguageItemRequest[]);
+        data = await updateLanguages(cvId, items as LanguageItemRequest[]);
         break;
       case 'custom-sections':
-        await updateCustomSections(cvId, items as CustomSectionItemRequest[]);
+        data = await updateCustomSections(
+          cvId,
+          items as CustomSectionItemRequest[]
+        );
         break;
       default: {
         const _exhaustive: never = section;
@@ -219,7 +249,11 @@ export async function updateSectionAction(
       }
     }
 
-    return { ok: true, message: 'Section updated successfully.' };
+    return {
+      ok: true,
+      message: 'Section updated successfully.',
+      data: data as SectionDataMap[T],
+    };
   } catch (error) {
     return toFailureResult(error, 'Unable to update this section right now.');
   }

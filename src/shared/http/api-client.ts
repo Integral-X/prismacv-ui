@@ -15,6 +15,7 @@ export function getApiClient(): FetchHttpClient {
  */
 export const apiClient = new Proxy({} as FetchHttpClient, {
   get(_target, prop) {
-    return Reflect.get(getApiClient(), prop, getApiClient());
+    const client = getApiClient();
+    return Reflect.get(client, prop, client);
   },
 });

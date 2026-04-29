@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { apiClient } from '@/shared/http/api-client';
 import { executeAuthenticatedRequest } from '@/shared/auth/execute-authenticated-request';
 import type {

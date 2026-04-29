@@ -82,19 +82,9 @@ export function ExperienceForm({
 
       if (result.ok) {
         toast.success(result.message ?? 'Experiences saved.');
-        onSaved(
-          items.map((item, i) => ({
-            id: initialData[i]?.id ?? '',
-            company: item.company,
-            title: item.title,
-            location: item.location ?? null,
-            startDate: new Date(item.startDate),
-            endDate: item.endDate ? new Date(item.endDate) : null,
-            current: item.current ?? false,
-            description: item.description ?? null,
-            sortOrder: item.sortOrder ?? i,
-          }))
-        );
+        if (result.data) {
+          onSaved(result.data);
+        }
       } else {
         toast.error(result.message);
       }

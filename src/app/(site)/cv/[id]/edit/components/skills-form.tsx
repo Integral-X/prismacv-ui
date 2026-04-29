@@ -74,19 +74,9 @@ export function SkillsForm({ cvId, initialData, onSaved }: SkillsFormProps) {
 
       if (result.ok) {
         toast.success(result.message ?? 'Skills saved.');
-        onSaved(
-          items.map((item, i) => ({
-            id: initialData[i]?.id ?? '',
-            name: item.name,
-            level: (item.level?.toLowerCase() ?? 'beginner') as
-              | 'beginner'
-              | 'intermediate'
-              | 'advanced'
-              | 'expert',
-            category: item.category ?? null,
-            sortOrder: item.sortOrder ?? i,
-          }))
-        );
+        if (result.data) {
+          onSaved(result.data);
+        }
       } else {
         toast.error(result.message);
       }

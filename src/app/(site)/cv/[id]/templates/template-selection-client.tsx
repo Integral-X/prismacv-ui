@@ -92,6 +92,8 @@ export function TemplateSelectionClient({
                 key={template.id}
                 role='button'
                 tabIndex={0}
+                aria-label={`Select ${template.name} template`}
+                aria-pressed={isSelected ? 'true' : 'false'}
                 onClick={() => handleSelect(template.id)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {

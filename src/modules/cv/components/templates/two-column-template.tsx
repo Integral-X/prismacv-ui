@@ -250,14 +250,14 @@ function MainSection({
 }
 
 const LEVEL_WIDTHS: Record<string, string> = {
-  BEGINNER: '25%',
-  INTERMEDIATE: '50%',
-  ADVANCED: '75%',
-  EXPERT: '100%',
+  beginner: '25%',
+  intermediate: '50%',
+  advanced: '75%',
+  expert: '100%',
 };
 
 function SkillBar({ skill, color }: { skill: Skill; color: string }) {
-  const width = LEVEL_WIDTHS[skill.level ?? 'INTERMEDIATE'] ?? '50%';
+  const width = LEVEL_WIDTHS[skill.level ?? 'intermediate'] ?? '50%';
   return (
     <div>
       <span className='text-xs text-gray-700'>{skill.name}</span>

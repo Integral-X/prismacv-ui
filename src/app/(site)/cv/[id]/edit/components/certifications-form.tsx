@@ -79,17 +79,9 @@ export function CertificationsForm({
 
       if (result.ok) {
         toast.success(result.message ?? 'Certifications saved.');
-        onSaved(
-          items.map((item, i) => ({
-            id: initialData[i]?.id ?? '',
-            name: item.name,
-            issuer: item.issuer ?? null,
-            issueDate: item.issueDate ? new Date(item.issueDate) : null,
-            expiryDate: item.expiryDate ? new Date(item.expiryDate) : null,
-            credentialUrl: item.credentialUrl ?? null,
-            sortOrder: item.sortOrder ?? i,
-          }))
-        );
+        if (result.data) {
+          onSaved(result.data);
+        }
       } else {
         toast.error(result.message);
       }

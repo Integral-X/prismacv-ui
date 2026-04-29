@@ -256,7 +256,12 @@ export async function changePasswordAction(input: {
 }): Promise<ActionResult> {
   try {
     await changePassword(input);
-    return { ok: true, message: 'Password changed successfully' };
+    await clearAuthSession();
+    return {
+      ok: true,
+      message: 'Password changed successfully. Please sign in again.',
+      redirectTo: '/login',
+    };
   } catch (error) {
     return toFailureResult(error, 'Failed to change password', {
       unauthorizedCode: 'invalid_credentials',

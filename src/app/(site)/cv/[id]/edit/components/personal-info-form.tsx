@@ -51,17 +51,9 @@ export function PersonalInfoForm({
       const result = await updatePersonalInfoAction(cvId, data);
       if (result.ok) {
         toast.success(result.message ?? 'Personal info saved.');
-        onSaved({
-          id: initialData?.id ?? '',
-          fullName: data.fullName ?? null,
-          email: data.email ?? null,
-          phone: data.phone ?? null,
-          location: data.location ?? null,
-          website: data.website ?? null,
-          linkedinUrl: data.linkedinUrl ?? null,
-          summary: data.summary ?? null,
-          avatarUrl: data.avatarUrl ?? null,
-        });
+        if (result.data) {
+          onSaved(result.data);
+        }
       } else {
         toast.error(result.message);
       }

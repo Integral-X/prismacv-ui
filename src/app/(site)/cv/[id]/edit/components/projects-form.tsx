@@ -80,17 +80,9 @@ export function ProjectsForm({
 
       if (result.ok) {
         toast.success(result.message ?? 'Projects saved.');
-        onSaved(
-          items.map((item, i) => ({
-            id: initialData[i]?.id ?? '',
-            name: item.name,
-            description: item.description ?? null,
-            url: item.url ?? null,
-            startDate: item.startDate ? new Date(item.startDate) : null,
-            endDate: item.endDate ? new Date(item.endDate) : null,
-            sortOrder: item.sortOrder ?? i,
-          }))
-        );
+        if (result.data) {
+          onSaved(result.data);
+        }
       } else {
         toast.error(result.message);
       }

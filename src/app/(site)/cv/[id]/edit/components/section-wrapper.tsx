@@ -23,11 +23,13 @@ export function SectionWrapper({
 
   return (
     <Card className='bg-surface-card shadow-card'>
-      <CardHeader
-        className='cursor-pointer select-none'
-        onClick={() => setOpen((prev) => !prev)}
-      >
-        <div className='flex items-center justify-between'>
+      <CardHeader className='p-0'>
+        <button
+          type='button'
+          className='flex w-full cursor-pointer items-center justify-between p-6 select-none'
+          aria-expanded={open ? 'true' : 'false'}
+          onClick={() => setOpen((prev) => !prev)}
+        >
           <div className='flex items-center gap-2'>
             <CardTitle className='text-content-primary'>{title}</CardTitle>
             <Badge variant='secondary'>{count}</Badge>
@@ -38,7 +40,7 @@ export function SectionWrapper({
               open && 'rotate-180'
             )}
           />
-        </div>
+        </button>
       </CardHeader>
       {open && <CardContent>{children}</CardContent>}
     </Card>
