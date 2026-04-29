@@ -1,155 +1,75 @@
-# PrismaCV
+# PrismaCV Frontend
 
-A comprehensive CV building and job application tracking platform built with Next.js 15, TypeScript, and Feature-Sliced Design architecture.
+AI-powered CV building, job application tracking, and career management platform.
 
-## Project Overview
+## Tech Stack
 
-PrismaCV is an all-in-one platform that helps users create professional resumes, track job applications, prepare for interviews, and identify skill gaps. The platform provides AI-powered insights for resume optimization, personalized learning roadmaps, and a centralized dashboard for career management.
-
-### Key Features
-
-- **PrismaCV**: AI-powered resume creation with multiple templates and real-time ATS scoring
-- **Job Application Tracker**: Kanban-style tracking of job applications with status management
-- **Skill Gap Analysis**: AI-powered comparison of user skills against market requirements
-- **Learning Roadmap**: Personalized course recommendations and skill development paths
-- **Job Search Integration**: Web-scraped job listings relevant to user profiles
-- **Interview Preparation**: Question bank with adaptive difficulty and mock interview simulations
-- **Analytics & Insights**: Performance metrics and career progression tracking
-
-## Architecture
-
-This project follows the Feature-Sliced Design (FSD) architecture pattern for scalability and maintainability.
-
-### FSD Layer Hierarchy
-
-```
-src/
-├── app/          # Application entry point and providers
-├── pages/        # Page components (routes)
-├── widgets/      # Complex UI components
-├── features/     # Business features
-├── entities/     # Business entities
-└── shared/       # Shared utilities and components
-```
-
-## Requirements
-
-- Node.js 20.x or later
-- pnpm
-- Git
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS + shadcn/ui
+- **Auth**: JWT with server-side session management
+- **Package Manager**: pnpm
 
 ## Getting Started
 
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/Integral-X/prismacv-ui.git
-   cd prismacv-ui
-   ```
-
-2. Install dependencies:
-
-   ```bash
-   pnpm install
-   ```
-
-3. Run the development server:
-
-   ```bash
-   pnpm dev
-   ```
-
-4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-## Code Quality
-
-Run ESLint to check for code quality issues:
-
 ```bash
-pnpm lint
+git clone https://github.com/Integral-X/prismacv-ui.git
+cd prismacv-ui
+pnpm install
+cp .env.example .env.local   # fill in API URL and auth config
+pnpm dev
 ```
 
-Automatically fix fixable issues:
+Open [http://localhost:3000](http://localhost:3000).
 
-```bash
-pnpm lint:fix
+### Required Environment Variables
+
+| Variable              | Purpose                                 |
+| --------------------- | --------------------------------------- |
+| `NEXT_PUBLIC_API_URL` | Backend API base URL                    |
+| `JWT_SECRET`          | Token verification (must match backend) |
+
+See `.env.example` for the full list.
+
+## Features
+
+- **CV Builder** — section-based editor (personal info, experience, education, skills, projects, certifications, languages, custom sections)
+- **Multiple Templates** — classic, two-column, and creative layouts with accent colors
+- **Live Preview** — real-time template rendering as you edit
+- **PDF Export** — server-side PDF generation via backend
+- **LinkedIn Import** — create a CV from LinkedIn profile data
+- **Job Application Tracker** — kanban-style tracking with status management (planned)
+- **Skill Gap Analysis** — AI-powered comparison against market requirements (planned)
+- **Interview Prep** — question bank with adaptive difficulty (planned)
+- **Analytics** — career progression tracking and insights (planned)
+- **Auth** — signup/login with email + OTP verification, Google & LinkedIn OAuth
+
+## Project Structure
+
+```
+src/
+├── app/              # Next.js routes and layouts
+├── modules/          # Feature modules (cv, user)
+│   └── cv/
+│       ├── components/   # CV editor, preview, templates
+│       └── data/         # Server actions and API calls
+├── shared/           # Auth utilities, UI components, hooks
+└── lib/              # Validations, helpers
 ```
 
-## Code Formatting
-
-This project uses Prettier for code formatting with automated pre-commit hooks to ensure consistent code style.
-
-### Automatic Formatting (Recommended)
-
-The project is configured with **Husky** and **lint-staged** for automatic formatting:
-
-- **Pre-commit hooks** automatically format and lint staged files
-- **VS Code integration** formats files on save
-- **No manual intervention** required for most workflows
-
-### Manual Commands
-
-When you need to format manually:
+## Development
 
 ```bash
-# Format all files in the project
-pnpm format
-
-# Check formatting without fixing
-pnpm format:check
-
-# Format only staged files (used by pre-commit hook)
-pnpm format:staged
-
-# Fix everything (format + lint)
-pnpm fix
+pnpm dev             # dev server (turbopack)
+pnpm build           # production build
+pnpm lint            # eslint
+pnpm format          # prettier
+pnpm test            # jest + react testing library
+pnpm test:coverage   # with coverage
 ```
 
-### VS Code Integration
+Pre-commit hooks run formatting + linting automatically.
 
-The project includes VS Code settings for automatic formatting:
+## License
 
-- **Format on save** enabled
-- **Auto-fix ESLint** issues on save
-- **Prettier as default** formatter
-
-Install the "Prettier - Code formatter" extension for the best experience.
-
-### Troubleshooting
-
-If formatting isn't working:
-
-```bash
-# Emergency format fix (if CI fails)
-pnpm fix
-git add .
-git commit --amend --no-edit
-
-# Skip hooks (use sparingly)
-git commit --no-verify -m "emergency fix"
-
-# Reinstall hooks
-pnpm exec husky init
-```
-
-## Testing
-
-This project uses Jest and React Testing Library for unit testing.
-
-Run all tests:
-
-```bash
-pnpm test
-```
-
-Run tests in watch mode:
-
-```bash
-pnpm test:watch
-```
-
-Run tests with coverage report:
-
-```bash
-pnpm test:coverage
-```
+Copyright (c) 2026 PrismaCV.
