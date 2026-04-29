@@ -1,5 +1,8 @@
 # PrismaCV Frontend
 
+[![Release Pipeline](https://github.com/Integral-X/prismacv-ui/actions/workflows/main.yml/badge.svg)](https://github.com/Integral-X/prismacv-ui/actions/workflows/main.yml)
+[![PR Validation](https://github.com/Integral-X/prismacv-ui/actions/workflows/pr.yml/badge.svg)](https://github.com/Integral-X/prismacv-ui/actions/workflows/pr.yml)
+
 AI-powered CV building, job application tracking, and career management platform.
 
 ## Tech Stack
