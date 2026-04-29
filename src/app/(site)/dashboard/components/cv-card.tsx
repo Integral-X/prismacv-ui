@@ -74,6 +74,8 @@ export function CvCard({ cv, onEdit, onDuplicate, onDelete }: CvCardProps) {
               'rounded-md p-1 transition-colors'
             )}
             aria-label='CV actions'
+            aria-haspopup='menu'
+            aria-expanded={menuOpen}
           >
             <MoreHorizontal className='h-5 w-5' />
           </button>

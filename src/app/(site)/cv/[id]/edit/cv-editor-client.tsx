@@ -80,7 +80,7 @@ export function CvEditorClient({ cv: initialCv }: CvEditorClientProps) {
       a.href = url;
       a.download = `${cv.title || 'cv'}.pdf`;
       a.click();
-      URL.revokeObjectURL(url);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
     });
   }
 

@@ -91,9 +91,10 @@ export function TemplateSelectionClient({
               <div
                 key={template.id}
                 role='button'
-                tabIndex={0}
+                tabIndex={isPending ? -1 : 0}
                 aria-label={`Select ${template.name} template`}
                 aria-pressed={isSelected ? 'true' : 'false'}
+                aria-disabled={isPending ? 'true' : 'false'}
                 onClick={() => handleSelect(template.id)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
