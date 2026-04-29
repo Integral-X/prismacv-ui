@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,6 +19,10 @@ export function CreateCvDialog({
   isPending,
 }: CreateCvDialogProps) {
   const [title, setTitle] = useState('Untitled CV');
+
+  useEffect(() => {
+    if (open) setTitle('Untitled CV');
+  }, [open]);
 
   if (!open) return null;
 

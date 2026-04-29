@@ -1,5 +1,11 @@
 import { z } from 'zod';
 
+const optionalUrl = z
+  .string()
+  .transform((v) => v.trim())
+  .pipe(z.union([z.literal(''), z.string().url()]))
+  .optional();
+
 // ─── Personal info ────────────────────────────────────────────────────────────
 
 export const personalInfoSchema = z.object({
@@ -7,8 +13,8 @@ export const personalInfoSchema = z.object({
   email: z.string().email().optional(),
   phone: z.string().max(50).optional(),
   location: z.string().max(200).optional(),
-  website: z.string().url().optional(),
-  linkedinUrl: z.string().url().optional(),
+  website: optionalUrl,
+  linkedinUrl: optionalUrl,
   summary: z.string().max(5000).optional(),
   avatarUrl: z.string().optional(),
 });
@@ -63,7 +69,7 @@ export const certificationSchema = z.object({
   issuer: z.string().max(200).optional(),
   issueDate: z.string().optional(),
   expiryDate: z.string().optional(),
-  credentialUrl: z.string().url().optional(),
+  credentialUrl: optionalUrl,
   sortOrder: z.number().min(0).optional(),
 });
 
@@ -74,7 +80,7 @@ export type CertificationFormData = z.infer<typeof certificationSchema>;
 export const projectSchema = z.object({
   name: z.string().min(1, 'Name is required').max(200),
   description: z.string().max(5000).optional(),
-  url: z.string().url().optional(),
+  url: optionalUrl,
   startDate: z.string().optional(),
   endDate: z.string().optional(),
   sortOrder: z.number().min(0).optional(),

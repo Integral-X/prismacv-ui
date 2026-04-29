@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { HttpError } from '@/shared/http/http-error';
 import type {
   CreateCvRequest,
@@ -12,6 +13,7 @@ import {
   deleteCv,
   duplicateCv,
   importLinkedInToCv,
+  exportCvPdf,
   updateCertifications,
   updateCv,
   updateCustomSections,
@@ -112,6 +114,7 @@ export async function createCvAction(input: {
       templateId: input.templateId,
     };
     const cv = await createCv(body);
+    revalidatePath('/dashboard');
 
     return { ok: true, redirectTo: `/cv/${cv.id}/edit` };
   } catch (error) {
@@ -135,6 +138,7 @@ export async function updateCvAction(
 export async function deleteCvAction(id: string): Promise<ActionResult> {
   try {
     await deleteCv(id);
+    revalidatePath('/dashboard');
 
     return { ok: true, message: 'CV deleted successfully.' };
   } catch (error) {
@@ -145,6 +149,7 @@ export async function deleteCvAction(id: string): Promise<ActionResult> {
 export async function duplicateCvAction(id: string): Promise<ActionResult> {
   try {
     const cv = await duplicateCv(id);
+    revalidatePath('/dashboard');
 
     return { ok: true, redirectTo: `/cv/${cv.id}/edit` };
   } catch (error) {
@@ -234,6 +239,7 @@ export async function importLinkedInToCvAction(input: {
       templateId: input.templateId,
     };
     const cv = await importLinkedInToCv(body);
+    revalidatePath('/dashboard');
 
     return { ok: true, redirectTo: `/cv/${cv.id}/edit` };
   } catch (error) {
@@ -241,5 +247,24 @@ export async function importLinkedInToCvAction(input: {
       error,
       'Unable to import your LinkedIn data right now.'
     );
+  }
+}
+
+// ─── Export action ───────────────────────────────────────────────────────────
+
+export interface PdfExportResult {
+  ok: true;
+  base64: string;
+}
+
+export async function exportCvPdfAction(
+  cvId: string
+): Promise<PdfExportResult | ActionFailureResult> {
+  try {
+    const blob = await exportCvPdf(cvId);
+    const buffer = Buffer.from(await blob.arrayBuffer());
+    return { ok: true, base64: buffer.toString('base64') };
+  } catch (error) {
+    return toFailureResult(error, 'Unable to export PDF right now.');
   }
 }
