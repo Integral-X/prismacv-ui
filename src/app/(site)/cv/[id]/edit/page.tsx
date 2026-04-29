@@ -1,6 +1,8 @@
 import { getCvById } from '@/modules/cv/data/queries';
 import { CvEditorClient } from './cv-editor-client';
 
+export const dynamic = 'force-dynamic';
+
 interface CvEditPageProps {
   params: Promise<{ id: string }>;
 }
