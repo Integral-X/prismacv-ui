@@ -23,6 +23,7 @@ export function CvPreviewPanel({ cv }: CvPreviewPanelProps) {
           <Button
             variant='ghost'
             size='sm'
+            aria-label='Zoom out'
             onClick={() =>
               setScale((s) => Math.max(0.25, +(s - 0.1).toFixed(1)))
             }
@@ -35,6 +36,7 @@ export function CvPreviewPanel({ cv }: CvPreviewPanelProps) {
           <Button
             variant='ghost'
             size='sm'
+            aria-label='Zoom in'
             onClick={() =>
               setScale((s) => Math.min(1.5, +(s + 0.1).toFixed(1)))
             }

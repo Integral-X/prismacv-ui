@@ -19,7 +19,8 @@ export function middleware(request: NextRequest) {
 
   if (!accessToken) {
     const loginUrl = new URL('/login', request.url);
-    loginUrl.searchParams.set('redirect', pathname);
+    const redirectPath = pathname + request.nextUrl.search;
+    loginUrl.searchParams.set('redirect', redirectPath);
     return NextResponse.redirect(loginUrl);
   }
 

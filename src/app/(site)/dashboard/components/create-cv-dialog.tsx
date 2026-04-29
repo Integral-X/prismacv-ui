@@ -24,6 +24,17 @@ export function CreateCvDialog({
     if (open) setTitle('Untitled CV');
   }, [open]);
 
+  useEffect(() => {
+    if (!open) return;
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape' && !isPending) {
+        onOpenChange(false);
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [open, isPending, onOpenChange]);
+
   if (!open) return null;
 
   function handleSubmit(e: React.FormEvent) {
@@ -35,8 +46,16 @@ export function CreateCvDialog({
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50'>
-      <div className='bg-surface-card mx-4 w-full max-w-md rounded-lg p-6 shadow-xl'>
-        <h2 className='text-content-primary mb-4 text-lg font-semibold'>
+      <div
+        role='dialog'
+        aria-modal='true'
+        aria-labelledby='create-cv-dialog-title'
+        className='bg-surface-card mx-4 w-full max-w-md rounded-lg p-6 shadow-xl'
+      >
+        <h2
+          id='create-cv-dialog-title'
+          className='text-content-primary mb-4 text-lg font-semibold'
+        >
           Create New CV
         </h2>
         <form onSubmit={handleSubmit}>

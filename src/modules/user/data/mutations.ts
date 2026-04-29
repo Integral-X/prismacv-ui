@@ -40,15 +40,19 @@ export async function uploadAvatar(file: File): Promise<string> {
     });
 
     if (!response.ok) {
-      const errorBody = (await response.json()) as {
-        error?: string;
-        message?: string;
-      };
-      throw new HttpError(
-        response.status,
-        errorBody.error ?? response.statusText,
-        errorBody.message
-      );
+      let errorMessage: string | undefined;
+      let errorName: string = response.statusText;
+      try {
+        const errorBody = (await response.json()) as {
+          error?: string;
+          message?: string;
+        };
+        errorName = errorBody.error ?? response.statusText;
+        errorMessage = errorBody.message;
+      } catch {
+        // non-JSON error response
+      }
+      throw new HttpError(response.status, errorName, errorMessage);
     }
 
     const json = (await response.json()) as {
