@@ -19,4 +19,12 @@ export const env = {
   get apiBaseUrl(): string {
     return getApiBaseUrl();
   },
+
+  /**
+   * Base URL for initiating OAuth flows (Google, LinkedIn).
+   * Points to `{API_URL}/v1/oauth/` — the backend OAuth controller prefix.
+   */
+  get oauthBaseUrl(): string {
+    return `${getApiBaseUrl()}oauth/`;
+  },
 } as const;

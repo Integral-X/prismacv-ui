@@ -3,26 +3,19 @@
 import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { env } from '@/shared/config/env';
 
 interface SocialAuthButtonsProps {
   className?: string;
-  onGoogleClick?: () => void;
-  onLinkedInClick?: () => void;
 }
 
-export const SocialAuthButtons = ({
-  className,
-  onGoogleClick,
-  onLinkedInClick,
-}: SocialAuthButtonsProps) => {
+export const SocialAuthButtons = ({ className }: SocialAuthButtonsProps) => {
   const handleGoogleClick = () => {
-    // TODO: Implement Google OAuth
-    onGoogleClick?.();
+    window.location.href = `${env.oauthBaseUrl}google`;
   };
 
   const handleLinkedInClick = () => {
-    // TODO: Implement LinkedIn OAuth
-    onLinkedInClick?.();
+    window.location.href = `${env.oauthBaseUrl}linkedin`;
   };
 
   return (

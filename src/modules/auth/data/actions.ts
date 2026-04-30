@@ -13,6 +13,8 @@ import {
   verifyResetOtp,
   verifySignupOtp,
 } from './mutations';
+import { toUserProfile } from './mappers';
+import type { UserLoginContract } from './contracts';
 import { clearAuthSession, persistAuthSession } from './session';
 
 export type AuthActionCode =
@@ -272,4 +274,28 @@ export async function changePasswordAction(input: {
 export async function logoutUserAction(): Promise<void> {
   await clearAuthSession();
   redirect('/login');
+}
+
+export async function persistOAuthSessionAction(input: {
+  accessToken: string;
+  refreshToken: string;
+  user: unknown;
+}): Promise<ActionResult> {
+  try {
+    const contract = input as unknown as UserLoginContract;
+    const user = toUserProfile(contract.user);
+
+    await persistAuthSession(
+      {
+        user,
+        accessToken: input.accessToken,
+        refreshToken: input.refreshToken,
+      },
+      true
+    );
+
+    return { ok: true, redirectTo: '/dashboard' };
+  } catch (error) {
+    return toFailureResult(error, 'Unable to complete OAuth sign in.');
+  }
 }
