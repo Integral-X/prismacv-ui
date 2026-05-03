@@ -1,23 +1,26 @@
 // ─── Response contracts ─────────────────────────────────────────────────────
 
 export interface CvIssueContract {
-  field: string;
-  severity: 'error' | 'warning' | 'info';
+  section: string;
+  type: 'grammar' | 'readability' | 'ats' | 'content';
+  severity: 'low' | 'medium' | 'high';
   message: string;
   suggestion?: string;
 }
 
 export interface CvSuggestionContract {
   section: string;
-  current?: string;
-  suggested: string;
-  reason: string;
+  type: 'improvement' | 'addition' | 'removal';
+  message: string;
+  originalText?: string;
+  suggestedText?: string;
 }
 
 export interface SectionRecommendationContract {
   section: string;
-  recommendation: string;
-  priority: 'high' | 'medium' | 'low';
+  action: 'add' | 'improve' | 'remove';
+  message: string;
+  priority: 'low' | 'medium' | 'high';
 }
 
 export interface CvAnalysisResultContract {
@@ -27,13 +30,11 @@ export interface CvAnalysisResultContract {
   atsScore: number;
   issues: CvIssueContract[];
   suggestions: CvSuggestionContract[];
-  sectionRecommendations: SectionRecommendationContract[];
 }
 
 export interface CvOptimizationResultContract {
   matchScore: number;
   missingKeywords: string[];
-  presentKeywords: string[];
   suggestions: CvSuggestionContract[];
   sectionRecommendations: SectionRecommendationContract[];
 }

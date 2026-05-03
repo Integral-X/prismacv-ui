@@ -1,7 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { HttpError } from '@/shared/http/http-error';
+import { type ActionResult, toFailureResult } from '@/shared/action-result';
 import type {
   CreateJobNoteRequest,
   CreateJobRequest,
@@ -17,49 +17,6 @@ import {
   updateJobStatus,
 } from './mutations';
 import type { Job, JobNote } from './mappers';
-
-// ─── Action types ─────────────────────────────────────────────────────────────
-
-export type JobActionCode =
-  | 'not_found'
-  | 'forbidden'
-  | 'unauthorized'
-  | 'unknown';
-
-export interface ActionSuccessResult<T = undefined> {
-  ok: true;
-  message?: string;
-  redirectTo?: string;
-  data?: T;
-}
-
-export interface ActionFailureResult {
-  ok: false;
-  code: JobActionCode;
-  message: string;
-}
-
-export type ActionResult<T = undefined> =
-  | ActionSuccessResult<T>
-  | ActionFailureResult;
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function toFailureResult(
-  error: unknown,
-  fallbackMessage: string
-): ActionFailureResult {
-  if (error instanceof HttpError) {
-    const message = error.serverMessage ?? error.message ?? fallbackMessage;
-
-    if (error.isNotFound) return { ok: false, code: 'not_found', message };
-    if (error.isForbidden) return { ok: false, code: 'forbidden', message };
-    if (error.isUnauthorized)
-      return { ok: false, code: 'unauthorized', message };
-  }
-
-  return { ok: false, code: 'unknown', message: fallbackMessage };
-}
 
 // ─── Job actions ──────────────────────────────────────────────────────────────
 

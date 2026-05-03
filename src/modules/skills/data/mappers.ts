@@ -1,9 +1,10 @@
 import type {
   LearningResourceContract,
-  RoadmapPhaseContract,
-  SkillAssessmentContract,
+  RoadmapMilestoneContract,
+  LearningRoadmapContract,
+  SkillAssessmentItemContract,
+  SkillGapResponseContract,
   SkillCategoryContract,
-  SkillGapContract,
   UserSkillProgressContract,
 } from './contracts';
 
@@ -16,19 +17,20 @@ export interface SkillCategory {
   icon: string | null;
 }
 
-export interface SkillGap {
+export interface SkillAssessmentItem {
   skillName: string;
   category: string;
   importance: number;
-  currentLevel: number;
-  requiredLevel: number;
-  gap: number;
+  hasSkill: boolean;
+  userLevel: number | null;
 }
 
-export interface SkillAssessment {
-  role: string;
-  readinessScore: number;
-  gaps: SkillGap[];
+export interface SkillGapResult {
+  targetRole: string;
+  overallReadiness: number;
+  requiredSkills: SkillAssessmentItem[];
+  strengths: string[];
+  gaps: string[];
 }
 
 export interface UserSkillProgress {
@@ -45,20 +47,29 @@ export interface LearningResource {
   skillName: string;
   title: string;
   url: string;
-  platform: string | null;
-  difficulty: string | null;
+  platform: string;
+  difficulty: string;
   duration: string | null;
   isFree: boolean;
 }
 
-export interface RoadmapPhase {
+export interface RoadmapMilestone {
   phase: string;
+  description: string;
   skills: Array<{
     skillName: string;
     importance: number;
-    currentLevel: number;
-    targetLevel: number;
+    status: string;
+    level: number;
+    resources: LearningResource[];
   }>;
+}
+
+export interface LearningRoadmap {
+  targetRole: string;
+  totalSkills: number;
+  completedSkills: number;
+  milestones: RoadmapMilestone[];
 }
 
 // ─── Mappers ──────────────────────────────────────────────────────────────────
@@ -72,22 +83,25 @@ export function toSkillCategory(c: SkillCategoryContract): SkillCategory {
   };
 }
 
-function toSkillGap(c: SkillGapContract): SkillGap {
+function toSkillAssessmentItem(
+  c: SkillAssessmentItemContract
+): SkillAssessmentItem {
   return {
     skillName: c.skillName,
     category: c.category,
     importance: c.importance,
-    currentLevel: c.currentLevel,
-    requiredLevel: c.requiredLevel,
-    gap: c.gap,
+    hasSkill: c.hasSkill,
+    userLevel: c.userLevel ?? null,
   };
 }
 
-export function toSkillAssessment(c: SkillAssessmentContract): SkillAssessment {
+export function toSkillGapResult(c: SkillGapResponseContract): SkillGapResult {
   return {
-    role: c.role,
-    readinessScore: c.readinessScore,
-    gaps: c.gaps.map(toSkillGap),
+    targetRole: c.targetRole,
+    overallReadiness: c.overallReadiness,
+    requiredSkills: c.requiredSkills.map(toSkillAssessmentItem),
+    strengths: c.strengths,
+    gaps: c.gaps,
   };
 }
 
@@ -112,16 +126,34 @@ export function toLearningResource(
     skillName: c.skillName,
     title: c.title,
     url: c.url,
-    platform: c.platform ?? null,
-    difficulty: c.difficulty ?? null,
+    platform: c.platform,
+    difficulty: c.difficulty,
     duration: c.duration ?? null,
     isFree: c.isFree,
   };
 }
 
-export function toRoadmapPhase(c: RoadmapPhaseContract): RoadmapPhase {
+export function toRoadmapMilestone(
+  c: RoadmapMilestoneContract
+): RoadmapMilestone {
   return {
     phase: c.phase,
-    skills: c.skills,
+    description: c.description,
+    skills: c.skills.map((s) => ({
+      skillName: s.skillName,
+      importance: s.importance,
+      status: s.status,
+      level: s.level,
+      resources: s.resources.map(toLearningResource),
+    })),
+  };
+}
+
+export function toLearningRoadmap(c: LearningRoadmapContract): LearningRoadmap {
+  return {
+    targetRole: c.targetRole,
+    totalSkills: c.totalSkills,
+    completedSkills: c.completedSkills,
+    milestones: c.milestones.map(toRoadmapMilestone),
   };
 }

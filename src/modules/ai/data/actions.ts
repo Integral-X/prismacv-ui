@@ -1,46 +1,9 @@
 'use server';
 
-import { HttpError } from '@/shared/http/http-error';
+import { type ActionResult, toFailureResult } from '@/shared/action-result';
 import type { OptimizeCvRequest } from './contracts';
 import { analyzeCv, optimizeCvForJob } from './mutations';
 import type { CvAnalysisResult, CvOptimizationResult } from './mappers';
-
-// ─── Action types ─────────────────────────────────────────────────────────────
-
-export type AiActionCode =
-  | 'not_found'
-  | 'forbidden'
-  | 'unauthorized'
-  | 'unknown';
-
-export interface ActionSuccessResult<T = undefined> {
-  ok: true;
-  data?: T;
-}
-
-export interface ActionFailureResult {
-  ok: false;
-  code: AiActionCode;
-  message: string;
-}
-
-export type ActionResult<T = undefined> =
-  | ActionSuccessResult<T>
-  | ActionFailureResult;
-
-function toFailureResult(
-  error: unknown,
-  fallbackMessage: string
-): ActionFailureResult {
-  if (error instanceof HttpError) {
-    const message = error.serverMessage ?? error.message ?? fallbackMessage;
-    if (error.isNotFound) return { ok: false, code: 'not_found', message };
-    if (error.isForbidden) return { ok: false, code: 'forbidden', message };
-    if (error.isUnauthorized)
-      return { ok: false, code: 'unauthorized', message };
-  }
-  return { ok: false, code: 'unknown', message: fallbackMessage };
-}
 
 // ─── AI actions ───────────────────────────────────────────────────────────────
 

@@ -20,7 +20,7 @@ import {
 import { Slider } from '@/components/ui/slider';
 
 import type {
-  SkillAssessment,
+  SkillGapResult,
   SkillCategory,
 } from '@/modules/skills/data/mappers';
 import { assessSkillsAction } from '@/modules/skills/data/actions';
@@ -41,7 +41,7 @@ export function SkillsPageClient({ categories, roles }: SkillsPageClientProps) {
   const [skillInputs, setSkillInputs] = useState<SkillInput[]>([
     { name: '', level: 50 },
   ]);
-  const [assessment, setAssessment] = useState<SkillAssessment | null>(null);
+  const [assessment, setAssessment] = useState<SkillGapResult | null>(null);
 
   function addSkillInput() {
     setSkillInputs((prev) => [...prev, { name: '', level: 50 }]);
@@ -67,7 +67,9 @@ export function SkillsPageClient({ categories, roles }: SkillsPageClientProps) {
       return;
     }
 
-    const validSkills = skillInputs.filter((s) => s.name.trim());
+    const validSkills = skillInputs
+      .filter((s) => s.name.trim())
+      .map((s) => s.name.trim());
     if (validSkills.length === 0) {
       toast.error('Please add at least one skill.');
       return;
@@ -75,8 +77,8 @@ export function SkillsPageClient({ categories, roles }: SkillsPageClientProps) {
 
     startTransition(async () => {
       const result = await assessSkillsAction({
-        role: selectedRole,
-        skills: validSkills,
+        targetRole: selectedRole,
+        currentSkills: validSkills,
       });
       if (result.ok && result.data) {
         setAssessment(result.data);
@@ -203,47 +205,57 @@ export function SkillsPageClient({ categories, roles }: SkillsPageClientProps) {
                   <div className='space-y-2'>
                     <div className='flex items-center justify-between'>
                       <span className='text-sm text-muted-foreground'>
-                        {assessment.role}
+                        {assessment.targetRole}
                       </span>
                       <span className='text-2xl font-bold'>
-                        {assessment.readinessScore}%
+                        {assessment.overallReadiness}%
                       </span>
                     </div>
-                    <Progress value={assessment.readinessScore} />
+                    <Progress value={assessment.overallReadiness} />
                   </div>
                 </CardContent>
               </Card>
+
+              {assessment.strengths.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className='flex items-center gap-2'>
+                      <TrendingUp className='h-5 w-5' />
+                      Strengths
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className='flex flex-wrap gap-2'>
+                      {assessment.strengths.map((strength) => (
+                        <Badge key={strength} variant='secondary'>
+                          {strength}
+                        </Badge>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
 
               {assessment.gaps.length > 0 && (
                 <Card>
                   <CardHeader>
                     <CardTitle className='flex items-center gap-2'>
-                      <TrendingUp className='h-5 w-5' />
-                      Skill Gaps
+                      <BookOpen className='h-5 w-5' />
+                      Gaps to Fill
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className='space-y-3'>
-                    {assessment.gaps.map((gap) => (
-                      <div key={gap.skillName} className='space-y-1'>
-                        <div className='flex items-center justify-between'>
-                          <div className='flex items-center gap-2'>
-                            <span className='text-sm font-medium'>
-                              {gap.skillName}
-                            </span>
-                            <Badge variant='secondary' className='text-xs'>
-                              {gap.category}
-                            </Badge>
-                          </div>
-                          <span className='text-xs text-muted-foreground'>
-                            {gap.currentLevel}/{gap.requiredLevel}
-                          </span>
-                        </div>
-                        <Progress
-                          value={(gap.currentLevel / gap.requiredLevel) * 100}
-                          className='h-2'
-                        />
-                      </div>
-                    ))}
+                  <CardContent>
+                    <div className='flex flex-wrap gap-2'>
+                      {assessment.gaps.map((gap) => (
+                        <Badge
+                          key={gap}
+                          variant='outline'
+                          className='text-feedback-error'
+                        >
+                          {gap}
+                        </Badge>
+                      ))}
+                    </div>
                   </CardContent>
                 </Card>
               )}

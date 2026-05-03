@@ -7,26 +7,20 @@ export interface SkillCategoryContract {
   icon?: string;
 }
 
-export interface RoleSkillMapContract {
-  role: string;
-  skillName: string;
-  category: SkillCategoryContract;
-  importance: number;
-}
-
-export interface SkillGapContract {
+export interface SkillAssessmentItemContract {
   skillName: string;
   category: string;
   importance: number;
-  currentLevel: number;
-  requiredLevel: number;
-  gap: number;
+  hasSkill: boolean;
+  userLevel?: number;
 }
 
-export interface SkillAssessmentContract {
-  role: string;
-  readinessScore: number;
-  gaps: SkillGapContract[];
+export interface SkillGapResponseContract {
+  targetRole: string;
+  overallReadiness: number;
+  requiredSkills: SkillAssessmentItemContract[];
+  strengths: string[];
+  gaps: string[];
 }
 
 export interface UserSkillProgressContract {
@@ -43,34 +37,42 @@ export interface LearningResourceContract {
   skillName: string;
   title: string;
   url: string;
-  platform?: string;
-  difficulty?: string;
+  platform: string;
+  difficulty: string;
   duration?: string;
   isFree: boolean;
 }
 
-export interface RoadmapPhaseContract {
+export interface RoadmapSkillContract {
+  skillName: string;
+  importance: number;
+  status: string;
+  level: number;
+  resources: LearningResourceContract[];
+}
+
+export interface RoadmapMilestoneContract {
   phase: string;
-  skills: Array<{
-    skillName: string;
-    importance: number;
-    currentLevel: number;
-    targetLevel: number;
-  }>;
+  skills: RoadmapSkillContract[];
+  description: string;
+}
+
+export interface LearningRoadmapContract {
+  targetRole: string;
+  totalSkills: number;
+  completedSkills: number;
+  milestones: RoadmapMilestoneContract[];
 }
 
 // ─── Request contracts ──────────────────────────────────────────────────────
 
 export interface AssessSkillsRequest {
-  role: string;
-  skills: Array<{
-    name: string;
-    level: number;
-  }>;
+  targetRole: string;
+  currentSkills?: string[];
 }
 
 export interface UpdateProgressRequest {
   skillName: string;
-  level: number;
+  level?: number;
   status?: string;
 }

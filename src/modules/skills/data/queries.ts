@@ -4,17 +4,17 @@ import { apiClient } from '@/shared/http/api-client';
 import { executeAuthenticatedRequest } from '@/shared/auth/execute-authenticated-request';
 import type {
   LearningResourceContract,
-  RoadmapPhaseContract,
+  LearningRoadmapContract,
   SkillCategoryContract,
   UserSkillProgressContract,
 } from './contracts';
 import {
   toLearningResource,
-  toRoadmapPhase,
+  toLearningRoadmap,
   toSkillCategory,
   toUserSkillProgress,
   type LearningResource,
-  type RoadmapPhase,
+  type LearningRoadmap,
   type SkillCategory,
   type UserSkillProgress,
 } from './mappers';
@@ -56,12 +56,12 @@ export async function getUserProgress(): Promise<UserSkillProgress[]> {
 
 export async function getLearningRoadmap(
   role: string
-): Promise<RoadmapPhase[]> {
+): Promise<LearningRoadmap> {
   return executeAuthenticatedRequest(async (headers) => {
-    const contracts = await apiClient.get<RoadmapPhaseContract[]>(
+    const contract = await apiClient.get<LearningRoadmapContract>(
       'skills/roadmap',
       { headers, params: { role } }
     );
-    return contracts.map(toRoadmapPhase);
+    return toLearningRoadmap(contract);
   });
 }

@@ -1,6 +1,7 @@
 import 'server-only';
 
 import { apiClient } from '@/shared/http/api-client';
+import type { PaginatedResponse } from '@/shared/http/paginated-response';
 import type { InterviewQuestionContract } from './contracts';
 import { toInterviewQuestion, type InterviewQuestion } from './mappers';
 
@@ -18,12 +19,11 @@ export async function getInterviewQuestions(params?: {
   if (params?.random) queryParams.random = true;
   if (params?.limit) queryParams.limit = params.limit;
 
-  const contracts = await apiClient.get<InterviewQuestionContract[]>(
-    'interview/questions',
-    { params: queryParams }
-  );
+  const response = await apiClient.get<
+    PaginatedResponse<InterviewQuestionContract>
+  >('interview/questions', { params: queryParams });
 
-  return contracts.map(toInterviewQuestion);
+  return response.data.map(toInterviewQuestion);
 }
 
 export async function getInterviewRoles(): Promise<string[]> {

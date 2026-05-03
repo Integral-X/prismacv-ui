@@ -4,26 +4,26 @@ import { apiClient } from '@/shared/http/api-client';
 import { executeAuthenticatedRequest } from '@/shared/auth/execute-authenticated-request';
 import type {
   AssessSkillsRequest,
-  SkillAssessmentContract,
+  SkillGapResponseContract,
   UpdateProgressRequest,
   UserSkillProgressContract,
 } from './contracts';
 import {
-  toSkillAssessment,
+  toSkillGapResult,
   toUserSkillProgress,
-  type SkillAssessment,
+  type SkillGapResult,
   type UserSkillProgress,
 } from './mappers';
 
 export async function assessSkills(
   body: AssessSkillsRequest
-): Promise<SkillAssessment> {
+): Promise<SkillGapResult> {
   return executeAuthenticatedRequest(async (headers) => {
     const contract = await apiClient.post<
-      SkillAssessmentContract,
+      SkillGapResponseContract,
       AssessSkillsRequest
     >('skills/assess', body, { headers });
-    return toSkillAssessment(contract);
+    return toSkillGapResult(contract);
   });
 }
 

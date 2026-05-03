@@ -8,11 +8,15 @@ import type {
 
 // ─── Domain types ─────────────────────────────────────────────────────────────
 
-export type IssueSeverity = 'error' | 'warning' | 'info';
-export type RecommendationPriority = 'high' | 'medium' | 'low';
+export type IssueSeverity = 'low' | 'medium' | 'high';
+export type IssueType = 'grammar' | 'readability' | 'ats' | 'content';
+export type SuggestionType = 'improvement' | 'addition' | 'removal';
+export type RecommendationAction = 'add' | 'improve' | 'remove';
+export type RecommendationPriority = 'low' | 'medium' | 'high';
 
 export interface CvIssue {
-  field: string;
+  section: string;
+  type: IssueType;
   severity: IssueSeverity;
   message: string;
   suggestion: string | null;
@@ -20,14 +24,16 @@ export interface CvIssue {
 
 export interface CvSuggestion {
   section: string;
-  current: string | null;
-  suggested: string;
-  reason: string;
+  type: SuggestionType;
+  message: string;
+  originalText: string | null;
+  suggestedText: string | null;
 }
 
 export interface SectionRecommendation {
   section: string;
-  recommendation: string;
+  action: RecommendationAction;
+  message: string;
   priority: RecommendationPriority;
 }
 
@@ -38,13 +44,11 @@ export interface CvAnalysisResult {
   atsScore: number;
   issues: CvIssue[];
   suggestions: CvSuggestion[];
-  sectionRecommendations: SectionRecommendation[];
 }
 
 export interface CvOptimizationResult {
   matchScore: number;
   missingKeywords: string[];
-  presentKeywords: string[];
   suggestions: CvSuggestion[];
   sectionRecommendations: SectionRecommendation[];
 }
@@ -53,7 +57,8 @@ export interface CvOptimizationResult {
 
 function toIssue(c: CvIssueContract): CvIssue {
   return {
-    field: c.field,
+    section: c.section,
+    type: c.type,
     severity: c.severity,
     message: c.message,
     suggestion: c.suggestion ?? null,
@@ -63,9 +68,10 @@ function toIssue(c: CvIssueContract): CvIssue {
 function toSuggestion(c: CvSuggestionContract): CvSuggestion {
   return {
     section: c.section,
-    current: c.current ?? null,
-    suggested: c.suggested,
-    reason: c.reason,
+    type: c.type,
+    message: c.message,
+    originalText: c.originalText ?? null,
+    suggestedText: c.suggestedText ?? null,
   };
 }
 
@@ -74,7 +80,8 @@ function toRecommendation(
 ): SectionRecommendation {
   return {
     section: c.section,
-    recommendation: c.recommendation,
+    action: c.action,
+    message: c.message,
     priority: c.priority,
   };
 }
@@ -87,7 +94,6 @@ export function toCvAnalysis(c: CvAnalysisResultContract): CvAnalysisResult {
     atsScore: c.atsScore,
     issues: c.issues.map(toIssue),
     suggestions: c.suggestions.map(toSuggestion),
-    sectionRecommendations: c.sectionRecommendations.map(toRecommendation),
   };
 }
 
@@ -97,7 +103,6 @@ export function toCvOptimization(
   return {
     matchScore: c.matchScore,
     missingKeywords: c.missingKeywords,
-    presentKeywords: c.presentKeywords,
     suggestions: c.suggestions.map(toSuggestion),
     sectionRecommendations: c.sectionRecommendations.map(toRecommendation),
   };
