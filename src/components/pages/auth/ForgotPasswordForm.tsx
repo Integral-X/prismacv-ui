@@ -13,11 +13,13 @@ import { cn } from '@/lib/utils';
 
 interface ForgotPasswordFormProps {
   className?: string;
+  errorMessage?: string;
   onSubmit?: (data: ForgotPasswordFormData) => void | Promise<void>;
 }
 
 export const ForgotPasswordForm = ({
   className,
+  errorMessage,
   onSubmit,
 }: ForgotPasswordFormProps) => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -46,39 +48,45 @@ export const ForgotPasswordForm = ({
       onSubmit={form.handleSubmit(handleFormSubmit)}
       className={cn('flex flex-col gap-5', className)}
     >
-      <p className="text-sm text-content-secondary">
+      <p className='text-sm text-content-secondary'>
         We will send you a secure email with a link to change your password.
       </p>
 
-      <div className="flex flex-col gap-2">
+      <div className='flex flex-col gap-2'>
         <label
-          htmlFor="email"
-          className="text-sm font-medium text-content-primary"
+          htmlFor='email'
+          className='text-sm font-medium text-content-primary'
         >
           Email
         </label>
         <Input
-          id="email"
-          type="email"
-          placeholder="Enter your email"
+          id='email'
+          type='email'
+          placeholder='Enter your email'
           aria-invalid={!!form.formState.errors.email}
           disabled={isLoading}
           {...form.register('email')}
         />
         {form.formState.errors.email && (
-          <p className="text-sm text-feedback-error" role="alert">
+          <p className='text-sm text-feedback-error' role='alert'>
             {form.formState.errors.email.message}
           </p>
         )}
       </div>
 
       <Button
-        type="submit"
+        type='submit'
         disabled={isLoading}
-        className="w-full h-12 bg-[#069EA8] hover:bg-[#058a93] text-white font-medium text-base"
+        className='w-full h-12 bg-primary hover:bg-primary/85 text-primary-foreground font-medium text-base'
       >
         {isLoading ? 'Sending...' : 'Send'}
       </Button>
+
+      {errorMessage ? (
+        <p className='text-sm text-feedback-error text-center' role='alert'>
+          {errorMessage}
+        </p>
+      ) : null}
     </form>
   );
 };

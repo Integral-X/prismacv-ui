@@ -66,25 +66,25 @@ const pricingTiers: PricingTier[] = [
 
 const CheckIcon = ({ featured }: { featured?: boolean }) => (
   <svg
-    width="20"
-    height="20"
-    viewBox="0 0 20 20"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className="flex-shrink-0"
+    width='20'
+    height='20'
+    viewBox='0 0 20 20'
+    fill='none'
+    xmlns='http://www.w3.org/2000/svg'
+    className='flex-shrink-0'
   >
     <circle
-      cx="10"
-      cy="10"
-      r="10"
+      cx='10'
+      cy='10'
+      r='10'
       fill={featured ? 'rgba(255, 255, 255, 0.2)' : '#E0F2F1'}
     />
     <path
-      d="M6 10L9 13L14 7"
+      d='M6 10L9 13L14 7'
       stroke={featured ? 'white' : '#4ECCA3'}
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      strokeWidth='2'
+      strokeLinecap='round'
+      strokeLinejoin='round'
     />
   </svg>
 );
@@ -94,24 +94,24 @@ export const Pricing = () => {
 
   return (
     <section
-      className="py-16 md:py-20 bg-linear-to-b from-white to-gray-50"
-      id="pricing"
+      className='py-16 md:py-20 bg-linear-to-b from-white to-gray-50'
+      id='pricing'
     >
-      <div className="container mx-auto px-4">
+      <div className='container mx-auto px-4'>
         {/* Header */}
-        <div className="text-center mb-12 max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-4">
+        <div className='text-center mb-12 max-w-4xl mx-auto'>
+          <h2 className='text-3xl md:text-4xl lg:text-5xl font-semibold mb-4'>
             Invest in Your Future, One Resume at a Time
           </h2>
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className='text-lg text-muted-foreground mb-8'>
             Simple tools. Fair prices. CrackCV helps you create polished
             resumes, standout applications, cover letters, and personal websites
             with ease.
           </p>
 
           {/* Toggle Switch */}
-          <div className="flex items-center justify-center relative">
-            <div className="inline-flex items-center bg-gray-100 rounded-full p-1">
+          <div className='flex items-center justify-center relative'>
+            <div className='inline-flex items-center bg-gray-100 rounded-full p-1'>
               <button
                 onClick={() => setIsYearly(false)}
                 className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
@@ -135,14 +135,14 @@ export const Pricing = () => {
             </div>
 
             {/* Save 25% Badge - Positioned beside the tabs */}
-            <div className="absolute left-1/2 flex items-center ml-44 mt-8">
+            <div className='absolute left-1/2 flex items-center ml-44 mt-8'>
               <img
-                src="/images/landing-page/pricing_arrow.svg"
-                alt=""
-                className="absolute -left-20 -top-6 w-24 h-20"
-                aria-hidden="true"
+                src='/images/landing-page/pricing_arrow.svg'
+                alt=''
+                className='absolute -left-20 -top-6 w-24 h-20'
+                aria-hidden='true'
               />
-              <span className="text-primary font-medium relative z-10 mt-4">
+              <span className='text-primary font-medium relative z-10 mt-4'>
                 Save 25%
               </span>
             </div>
@@ -150,7 +150,7 @@ export const Pricing = () => {
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+        <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto'>
           {pricingTiers.map((tier) => (
             <div
               key={tier.name}
@@ -161,7 +161,7 @@ export const Pricing = () => {
               }`}
             >
               {/* Card Header */}
-              <div className="mb-6">
+              <div className='mb-6'>
                 <h3
                   className={`text-2xl font-semibold mb-2 ${tier.featured ? 'text-white' : 'text-gray-900'}`}
                 >
@@ -175,8 +175,8 @@ export const Pricing = () => {
               </div>
 
               {/* Price */}
-              <div className="mb-6">
-                <div className="flex items-baseline gap-2">
+              <div className='mb-6'>
+                <div className='flex items-baseline gap-2'>
                   <span
                     className={`text-5xl font-bold ${tier.featured ? 'text-white' : 'text-gray-900'}`}
                   >
@@ -199,13 +199,13 @@ export const Pricing = () => {
                 }`}
                 asChild
               >
-                <a href="/login">{tier.buttonText}</a>
+                <a href='/login'>{tier.buttonText}</a>
               </Button>
 
               {/* Features */}
-              <ul className="space-y-4">
+              <ul className='space-y-4'>
                 {tier.features.map((feature, index) => (
-                  <li key={index} className="flex items-start gap-3">
+                  <li key={index} className='flex items-start gap-3'>
                     <CheckIcon featured={tier.featured} />
                     <span
                       className={`text-sm ${tier.featured ? 'text-white' : 'text-gray-700'}`}

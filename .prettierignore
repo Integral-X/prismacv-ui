@@ -32,3 +32,6 @@ Dockerfile
 
 # Git files
 .gitignore
+
+# Auto-generated files
+CHANGELOG.md

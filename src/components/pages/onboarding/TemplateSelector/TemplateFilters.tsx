@@ -26,10 +26,10 @@ export const TemplateFilters = ({
   const hasActiveFilters = headshotFilter !== null || layoutFilter !== null;
 
   return (
-    <div className="mb-8">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-gray-200">
-        <div className="flex flex-wrap items-center gap-3">
-          <span className="text-sm font-medium text-gray-700 mr-2">
+    <div className='mb-8'>
+      <div className='flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-gray-200'>
+        <div className='flex flex-wrap items-center gap-3'>
+          <span className='text-sm font-medium text-gray-700 mr-2'>
             Filter by:
           </span>
 
@@ -43,7 +43,7 @@ export const TemplateFilters = ({
                 ? 'bg-primary text-white border-primary shadow-sm'
                 : 'bg-white text-gray-700 border-gray-300 hover:border-primary hover:text-primary'
             )}
-            aria-label="Filter templates with headshot"
+            aria-label='Filter templates with headshot'
           >
             <User
               className={cn(
@@ -53,7 +53,7 @@ export const TemplateFilters = ({
             />
             <span>With Headshot</span>
             {headshotFilter === true && (
-              <Check className="w-4 h-4 text-white" />
+              <Check className='w-4 h-4 text-white' />
             )}
           </button>
 
@@ -67,7 +67,7 @@ export const TemplateFilters = ({
                 ? 'bg-primary text-white border-primary shadow-sm'
                 : 'bg-white text-gray-700 border-gray-300 hover:border-primary hover:text-primary'
             )}
-            aria-label="Filter single column templates"
+            aria-label='Filter single column templates'
           >
             <Layout
               className={cn(
@@ -77,7 +77,7 @@ export const TemplateFilters = ({
             />
             <span>Single Column</span>
             {layoutFilter === 'single' && (
-              <Check className="w-4 h-4 text-white" />
+              <Check className='w-4 h-4 text-white' />
             )}
           </button>
 
@@ -90,7 +90,7 @@ export const TemplateFilters = ({
                 ? 'bg-primary text-white border-primary shadow-sm'
                 : 'bg-white text-gray-700 border-gray-300 hover:border-primary hover:text-primary'
             )}
-            aria-label="Filter two column templates"
+            aria-label='Filter two column templates'
           >
             <Columns
               className={cn(
@@ -100,7 +100,7 @@ export const TemplateFilters = ({
             />
             <span>Two Column</span>
             {layoutFilter === 'two-column' && (
-              <Check className="w-4 h-4 text-white" />
+              <Check className='w-4 h-4 text-white' />
             )}
           </button>
         </div>
@@ -109,7 +109,7 @@ export const TemplateFilters = ({
         {hasActiveFilters && (
           <button
             onClick={onClearFilters}
-            className="text-sm text-gray-600 hover:text-primary transition-colors underline"
+            className='text-sm text-gray-600 hover:text-primary transition-colors underline'
           >
             Clear filters
           </button>
@@ -117,7 +117,7 @@ export const TemplateFilters = ({
       </div>
 
       {/* Results Count */}
-      <div className="mt-4 text-sm text-gray-600">
+      <div className='mt-4 text-sm text-gray-600'>
         Showing {filteredCount} of {totalCount} templates
       </div>
     </div>

@@ -122,6 +122,15 @@ export default [
     },
   },
 
-  // Prettier configuration (must be last to override other configs)
+  // Prettier configuration
   prettierConfigs,
+
+  // Enforce single quotes project-wide (aligned with Prettier singleQuote: true)
+  {
+    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
+    rules: {
+      quotes: ['error', 'single', { avoidEscape: true }],
+      'jsx-quotes': ['error', 'prefer-single'],
+    },
+  },
 ];

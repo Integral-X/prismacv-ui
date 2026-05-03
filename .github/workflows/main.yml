@@ -64,6 +64,8 @@ jobs:
     permissions:
       contents: write
       packages: write
+    env:
+      HUSKY: '0'
 
     steps:
       - name: Checkout code
