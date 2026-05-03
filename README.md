@@ -25,14 +25,26 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-### Required Environment Variables
+### Environment Variables
 
-| Variable              | Purpose                                 |
-| --------------------- | --------------------------------------- |
-| `NEXT_PUBLIC_API_URL` | Backend API base URL                    |
-| `JWT_SECRET`          | Token verification (must match backend) |
+Copy `.env.example` to `.env.local` and fill in the values.
 
-See `.env.example` for the full list.
+#### Required
+
+| Variable              | Purpose                                           | Example                     |
+| --------------------- | ------------------------------------------------- | --------------------------- |
+| `NEXT_PUBLIC_API_URL` | Backend API base URL (must include `/api` prefix) | `http://localhost:3000/api` |
+
+#### Optional
+
+| Variable    | Default                       | Purpose                                  |
+| ----------- | ----------------------------- | ---------------------------------------- |
+| `NODE_ENV`  | `development`                 | Environment (`production` in deployment) |
+| `LOG_LEVEL` | `debug` (dev) / `info` (prod) | Logging verbosity                        |
+
+> **Note:** The UI does not need `JWT_SECRET`. Auth is handled entirely via httpOnly cookies set by the backend.
+
+See `.env.example` for a ready-to-copy template.
 
 ## Features
 
