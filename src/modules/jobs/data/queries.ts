@@ -11,7 +11,7 @@ import { toJob, toJobStats, type Job, type JobStats } from './mappers';
 
 export async function getJobs(status?: string): Promise<Job[]> {
   return executeAuthenticatedRequest(async (headers) => {
-    const params: Record<string, string | number> = { limit: 200 };
+    const params: Record<string, string | number> = { limit: 100 };
     if (status) params.status = status;
 
     const response = await apiClient.get<
