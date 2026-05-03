@@ -8,22 +8,35 @@ import { WavyPattern } from '@/components/common/WavyPattern';
 import { TemplateSelector } from '@/components/pages/onboarding/TemplateSelector';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
+import { createCvAction } from '@/modules/cv/data/actions';
+import { toast } from 'sonner';
 
 export function SelectTemplatePageClient() {
   const router = useRouter();
   const [selectedTemplate, setSelectedTemplate] = React.useState<string | null>(
     null
   );
+  const [isPending, startTransition] = React.useTransition();
 
   const handleTemplateSelect = (templateId: string) => {
     setSelectedTemplate(templateId);
   };
 
   const handleContinue = () => {
-    if (selectedTemplate) {
-      // TODO: Save selected template and navigate to editor
-      // router.push('/editor');
-    }
+    if (!selectedTemplate) return;
+
+    startTransition(async () => {
+      const result = await createCvAction({
+        title: 'My CV',
+        templateId: selectedTemplate,
+      });
+
+      if (result.ok && result.redirectTo) {
+        router.push(result.redirectTo);
+      } else if (!result.ok) {
+        toast.error(result.message);
+      }
+    });
   };
 
   const handleBack = () => {
@@ -72,10 +85,10 @@ export function SelectTemplatePageClient() {
           <div className='flex flex-col sm:flex-row gap-4 justify-center items-center px-4'>
             <Button
               onClick={handleContinue}
-              disabled={!selectedTemplate}
+              disabled={!selectedTemplate || isPending}
               className='bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 rounded-md text-base font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto'
             >
-              Continue
+              {isPending ? 'Creating...' : 'Continue'}
             </Button>
           </div>
 

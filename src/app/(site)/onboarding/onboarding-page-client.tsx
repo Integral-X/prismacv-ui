@@ -26,8 +26,7 @@ export function OnboardingPageClient() {
     } else if (selectedOption === 'linkedin') {
       router.push('/onboarding/import-linkedin');
     } else if (selectedOption === 'scratch') {
-      // TODO: Navigate to manual entry page
-      // router.push('/onboarding/manual-entry');
+      router.push('/onboarding/select-template');
     }
   };
 

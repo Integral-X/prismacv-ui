@@ -1,32 +1,30 @@
-type PublicEnvInput = {
-  NEXT_PUBLIC_API_URL: string | undefined;
-};
-
-type PublicEnv = {
-  NEXT_PUBLIC_API_URL: string;
-};
-
-function assertPublicEnv(input: PublicEnvInput): asserts input is PublicEnv {
-  if (!input.NEXT_PUBLIC_API_URL) {
+function getApiBaseUrl(): string {
+  const raw = process.env.NEXT_PUBLIC_API_URL;
+  if (!raw) {
     throw new Error(
       'Missing required environment variables: NEXT_PUBLIC_API_URL.\n' +
         'Check your .env.local file.'
     );
   }
+  return `${raw.replace(/\/$/, '')}/v1/`;
 }
-
-const publicEnv: PublicEnvInput = {
-  NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
-};
-
-assertPublicEnv(publicEnv);
-
-const apiBaseUrl = publicEnv.NEXT_PUBLIC_API_URL.replace(/\/$/, '');
 
 export const env = {
   /**
    * Trailing slash is required: `new URL('auth/...', base)` replaces the last
    * path segment of a base without a trailing slash, which would drop `v1`.
+   *
+   * Lazily evaluated so `next build` can compile without the env var present.
    */
-  apiBaseUrl: `${apiBaseUrl}/v1/`,
+  get apiBaseUrl(): string {
+    return getApiBaseUrl();
+  },
+
+  /**
+   * Base URL for initiating OAuth flows (Google, LinkedIn).
+   * Points to `{API_URL}/v1/oauth/` — the backend OAuth controller prefix.
+   */
+  get oauthBaseUrl(): string {
+    return `${getApiBaseUrl()}oauth/`;
+  },
 } as const;

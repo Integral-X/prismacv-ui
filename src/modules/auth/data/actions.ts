@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 
 import { HttpError } from '@/shared/http/http-error';
 import {
+  changePassword,
   forgotPassword,
   loginUser,
   resendSignupOtp,
@@ -12,6 +13,8 @@ import {
   verifyResetOtp,
   verifySignupOtp,
 } from './mutations';
+import { toUserProfile } from './mappers';
+import type { UserLoginContract } from './contracts';
 import { clearAuthSession, persistAuthSession } from './session';
 
 export type AuthActionCode =
@@ -104,7 +107,7 @@ export async function loginUserAction(input: {
 
     return {
       ok: true,
-      redirectTo: '/onboarding',
+      redirectTo: '/dashboard',
     };
   } catch (error) {
     const message = getErrorMessage(
@@ -163,7 +166,7 @@ export async function verifyOtpAction(input: {
       return {
         ok: true,
         message: result.message,
-        redirectTo: '/onboarding',
+        redirectTo: '/dashboard',
       };
     }
 
@@ -248,7 +251,51 @@ export async function resetPasswordAction(input: {
   }
 }
 
+export async function changePasswordAction(input: {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}): Promise<ActionResult> {
+  try {
+    await changePassword(input);
+    await clearAuthSession();
+    return {
+      ok: true,
+      message: 'Password changed successfully. Please sign in again.',
+      redirectTo: '/login',
+    };
+  } catch (error) {
+    return toFailureResult(error, 'Failed to change password', {
+      unauthorizedCode: 'invalid_credentials',
+    });
+  }
+}
+
 export async function logoutUserAction(): Promise<void> {
   await clearAuthSession();
   redirect('/login');
+}
+
+export async function persistOAuthSessionAction(input: {
+  accessToken: string;
+  refreshToken: string;
+  user: unknown;
+}): Promise<ActionResult> {
+  try {
+    const contract = input as unknown as UserLoginContract;
+    const user = toUserProfile(contract.user);
+
+    await persistAuthSession(
+      {
+        user,
+        accessToken: input.accessToken,
+        refreshToken: input.refreshToken,
+      },
+      true
+    );
+
+    return { ok: true, redirectTo: '/dashboard' };
+  } catch (error) {
+    return toFailureResult(error, 'Unable to complete OAuth sign in.');
+  }
 }
