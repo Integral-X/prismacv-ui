@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function InterviewPage() {
   const [questions, roles, categories] = await Promise.all([
-    getInterviewQuestions({ limit: 20 }),
+    getInterviewQuestions({ limit: 100 }),
     getInterviewRoles(),
     getInterviewCategories(),
   ]);

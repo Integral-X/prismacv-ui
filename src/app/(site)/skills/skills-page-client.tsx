@@ -99,7 +99,7 @@ export function SkillsPageClient({ categories, roles }: SkillsPageClientProps) {
 
       {/* Categories overview */}
       <div className='grid grid-cols-2 md:grid-cols-5 gap-3 mb-8'>
-        {categories.slice(0, 10).map((cat) => (
+        {categories.map((cat) => (
           <Card key={cat.id}>
             <CardContent className='pt-4 pb-3 px-4'>
               <p className='font-medium text-sm'>{cat.name}</p>

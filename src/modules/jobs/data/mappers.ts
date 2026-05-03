@@ -56,6 +56,14 @@ const STATUS_MAP: Record<JobStatusContract, JobStatus> = {
   REJECTED: 'rejected',
 };
 
+export const REVERSE_STATUS_MAP: Record<JobStatus, JobStatusContract> = {
+  saved: 'SAVED',
+  applied: 'APPLIED',
+  interview: 'INTERVIEW',
+  offer: 'OFFER',
+  rejected: 'REJECTED',
+};
+
 export function toJobNote(contract: JobNoteResponseContract): JobNote {
   return {
     id: contract.id,

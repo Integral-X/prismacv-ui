@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Plus,
   Briefcase,
@@ -37,12 +39,16 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import type { Job, JobStats } from '@/modules/jobs/data/mappers';
-import type { JobStatusContract } from '@/modules/jobs/data/contracts';
+import { REVERSE_STATUS_MAP } from '@/modules/jobs/data/mappers';
 import {
   createJobAction,
   deleteJobAction,
   updateJobStatusAction,
 } from '@/modules/jobs/data/actions';
+import {
+  createJobSchema,
+  type CreateJobFormData,
+} from '@/lib/validations/jobs';
 
 interface JobsPageClientProps {
   initialJobs: Job[];
@@ -98,25 +104,31 @@ export function JobsPageClient({
   const [dialogOpen, setDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('board');
 
-  function handleAddJob(formData: FormData) {
-    const title = formData.get('title') as string;
-    const company = formData.get('company') as string;
-    const url = (formData.get('url') as string) || undefined;
-    const location = (formData.get('location') as string) || undefined;
-    const status = (formData.get('status') as JobStatusContract) || 'SAVED';
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset: resetForm,
+    formState: { errors },
+  } = useForm<CreateJobFormData>({
+    resolver: zodResolver(createJobSchema),
+    defaultValues: { status: 'SAVED' },
+  });
 
+  function onSubmit(data: CreateJobFormData) {
     startTransition(async () => {
       const result = await createJobAction({
-        title,
-        company,
-        url,
-        location,
-        status,
+        title: data.title,
+        company: data.company,
+        url: data.url || undefined,
+        location: data.location || undefined,
+        status: data.status,
       });
       if (result.ok && result.data) {
         setJobs((prev) => [result.data!, ...prev]);
         setStats((prev) => ({ ...prev, total: prev.total + 1 }));
         setDialogOpen(false);
+        resetForm();
         toast.success(result.message);
       } else if (!result.ok) {
         toast.error(result.message);
@@ -125,17 +137,14 @@ export function JobsPageClient({
   }
 
   function handleStatusChange(jobId: string, newStatus: string) {
-    const statusMap: Record<string, JobStatusContract> = {
-      saved: 'SAVED',
-      applied: 'APPLIED',
-      interview: 'INTERVIEW',
-      offer: 'OFFER',
-      rejected: 'REJECTED',
-    };
+    const contractStatus =
+      REVERSE_STATUS_MAP[newStatus as keyof typeof REVERSE_STATUS_MAP];
+
+    if (!contractStatus) return;
 
     startTransition(async () => {
       const result = await updateJobStatusAction(jobId, {
-        status: statusMap[newStatus],
+        status: contractStatus,
       });
       if (result.ok && result.data) {
         setJobs((prev) => prev.map((j) => (j.id === jobId ? result.data! : j)));
@@ -179,45 +188,66 @@ export function JobsPageClient({
             <DialogHeader>
               <DialogTitle>Add Job Application</DialogTitle>
             </DialogHeader>
-            <form action={handleAddJob} className='space-y-4'>
+            <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
               <div className='space-y-2'>
                 <Label htmlFor='title'>Job Title</Label>
                 <Input
                   id='title'
-                  name='title'
-                  required
                   placeholder='Software Engineer'
+                  aria-invalid={!!errors.title}
+                  {...register('title')}
                 />
+                {errors.title && (
+                  <p role='alert' className='text-xs text-feedback-error'>
+                    {errors.title.message}
+                  </p>
+                )}
               </div>
               <div className='space-y-2'>
                 <Label htmlFor='company'>Company</Label>
                 <Input
                   id='company'
-                  name='company'
-                  required
                   placeholder='Company name'
+                  aria-invalid={!!errors.company}
+                  {...register('company')}
                 />
+                {errors.company && (
+                  <p role='alert' className='text-xs text-feedback-error'>
+                    {errors.company.message}
+                  </p>
+                )}
               </div>
               <div className='space-y-2'>
                 <Label htmlFor='url'>Job URL</Label>
                 <Input
                   id='url'
-                  name='url'
                   type='url'
                   placeholder='https://...'
+                  aria-invalid={!!errors.url}
+                  {...register('url')}
                 />
+                {errors.url && (
+                  <p role='alert' className='text-xs text-feedback-error'>
+                    {errors.url.message}
+                  </p>
+                )}
               </div>
               <div className='space-y-2'>
                 <Label htmlFor='location'>Location</Label>
                 <Input
                   id='location'
-                  name='location'
                   placeholder='City, Country'
+                  {...register('location')}
                 />
               </div>
               <div className='space-y-2'>
                 <Label htmlFor='status'>Status</Label>
-                <Select name='status' defaultValue='SAVED'>
+                <Select
+                  defaultValue='SAVED'
+                  onValueChange={(v) =>
+                    setValue('status', v as CreateJobFormData['status'])
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>

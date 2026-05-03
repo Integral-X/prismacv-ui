@@ -1,5 +1,4 @@
-import { getJobs } from '@/modules/jobs/data/queries';
-import { getJobStats } from '@/modules/jobs/data/queries';
+import { getJobs, getJobStats } from '@/modules/jobs/data/queries';
 import { JobsPageClient } from './jobs-page-client';
 
 export const dynamic = 'force-dynamic';
