@@ -2,7 +2,15 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 // Protected route prefixes
-const PROTECTED_PREFIXES = ['/onboarding', '/dashboard', '/cv', '/settings'];
+const PROTECTED_PREFIXES = [
+  '/onboarding',
+  '/dashboard',
+  '/cv',
+  '/settings',
+  '/jobs',
+  '/skills',
+  '/interview',
+];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
