@@ -251,7 +251,7 @@ export const Footer = () => {
         <div className='flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground'>
           <div className='flex items-center gap-2'>
             <span className='text-lg'>©</span>
-            <span>2025 PrismaCV. All rights reserved.</span>
+            <span>2026 PrismaCV. All rights reserved.</span>
           </div>
           <div className='flex gap-6'>
             <Link

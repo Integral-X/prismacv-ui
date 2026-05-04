@@ -137,8 +137,11 @@ export const FAQ = () => {
                 Can&apos;t find the answer to your question? Send us an email
                 and we&apos;ll get back to you as soon as possible
               </p>
-              <Button className='bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-md'>
-                Ask Any Thing
+              <Button
+                className='bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-md'
+                asChild
+              >
+                <a href='mailto:support@prismacv.com'>Ask Anything</a>
               </Button>
             </div>
           </div>

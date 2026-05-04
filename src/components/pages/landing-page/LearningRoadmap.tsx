@@ -131,7 +131,7 @@ export const LearningRoadmap = () => {
 
               {/* Learn More Link */}
               <Link
-                href='#'
+                href='/skills'
                 className='inline-flex items-center gap-2 text-primary font-medium hover:gap-3 transition-all group'
               >
                 Learn more
