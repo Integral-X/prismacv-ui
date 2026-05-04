@@ -28,7 +28,7 @@ export const OnboardingCard = ({
 
   return (
     <Card
-      role="button"
+      role='button'
       tabIndex={0}
       aria-label={`${title}. ${description}`}
       className={cn(
@@ -42,19 +42,19 @@ export const OnboardingCard = ({
       onClick={onClick}
       onKeyDown={handleKeyDown}
     >
-      <CardContent className="p-8 flex flex-col items-center text-center space-y-4">
+      <CardContent className='p-8 flex flex-col items-center text-center space-y-4'>
         {/* Icon */}
-        <div className="w-20 h-20 rounded-full border-2 border-primary flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
-          <div className="[&>svg]:stroke-primary [&>svg]:stroke-[1.5] [&>svg]:fill-none">
+        <div className='w-20 h-20 rounded-full border-2 border-primary flex items-center justify-center transition-transform duration-300 group-hover:scale-110'>
+          <div className='[&>svg]:stroke-primary [&>svg]:stroke-[1.5] [&>svg]:fill-none'>
             {icon}
           </div>
         </div>
 
         {/* Title */}
-        <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
+        <h3 className='text-xl font-semibold text-gray-900'>{title}</h3>
 
         {/* Description */}
-        <p className="text-muted-foreground text-sm leading-relaxed">
+        <p className='text-muted-foreground text-sm leading-relaxed'>
           {description}
         </p>
       </CardContent>

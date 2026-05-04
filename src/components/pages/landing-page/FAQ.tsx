@@ -55,26 +55,26 @@ export const FAQ = () => {
   };
 
   return (
-    <section className="py-16 md:py-20 bg-white" id="faq">
-      <div className="container mx-auto px-4">
+    <section className='py-16 md:py-20 bg-white' id='faq'>
+      <div className='container mx-auto px-4'>
         {/* Section Title */}
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-center mb-12 md:mb-16">
+        <h2 className='text-3xl md:text-4xl lg:text-5xl font-semibold text-center mb-12 md:mb-16'>
           Frequently Asked Questions
         </h2>
 
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+        <div className='grid lg:grid-cols-2 gap-12 lg:gap-16 items-start'>
           {/* Left - FAQ List */}
-          <div className="space-y-4">
+          <div className='space-y-4'>
             {faqData.map((faq, index) => (
               <div
                 key={faq.question}
-                className="border border-gray-200 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-md"
+                className='border border-gray-200 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-md'
               >
                 <button
                   onClick={() => toggleFAQ(index)}
-                  className="w-full px-6 py-4 flex items-center justify-between text-left bg-white hover:bg-gray-50 transition-colors cursor-pointer"
+                  className='w-full px-6 py-4 flex items-center justify-between text-left bg-white hover:bg-gray-50 transition-colors cursor-pointer'
                 >
-                  <span className="text-base md:text-lg font-medium pr-4">
+                  <span className='text-base md:text-lg font-medium pr-4'>
                     {faq.question}
                   </span>
                   <div
@@ -83,18 +83,18 @@ export const FAQ = () => {
                     }`}
                   >
                     <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="text-primary"
+                      width='16'
+                      height='16'
+                      viewBox='0 0 16 16'
+                      fill='none'
+                      xmlns='http://www.w3.org/2000/svg'
+                      className='text-primary'
                     >
                       <path
-                        d="M8 3V13M3 8H13"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
+                        d='M8 3V13M3 8H13'
+                        stroke='currentColor'
+                        strokeWidth='2'
+                        strokeLinecap='round'
                       />
                     </svg>
                   </div>
@@ -106,9 +106,9 @@ export const FAQ = () => {
                       : 'grid-rows-[0fr] opacity-0'
                   }`}
                 >
-                  <div className="overflow-hidden">
-                    <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                      <p className="text-muted-foreground leading-relaxed">
+                  <div className='overflow-hidden'>
+                    <div className='px-6 py-4 bg-gray-50 border-t border-gray-200'>
+                      <p className='text-muted-foreground leading-relaxed'>
                         {faq.answer}
                       </p>
                     </div>
@@ -119,25 +119,25 @@ export const FAQ = () => {
           </div>
 
           {/* Right - Illustration and Contact */}
-          <div className="flex flex-col items-center lg:items-start">
+          <div className='flex flex-col items-center lg:items-start'>
             {/* FAQ Illustration */}
-            <div className="mb-8">
+            <div className='mb-8'>
               <Image
-                src="/images/landing-page/faq.svg"
-                alt="FAQ illustration"
+                src='/images/landing-page/faq.svg'
+                alt='FAQ illustration'
                 width={365}
                 height={370}
-                className="w-full h-auto max-w-md"
+                className='w-full h-auto max-w-md'
               />
             </div>
 
             {/* Contact Section */}
-            <div className="text-center lg:text-left max-w-md">
-              <p className="text-base md:text-lg text-muted-foreground mb-6">
+            <div className='text-center lg:text-left max-w-md'>
+              <p className='text-base md:text-lg text-muted-foreground mb-6'>
                 Can&apos;t find the answer to your question? Send us an email
                 and we&apos;ll get back to you as soon as possible
               </p>
-              <Button className="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-md">
+              <Button className='bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-md'>
                 Ask Any Thing
               </Button>
             </div>

@@ -47,7 +47,7 @@ export const TemplateSelector = ({
   };
 
   return (
-    <div className="w-full">
+    <div className='w-full'>
       <TemplateFilters
         headshotFilter={headshotFilter}
         layoutFilter={layoutFilter}
