@@ -23,7 +23,7 @@ const pricingTiers: PricingTier[] = [
     features: [
       'All resume templates',
       'Basic resume sections',
-      'Crackcv branding',
+      'PrismaCV branding',
       'Maximum 15 section items',
       'Access to all design tools',
     ],
@@ -104,7 +104,7 @@ export const Pricing = () => {
             Invest in Your Future, One Resume at a Time
           </h2>
           <p className='text-lg text-muted-foreground mb-8'>
-            Simple tools. Fair prices. CrackCV helps you create polished
+            Simple tools. Fair prices. PrismaCV helps you create polished
             resumes, standout applications, cover letters, and personal websites
             with ease.
           </p>

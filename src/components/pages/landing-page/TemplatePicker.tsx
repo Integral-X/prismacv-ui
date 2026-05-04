@@ -38,7 +38,10 @@ export const TemplatePicker = () => {
   }, [api]);
 
   return (
-    <section className='py-16 md:py-20 bg-linear-to-b from-[#E8F5E9] to-white relative overflow-hidden'>
+    <section
+      id='templates'
+      className='py-16 md:py-20 bg-linear-to-b from-[#E8F5E9] to-white relative overflow-hidden'
+    >
       <div className='container mx-auto px-4'>
         {/* Section Title */}
         <h2 className='text-3xl md:text-4xl lg:text-5xl font-semibold text-center mb-8 text-gray-900'>
@@ -111,7 +114,7 @@ export const TemplatePicker = () => {
               className='border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8 py-6 rounded-lg text-base font-medium transition-all'
               asChild
             >
-              <a href='#templates'>Browse More</a>
+              <a href='/signup'>Browse More</a>
             </Button>
           </div>
         </div>
