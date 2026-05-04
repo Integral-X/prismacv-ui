@@ -35,7 +35,7 @@ interface NavbarClientProps {
   currentUser: NavbarUser | null;
 }
 
-const routeList: RouteProps[] = [
+const publicRouteList: RouteProps[] = [
   {
     href: '#templates',
     label: 'Templates',
@@ -50,12 +50,36 @@ const routeList: RouteProps[] = [
   },
 ];
 
+const authenticatedRouteList: RouteProps[] = [
+  {
+    href: '/dashboard',
+    label: 'Dashboard',
+  },
+  {
+    href: '/jobs',
+    label: 'Jobs',
+  },
+  {
+    href: '/skills',
+    label: 'Skills',
+  },
+  {
+    href: '/interview',
+    label: 'Interview',
+  },
+];
+
 export function NavbarClient({ currentUser }: NavbarClientProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const pathname = usePathname();
   const isLandingPage = pathname === '/';
   const showAccountMenu = Boolean(currentUser && !isLandingPage);
   const showGetStarted = isLandingPage || !currentUser;
+  const routeList = isLandingPage
+    ? publicRouteList
+    : currentUser
+      ? authenticatedRouteList
+      : publicRouteList;
 
   return (
     <header className='sticky top-0 z-40 w-full bg-white shadow-(--shadow-sm)'>
