@@ -8,23 +8,36 @@ import { WavyPattern } from '@/components/common/WavyPattern';
 import { LinkedInImport } from '@/components/pages/onboarding/LinkedInImport';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
+import { importLinkedInProfileAction } from '@/modules/cv/data/actions';
 
 export function ImportLinkedInPageClient() {
   const router = useRouter();
   const [importedUrl, setImportedUrl] = React.useState<string | null>(null);
+  const [importId, setImportId] = React.useState<string | null>(null);
 
-  const handleImport = (url: string) => {
+  const handleImportFn = async (url: string): Promise<{ importId: string }> => {
+    const result = await importLinkedInProfileAction(url);
+    if (!result.ok) {
+      throw new Error(result.message);
+    }
+    return result.data!;
+  };
+
+  const handleImport = (url: string, id: string) => {
     setImportedUrl(url);
+    setImportId(id);
   };
 
   const handleRemove = () => {
     setImportedUrl(null);
+    setImportId(null);
   };
 
   const handleContinue = () => {
-    if (importedUrl) {
-      // Navigate to template selection (Step 3)
-      router.push('/onboarding/select-template');
+    if (importedUrl && importId) {
+      router.push(
+        `/onboarding/select-template?importId=${encodeURIComponent(importId)}`
+      );
     }
   };
 
@@ -33,8 +46,7 @@ export function ImportLinkedInPageClient() {
   };
 
   const handleSkip = () => {
-    // TODO: Navigate to manual entry or skip this step
-    // router.push('/onboarding/manual-entry');
+    router.push('/onboarding/select-template');
   };
 
   return (
@@ -69,7 +81,11 @@ export function ImportLinkedInPageClient() {
 
           {/* LinkedIn Import Component */}
           <div className='mb-8 px-4'>
-            <LinkedInImport onImport={handleImport} onRemove={handleRemove} />
+            <LinkedInImport
+              onImport={handleImport}
+              onRemove={handleRemove}
+              importFn={handleImportFn}
+            />
           </div>
 
           {/* Action Buttons */}

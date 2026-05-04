@@ -12,6 +12,7 @@ import {
   createCv,
   deleteCv,
   duplicateCv,
+  importLinkedInProfile,
   importLinkedInToCv,
   exportCvPdf,
   updateCertifications,
@@ -259,7 +260,21 @@ export async function updateSectionAction<T extends SectionName>(
   }
 }
 
-// ─── Import action ────────────────────────────────────────────────────────────
+// ─── Import actions ───────────────────────────────────────────────────────────
+
+export async function importLinkedInProfileAction(
+  handleOrUrl: string
+): Promise<ActionResult<{ importId: string }>> {
+  try {
+    const result = await importLinkedInProfile(handleOrUrl);
+    return { ok: true, data: result };
+  } catch (error) {
+    return toFailureResult(
+      error,
+      'Unable to import your LinkedIn profile. Make sure your LinkedIn account is connected.'
+    );
+  }
+}
 
 export async function importLinkedInToCvAction(input: {
   importId: string;

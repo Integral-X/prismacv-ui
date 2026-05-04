@@ -8,7 +8,6 @@ import {
   normalizeLinkedInUrl,
   extractLinkedInDisplayName,
 } from '../shared/utils/urlValidation';
-import { useProgressSimulation } from '../shared/hooks/useProgressSimulation';
 import type { ImportState } from '../shared/utils/stateStyles';
 import { LinkedInImportSuccess } from './LinkedInImportSuccess';
 import { LinkedInImportProgress } from './LinkedInImportProgress';
@@ -17,14 +16,15 @@ import { LinkedInImportForm } from './LinkedInImportForm';
 export const LinkedInImport = ({
   onImport,
   onRemove,
+  importFn,
   className,
 }: LinkedInImportProps) => {
   const [state, setState] = React.useState<ImportState>('idle');
   const [linkedInUrl, setLinkedInUrl] = React.useState<string>('');
   const [errorMessage, setErrorMessage] = React.useState<string>('');
+  const [progress, setProgress] = React.useState(0);
   const [importedProfile, setImportedProfile] =
     React.useState<ImportedProfile | null>(null);
-  const pendingUrlRef = React.useRef<string | null>(null);
   const errorResetTimeoutRef = React.useRef<ReturnType<
     typeof setTimeout
   > | null>(null);
@@ -38,27 +38,7 @@ export const LinkedInImport = ({
     };
   }, []);
 
-  const {
-    progress,
-    start: startProgress,
-    reset: resetProgress,
-  } = useProgressSimulation({
-    onComplete: () => {
-      if (pendingUrlRef.current) {
-        const normalizedUrl = normalizeLinkedInUrl(pendingUrlRef.current);
-        const displayName = extractLinkedInDisplayName(normalizedUrl);
-        setImportedProfile({
-          url: normalizedUrl,
-          displayName,
-        });
-        setState('success');
-        onImport?.(normalizedUrl);
-        pendingUrlRef.current = null;
-      }
-    },
-  });
-
-  const handleImport = () => {
+  const handleImport = async () => {
     const validation = validateLinkedInUrl(linkedInUrl);
 
     if (!validation.valid) {
@@ -77,15 +57,48 @@ export const LinkedInImport = ({
     }
 
     setState('importing');
-    pendingUrlRef.current = linkedInUrl;
-    startProgress();
+    setProgress(20);
+
+    const normalizedUrl = normalizeLinkedInUrl(linkedInUrl);
+
+    if (importFn) {
+      try {
+        setProgress(50);
+        const { importId } = await importFn(normalizedUrl);
+        setProgress(100);
+        const displayName = extractLinkedInDisplayName(normalizedUrl);
+        setImportedProfile({ url: normalizedUrl, displayName, importId });
+        setState('success');
+        onImport?.(normalizedUrl, importId);
+      } catch (error) {
+        setState('error');
+        setErrorMessage(
+          error instanceof Error
+            ? error.message
+            : 'Failed to import LinkedIn profile. Please try again.'
+        );
+        setProgress(0);
+        errorResetTimeoutRef.current = setTimeout(() => {
+          errorResetTimeoutRef.current = null;
+          setState('idle');
+          setErrorMessage('');
+        }, ERROR_DISPLAY_DURATION_MS);
+      }
+    } else {
+      // Fallback: no importFn provided, just validate URL and report success
+      const displayName = extractLinkedInDisplayName(normalizedUrl);
+      setProgress(100);
+      setImportedProfile({ url: normalizedUrl, displayName, importId: '' });
+      setState('success');
+      onImport?.(normalizedUrl, '');
+    }
   };
 
   const handleRemove = () => {
     setImportedProfile(null);
     setLinkedInUrl('');
     setState('idle');
-    resetProgress();
+    setProgress(0);
     onRemove?.();
   };
 
