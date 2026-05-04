@@ -44,7 +44,7 @@ export const TemplatePicker = () => {
     >
       <div className='container mx-auto px-4'>
         {/* Section Title */}
-        <h2 className='text-3xl md:text-4xl lg:text-5xl font-semibold text-center mb-8 text-gray-900'>
+        <h2 className='text-3xl md:text-4xl lg:text-5xl font-semibold text-center mb-8 text-content-primary'>
           Pick the Perfect Resume Template
         </h2>
 
@@ -100,7 +100,7 @@ export const TemplatePicker = () => {
                   'w-4 h-4 rounded-full cursor-pointer transition-all duration-300',
                   current === index
                     ? 'bg-primary'
-                    : 'bg-gray-300 hover:bg-gray-400'
+                    : 'bg-border hover:bg-border-strong'
                 )}
                 aria-label={`Go to slide ${index + 1}`}
               />
