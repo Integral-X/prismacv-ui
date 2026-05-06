@@ -16,7 +16,11 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <div className='min-h-screen flex items-center justify-center bg-surface-primary px-4' role='alert' aria-live='assertive'>
+    <div
+      className='min-h-screen flex items-center justify-center bg-surface-primary px-4'
+      role='alert'
+      aria-live='assertive'
+    >
       <div className='text-center max-w-md'>
         <div className='mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-feedback-error/10'>
           <AlertTriangle className='h-8 w-8 text-feedback-error' />
