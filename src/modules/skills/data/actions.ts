@@ -4,7 +4,11 @@ import { revalidatePath } from 'next/cache';
 import { type ActionResult, toFailureResult } from '@/shared/action-result';
 import type { AssessSkillsRequest, UpdateProgressRequest } from './contracts';
 import { assessSkills, updateSkillProgress } from './mutations';
-import type { SkillGapResult, UserSkillProgress, LearningRoadmap } from './mappers';
+import type {
+  SkillGapResult,
+  UserSkillProgress,
+  LearningRoadmap,
+} from './mappers';
 import { getLearningRoadmap } from './queries';
 
 // ─── Skills actions ─────────────────────────────────────────────────────────

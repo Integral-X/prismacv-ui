@@ -1,7 +1,4 @@
-import {
-  getSkillRoles,
-  getUserProgress,
-} from '@/modules/skills/data/queries';
+import { getSkillRoles, getUserProgress } from '@/modules/skills/data/queries';
 import { RoadmapPageClient } from './roadmap-page-client';
 
 export const dynamic = 'force-dynamic';

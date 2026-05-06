@@ -71,9 +71,7 @@ export function RoadmapPageClient({
       });
       if (result.ok && result.data) {
         setProgress((prev) => {
-          const existing = prev.findIndex(
-            (p) => p.skillName === skillName
-          );
+          const existing = prev.findIndex((p) => p.skillName === skillName);
           if (existing >= 0) {
             const updated = [...prev];
             updated[existing] = result.data!;
@@ -93,16 +91,22 @@ export function RoadmapPageClient({
     return p?.status ?? 'not_started';
   }
 
-  const completionPercent = roadmap && roadmap.totalSkills > 0
-    ? Math.round((roadmap.completedSkills / roadmap.totalSkills) * 100)
-    : 0;
+  const completionPercent =
+    roadmap && roadmap.totalSkills > 0
+      ? Math.round((roadmap.completedSkills / roadmap.totalSkills) * 100)
+      : 0;
 
   return (
     <div className='min-h-screen bg-surface-primary'>
       <div className='mx-auto max-w-5xl px-4 py-8'>
         {/* Header */}
         <div className='mb-6 flex items-center gap-3'>
-          <Button variant='ghost' size='icon' aria-label='Back to skills' asChild>
+          <Button
+            variant='ghost'
+            size='icon'
+            aria-label='Back to skills'
+            asChild
+          >
             <Link href='/skills'>
               <ArrowLeft className='size-4' />
             </Link>
@@ -206,10 +210,7 @@ export function RoadmapPageClient({
                                 </span>
                               </div>
                             </div>
-                            <Badge
-                              variant='secondary'
-                              className='text-xs'
-                            >
+                            <Badge variant='secondary' className='text-xs'>
                               Importance: {skill.importance}/5
                             </Badge>
                             {!isCompleted && (
