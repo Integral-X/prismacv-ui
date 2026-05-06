@@ -46,7 +46,9 @@ export default function SignupPage() {
             <div className='w-full border-t border-border-subtle' />
           </div>
           <div className='relative flex justify-center text-sm'>
-            <span className='px-4 bg-background text-content-tertiary'>Or</span>
+            <span className='px-4 bg-surface-card text-content-tertiary'>
+              Or
+            </span>
           </div>
         </div>
 
