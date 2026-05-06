@@ -50,7 +50,8 @@ function LoginPageClient() {
 
     // Redirect to the originally requested page or default
     // Prevent open redirect: must start with single slash and not be protocol-relative
-    const isSafePath = redirectTo &&
+    const isSafePath =
+      redirectTo &&
       redirectTo.startsWith('/') &&
       !redirectTo.startsWith('//') &&
       !redirectTo.startsWith('/\\');
