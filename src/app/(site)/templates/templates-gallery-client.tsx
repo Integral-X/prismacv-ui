@@ -52,6 +52,7 @@ export function TemplatesGalleryClient({
               variant={activeFilter === f.value ? 'default' : 'outline'}
               size='sm'
               onClick={() => setActiveFilter(f.value)}
+              aria-pressed={activeFilter === f.value}
             >
               {f.label}
             </Button>
@@ -66,7 +67,7 @@ export function TemplatesGalleryClient({
               className='group overflow-hidden rounded-lg border border-border-subtle bg-surface-card transition-all hover:shadow-lg'
             >
               {/* Thumbnail */}
-              <div className='relative aspect-[3/4] overflow-hidden bg-gray-100'>
+              <div className='relative aspect-[3/4] overflow-hidden bg-surface-elevated'>
                 <Image
                   src={template.thumbnail}
                   alt={`${template.name} template preview`}
