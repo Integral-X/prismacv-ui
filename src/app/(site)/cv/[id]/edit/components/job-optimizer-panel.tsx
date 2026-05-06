@@ -37,6 +37,8 @@ export function JobOptimizerPanel({ cvId, onClose }: JobOptimizerPanelProps) {
       });
       if (res.ok && res.data) {
         setResult(res.data);
+      } else if (res.ok && !res.data) {
+        toast.error('Analysis returned no data. Please try again.');
       } else if (!res.ok) {
         toast.error(res.message);
       }
@@ -46,19 +48,19 @@ export function JobOptimizerPanel({ cvId, onClose }: JobOptimizerPanelProps) {
   }
 
   function scoreColor(score: number) {
-    if (score >= 80) return 'text-green-600';
-    if (score >= 60) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 80) return 'text-feedback-success';
+    if (score >= 60) return 'text-feedback-warning';
+    return 'text-feedback-error';
   }
 
   function priorityIcon(priority: 'low' | 'medium' | 'high') {
     switch (priority) {
       case 'high':
-        return <AlertTriangle className='size-4 shrink-0 text-red-500' />;
+        return <AlertTriangle className='size-4 shrink-0 text-feedback-error' />;
       case 'medium':
-        return <AlertTriangle className='size-4 shrink-0 text-yellow-500' />;
+        return <AlertTriangle className='size-4 shrink-0 text-feedback-warning' />;
       case 'low':
-        return <CheckCircle2 className='size-4 shrink-0 text-blue-500' />;
+        return <CheckCircle2 className='size-4 shrink-0 text-feedback-info' />;
     }
   }
 
@@ -76,6 +78,8 @@ export function JobOptimizerPanel({ cvId, onClose }: JobOptimizerPanelProps) {
           size='icon'
           onClick={onClose}
           className='size-7'
+          aria-label='Close job match optimizer'
+          disabled={isLoading}
         >
           <X className='size-4' />
         </Button>
@@ -87,11 +91,13 @@ export function JobOptimizerPanel({ cvId, onClose }: JobOptimizerPanelProps) {
             Paste a job description to see how well your CV matches and get
             optimization suggestions.
           </p>
+          <label htmlFor='job-description' className='sr-only'>Job description</label>
           <textarea
+            id='job-description'
             value={jobDescription}
             onChange={(e) => setJobDescription(e.target.value)}
             placeholder='Paste the job description here...'
-            className='mb-3 h-32 w-full resize-none rounded-md border border-border-subtle bg-surface-page p-3 text-sm text-content-primary placeholder:text-content-muted focus:border-border-focus focus:outline-none'
+            className='mb-3 h-32 w-full resize-none rounded-md border border-border-subtle bg-surface-page p-3 text-sm text-content-primary placeholder:text-content-muted focus:border-border-interactive focus:outline-none'
           />
           <Button
             onClick={handleOptimize}
@@ -145,7 +151,7 @@ export function JobOptimizerPanel({ cvId, onClose }: JobOptimizerPanelProps) {
                 {result.missingKeywords.map((kw) => (
                   <span
                     key={kw}
-                    className='rounded-full bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700'
+                    className='rounded-full bg-feedback-error/10 px-2 py-0.5 text-xs font-medium text-feedback-error'
                   >
                     {kw}
                   </span>
@@ -161,9 +167,9 @@ export function JobOptimizerPanel({ cvId, onClose }: JobOptimizerPanelProps) {
                 Section Recommendations
               </h4>
               <ul className='space-y-2'>
-                {result.sectionRecommendations.map((rec, i) => (
+                {result.sectionRecommendations.map((rec) => (
                   <li
-                    key={i}
+                    key={`${rec.section}-${rec.action}-${rec.priority}`}
                     className='rounded-md border border-border-subtle bg-surface-page p-2'
                   >
                     <div className='flex items-start gap-2'>
@@ -195,9 +201,9 @@ export function JobOptimizerPanel({ cvId, onClose }: JobOptimizerPanelProps) {
                 Content Suggestions ({result.suggestions.length})
               </h4>
               <ul className='space-y-2'>
-                {result.suggestions.map((s, i) => (
+                {result.suggestions.map((s) => (
                   <li
-                    key={i}
+                    key={`${s.section}-${s.message.slice(0, 30)}`}
                     className='rounded-md border border-border-subtle bg-surface-page p-2'
                   >
                     <span className='text-xs font-medium text-content-primary'>
@@ -207,7 +213,7 @@ export function JobOptimizerPanel({ cvId, onClose }: JobOptimizerPanelProps) {
                       {s.message}
                     </p>
                     {s.suggestedText && (
-                      <p className='mt-1 rounded bg-green-50 px-1.5 py-0.5 text-xs text-green-800'>
+                      <p className='mt-1 rounded bg-feedback-success/10 px-1.5 py-0.5 text-xs text-feedback-success'>
                         {s.suggestedText}
                       </p>
                     )}
