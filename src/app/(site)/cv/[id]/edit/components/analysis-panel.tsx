@@ -13,10 +13,10 @@ interface AnalysisPanelProps {
 function ScoreRing({ score, label }: { score: number; label: string }) {
   const color =
     score >= 80
-      ? 'text-green-600'
+      ? 'text-feedback-success'
       : score >= 60
-        ? 'text-yellow-600'
-        : 'text-red-600';
+        ? 'text-feedback-warning'
+        : 'text-feedback-error';
 
   return (
     <div className='flex flex-col items-center gap-1'>
@@ -29,11 +29,11 @@ function ScoreRing({ score, label }: { score: number; label: string }) {
 function severityIcon(severity: CvIssue['severity']) {
   switch (severity) {
     case 'high':
-      return <AlertTriangle className='size-4 shrink-0 text-red-500' />;
+      return <AlertTriangle className='size-4 shrink-0 text-feedback-error' />;
     case 'medium':
-      return <AlertTriangle className='size-4 shrink-0 text-yellow-500' />;
+      return <AlertTriangle className='size-4 shrink-0 text-feedback-warning' />;
     case 'low':
-      return <Info className='size-4 shrink-0 text-blue-500' />;
+      return <Info className='size-4 shrink-0 text-feedback-info' />;
   }
 }
 
@@ -68,6 +68,7 @@ export function AnalysisPanel({ result, onClose }: AnalysisPanelProps) {
           size='icon'
           onClick={onClose}
           className='size-7'
+          aria-label='Close analysis panel'
         >
           <X className='size-4' />
         </Button>
@@ -108,7 +109,7 @@ export function AnalysisPanel({ result, onClose }: AnalysisPanelProps) {
                       {issue.message}
                     </p>
                     {issue.suggestion && (
-                      <p className='mt-1 text-xs italic text-green-700'>
+                      <p className='mt-1 text-xs italic text-feedback-success'>
                         Suggestion: {issue.suggestion}
                       </p>
                     )}
@@ -133,7 +134,7 @@ export function AnalysisPanel({ result, onClose }: AnalysisPanelProps) {
                 className='rounded-md border border-border-subtle bg-surface-page p-2'
               >
                 <div className='flex items-start gap-2'>
-                  <CheckCircle2 className='size-4 shrink-0 text-green-500' />
+                  <CheckCircle2 className='size-4 shrink-0 text-feedback-success' />
                   <div className='min-w-0 flex-1'>
                     <span className='text-xs font-medium text-content-primary'>
                       {s.section}
@@ -142,7 +143,7 @@ export function AnalysisPanel({ result, onClose }: AnalysisPanelProps) {
                       {s.message}
                     </p>
                     {s.suggestedText && (
-                      <p className='mt-1 rounded bg-green-50 px-1.5 py-0.5 text-xs text-green-800'>
+                      <p className='mt-1 rounded bg-feedback-success/10 px-1.5 py-0.5 text-xs text-feedback-success'>
                         {s.suggestedText}
                       </p>
                     )}
@@ -155,9 +156,9 @@ export function AnalysisPanel({ result, onClose }: AnalysisPanelProps) {
       )}
 
       {!hasIssues && !hasSuggestions && (
-        <div className='flex items-center gap-2 rounded-md bg-green-50 p-3'>
-          <CheckCircle2 className='size-5 text-green-600' />
-          <p className='text-sm text-green-800'>
+        <div className='flex items-center gap-2 rounded-md bg-feedback-success/10 p-3'>
+          <CheckCircle2 className='size-5 text-feedback-success' />
+          <p className='text-sm text-feedback-success'>
             Your CV looks great! No issues found.
           </p>
         </div>
