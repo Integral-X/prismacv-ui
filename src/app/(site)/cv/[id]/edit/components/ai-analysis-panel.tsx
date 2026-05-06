@@ -29,9 +29,9 @@ const SEVERITY_ICON = {
 } as const;
 
 const SEVERITY_COLOR = {
-  high: 'text-red-600',
-  medium: 'text-yellow-600',
-  low: 'text-green-600',
+  high: 'text-feedback-error',
+  medium: 'text-feedback-warning',
+  low: 'text-feedback-success',
 } as const;
 
 export function AiAnalysisPanel({ cvId, onClose }: AiAnalysisPanelProps) {
@@ -43,6 +43,8 @@ export function AiAnalysisPanel({ cvId, onClose }: AiAnalysisPanelProps) {
       const response = await analyzeCvAction(cvId);
       if (response.ok && response.data) {
         setResult(response.data);
+      } else if (response.ok && !response.data) {
+        toast.error('Analysis returned no data. Please try again.');
       } else if (!response.ok) {
         toast.error(response.message);
       }
@@ -50,9 +52,9 @@ export function AiAnalysisPanel({ cvId, onClose }: AiAnalysisPanelProps) {
   }
 
   function getScoreColor(score: number): string {
-    if (score >= 80) return 'text-green-600';
-    if (score >= 60) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 80) return 'text-feedback-success';
+    if (score >= 60) return 'text-feedback-warning';
+    return 'text-feedback-error';
   }
 
   return (
@@ -79,7 +81,7 @@ export function AiAnalysisPanel({ cvId, onClose }: AiAnalysisPanelProps) {
             )}
             {result ? 'Re-analyze' : 'Analyze CV'}
           </Button>
-          <Button variant='ghost' size='icon' onClick={onClose}>
+          <Button variant='ghost' size='icon' onClick={onClose} aria-label='Close AI analysis'>
             <X className='size-4' />
           </Button>
         </div>
@@ -189,7 +191,7 @@ export function AiAnalysisPanel({ cvId, onClose }: AiAnalysisPanelProps) {
                         {suggestion.message}
                       </p>
                       {suggestion.suggestedText && (
-                        <p className='mt-1 rounded bg-green-50 p-1.5 text-xs text-green-800'>
+                        <p className='mt-1 rounded bg-feedback-success/10 p-1.5 text-xs text-feedback-success'>
                           {suggestion.suggestedText}
                         </p>
                       )}

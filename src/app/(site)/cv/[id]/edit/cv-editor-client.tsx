@@ -26,6 +26,8 @@ import { LanguagesForm } from './components/languages-form';
 import { CvPreviewPanel } from '@/modules/cv/components/cv-preview-panel';
 import { AiAnalysisPanel } from './components/ai-analysis-panel';
 import { AiOptimizePanel } from './components/ai-optimize-panel';
+import { Button } from '@/components/ui/button';
+import { Sparkles, Target } from 'lucide-react';
 
 interface CvEditorClientProps {
   cv: Cv;
@@ -199,22 +201,22 @@ export function CvEditorClient({ cv: initialCv }: CvEditorClientProps) {
             <div className='sticky top-20 space-y-4'>
               {!showAiPanel && !showOptimizePanel && (
                 <div className='flex gap-2'>
-                  <button
-                    type='button'
+                  <Button
+                    variant='outline'
                     onClick={() => setShowAiPanel(true)}
-                    className='flex flex-1 items-center justify-center gap-2 rounded-lg border border-dashed border-border-subtle p-3 text-sm text-content-secondary transition-colors hover:border-brand-primary hover:text-brand-primary'
+                    className='flex flex-1 items-center justify-center gap-2 border-dashed'
                   >
-                    <span className='size-4'>✨</span>
+                    <Sparkles className='size-4' />
                     Analyze
-                  </button>
-                  <button
-                    type='button'
+                  </Button>
+                  <Button
+                    variant='outline'
                     onClick={() => setShowOptimizePanel(true)}
-                    className='flex flex-1 items-center justify-center gap-2 rounded-lg border border-dashed border-border-subtle p-3 text-sm text-content-secondary transition-colors hover:border-brand-primary hover:text-brand-primary'
+                    className='flex flex-1 items-center justify-center gap-2 border-dashed'
                   >
-                    <span className='size-4'>🎯</span>
+                    <Target className='size-4' />
                     Optimize
-                  </button>
+                  </Button>
                 </div>
               )}
               {showAiPanel && (

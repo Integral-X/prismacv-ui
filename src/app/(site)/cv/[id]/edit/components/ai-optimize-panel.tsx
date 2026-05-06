@@ -34,6 +34,8 @@ export function AiOptimizePanel({ cvId, onClose }: AiOptimizePanelProps) {
       });
       if (response.ok && response.data) {
         setResult(response.data);
+      } else if (response.ok && !response.data) {
+        toast.error('Optimization returned no data. Please try again.');
       } else if (!response.ok) {
         toast.error(response.message);
       }
@@ -50,7 +52,7 @@ export function AiOptimizePanel({ cvId, onClose }: AiOptimizePanelProps) {
             Job Optimizer
           </h3>
         </div>
-        <Button variant='ghost' size='icon' onClick={onClose}>
+        <Button variant='ghost' size='icon' onClick={onClose} aria-label='Close job optimizer'>
           <X className='size-4' />
         </Button>
       </div>
@@ -61,12 +63,14 @@ export function AiOptimizePanel({ cvId, onClose }: AiOptimizePanelProps) {
           placeholder='Job title (e.g. Senior React Developer)'
           value={jobTitle}
           onChange={(e) => setJobTitle(e.target.value)}
+          aria-label='Job title'
         />
         <Textarea
           placeholder='Paste job description here…'
           rows={4}
           value={jobDescription}
           onChange={(e) => setJobDescription(e.target.value)}
+          aria-label='Job description'
         />
         <Button
           className='w-full'
@@ -96,10 +100,10 @@ export function AiOptimizePanel({ cvId, onClose }: AiOptimizePanelProps) {
                 className={cn(
                   'text-lg font-bold',
                   result.matchScore >= 80
-                    ? 'text-green-600'
+                    ? 'text-feedback-success'
                     : result.matchScore >= 60
-                      ? 'text-yellow-600'
-                      : 'text-red-600'
+                      ? 'text-feedback-warning'
+                      : 'text-feedback-error'
                 )}
               >
                 {result.matchScore}%
@@ -182,7 +186,7 @@ export function AiOptimizePanel({ cvId, onClose }: AiOptimizePanelProps) {
                   >
                     <p className='text-xs text-content-primary'>{s.message}</p>
                     {s.suggestedText && (
-                      <p className='mt-1 rounded bg-green-50 p-1.5 text-xs text-green-800'>
+                      <p className='mt-1 rounded bg-feedback-success/10 p-1.5 text-xs text-feedback-success'>
                         {s.suggestedText}
                       </p>
                     )}
