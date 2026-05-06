@@ -26,6 +26,7 @@ export async function updateSkillProgressAction(
   try {
     const progress = await updateSkillProgress(input);
     revalidatePath('/skills');
+    revalidatePath('/skills/roadmap');
 
     return { ok: true, data: progress, message: 'Progress updated.' };
   } catch (error) {

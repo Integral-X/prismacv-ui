@@ -98,12 +98,12 @@ export function SkillsPageClient({ categories, roles }: SkillsPageClientProps) {
             Assess your skills and discover career growth paths
           </p>
         </div>
-        <Link href='/skills/roadmap'>
-          <Button variant='outline'>
+        <Button variant='outline' asChild>
+          <Link href='/skills/roadmap'>
             <Map className='size-4' />
             Learning Roadmap
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       </div>
 
       {/* Categories overview */}

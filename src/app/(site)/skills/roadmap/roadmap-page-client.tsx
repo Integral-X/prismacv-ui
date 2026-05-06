@@ -47,10 +47,15 @@ export function RoadmapPageClient({
 
   function handleLoadRoadmap(role: string) {
     setSelectedRole(role);
+    const requestedRole = role;
     startTransition(async () => {
-      const result = await fetchRoadmapAction(role);
+      const result = await fetchRoadmapAction(requestedRole);
       if (result.ok && result.data) {
-        setRoadmap(result.data);
+        // Only apply if this is still the selected role (guard against race)
+        setSelectedRole((current) => {
+          if (current === requestedRole) setRoadmap(result.data!);
+          return current;
+        });
       } else if (!result.ok) {
         toast.error(result.message);
       }
@@ -88,7 +93,7 @@ export function RoadmapPageClient({
     return p?.status ?? 'not_started';
   }
 
-  const completionPercent = roadmap
+  const completionPercent = roadmap && roadmap.totalSkills > 0
     ? Math.round((roadmap.completedSkills / roadmap.totalSkills) * 100)
     : 0;
 
@@ -97,11 +102,11 @@ export function RoadmapPageClient({
       <div className='mx-auto max-w-5xl px-4 py-8'>
         {/* Header */}
         <div className='mb-6 flex items-center gap-3'>
-          <Link href='/skills'>
-            <Button variant='ghost' size='icon'>
+          <Button variant='ghost' size='icon' aria-label='Back to skills' asChild>
+            <Link href='/skills'>
               <ArrowLeft className='size-4' />
-            </Button>
-          </Link>
+            </Link>
+          </Button>
           <div className='flex-1'>
             <h1 className='text-2xl font-bold text-content-primary'>
               Learning Roadmap
@@ -183,7 +188,7 @@ export function RoadmapPageClient({
                             className='flex items-center gap-3 rounded-md border border-border-subtle p-3'
                           >
                             {isCompleted ? (
-                              <CheckCircle2 className='size-5 text-green-600' />
+                              <CheckCircle2 className='size-5 text-feedback-success' />
                             ) : (
                               <Circle className='size-5 text-content-tertiary' />
                             )}
@@ -256,7 +261,7 @@ export function RoadmapPageClient({
                     className='flex items-center gap-2 rounded-md border border-border-subtle p-2'
                   >
                     {p.status === 'completed' ? (
-                      <CheckCircle2 className='size-4 text-green-600' />
+                      <CheckCircle2 className='size-4 text-feedback-success' />
                     ) : (
                       <Circle className='size-4 text-content-tertiary' />
                     )}
