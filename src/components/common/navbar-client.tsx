@@ -112,12 +112,11 @@ export function NavbarClient({ currentUser }: NavbarClientProps) {
               </Button>
             ) : null}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
-              <SheetTrigger className='px-2'>
+              <SheetTrigger className='px-2' aria-label='Open navigation menu'>
                 <Menu
                   className='flex h-5 w-5'
                   onClick={() => setIsOpen(true)}
                 />
-                <span className='sr-only'>Menu Icon</span>
               </SheetTrigger>
 
               <SheetContent side={'left'}>
