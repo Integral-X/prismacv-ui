@@ -92,7 +92,7 @@ export function ImportLinkedInPageClient() {
           <div className='flex flex-col sm:flex-row gap-4 justify-center items-center px-4'>
             <Button
               onClick={handleContinue}
-              disabled={!importedUrl}
+              disabled={!importedUrl || !importId}
               className='bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 rounded-md text-base font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto'
             >
               Continue

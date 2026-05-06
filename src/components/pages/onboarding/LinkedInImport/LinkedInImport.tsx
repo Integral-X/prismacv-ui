@@ -71,6 +71,10 @@ export const LinkedInImport = ({
         setState('success');
         onImport?.(normalizedUrl, importId);
       } catch (error) {
+        if (errorResetTimeoutRef.current !== null) {
+          clearTimeout(errorResetTimeoutRef.current);
+          errorResetTimeoutRef.current = null;
+        }
         setState('error');
         setErrorMessage(
           error instanceof Error
