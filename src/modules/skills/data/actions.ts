@@ -4,7 +4,8 @@ import { revalidatePath } from 'next/cache';
 import { type ActionResult, toFailureResult } from '@/shared/action-result';
 import type { AssessSkillsRequest, UpdateProgressRequest } from './contracts';
 import { assessSkills, updateSkillProgress } from './mutations';
-import type { SkillGapResult, UserSkillProgress } from './mappers';
+import type { SkillGapResult, UserSkillProgress, LearningRoadmap } from './mappers';
+import { getLearningRoadmap } from './queries';
 
 // ─── Skills actions ─────────────────────────────────────────────────────────
 
@@ -29,5 +30,16 @@ export async function updateSkillProgressAction(
     return { ok: true, data: progress, message: 'Progress updated.' };
   } catch (error) {
     return toFailureResult(error, 'Unable to update your progress.');
+  }
+}
+
+export async function fetchRoadmapAction(
+  role: string
+): Promise<ActionResult<LearningRoadmap>> {
+  try {
+    const roadmap = await getLearningRoadmap(role);
+    return { ok: true, data: roadmap };
+  } catch (error) {
+    return toFailureResult(error, 'Unable to load roadmap.');
   }
 }

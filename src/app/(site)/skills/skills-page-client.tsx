@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { BarChart3, BookOpen, Target, TrendingUp } from 'lucide-react';
+import Link from 'next/link';
+import { BarChart3, BookOpen, Map, Target, TrendingUp } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
@@ -90,11 +91,19 @@ export function SkillsPageClient({ categories, roles }: SkillsPageClientProps) {
 
   return (
     <main className='container mx-auto py-8 px-4'>
-      <div className='mb-8'>
-        <h1 className='text-3xl font-bold'>Skills Analysis</h1>
-        <p className='text-muted-foreground mt-1'>
-          Assess your skills and discover career growth paths
-        </p>
+      <div className='mb-8 flex items-center justify-between'>
+        <div>
+          <h1 className='text-3xl font-bold'>Skills Analysis</h1>
+          <p className='text-muted-foreground mt-1'>
+            Assess your skills and discover career growth paths
+          </p>
+        </div>
+        <Link href='/skills/roadmap'>
+          <Button variant='outline'>
+            <Map className='size-4' />
+            Learning Roadmap
+          </Button>
+        </Link>
       </div>
 
       {/* Categories overview */}
