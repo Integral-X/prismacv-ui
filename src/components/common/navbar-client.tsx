@@ -60,6 +60,10 @@ const authenticatedRouteList: RouteProps[] = [
     label: 'Jobs',
   },
   {
+    href: '/cover-letters',
+    label: 'Cover Letters',
+  },
+  {
     href: '/skills',
     label: 'Skills',
   },
