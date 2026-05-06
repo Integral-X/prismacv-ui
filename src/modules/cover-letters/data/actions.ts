@@ -1,7 +1,6 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { HttpError } from '@/shared/http/http-error';
 import type {
   CreateCoverLetterRequest,
   UpdateCoverLetterRequest,
@@ -15,38 +14,7 @@ import {
   generateCoverLetter,
 } from './mutations';
 import type { CoverLetter } from './mappers';
-
-// ─── Action result types ──────────────────────────────────────────────────────
-
-type ActionCode = 'not_found' | 'forbidden' | 'unauthorized' | 'unknown';
-
-interface ActionSuccess<T = undefined> {
-  ok: true;
-  data?: T;
-}
-
-interface ActionFailure {
-  ok: false;
-  code: ActionCode;
-  message: string;
-}
-
-type ActionResult<T = undefined> = ActionSuccess<T> | ActionFailure;
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function toFailureResult(error: unknown, fallback: string): ActionFailure {
-  if (error instanceof HttpError) {
-    const message = error.serverMessage ?? error.message;
-
-    if (error.isNotFound) return { ok: false, code: 'not_found', message };
-    if (error.isForbidden) return { ok: false, code: 'forbidden', message };
-    if (error.isUnauthorized)
-      return { ok: false, code: 'unauthorized', message };
-  }
-
-  return { ok: false, code: 'unknown', message: fallback };
-}
+import { type ActionResult, toFailureResult } from '@/shared/action-result';
 
 // ─── Actions ──────────────────────────────────────────────────────────────────
 

@@ -9,6 +9,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import type { CoverLetter } from '@/modules/cover-letters/data/mappers';
 import {
   updateCoverLetterAction,
@@ -85,13 +92,14 @@ export function CoverLetterEditorClient({
         <div className='mx-auto flex max-w-5xl items-center justify-between'>
           <div className='flex items-center gap-3'>
             <Link href='/cover-letters'>
-              <Button variant='ghost' size='icon'>
+              <Button variant='ghost' size='icon' aria-label='Back to cover letters'>
                 <ArrowLeft className='size-4' />
               </Button>
             </Link>
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              aria-label='Cover letter title'
               className='h-8 w-64 border-none bg-transparent text-lg font-semibold focus-visible:ring-1'
             />
           </div>
@@ -163,16 +171,16 @@ export function CoverLetterEditorClient({
                 </div>
                 <div>
                   <Label htmlFor='tone'>Tone</Label>
-                  <select
-                    id='tone'
-                    value={tone}
-                    onChange={(e) => setTone(e.target.value)}
-                    className='mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm'
-                  >
-                    <option value='professional'>Professional</option>
-                    <option value='casual'>Casual</option>
-                    <option value='enthusiastic'>Enthusiastic</option>
-                  </select>
+                  <Select value={tone} onValueChange={setTone}>
+                    <SelectTrigger id='tone' className='mt-1 w-full'>
+                      <SelectValue placeholder='Select tone' />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value='professional'>Professional</SelectItem>
+                      <SelectItem value='casual'>Casual</SelectItem>
+                      <SelectItem value='enthusiastic'>Enthusiastic</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
             </div>

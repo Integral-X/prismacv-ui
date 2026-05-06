@@ -8,40 +8,8 @@ import type {
   UpdateCoverLetterRequest,
   GenerateCoverLetterRequest,
   GeneratedCoverLetterResponseContract,
-  PaginatedCoverLettersContract,
 } from './contracts';
 import { toCoverLetter, type CoverLetter } from './mappers';
-
-// ─── Queries ──────────────────────────────────────────────────────────────────
-
-export async function fetchCoverLetters(
-  page = 1,
-  limit = 20
-): Promise<{ data: CoverLetter[]; total: number; totalPages: number }> {
-  return executeAuthenticatedRequest(async (headers) => {
-    const contract = await apiClient.get<PaginatedCoverLettersContract>(
-      `cover-letters?page=${page}&limit=${limit}`,
-      { headers }
-    );
-
-    return {
-      data: contract.data.map(toCoverLetter),
-      total: contract.total,
-      totalPages: contract.totalPages,
-    };
-  });
-}
-
-export async function fetchCoverLetter(id: string): Promise<CoverLetter> {
-  return executeAuthenticatedRequest(async (headers) => {
-    const contract = await apiClient.get<CoverLetterResponseContract>(
-      `cover-letters/${id}`,
-      { headers }
-    );
-
-    return toCoverLetter(contract);
-  });
-}
 
 // ─── Mutations ────────────────────────────────────────────────────────────────
 
@@ -63,7 +31,7 @@ export async function updateCoverLetter(
   body: UpdateCoverLetterRequest
 ): Promise<CoverLetter> {
   return executeAuthenticatedRequest(async (headers) => {
-    const contract = await apiClient.put<
+    const contract = await apiClient.patch<
       CoverLetterResponseContract,
       UpdateCoverLetterRequest
     >(`cover-letters/${id}`, body, { headers });

@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { fetchCoverLetter } from '@/modules/cover-letters/data/mutations';
+import { fetchCoverLetter } from '@/modules/cover-letters/data/queries';
 import { CoverLetterEditorClient } from './cover-letter-editor-client';
 
 export const dynamic = 'force-dynamic';

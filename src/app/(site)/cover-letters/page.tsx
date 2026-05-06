@@ -1,4 +1,4 @@
-import { fetchCoverLetters } from '@/modules/cover-letters/data/mutations';
+import { fetchCoverLetters } from '@/modules/cover-letters/data/queries';
 import { CoverLettersPageClient } from './cover-letters-page-client';
 
 export const dynamic = 'force-dynamic';
