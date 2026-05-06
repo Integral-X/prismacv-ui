@@ -31,7 +31,9 @@ function severityIcon(severity: CvIssue['severity']) {
     case 'high':
       return <AlertTriangle className='size-4 shrink-0 text-feedback-error' />;
     case 'medium':
-      return <AlertTriangle className='size-4 shrink-0 text-feedback-warning' />;
+      return (
+        <AlertTriangle className='size-4 shrink-0 text-feedback-warning' />
+      );
     case 'low':
       return <Info className='size-4 shrink-0 text-feedback-info' />;
   }
