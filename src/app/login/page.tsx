@@ -49,7 +49,12 @@ function LoginPageClient() {
     }
 
     // Redirect to the originally requested page or default
-    const destination = redirectTo && redirectTo.startsWith('/')
+    // Prevent open redirect: must start with single slash and not be protocol-relative
+    const isSafePath = redirectTo &&
+      redirectTo.startsWith('/') &&
+      !redirectTo.startsWith('//') &&
+      !redirectTo.startsWith('/\\');
+    const destination = isSafePath
       ? redirectTo
       : (result.redirectTo ?? '/dashboard');
     router.push(destination);
@@ -83,7 +88,7 @@ function LoginPageClient() {
 
 export default function LoginPage() {
   return (
-    <Suspense>
+    <Suspense fallback={null}>
       <LoginPageClient />
     </Suspense>
   );
