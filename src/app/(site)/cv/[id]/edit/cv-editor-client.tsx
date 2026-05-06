@@ -13,8 +13,6 @@ import type {
   Language,
 } from '@/modules/cv/data/mappers';
 import { updateCvAction, exportCvPdfAction } from '@/modules/cv/data/actions';
-import { analyzeCvAction } from '@/modules/ai/data/actions';
-import type { CvAnalysisResult } from '@/modules/ai/data/mappers';
 import type { UpdateCvRequest } from '@/modules/cv/data/contracts';
 import { EditorHeader } from './components/editor-header';
 import { SectionWrapper } from './components/section-wrapper';
@@ -26,8 +24,8 @@ import { CertificationsForm } from './components/certifications-form';
 import { ProjectsForm } from './components/projects-form';
 import { LanguagesForm } from './components/languages-form';
 import { CvPreviewPanel } from '@/modules/cv/components/cv-preview-panel';
-import { AnalysisPanel } from './components/analysis-panel';
-import { JobOptimizerPanel } from './components/job-optimizer-panel';
+import { AiAnalysisPanel } from './components/ai-analysis-panel';
+import { AiOptimizePanel } from './components/ai-optimize-panel';
 
 interface CvEditorClientProps {
   cv: Cv;
@@ -36,11 +34,8 @@ interface CvEditorClientProps {
 export function CvEditorClient({ cv: initialCv }: CvEditorClientProps) {
   const [cv, setCv] = useState<Cv>(initialCv);
   const [isPending, startTransition] = useTransition();
-  const [analysisResult, setAnalysisResult] = useState<CvAnalysisResult | null>(
-    null
-  );
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [showJobOptimizer, setShowJobOptimizer] = useState(false);
+  const [showAiPanel, setShowAiPanel] = useState(false);
+  const [showOptimizePanel, setShowOptimizePanel] = useState(false);
 
   function handleTitleChange(title: string) {
     startTransition(async () => {
@@ -93,20 +88,6 @@ export function CvEditorClient({ cv: initialCv }: CvEditorClientProps) {
     });
   }
 
-  async function handleAnalyze() {
-    setIsAnalyzing(true);
-    try {
-      const result = await analyzeCvAction(cv.id);
-      if (result.ok && result.data) {
-        setAnalysisResult(result.data);
-      } else if (!result.ok) {
-        toast.error(result.message);
-      }
-    } finally {
-      setIsAnalyzing(false);
-    }
-  }
-
   function handlePersonalInfoSaved(data: PersonalInfo) {
     setCv((prev) => ({ ...prev, personalInfo: data }));
   }
@@ -142,30 +123,13 @@ export function CvEditorClient({ cv: initialCv }: CvEditorClientProps) {
         onTitleChange={handleTitleChange}
         onStatusToggle={handleStatusToggle}
         onExport={handleExport}
-        onAnalyze={handleAnalyze}
-        onJobMatch={() => setShowJobOptimizer((v) => !v)}
         isPending={isPending}
-        isAnalyzing={isAnalyzing}
       />
 
       <div className='mx-auto max-w-7xl px-4 py-6'>
         <div className='grid grid-cols-1 gap-6 lg:grid-cols-3'>
           {/* Left panel — forms */}
           <div className='space-y-4 lg:col-span-2'>
-            {analysisResult && (
-              <AnalysisPanel
-                result={analysisResult}
-                onClose={() => setAnalysisResult(null)}
-              />
-            )}
-
-            {showJobOptimizer && (
-              <JobOptimizerPanel
-                cvId={cv.id}
-                onClose={() => setShowJobOptimizer(false)}
-              />
-            )}
-
             <SectionWrapper
               title='Personal Info'
               count={cv.personalInfo ? 1 : 0}
@@ -230,9 +194,41 @@ export function CvEditorClient({ cv: initialCv }: CvEditorClientProps) {
             </SectionWrapper>
           </div>
 
-          {/* Right panel — live preview */}
+          {/* Right panel — AI analysis & live preview */}
           <div className='lg:col-span-1'>
-            <div className='sticky top-20'>
+            <div className='sticky top-20 space-y-4'>
+              {!showAiPanel && !showOptimizePanel && (
+                <div className='flex gap-2'>
+                  <button
+                    type='button'
+                    onClick={() => setShowAiPanel(true)}
+                    className='flex flex-1 items-center justify-center gap-2 rounded-lg border border-dashed border-border-subtle p-3 text-sm text-content-secondary transition-colors hover:border-brand-primary hover:text-brand-primary'
+                  >
+                    <span className='size-4'>✨</span>
+                    Analyze
+                  </button>
+                  <button
+                    type='button'
+                    onClick={() => setShowOptimizePanel(true)}
+                    className='flex flex-1 items-center justify-center gap-2 rounded-lg border border-dashed border-border-subtle p-3 text-sm text-content-secondary transition-colors hover:border-brand-primary hover:text-brand-primary'
+                  >
+                    <span className='size-4'>🎯</span>
+                    Optimize
+                  </button>
+                </div>
+              )}
+              {showAiPanel && (
+                <AiAnalysisPanel
+                  cvId={cv.id}
+                  onClose={() => setShowAiPanel(false)}
+                />
+              )}
+              {showOptimizePanel && (
+                <AiOptimizePanel
+                  cvId={cv.id}
+                  onClose={() => setShowOptimizePanel(false)}
+                />
+              )}
               <CvPreviewPanel cv={cv} />
             </div>
           </div>
