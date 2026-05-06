@@ -286,20 +286,20 @@ export function JobDetailClient({ job: initialJob }: JobDetailClientProps) {
                 Update Status
               </h3>
               <div className='flex flex-col gap-2'>
-                {(
-                  Object.entries(STATUS_LABELS) as [JobStatus, string][]
-                ).map(([status, label]) => (
-                  <Button
-                    key={status}
-                    variant={job.status === status ? 'default' : 'outline'}
-                    size='sm'
-                    onClick={() => handleStatusChange(status)}
-                    disabled={isPending || job.status === status}
-                    className='justify-start'
-                  >
-                    {label}
-                  </Button>
-                ))}
+                {(Object.entries(STATUS_LABELS) as [JobStatus, string][]).map(
+                  ([status, label]) => (
+                    <Button
+                      key={status}
+                      variant={job.status === status ? 'default' : 'outline'}
+                      size='sm'
+                      onClick={() => handleStatusChange(status)}
+                      disabled={isPending || job.status === status}
+                      className='justify-start'
+                    >
+                      {label}
+                    </Button>
+                  )
+                )}
               </div>
             </div>
           </div>
