@@ -21,7 +21,9 @@ export const LinkedInImportProgress = ({
           </div>
           <div className='w-full max-w-xs'>
             <div className='flex justify-between text-sm mb-2'>
-              <span className='text-content-secondary'>Importing profile...</span>
+              <span className='text-content-secondary'>
+                Importing profile...
+              </span>
               <span className='text-primary font-medium'>{progress}%</span>
             </div>
             <div className='w-full h-2 bg-border rounded-full overflow-hidden'>

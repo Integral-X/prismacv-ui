@@ -95,7 +95,9 @@ export const TemplateFilters = ({
             <Columns
               className={cn(
                 'w-4 h-4',
-                layoutFilter === 'two-column' ? 'text-white' : 'text-content-muted'
+                layoutFilter === 'two-column'
+                  ? 'text-white'
+                  : 'text-content-muted'
               )}
             />
             <span>Two Column</span>

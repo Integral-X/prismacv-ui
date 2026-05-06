@@ -105,7 +105,9 @@ export const FileUploadDropzone = ({
             {state === 'error' ? (
               <p className='text-sm text-red-600'>{errorMessage}</p>
             ) : (
-              <p className='text-sm text-content-secondary'>or click to browse</p>
+              <p className='text-sm text-content-secondary'>
+                or click to browse
+              </p>
             )}
           </div>
 
