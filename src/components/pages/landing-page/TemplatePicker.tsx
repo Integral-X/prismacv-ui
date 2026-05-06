@@ -97,13 +97,20 @@ export const TemplatePicker = () => {
                 key={index}
                 onClick={() => api?.scrollTo(index)}
                 className={cn(
-                  'w-4 h-4 rounded-full cursor-pointer transition-all duration-300',
-                  current === index
-                    ? 'bg-primary'
-                    : 'bg-border hover:bg-border-strong'
+                  'min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer'
                 )}
                 aria-label={`Go to slide ${index + 1}`}
-              />
+                aria-current={current === index ? 'true' : undefined}
+              >
+                <span
+                  className={cn(
+                    'w-3 h-3 rounded-full transition-all duration-300',
+                    current === index
+                      ? 'bg-primary scale-125'
+                      : 'bg-border hover:bg-border-strong'
+                  )}
+                />
+              </button>
             ))}
           </div>
 

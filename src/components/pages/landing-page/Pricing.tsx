@@ -111,9 +111,14 @@ export const Pricing = () => {
 
           {/* Toggle Switch */}
           <div className='flex items-center justify-center relative'>
-            <div className='inline-flex items-center bg-surface-page rounded-full p-1'>
+            <div
+              className='inline-flex items-center bg-surface-page rounded-full p-1'
+              role='group'
+              aria-label='Billing period'
+            >
               <button
                 onClick={() => setIsYearly(false)}
+                aria-pressed={!isYearly}
                 className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
                   !isYearly
                     ? 'bg-surface-card text-content-primary shadow-sm'
@@ -124,9 +129,10 @@ export const Pricing = () => {
               </button>
               <button
                 onClick={() => setIsYearly(true)}
+                aria-pressed={isYearly}
                 className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
                   isYearly
-                    ? 'bg-primary text-white shadow-sm'
+                    ? 'bg-primary text-content-inverse shadow-sm'
                     : 'bg-transparent text-content-secondary'
                 }`}
               >
@@ -194,8 +200,8 @@ export const Pricing = () => {
               <Button
                 className={`w-full mb-8 py-6 rounded-lg text-base font-medium transition-all ${
                   tier.featured
-                    ? 'bg-white text-primary hover:bg-surface-page'
-                    : 'bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-white'
+                    ? 'bg-surface-card text-primary hover:bg-surface-page'
+                    : 'bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-content-inverse'
                 }`}
                 asChild
               >

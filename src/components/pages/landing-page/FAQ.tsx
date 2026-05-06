@@ -72,6 +72,8 @@ export const FAQ = () => {
               >
                 <button
                   onClick={() => toggleFAQ(index)}
+                  aria-expanded={openIndex === index}
+                  aria-controls={`faq-answer-${index}`}
                   className='w-full px-6 py-4 flex items-center justify-between text-left bg-surface-card hover:bg-surface-page transition-colors cursor-pointer'
                 >
                   <span className='text-base md:text-lg font-medium pr-4'>
@@ -100,6 +102,9 @@ export const FAQ = () => {
                   </div>
                 </button>
                 <div
+                  id={`faq-answer-${index}`}
+                  role='region'
+                  aria-hidden={openIndex !== index}
                   className={`grid transition-all duration-300 ease-in-out ${
                     openIndex === index
                       ? 'grid-rows-[1fr] opacity-100'
