@@ -27,6 +27,7 @@ import { ProjectsForm } from './components/projects-form';
 import { LanguagesForm } from './components/languages-form';
 import { CvPreviewPanel } from '@/modules/cv/components/cv-preview-panel';
 import { AnalysisPanel } from './components/analysis-panel';
+import { JobOptimizerPanel } from './components/job-optimizer-panel';
 
 interface CvEditorClientProps {
   cv: Cv;
@@ -39,6 +40,7 @@ export function CvEditorClient({ cv: initialCv }: CvEditorClientProps) {
     null
   );
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [showJobOptimizer, setShowJobOptimizer] = useState(false);
 
   function handleTitleChange(title: string) {
     startTransition(async () => {
@@ -141,6 +143,7 @@ export function CvEditorClient({ cv: initialCv }: CvEditorClientProps) {
         onStatusToggle={handleStatusToggle}
         onExport={handleExport}
         onAnalyze={handleAnalyze}
+        onJobMatch={() => setShowJobOptimizer((v) => !v)}
         isPending={isPending}
         isAnalyzing={isAnalyzing}
       />
@@ -153,6 +156,13 @@ export function CvEditorClient({ cv: initialCv }: CvEditorClientProps) {
               <AnalysisPanel
                 result={analysisResult}
                 onClose={() => setAnalysisResult(null)}
+              />
+            )}
+
+            {showJobOptimizer && (
+              <JobOptimizerPanel
+                cvId={cv.id}
+                onClose={() => setShowJobOptimizer(false)}
               />
             )}
 

@@ -6,7 +6,7 @@ import type { Cv } from '@/modules/cv/data/mappers';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { ArrowLeft, Download, Loader2, Pencil, SpellCheck } from 'lucide-react';
+import { ArrowLeft, Download, Loader2, Pencil, SpellCheck, Target } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface EditorHeaderProps {
@@ -15,8 +15,10 @@ interface EditorHeaderProps {
   onStatusToggle: () => void;
   onExport: () => void;
   onAnalyze: () => void;
+  onJobMatch: () => void;
   isPending: boolean;
   isAnalyzing?: boolean;
+  isOptimizing?: boolean;
 }
 
 export function EditorHeader({
@@ -25,8 +27,10 @@ export function EditorHeader({
   onStatusToggle,
   onExport,
   onAnalyze,
+  onJobMatch,
   isPending,
   isAnalyzing,
+  isOptimizing,
 }: EditorHeaderProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [titleDraft, setTitleDraft] = useState(cv.title);
@@ -123,6 +127,20 @@ export function EditorHeader({
               <SpellCheck className='size-4' />
             )}
             Check Content
+          </Button>
+
+          <Button
+            variant='outline'
+            size='sm'
+            onClick={onJobMatch}
+            disabled={isPending || isOptimizing}
+          >
+            {isOptimizing ? (
+              <Loader2 className='size-4 animate-spin' />
+            ) : (
+              <Target className='size-4' />
+            )}
+            Job Match
           </Button>
 
           <Button
