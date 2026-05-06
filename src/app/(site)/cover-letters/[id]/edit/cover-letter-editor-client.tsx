@@ -92,7 +92,11 @@ export function CoverLetterEditorClient({
         <div className='mx-auto flex max-w-5xl items-center justify-between'>
           <div className='flex items-center gap-3'>
             <Link href='/cover-letters'>
-              <Button variant='ghost' size='icon' aria-label='Back to cover letters'>
+              <Button
+                variant='ghost'
+                size='icon'
+                aria-label='Back to cover letters'
+              >
                 <ArrowLeft className='size-4' />
               </Button>
             </Link>

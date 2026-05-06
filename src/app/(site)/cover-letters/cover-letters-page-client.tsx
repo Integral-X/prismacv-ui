@@ -96,7 +96,12 @@ export function CoverLettersPageClient({
                 </h3>
                 <div className='flex gap-1'>
                   <Link href={`/cover-letters/${cl.id}/edit`}>
-                    <Button variant='ghost' size='icon' className='size-7' aria-label='Edit cover letter'>
+                    <Button
+                      variant='ghost'
+                      size='icon'
+                      className='size-7'
+                      aria-label='Edit cover letter'
+                    >
                       <Pencil className='size-3.5' />
                     </Button>
                   </Link>
