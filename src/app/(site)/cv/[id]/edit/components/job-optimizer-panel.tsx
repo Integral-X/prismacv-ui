@@ -5,13 +5,7 @@ import { cn } from '@/lib/utils';
 import type { CvOptimizationResult } from '@/modules/ai/data/mappers';
 import { optimizeCvAction } from '@/modules/ai/data/actions';
 import { Button } from '@/components/ui/button';
-import {
-  AlertTriangle,
-  CheckCircle2,
-  Loader2,
-  Target,
-  X,
-} from 'lucide-react';
+import { AlertTriangle, CheckCircle2, Loader2, Target, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface JobOptimizerPanelProps {
@@ -56,9 +50,13 @@ export function JobOptimizerPanel({ cvId, onClose }: JobOptimizerPanelProps) {
   function priorityIcon(priority: 'low' | 'medium' | 'high') {
     switch (priority) {
       case 'high':
-        return <AlertTriangle className='size-4 shrink-0 text-feedback-error' />;
+        return (
+          <AlertTriangle className='size-4 shrink-0 text-feedback-error' />
+        );
       case 'medium':
-        return <AlertTriangle className='size-4 shrink-0 text-feedback-warning' />;
+        return (
+          <AlertTriangle className='size-4 shrink-0 text-feedback-warning' />
+        );
       case 'low':
         return <CheckCircle2 className='size-4 shrink-0 text-feedback-info' />;
     }
@@ -91,7 +89,9 @@ export function JobOptimizerPanel({ cvId, onClose }: JobOptimizerPanelProps) {
             Paste a job description to see how well your CV matches and get
             optimization suggestions.
           </p>
-          <label htmlFor='job-description' className='sr-only'>Job description</label>
+          <label htmlFor='job-description' className='sr-only'>
+            Job description
+          </label>
           <textarea
             id='job-description'
             value={jobDescription}
@@ -123,7 +123,10 @@ export function JobOptimizerPanel({ cvId, onClose }: JobOptimizerPanelProps) {
           {/* Match Score */}
           <div className='flex items-center gap-3 rounded-md bg-surface-page p-3'>
             <span
-              className={cn('text-3xl font-bold', scoreColor(result.matchScore))}
+              className={cn(
+                'text-3xl font-bold',
+                scoreColor(result.matchScore)
+              )}
             >
               {result.matchScore}%
             </span>
