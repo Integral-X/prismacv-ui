@@ -11,12 +11,14 @@ export default function SiteLayout({
     <>
       <a
         href='#main-content'
-        className='sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-brand-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-white focus:outline-none'
+        className='sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-brand-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-content-inverse focus:outline-none'
       >
         Skip to main content
       </a>
       <Navbar />
-      <main id='main-content'>{children}</main>
+      <main id='main-content' tabIndex={-1}>
+        {children}
+      </main>
     </>
   );
 }
