@@ -99,18 +99,18 @@ export const FileUploadDropzone = ({
 
           {/* Text */}
           <div className='space-y-2'>
-            <h3 className='text-lg font-semibold text-gray-900'>
+            <h3 className='text-lg font-semibold text-content-primary'>
               {state === 'error' ? 'Upload Failed' : 'Drag & drop your CV here'}
             </h3>
             {state === 'error' ? (
               <p className='text-sm text-red-600'>{errorMessage}</p>
             ) : (
-              <p className='text-sm text-gray-600'>or click to browse</p>
+              <p className='text-sm text-content-secondary'>or click to browse</p>
             )}
           </div>
 
           {/* File format info */}
-          <p className='text-xs text-gray-500'>
+          <p className='text-xs text-content-muted'>
             Supports {acceptedFormats.join(', ').toUpperCase()} (Max {maxSizeMB}
             MB)
           </p>

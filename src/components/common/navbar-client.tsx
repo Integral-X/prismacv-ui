@@ -82,7 +82,7 @@ export function NavbarClient({ currentUser }: NavbarClientProps) {
       : publicRouteList;
 
   return (
-    <header className='sticky top-0 z-40 w-full bg-white shadow-(--shadow-sm)'>
+    <header className='sticky top-0 z-40 w-full bg-surface-card shadow-(--shadow-sm)'>
       <NavigationMenu className='mx-auto'>
         <NavigationMenuList className='container h-14 w-screen flex justify-between '>
           <NavigationMenuItem className='font-bold flex'>

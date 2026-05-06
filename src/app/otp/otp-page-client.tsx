@@ -62,7 +62,7 @@ export function OtpPageClient() {
 
   return (
     <AuthFormLayout>
-      <Card className='w-full max-w-[440px] bg-white shadow-card p-8'>
+      <Card className='w-full max-w-[440px] bg-surface-card shadow-card p-8'>
         <h2 className='text-xl font-semibold text-content-primary mb-4'>
           {mode === 'reset' ? 'Verify reset code' : 'Verify your email'}
         </h2>
