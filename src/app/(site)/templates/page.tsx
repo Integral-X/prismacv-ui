@@ -1,7 +1,7 @@
 import { getTemplates } from '@/modules/cv/data/queries';
 import { TemplatesGalleryClient } from './templates-gallery-client';
 
-export const revalidate = 3600; // revalidate template list every hour
+export const dynamic = 'force-dynamic';
 
 export default async function TemplatesPage() {
   const templates = await getTemplates();
