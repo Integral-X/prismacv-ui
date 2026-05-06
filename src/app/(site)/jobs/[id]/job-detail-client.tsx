@@ -39,11 +39,11 @@ const STATUS_LABELS: Record<JobStatus, string> = {
 };
 
 const STATUS_COLORS: Record<JobStatus, string> = {
-  saved: 'bg-gray-100 text-gray-800',
-  applied: 'bg-blue-100 text-blue-800',
-  interview: 'bg-yellow-100 text-yellow-800',
-  offer: 'bg-green-100 text-green-800',
-  rejected: 'bg-red-100 text-red-800',
+  saved: 'bg-surface-elevated text-content-primary',
+  applied: 'bg-feedback-info/10 text-feedback-info',
+  interview: 'bg-feedback-warning/10 text-feedback-warning',
+  offer: 'bg-feedback-success/10 text-feedback-success',
+  rejected: 'bg-feedback-error/10 text-feedback-error',
 };
 
 export function JobDetailClient({ job: initialJob }: JobDetailClientProps) {
@@ -121,11 +121,11 @@ export function JobDetailClient({ job: initialJob }: JobDetailClientProps) {
       <div className='mx-auto max-w-4xl px-4 py-8'>
         {/* Header */}
         <div className='mb-6 flex items-center gap-3'>
-          <Link href='/jobs'>
-            <Button variant='ghost' size='icon'>
+          <Button variant='ghost' size='icon' aria-label='Back to jobs' asChild>
+            <Link href='/jobs'>
               <ArrowLeft className='size-4' />
-            </Button>
-          </Link>
+            </Link>
+          </Button>
           <div className='flex-1'>
             <h1 className='text-2xl font-bold text-content-primary'>
               {job.title}
@@ -135,13 +135,18 @@ export function JobDetailClient({ job: initialJob }: JobDetailClientProps) {
                 <Building2 className='size-3.5' />
                 {job.company}
               </span>
-              {job.location && (
+              {job.location ? (
                 <span className='flex items-center gap-1'>
                   <MapPin className='size-3.5' />
                   {job.location}
                   {job.isRemote && ' (Remote)'}
                 </span>
-              )}
+              ) : job.isRemote ? (
+                <span className='flex items-center gap-1'>
+                  <MapPin className='size-3.5' />
+                  Remote
+                </span>
+              ) : null}
             </div>
           </div>
           <Button
@@ -164,7 +169,7 @@ export function JobDetailClient({ job: initialJob }: JobDetailClientProps) {
                 <Badge className={STATUS_COLORS[job.status]}>
                   {STATUS_LABELS[job.status]}
                 </Badge>
-                {job.salaryMin && (
+                {job.salaryMin !== null && job.salaryMin !== undefined && (
                   <span className='text-sm text-content-secondary'>
                     {job.salaryCurrency ?? '$'}
                     {job.salaryMin.toLocaleString()}
@@ -182,7 +187,7 @@ export function JobDetailClient({ job: initialJob }: JobDetailClientProps) {
                   </span>
                 )}
               </div>
-              {job.url && (
+              {job.url && /^https?:\/\//i.test(job.url) && (
                 <a
                   href={job.url}
                   target='_blank'
@@ -215,7 +220,7 @@ export function JobDetailClient({ job: initialJob }: JobDetailClientProps) {
                   className='min-h-[80px] flex-1 text-sm'
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
-                      handleAddNote();
+                      if (!isPending) handleAddNote();
                     }
                   }}
                 />
@@ -259,9 +264,10 @@ export function JobDetailClient({ job: initialJob }: JobDetailClientProps) {
                         <Button
                           variant='ghost'
                           size='icon'
-                          className='size-6 opacity-0 group-hover:opacity-100'
+                          className='size-6 opacity-0 group-hover:opacity-100 focus-visible:opacity-100'
                           onClick={() => handleDeleteNote(note.id)}
                           disabled={isPending}
+                          aria-label='Delete note'
                         >
                           <Trash2 className='size-3' />
                         </Button>
