@@ -81,7 +81,12 @@ export function AiAnalysisPanel({ cvId, onClose }: AiAnalysisPanelProps) {
             )}
             {result ? 'Re-analyze' : 'Analyze CV'}
           </Button>
-          <Button variant='ghost' size='icon' onClick={onClose} aria-label='Close AI analysis'>
+          <Button
+            variant='ghost'
+            size='icon'
+            onClick={onClose}
+            aria-label='Close AI analysis'
+          >
             <X className='size-4' />
           </Button>
         </div>
@@ -195,10 +200,7 @@ export function AiAnalysisPanel({ cvId, onClose }: AiAnalysisPanelProps) {
                           {suggestion.suggestedText}
                         </p>
                       )}
-                      <Badge
-                        variant='secondary'
-                        className='mt-1 text-[10px]'
-                      >
+                      <Badge variant='secondary' className='mt-1 text-[10px]'>
                         {suggestion.section} · {suggestion.type}
                       </Badge>
                     </div>

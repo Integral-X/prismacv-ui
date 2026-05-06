@@ -52,7 +52,12 @@ export function AiOptimizePanel({ cvId, onClose }: AiOptimizePanelProps) {
             Job Optimizer
           </h3>
         </div>
-        <Button variant='ghost' size='icon' onClick={onClose} aria-label='Close job optimizer'>
+        <Button
+          variant='ghost'
+          size='icon'
+          onClick={onClose}
+          aria-label='Close job optimizer'
+        >
           <X className='size-4' />
         </Button>
       </div>
