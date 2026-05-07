@@ -63,7 +63,7 @@ function LoginPageClient() {
 
   return (
     <AuthFormLayout>
-      <Card className='w-full max-w-[440px] bg-white shadow-card p-8'>
+      <Card className='w-full max-w-[440px] bg-surface-card shadow-card p-8'>
         <h2 className='text-xl text-center font-semibold text-content-primary mb-4'>
           Sign in your account
         </h2>
@@ -77,7 +77,9 @@ function LoginPageClient() {
             <div className='w-full border-t border-border-subtle' />
           </div>
           <div className='relative flex justify-center text-sm'>
-            <span className='px-4 bg-white text-content-tertiary'>Or</span>
+            <span className='px-4 bg-surface-card text-content-tertiary'>
+              Or
+            </span>
           </div>
         </div>
 

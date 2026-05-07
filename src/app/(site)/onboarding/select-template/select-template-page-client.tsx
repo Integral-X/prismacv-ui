@@ -68,7 +68,7 @@ export function SelectTemplatePageClient() {
           <Button
             variant='ghost'
             onClick={handleBack}
-            className='mb-6 -ml-2 text-gray-600 hover:text-gray-900'
+            className='mb-6 -ml-2 text-content-secondary hover:text-content-primary'
           >
             <ArrowLeft className='w-4 h-4 mr-2' />
             Back
@@ -76,10 +76,10 @@ export function SelectTemplatePageClient() {
 
           {/* Main Heading */}
           <div className='text-center mb-8 md:mb-12 px-4'>
-            <h1 className='text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 text-gray-900'>
+            <h1 className='text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 text-content-primary'>
               Job-winning templates for you.
             </h1>
-            <p className='text-base md:text-lg text-gray-600 max-w-2xl mx-auto'>
+            <p className='text-base md:text-lg text-content-secondary max-w-2xl mx-auto'>
               Select a professional template that matches your style
             </p>
           </div>
@@ -104,7 +104,7 @@ export function SelectTemplatePageClient() {
           </div>
 
           {/* Help Text */}
-          <p className='text-center text-sm text-gray-500 mt-8 px-4'>
+          <p className='text-center text-sm text-content-muted mt-8 px-4'>
             You can change your template later in the editor
           </p>
         </div>

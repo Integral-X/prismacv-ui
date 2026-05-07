@@ -31,7 +31,7 @@ export const OnboardingStepper = ({
                       ? 'bg-primary text-primary-foreground shadow-md scale-110'
                       : isCompleted
                         ? 'bg-primary text-primary-foreground'
-                        : 'bg-gray-200 text-gray-500'
+                        : 'bg-border text-content-muted'
                   )}
                 >
                   {isCompleted ? (
@@ -60,7 +60,7 @@ export const OnboardingStepper = ({
                   <div
                     className={cn(
                       'h-full transition-all duration-500',
-                      index < currentStep - 1 ? 'bg-primary' : 'bg-gray-200'
+                      index < currentStep - 1 ? 'bg-primary' : 'bg-border'
                     )}
                   />
                 </div>
