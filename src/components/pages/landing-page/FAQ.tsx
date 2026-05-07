@@ -55,7 +55,7 @@ export const FAQ = () => {
   };
 
   return (
-    <section className='py-16 md:py-20 bg-white' id='faq'>
+    <section className='py-16 md:py-20 bg-background' id='faq'>
       <div className='container mx-auto px-4'>
         {/* Section Title */}
         <h2 className='text-3xl md:text-4xl lg:text-5xl font-semibold text-center mb-12 md:mb-16'>
@@ -68,11 +68,15 @@ export const FAQ = () => {
             {faqData.map((faq, index) => (
               <div
                 key={faq.question}
-                className='border border-gray-200 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-md'
+                className='border border-border-subtle rounded-lg overflow-hidden transition-all duration-300 hover:shadow-md'
               >
                 <button
+                  id={`faq-btn-${index}`}
+                  type='button'
                   onClick={() => toggleFAQ(index)}
-                  className='w-full px-6 py-4 flex items-center justify-between text-left bg-white hover:bg-gray-50 transition-colors cursor-pointer'
+                  aria-expanded={openIndex === index}
+                  aria-controls={`faq-answer-${index}`}
+                  className='w-full px-6 py-4 flex items-center justify-between text-left bg-surface-card hover:bg-surface-page transition-colors cursor-pointer'
                 >
                   <span className='text-base md:text-lg font-medium pr-4'>
                     {faq.question}
@@ -100,6 +104,10 @@ export const FAQ = () => {
                   </div>
                 </button>
                 <div
+                  id={`faq-answer-${index}`}
+                  role='region'
+                  aria-labelledby={`faq-btn-${index}`}
+                  aria-hidden={openIndex !== index}
                   className={`grid transition-all duration-300 ease-in-out ${
                     openIndex === index
                       ? 'grid-rows-[1fr] opacity-100'
@@ -107,7 +115,7 @@ export const FAQ = () => {
                   }`}
                 >
                   <div className='overflow-hidden'>
-                    <div className='px-6 py-4 bg-gray-50 border-t border-gray-200'>
+                    <div className='px-6 py-4 bg-surface-page border-t border-border-subtle'>
                       <p className='text-muted-foreground leading-relaxed'>
                         {faq.answer}
                       </p>

@@ -1,18 +1,23 @@
 'use client';
 
 import * as React from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Footer } from '@/components/common/Footer';
 import { OnboardingStepper } from '@/components/pages/onboarding/OnboardingStepper';
 import { WavyPattern } from '@/components/common/WavyPattern';
 import { TemplateSelector } from '@/components/pages/onboarding/TemplateSelector';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
-import { createCvAction } from '@/modules/cv/data/actions';
+import {
+  createCvAction,
+  importLinkedInToCvAction,
+} from '@/modules/cv/data/actions';
 import { toast } from 'sonner';
 
 export function SelectTemplatePageClient() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const importId = searchParams.get('importId');
   const [selectedTemplate, setSelectedTemplate] = React.useState<string | null>(
     null
   );
@@ -26,10 +31,16 @@ export function SelectTemplatePageClient() {
     if (!selectedTemplate) return;
 
     startTransition(async () => {
-      const result = await createCvAction({
-        title: 'My CV',
-        templateId: selectedTemplate,
-      });
+      const result = importId
+        ? await importLinkedInToCvAction({
+            importId,
+            title: 'My CV',
+            templateId: selectedTemplate,
+          })
+        : await createCvAction({
+            title: 'My CV',
+            templateId: selectedTemplate,
+          });
 
       if (result.ok && result.redirectTo) {
         router.push(result.redirectTo);
@@ -57,7 +68,7 @@ export function SelectTemplatePageClient() {
           <Button
             variant='ghost'
             onClick={handleBack}
-            className='mb-6 -ml-2 text-gray-600 hover:text-gray-900'
+            className='mb-6 -ml-2 text-content-secondary hover:text-content-primary'
           >
             <ArrowLeft className='w-4 h-4 mr-2' />
             Back
@@ -65,10 +76,10 @@ export function SelectTemplatePageClient() {
 
           {/* Main Heading */}
           <div className='text-center mb-8 md:mb-12 px-4'>
-            <h1 className='text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 text-gray-900'>
+            <h1 className='text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 text-content-primary'>
               Job-winning templates for you.
             </h1>
-            <p className='text-base md:text-lg text-gray-600 max-w-2xl mx-auto'>
+            <p className='text-base md:text-lg text-content-secondary max-w-2xl mx-auto'>
               Select a professional template that matches your style
             </p>
           </div>
@@ -93,7 +104,7 @@ export function SelectTemplatePageClient() {
           </div>
 
           {/* Help Text */}
-          <p className='text-center text-sm text-gray-500 mt-8 px-4'>
+          <p className='text-center text-sm text-content-muted mt-8 px-4'>
             You can change your template later in the editor
           </p>
         </div>

@@ -111,8 +111,8 @@ export function TemplateSelectionClient({
                 )}
               >
                 {/* Thumbnail placeholder */}
-                <div className='relative flex aspect-[210/297] items-center justify-center rounded bg-gray-200'>
-                  <span className='text-sm font-medium text-gray-500'>
+                <div className='relative flex aspect-[210/297] items-center justify-center rounded bg-border'>
+                  <span className='text-sm font-medium text-content-muted'>
                     {template.name}
                   </span>
                   {isSelected && (
