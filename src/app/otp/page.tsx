@@ -8,7 +8,7 @@ export default function OtpPage() {
     <Suspense
       fallback={
         <AuthFormLayout>
-          <Card className='w-full max-w-[440px] bg-white shadow-card p-8'>
+          <Card className='w-full max-w-[440px] bg-surface-card shadow-card p-8'>
             <p className='text-sm text-content-secondary'>Loading…</p>
           </Card>
         </AuthFormLayout>

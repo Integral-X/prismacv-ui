@@ -94,7 +94,7 @@ export const Pricing = () => {
 
   return (
     <section
-      className='py-16 md:py-20 bg-linear-to-b from-white to-gray-50'
+      className='py-16 md:py-20 bg-linear-to-b from-background to-surface-page'
       id='pricing'
     >
       <div className='container mx-auto px-4'>
@@ -111,23 +111,29 @@ export const Pricing = () => {
 
           {/* Toggle Switch */}
           <div className='flex items-center justify-center relative'>
-            <div className='inline-flex items-center bg-gray-100 rounded-full p-1'>
+            <div
+              className='inline-flex items-center bg-surface-page rounded-full p-1'
+              role='group'
+              aria-label='Billing period'
+            >
               <button
                 onClick={() => setIsYearly(false)}
+                aria-pressed={!isYearly}
                 className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
                   !isYearly
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'bg-transparent text-gray-600'
+                    ? 'bg-surface-card text-content-primary shadow-sm'
+                    : 'bg-transparent text-content-secondary'
                 }`}
               >
                 Monthly
               </button>
               <button
                 onClick={() => setIsYearly(true)}
+                aria-pressed={isYearly}
                 className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
                   isYearly
-                    ? 'bg-primary text-white shadow-sm'
-                    : 'bg-transparent text-gray-600'
+                    ? 'bg-primary text-content-inverse shadow-sm'
+                    : 'bg-transparent text-content-secondary'
                 }`}
               >
                 Yearly
@@ -156,19 +162,19 @@ export const Pricing = () => {
               key={tier.name}
               className={`rounded-2xl p-8 transition-all duration-300 ${
                 tier.featured
-                  ? 'bg-primary text-white scale-105 shadow-2xl'
-                  : 'bg-white border-2 border-primary/20 shadow-lg hover:shadow-xl'
+                  ? 'bg-primary text-content-inverse scale-105 shadow-2xl'
+                  : 'bg-surface-card border-2 border-primary/20 shadow-lg hover:shadow-xl'
               }`}
             >
               {/* Card Header */}
               <div className='mb-6'>
                 <h3
-                  className={`text-2xl font-semibold mb-2 ${tier.featured ? 'text-white' : 'text-gray-900'}`}
+                  className={`text-2xl font-semibold mb-2 ${tier.featured ? 'text-content-inverse' : 'text-content-primary'}`}
                 >
                   {tier.name}
                 </h3>
                 <p
-                  className={`text-sm ${tier.featured ? 'text-white/80' : 'text-muted-foreground'}`}
+                  className={`text-sm ${tier.featured ? 'text-content-inverse/80' : 'text-muted-foreground'}`}
                 >
                   {tier.description}
                 </p>
@@ -178,12 +184,12 @@ export const Pricing = () => {
               <div className='mb-6'>
                 <div className='flex items-baseline gap-2'>
                   <span
-                    className={`text-5xl font-bold ${tier.featured ? 'text-white' : 'text-gray-900'}`}
+                    className={`text-5xl font-bold ${tier.featured ? 'text-content-inverse' : 'text-content-primary'}`}
                   >
                     ${isYearly ? tier.yearlyPrice : tier.monthlyPrice}
                   </span>
                   <span
-                    className={`text-lg ${tier.featured ? 'text-white/70' : 'text-muted-foreground'}`}
+                    className={`text-lg ${tier.featured ? 'text-content-inverse/70' : 'text-muted-foreground'}`}
                   >
                     / Month
                   </span>
@@ -194,8 +200,8 @@ export const Pricing = () => {
               <Button
                 className={`w-full mb-8 py-6 rounded-lg text-base font-medium transition-all ${
                   tier.featured
-                    ? 'bg-white text-primary hover:bg-gray-100'
-                    : 'bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-white'
+                    ? 'bg-surface-card text-primary hover:bg-surface-page'
+                    : 'bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-content-inverse'
                 }`}
                 asChild
               >
@@ -208,7 +214,7 @@ export const Pricing = () => {
                   <li key={index} className='flex items-start gap-3'>
                     <CheckIcon featured={tier.featured} />
                     <span
-                      className={`text-sm ${tier.featured ? 'text-white' : 'text-gray-700'}`}
+                      className={`text-sm ${tier.featured ? 'text-content-inverse' : 'text-content-secondary'}`}
                     >
                       {feature}
                     </span>
