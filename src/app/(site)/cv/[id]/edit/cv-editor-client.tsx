@@ -13,6 +13,8 @@ import type {
   Language,
 } from '@/modules/cv/data/mappers';
 import { updateCvAction, exportCvPdfAction } from '@/modules/cv/data/actions';
+import { analyzeCvAction } from '@/modules/ai/data/actions';
+import type { CvAnalysisResult } from '@/modules/ai/data/mappers';
 import type { UpdateCvRequest } from '@/modules/cv/data/contracts';
 import { EditorHeader } from './components/editor-header';
 import { SectionWrapper } from './components/section-wrapper';
@@ -24,6 +26,7 @@ import { CertificationsForm } from './components/certifications-form';
 import { ProjectsForm } from './components/projects-form';
 import { LanguagesForm } from './components/languages-form';
 import { CvPreviewPanel } from '@/modules/cv/components/cv-preview-panel';
+import { AnalysisPanel } from './components/analysis-panel';
 
 interface CvEditorClientProps {
   cv: Cv;
@@ -32,6 +35,10 @@ interface CvEditorClientProps {
 export function CvEditorClient({ cv: initialCv }: CvEditorClientProps) {
   const [cv, setCv] = useState<Cv>(initialCv);
   const [isPending, startTransition] = useTransition();
+  const [analysisResult, setAnalysisResult] = useState<CvAnalysisResult | null>(
+    null
+  );
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   function handleTitleChange(title: string) {
     startTransition(async () => {
@@ -84,6 +91,20 @@ export function CvEditorClient({ cv: initialCv }: CvEditorClientProps) {
     });
   }
 
+  async function handleAnalyze() {
+    setIsAnalyzing(true);
+    try {
+      const result = await analyzeCvAction(cv.id);
+      if (result.ok && result.data) {
+        setAnalysisResult(result.data);
+      } else if (!result.ok) {
+        toast.error(result.message);
+      }
+    } finally {
+      setIsAnalyzing(false);
+    }
+  }
+
   function handlePersonalInfoSaved(data: PersonalInfo) {
     setCv((prev) => ({ ...prev, personalInfo: data }));
   }
@@ -119,13 +140,22 @@ export function CvEditorClient({ cv: initialCv }: CvEditorClientProps) {
         onTitleChange={handleTitleChange}
         onStatusToggle={handleStatusToggle}
         onExport={handleExport}
+        onAnalyze={handleAnalyze}
         isPending={isPending}
+        isAnalyzing={isAnalyzing}
       />
 
       <div className='mx-auto max-w-7xl px-4 py-6'>
         <div className='grid grid-cols-1 gap-6 lg:grid-cols-3'>
           {/* Left panel — forms */}
           <div className='space-y-4 lg:col-span-2'>
+            {analysisResult && (
+              <AnalysisPanel
+                result={analysisResult}
+                onClose={() => setAnalysisResult(null)}
+              />
+            )}
+
             <SectionWrapper
               title='Personal Info'
               count={cv.personalInfo ? 1 : 0}
