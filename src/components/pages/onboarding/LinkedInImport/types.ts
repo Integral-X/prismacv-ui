@@ -3,7 +3,7 @@
  */
 
 export interface LinkedInImportProps {
-  onImport?: (url: string, importId: string) => void;
+  onImport?: (url: string, importId?: string) => void;
   onRemove?: () => void;
   importFn?: (url: string) => Promise<{ importId: string }>;
   className?: string;
@@ -12,5 +12,5 @@ export interface LinkedInImportProps {
 export interface ImportedProfile {
   url: string;
   displayName: string;
-  importId: string;
+  importId?: string;
 }

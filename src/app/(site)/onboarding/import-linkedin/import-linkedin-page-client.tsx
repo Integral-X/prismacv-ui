@@ -23,9 +23,9 @@ export function ImportLinkedInPageClient() {
     return result.data!;
   };
 
-  const handleImport = (url: string, id: string) => {
+  const handleImport = (url: string, id?: string) => {
     setImportedUrl(url);
-    setImportId(id);
+    setImportId(id ?? null);
   };
 
   const handleRemove = () => {

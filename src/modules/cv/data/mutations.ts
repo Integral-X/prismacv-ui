@@ -234,7 +234,7 @@ export async function importLinkedInProfile(
     if (!importId) {
       throw new HttpError(
         500,
-        'Server Error',
+        'Something went wrong. Please try again.',
         'Import ID missing from response'
       );
     }

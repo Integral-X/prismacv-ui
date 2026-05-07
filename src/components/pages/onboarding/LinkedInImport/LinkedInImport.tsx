@@ -92,9 +92,9 @@ export const LinkedInImport = ({
       // Fallback: no importFn provided, just validate URL and report success
       const displayName = extractLinkedInDisplayName(normalizedUrl);
       setProgress(100);
-      setImportedProfile({ url: normalizedUrl, displayName, importId: '' });
+      setImportedProfile({ url: normalizedUrl, displayName });
       setState('success');
-      onImport?.(normalizedUrl, '');
+      onImport?.(normalizedUrl);
     }
   };
 
