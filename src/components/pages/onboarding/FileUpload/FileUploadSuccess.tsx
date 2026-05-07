@@ -37,10 +37,10 @@ export const FileUploadSuccess = ({
             <CheckCircle className='w-6 h-6 text-green-600' />
           </div>
           <div className='flex-1 min-w-0'>
-            <p className='text-sm font-medium text-gray-900 truncate'>
+            <p className='text-sm font-medium text-content-primary truncate'>
               {uploadedFile.name}
             </p>
-            <p className='text-sm text-gray-500'>{uploadedFile.size}</p>
+            <p className='text-sm text-content-muted'>{uploadedFile.size}</p>
           </div>
           <Button
             variant='ghost'
@@ -48,7 +48,7 @@ export const FileUploadSuccess = ({
             onClick={onRemove}
             className='shrink-0'
           >
-            <X className='w-5 h-5 text-gray-500' />
+            <X className='w-5 h-5 text-content-muted' />
           </Button>
         </div>
 

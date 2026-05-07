@@ -1,6 +1,10 @@
 export default function SiteLoading() {
   return (
-    <div className='min-h-screen bg-surface-primary'>
+    <div
+      className='min-h-screen bg-surface-primary'
+      role='status'
+      aria-label='Loading page content'
+    >
       {/* Navbar placeholder */}
       <div className='h-16 border-b border-border-subtle bg-surface-card'>
         <div className='container mx-auto flex items-center justify-between px-4 h-full'>
