@@ -10,6 +10,7 @@ const PROTECTED_PREFIXES = [
   '/jobs',
   '/skills',
   '/interview',
+  '/cover-letters',
 ];
 
 export function middleware(request: NextRequest) {

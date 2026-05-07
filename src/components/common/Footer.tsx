@@ -188,7 +188,7 @@ export const Footer = () => {
         </div>
 
         {/* Middle Section - Social, Cover Letter, Resources */}
-        <div className='grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 pb-8 border-b border-gray-300'>
+        <div className='grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 pb-8 border-b border-border-subtle'>
           {/* Follow Us */}
           <div>
             <h3 className='font-semibold text-lg mb-4'>Follow Us</h3>
