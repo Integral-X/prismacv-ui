@@ -1,18 +1,23 @@
 'use client';
 
 import * as React from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Footer } from '@/components/common/Footer';
 import { OnboardingStepper } from '@/components/pages/onboarding/OnboardingStepper';
 import { WavyPattern } from '@/components/common/WavyPattern';
 import { TemplateSelector } from '@/components/pages/onboarding/TemplateSelector';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
-import { createCvAction } from '@/modules/cv/data/actions';
+import {
+  createCvAction,
+  importLinkedInToCvAction,
+} from '@/modules/cv/data/actions';
 import { toast } from 'sonner';
 
 export function SelectTemplatePageClient() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const importId = searchParams.get('importId');
   const [selectedTemplate, setSelectedTemplate] = React.useState<string | null>(
     null
   );
@@ -26,10 +31,16 @@ export function SelectTemplatePageClient() {
     if (!selectedTemplate) return;
 
     startTransition(async () => {
-      const result = await createCvAction({
-        title: 'My CV',
-        templateId: selectedTemplate,
-      });
+      const result = importId
+        ? await importLinkedInToCvAction({
+            importId,
+            title: 'My CV',
+            templateId: selectedTemplate,
+          })
+        : await createCvAction({
+            title: 'My CV',
+            templateId: selectedTemplate,
+          });
 
       if (result.ok && result.redirectTo) {
         router.push(result.redirectTo);
