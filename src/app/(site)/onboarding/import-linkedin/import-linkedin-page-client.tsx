@@ -8,23 +8,36 @@ import { WavyPattern } from '@/components/common/WavyPattern';
 import { LinkedInImport } from '@/components/pages/onboarding/LinkedInImport';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
+import { importLinkedInProfileAction } from '@/modules/cv/data/actions';
 
 export function ImportLinkedInPageClient() {
   const router = useRouter();
   const [importedUrl, setImportedUrl] = React.useState<string | null>(null);
+  const [importId, setImportId] = React.useState<string | null>(null);
 
-  const handleImport = (url: string) => {
+  const handleImportFn = async (url: string): Promise<{ importId: string }> => {
+    const result = await importLinkedInProfileAction(url);
+    if (!result.ok) {
+      throw new Error(result.message);
+    }
+    return result.data!;
+  };
+
+  const handleImport = (url: string, id?: string) => {
     setImportedUrl(url);
+    setImportId(id ?? null);
   };
 
   const handleRemove = () => {
     setImportedUrl(null);
+    setImportId(null);
   };
 
   const handleContinue = () => {
-    if (importedUrl) {
-      // Navigate to template selection (Step 3)
-      router.push('/onboarding/select-template');
+    if (importedUrl && importId) {
+      router.push(
+        `/onboarding/select-template?importId=${encodeURIComponent(importId)}`
+      );
     }
   };
 
@@ -33,8 +46,7 @@ export function ImportLinkedInPageClient() {
   };
 
   const handleSkip = () => {
-    // TODO: Navigate to manual entry or skip this step
-    // router.push('/onboarding/manual-entry');
+    router.push('/onboarding/select-template');
   };
 
   return (
@@ -69,14 +81,18 @@ export function ImportLinkedInPageClient() {
 
           {/* LinkedIn Import Component */}
           <div className='mb-8 px-4'>
-            <LinkedInImport onImport={handleImport} onRemove={handleRemove} />
+            <LinkedInImport
+              onImport={handleImport}
+              onRemove={handleRemove}
+              importFn={handleImportFn}
+            />
           </div>
 
           {/* Action Buttons */}
           <div className='flex flex-col sm:flex-row gap-4 justify-center items-center px-4'>
             <Button
               onClick={handleContinue}
-              disabled={!importedUrl}
+              disabled={!importedUrl || !importId}
               className='bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 rounded-md text-base font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto'
             >
               Continue

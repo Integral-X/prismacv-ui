@@ -1,6 +1,7 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 import { Card } from '@/components/ui/card';
 import { AuthFormLayout } from '@/components/layouts/AuthFormLayout';
@@ -9,8 +10,24 @@ import { SocialAuthButtons } from '@/components/pages/login/SocialAuthButtons';
 import type { LoginFormData } from '@/lib/validations/auth';
 import { loginUserAction } from '@/modules/auth/data/actions';
 
-export default function LoginPage() {
+function LoginPageClient() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirect');
+  const error = searchParams.get('error');
+  const toastShownRef = useRef(false);
+
+  useEffect(() => {
+    if (toastShownRef.current) return;
+    if (redirectTo && !error) {
+      toastShownRef.current = true;
+      toast.info('Please sign in to continue.');
+    }
+    if (error === 'oauth_failed') {
+      toastShownRef.current = true;
+      toast.error('OAuth sign-in failed. Please try again.');
+    }
+  }, [redirectTo, error]);
 
   const handleLogin = async (data: LoginFormData) => {
     const result = await loginUserAction({
@@ -31,7 +48,17 @@ export default function LoginPage() {
       return;
     }
 
-    router.push(result.redirectTo ?? '/onboarding');
+    // Redirect to the originally requested page or default
+    // Prevent open redirect: must start with single slash and not be protocol-relative
+    const isSafePath =
+      redirectTo &&
+      redirectTo.startsWith('/') &&
+      !redirectTo.startsWith('//') &&
+      !redirectTo.startsWith('/\\');
+    const destination = isSafePath
+      ? redirectTo
+      : (result.redirectTo ?? '/dashboard');
+    router.push(destination);
   };
 
   return (
@@ -59,5 +86,13 @@ export default function LoginPage() {
         <LoginForm onSubmit={handleLogin} />
       </Card>
     </AuthFormLayout>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginPageClient />
+    </Suspense>
   );
 }

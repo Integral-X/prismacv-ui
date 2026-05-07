@@ -33,8 +33,7 @@ export function UploadCVPageClient() {
   };
 
   const handleSkip = () => {
-    // TODO: Navigate to manual entry or skip this step
-    // router.push('/onboarding/manual-entry');
+    router.push('/onboarding/select-template');
   };
 
   return (

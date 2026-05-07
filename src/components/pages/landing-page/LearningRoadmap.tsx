@@ -92,7 +92,7 @@ const roadmapSteps = [
 
 export const LearningRoadmap = () => {
   return (
-    <section className='py-16 md:py-20 bg-gray-50'>
+    <section className='py-16 md:py-20 bg-surface-page'>
       <div className='container mx-auto px-4'>
         {/* Section Title */}
         <div className='text-center mb-12 md:mb-16 max-w-4xl mx-auto'>
@@ -110,7 +110,7 @@ export const LearningRoadmap = () => {
           {roadmapSteps.map((step) => (
             <div
               key={step.id}
-              className='bg-white rounded-2xl p-8 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100'
+              className='bg-surface-card rounded-2xl p-8 shadow-md hover:shadow-xl transition-all duration-300 border border-border-subtle'
             >
               {/* Icon */}
               <div className='mb-6'>
@@ -120,7 +120,7 @@ export const LearningRoadmap = () => {
               </div>
 
               {/* Title */}
-              <h3 className='text-xl font-semibold mb-3 text-gray-900'>
+              <h3 className='text-xl font-semibold mb-3 text-content-primary'>
                 {step.title}
               </h3>
 
