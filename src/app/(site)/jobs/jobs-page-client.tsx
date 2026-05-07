@@ -61,7 +61,7 @@ const STATUS_CONFIG: Record<
 > = {
   saved: {
     label: 'Saved',
-    color: 'bg-gray-100 text-gray-700',
+    color: 'bg-surface-page text-content-secondary',
     icon: <Briefcase className='h-3 w-3' />,
   },
   applied: {

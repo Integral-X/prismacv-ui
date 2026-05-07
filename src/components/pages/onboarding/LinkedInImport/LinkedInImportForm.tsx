@@ -75,7 +75,7 @@ export const LinkedInImportForm = ({
 
           {/* Text */}
           <div className='space-y-2'>
-            <h3 className='text-lg font-semibold text-gray-900'>
+            <h3 className='text-lg font-semibold text-content-primary'>
               {state === 'error'
                 ? 'Import Failed'
                 : 'Drop your LinkedIn profile here'}
@@ -89,7 +89,7 @@ export const LinkedInImportForm = ({
           <div className='w-full max-w-md flex gap-3'>
             <div className='flex-1 relative'>
               <div className='absolute left-3 top-1/2 -translate-y-1/2 z-10'>
-                <Linkedin className='w-5 h-5 text-gray-400' />
+                <Linkedin className='w-5 h-5 text-content-muted' />
               </div>
               <Input
                 type='text'

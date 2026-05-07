@@ -62,7 +62,7 @@ export function OnboardingPageClient() {
           </div>
 
           {/* Main Heading */}
-          <h1 className='text-3xl md:text-4xl lg:text-5xl font-semibold text-center mb-8 md:mb-12 text-gray-900 px-4'>
+          <h1 className='text-3xl md:text-4xl lg:text-5xl font-semibold text-center mb-8 md:mb-12 text-content-primary px-4'>
             Choose how you&apos;d like to create your resume.
           </h1>
 

@@ -164,8 +164,8 @@ export const JobTracking = () => {
               </div>
 
               {/* Description Card - Overlapping the header */}
-              <div className='relative -mt-18 bg-white rounded-xl shadow-lg px-4 py-6 min-h-32'>
-                <p className='text-sm text-gray-900 leading-relaxed'>
+              <div className='relative -mt-18 bg-surface-card rounded-xl shadow-lg px-4 py-6 min-h-32'>
+                <p className='text-sm text-content-primary leading-relaxed'>
                   {card.description}
                 </p>
               </div>

@@ -23,7 +23,9 @@ export const TemplateGrid = ({
   if (templates.length === 0) {
     return (
       <div className='text-center py-12'>
-        <p className='text-gray-500 mb-4'>No templates match your filters</p>
+        <p className='text-content-muted mb-4'>
+          No templates match your filters
+        </p>
         <Button variant='outline' onClick={onClearFilters}>
           Clear filters
         </Button>
@@ -83,7 +85,7 @@ export const TemplateGrid = ({
 
           {/* Template Name */}
           <div className='p-4'>
-            <p className='text-sm font-medium text-gray-900 text-center'>
+            <p className='text-sm font-medium text-content-primary text-center'>
               {template.name}
             </p>
           </div>
