@@ -10,7 +10,7 @@ const roadmapSteps = [
       'learning paths tailored to your career goals and current skill level',
     icon: (
       <svg
-        className='w-8 h-8 text-white'
+        className='w-8 h-8 text-content-inverse'
         fill='none'
         stroke='currentColor'
         viewBox='0 0 24 24'
@@ -32,7 +32,7 @@ const roadmapSteps = [
       'Build a strong foundation with fundamentals covering essential concepts and best',
     icon: (
       <svg
-        className='w-8 h-8 text-white'
+        className='w-8 h-8 text-content-inverse'
         fill='none'
         stroke='currentColor'
         viewBox='0 0 24 24'
@@ -53,7 +53,7 @@ const roadmapSteps = [
       'learning paths tailored to your career goals and current skill level',
     icon: (
       <svg
-        className='w-8 h-8 text-white'
+        className='w-8 h-8 text-content-inverse'
         fill='none'
         stroke='currentColor'
         viewBox='0 0 24 24'
@@ -74,7 +74,7 @@ const roadmapSteps = [
       'Apply your skills to real- world projects that you can add to your portfolio immediately',
     icon: (
       <svg
-        className='w-8 h-8 text-white'
+        className='w-8 h-8 text-content-inverse'
         fill='none'
         stroke='currentColor'
         viewBox='0 0 24 24'

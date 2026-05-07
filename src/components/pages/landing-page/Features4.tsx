@@ -11,11 +11,12 @@ const CheckIcon = () => (
     xmlns='http://www.w3.org/2000/svg'
     className='flex-shrink-0'
   >
-    <circle cx='12' cy='12' r='10' fill='#4ECCA3' fillOpacity='0.2' />
-    <circle cx='12' cy='12' r='8' fill='#4ECCA3' />
+    <circle cx='12' cy='12' r='10' className='fill-primary' fillOpacity='0.2' />
+    <circle cx='12' cy='12' r='8' className='fill-primary' />
     <path
       d='M8 12L11 15L16 9'
-      stroke='white'
+      stroke='currentColor'
+      className='text-primary-foreground'
       strokeWidth='2'
       strokeLinecap='round'
       strokeLinejoin='round'
@@ -34,7 +35,13 @@ const customizationFeatures = [
         xmlns='http://www.w3.org/2000/svg'
         className='flex-shrink-0'
       >
-        <text x='6' y='18' fontSize='16' fill='#4ECCA3' fontWeight='bold'>
+        <text
+          x='6'
+          y='18'
+          fontSize='16'
+          className='fill-primary'
+          fontWeight='bold'
+        >
           T
         </text>
       </svg>
@@ -58,10 +65,10 @@ const customizationFeatures = [
           cy='12'
           r='8'
           fill='none'
-          stroke='#4ECCA3'
+          className='stroke-primary'
           strokeWidth='2'
         />
-        <circle cx='8' cy='12' r='2' fill='#4ECCA3' />
+        <circle cx='8' cy='12' r='2' className='fill-primary' />
         <circle cx='16' cy='12' r='2' fill='#E28957' />
       </svg>
     ),
@@ -84,12 +91,12 @@ const customizationFeatures = [
           cy='12'
           r='8'
           fill='none'
-          stroke='#4ECCA3'
+          className='stroke-primary'
           strokeWidth='2'
         />
         <path
           d='M12 8V12L15 15'
-          stroke='#4ECCA3'
+          className='stroke-primary'
           strokeWidth='2'
           strokeLinecap='round'
         />

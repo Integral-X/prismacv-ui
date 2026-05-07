@@ -71,17 +71,12 @@ const CheckIcon = ({ featured }: { featured?: boolean }) => (
     viewBox='0 0 20 20'
     fill='none'
     xmlns='http://www.w3.org/2000/svg'
-    className='flex-shrink-0'
+    className={`flex-shrink-0 ${featured ? 'text-content-inverse' : 'text-primary'}`}
   >
-    <circle
-      cx='10'
-      cy='10'
-      r='10'
-      fill={featured ? 'rgba(255, 255, 255, 0.2)' : '#E0F2F1'}
-    />
+    <circle cx='10' cy='10' r='10' fill='currentColor' fillOpacity='0.2' />
     <path
       d='M6 10L9 13L14 7'
-      stroke={featured ? 'white' : '#4ECCA3'}
+      stroke='currentColor'
       strokeWidth='2'
       strokeLinecap='round'
       strokeLinejoin='round'
@@ -117,6 +112,7 @@ export const Pricing = () => {
               aria-label='Billing period'
             >
               <button
+                type='button'
                 onClick={() => setIsYearly(false)}
                 aria-pressed={!isYearly}
                 className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
@@ -128,6 +124,7 @@ export const Pricing = () => {
                 Monthly
               </button>
               <button
+                type='button'
                 onClick={() => setIsYearly(true)}
                 aria-pressed={isYearly}
                 className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
