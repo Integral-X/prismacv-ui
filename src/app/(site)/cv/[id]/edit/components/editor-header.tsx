@@ -6,7 +6,14 @@ import type { Cv } from '@/modules/cv/data/mappers';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { ArrowLeft, Download, Loader2, Pencil, SpellCheck, Target } from 'lucide-react';
+import {
+  ArrowLeft,
+  Download,
+  Loader2,
+  Pencil,
+  SpellCheck,
+  Target,
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface EditorHeaderProps {
