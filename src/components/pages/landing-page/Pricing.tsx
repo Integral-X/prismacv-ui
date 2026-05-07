@@ -162,19 +162,19 @@ export const Pricing = () => {
               key={tier.name}
               className={`rounded-2xl p-8 transition-all duration-300 ${
                 tier.featured
-                  ? 'bg-primary text-white scale-105 shadow-2xl'
+                  ? 'bg-primary text-content-inverse scale-105 shadow-2xl'
                   : 'bg-surface-card border-2 border-primary/20 shadow-lg hover:shadow-xl'
               }`}
             >
               {/* Card Header */}
               <div className='mb-6'>
                 <h3
-                  className={`text-2xl font-semibold mb-2 ${tier.featured ? 'text-white' : 'text-content-primary'}`}
+                  className={`text-2xl font-semibold mb-2 ${tier.featured ? 'text-content-inverse' : 'text-content-primary'}`}
                 >
                   {tier.name}
                 </h3>
                 <p
-                  className={`text-sm ${tier.featured ? 'text-white/80' : 'text-muted-foreground'}`}
+                  className={`text-sm ${tier.featured ? 'text-content-inverse/80' : 'text-muted-foreground'}`}
                 >
                   {tier.description}
                 </p>
@@ -184,12 +184,12 @@ export const Pricing = () => {
               <div className='mb-6'>
                 <div className='flex items-baseline gap-2'>
                   <span
-                    className={`text-5xl font-bold ${tier.featured ? 'text-white' : 'text-content-primary'}`}
+                    className={`text-5xl font-bold ${tier.featured ? 'text-content-inverse' : 'text-content-primary'}`}
                   >
                     ${isYearly ? tier.yearlyPrice : tier.monthlyPrice}
                   </span>
                   <span
-                    className={`text-lg ${tier.featured ? 'text-white/70' : 'text-muted-foreground'}`}
+                    className={`text-lg ${tier.featured ? 'text-content-inverse/70' : 'text-muted-foreground'}`}
                   >
                     / Month
                   </span>
@@ -214,7 +214,7 @@ export const Pricing = () => {
                   <li key={index} className='flex items-start gap-3'>
                     <CheckIcon featured={tier.featured} />
                     <span
-                      className={`text-sm ${tier.featured ? 'text-white' : 'text-content-secondary'}`}
+                      className={`text-sm ${tier.featured ? 'text-content-inverse' : 'text-content-secondary'}`}
                     >
                       {feature}
                     </span>

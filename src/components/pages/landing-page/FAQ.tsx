@@ -71,6 +71,8 @@ export const FAQ = () => {
                 className='border border-border-subtle rounded-lg overflow-hidden transition-all duration-300 hover:shadow-md'
               >
                 <button
+                  id={`faq-btn-${index}`}
+                  type='button'
                   onClick={() => toggleFAQ(index)}
                   aria-expanded={openIndex === index}
                   aria-controls={`faq-answer-${index}`}
@@ -104,6 +106,7 @@ export const FAQ = () => {
                 <div
                   id={`faq-answer-${index}`}
                   role='region'
+                  aria-labelledby={`faq-btn-${index}`}
                   aria-hidden={openIndex !== index}
                   className={`grid transition-all duration-300 ease-in-out ${
                     openIndex === index
