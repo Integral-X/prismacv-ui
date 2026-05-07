@@ -11,11 +11,12 @@ const CheckIcon = () => (
     xmlns='http://www.w3.org/2000/svg'
     className='flex-shrink-0'
   >
-    <circle cx='12' cy='12' r='10' fill='#4ECCA3' fillOpacity='0.2' />
-    <circle cx='12' cy='12' r='8' fill='#4ECCA3' />
+    <circle cx='12' cy='12' r='10' className='fill-primary' fillOpacity='0.2' />
+    <circle cx='12' cy='12' r='8' className='fill-primary' />
     <path
       d='M8 12L11 15L16 9'
-      stroke='white'
+      stroke='currentColor'
+      className='text-primary-foreground'
       strokeWidth='2'
       strokeLinecap='round'
       strokeLinejoin='round'

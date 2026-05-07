@@ -11,11 +11,12 @@ const CheckIcon = () => (
     xmlns='http://www.w3.org/2000/svg'
     className='flex-shrink-0'
   >
-    <circle cx='12' cy='12' r='10' fill='#4ECCA3' fillOpacity='0.2' />
-    <circle cx='12' cy='12' r='8' fill='#4ECCA3' />
+    <circle cx='12' cy='12' r='10' className='fill-primary' fillOpacity='0.2' />
+    <circle cx='12' cy='12' r='8' className='fill-primary' />
     <path
       d='M8 12L11 15L16 9'
-      stroke='white'
+      stroke='currentColor'
+      className='text-primary-foreground'
       strokeWidth='2'
       strokeLinecap='round'
       strokeLinejoin='round'
@@ -26,13 +27,13 @@ const CheckIcon = () => (
 const features1 = [
   'Wording and readability analysis',
   'Eliminate typos and grammatical errors',
-  'Content siggestions based on your job and experience',
+  'Content suggestions based on your job and experience',
 ];
 
 const features2 = [
   'Wording and readability analysis',
   'Eliminate typos and grammatical errors',
-  'Content siggestions based on your job and experience',
+  'Content suggestions based on your job and experience',
 ];
 
 export const Features2 = () => {
@@ -47,7 +48,7 @@ export const Features2 = () => {
               Ensure your resume is free of grammar and punctuation errors.
             </h2>
             <p className='text-lg text-muted-foreground'>
-              A built in - content cheacker tool helping you stay on top grammer
+              A built-in content checker tool helping you stay on top of grammar
               errors and analysis
             </p>
             <ul className='space-y-4'>
@@ -93,7 +94,7 @@ export const Features2 = () => {
               Personalize Your Resume for Each Application
             </h2>
             <p className='text-lg text-muted-foreground'>
-              A built in - content cheacker tool helping you stay on top grammer
+              A built-in content checker tool helping you stay on top of grammar
               errors and analysis
             </p>
             <ul className='space-y-4'>

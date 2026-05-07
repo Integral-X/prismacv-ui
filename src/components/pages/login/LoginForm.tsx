@@ -45,10 +45,8 @@ export const LoginForm = ({
   const handleFormSubmit = async (data: LoginFormData) => {
     try {
       setIsLoading(true);
-      // TODO: Implement actual login API call
       await onSubmit?.(data);
     } catch (error) {
-      // Error handling - TODO: Add toast notification
       void error;
     } finally {
       setIsLoading(false);
