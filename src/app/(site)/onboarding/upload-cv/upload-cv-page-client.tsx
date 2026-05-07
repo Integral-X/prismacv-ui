@@ -33,8 +33,7 @@ export function UploadCVPageClient() {
   };
 
   const handleSkip = () => {
-    // TODO: Navigate to manual entry or skip this step
-    // router.push('/onboarding/manual-entry');
+    router.push('/onboarding/select-template');
   };
 
   return (
@@ -50,7 +49,7 @@ export function UploadCVPageClient() {
           <Button
             variant='ghost'
             onClick={handleBack}
-            className='mb-6 -ml-2 text-gray-600 hover:text-gray-900'
+            className='mb-6 -ml-2 text-content-secondary hover:text-content-primary'
           >
             <ArrowLeft className='w-4 h-4 mr-2' />
             Back
@@ -58,10 +57,10 @@ export function UploadCVPageClient() {
 
           {/* Main Heading */}
           <div className='text-center mb-8 md:mb-12 px-4'>
-            <h1 className='text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 text-gray-900'>
+            <h1 className='text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 text-content-primary'>
               Upload Your CV
             </h1>
-            <p className='text-base md:text-lg text-gray-600 max-w-2xl mx-auto'>
+            <p className='text-base md:text-lg text-content-secondary max-w-2xl mx-auto'>
               We&apos;ll analyze your resume and automatically fill in your
               details
             </p>
@@ -90,14 +89,14 @@ export function UploadCVPageClient() {
             <Button
               variant='ghost'
               onClick={handleSkip}
-              className='text-gray-600 hover:text-gray-900 w-full sm:w-auto'
+              className='text-content-secondary hover:text-content-primary w-full sm:w-auto'
             >
               Skip for now
             </Button>
           </div>
 
           {/* Help Text */}
-          <p className='text-center text-sm text-gray-500 mt-8 px-4'>
+          <p className='text-center text-sm text-content-muted mt-8 px-4'>
             Your data is secure and will only be used to create your resume
           </p>
         </div>

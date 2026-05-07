@@ -172,6 +172,31 @@ export interface ImportLinkedInToCvRequest {
   templateId?: string;
 }
 
+export interface ImportLinkedInProfileRequest {
+  handleOrUrl: string;
+}
+
+export interface LinkedInImportSourceContract {
+  provider: string;
+  importId?: string;
+  handle?: string | null;
+  url?: string | null;
+  fetchedAt: string;
+  dataScope: string[];
+  warnings?: string[];
+}
+
+export interface LinkedInImportProfileContract {
+  fullName?: string | null;
+  headline?: string | null;
+  email?: string | null;
+}
+
+export interface LinkedInImportResponseContract {
+  source: LinkedInImportSourceContract;
+  profile: LinkedInImportProfileContract;
+}
+
 export interface UpsertPersonalInfoRequest {
   fullName?: string;
   email?: string;

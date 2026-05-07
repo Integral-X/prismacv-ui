@@ -35,7 +35,7 @@ export const OnboardingCard = ({
         'group cursor-pointer transition-all duration-300',
         'hover:-translate-y-2 hover:shadow-lg',
         'border-2 hover:border-primary/30',
-        'bg-white',
+        'bg-surface-card',
         'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
         className
       )}
@@ -51,7 +51,7 @@ export const OnboardingCard = ({
         </div>
 
         {/* Title */}
-        <h3 className='text-xl font-semibold text-gray-900'>{title}</h3>
+        <h3 className='text-xl font-semibold text-content-primary'>{title}</h3>
 
         {/* Description */}
         <p className='text-muted-foreground text-sm leading-relaxed'>

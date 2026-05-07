@@ -28,9 +28,11 @@ import type {
   EducationResponseContract,
   ExperienceItemRequest,
   ExperienceResponseContract,
+  ImportLinkedInProfileRequest,
   ImportLinkedInToCvRequest,
   LanguageItemRequest,
   LanguageResponseContract,
+  LinkedInImportResponseContract,
   PersonalInfoResponseContract,
   ProjectItemRequest,
   ProjectResponseContract,
@@ -218,6 +220,27 @@ export async function updateCustomSections(
 }
 
 // ─── Import / Export ──────────────────────────────────────────────────────────
+
+export async function importLinkedInProfile(
+  handleOrUrl: string
+): Promise<{ importId: string }> {
+  return executeAuthenticatedRequest(async (headers) => {
+    const contract = await apiClient.post<
+      LinkedInImportResponseContract,
+      ImportLinkedInProfileRequest
+    >('oauth/linkedin/import', { handleOrUrl }, { headers });
+
+    const importId = contract.source.importId;
+    if (!importId) {
+      throw new HttpError(
+        500,
+        'Something went wrong. Please try again.',
+        'Import ID missing from response'
+      );
+    }
+    return { importId };
+  });
+}
 
 export async function importLinkedInToCv(
   body: ImportLinkedInToCvRequest
