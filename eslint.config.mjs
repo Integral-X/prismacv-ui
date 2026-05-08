@@ -122,13 +122,11 @@ export default [
         'error',
         {
           selector: 'Literal[value=/#[0-9A-Fa-f]{3,8}/]',
-          message:
-            'Use design-system tokens instead of hardcoded hex colors.',
+          message: 'Use design-system tokens instead of hardcoded hex colors.',
         },
         {
           selector: 'TemplateElement[value.raw=/#[0-9A-Fa-f]{3,8}/]',
-          message:
-            'Use design-system tokens instead of hardcoded hex colors.',
+          message: 'Use design-system tokens instead of hardcoded hex colors.',
         },
         {
           selector:
