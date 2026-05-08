@@ -2,18 +2,21 @@ export class HttpError extends Error {
   readonly statusCode: number;
   readonly serverMessage: string | undefined;
   readonly path: string | undefined;
+  readonly correlationId: string | undefined;
 
   constructor(
     statusCode: number,
     error: string,
     message?: string,
-    path?: string
+    path?: string,
+    correlationId?: string
   ) {
     super(error);
     this.name = 'HttpError';
     this.statusCode = statusCode;
     this.serverMessage = message;
     this.path = path;
+    this.correlationId = correlationId;
   }
 
   get isUnauthorized(): boolean {

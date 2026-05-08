@@ -45,7 +45,7 @@ export function CvPreviewPanel({ cv }: CvPreviewPanelProps) {
           </Button>
         </div>
       </div>
-      <div className='flex-1 overflow-auto bg-gray-100 p-4'>
+      <div className='flex-1 overflow-auto bg-surface-elevated p-4'>
         <div
           style={{
             transform: `scale(${scale})`,

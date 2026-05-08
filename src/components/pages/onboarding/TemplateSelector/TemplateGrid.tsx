@@ -20,6 +20,43 @@ export const TemplateGrid = ({
   onSelect,
   onClearFilters,
 }: TemplateGridProps) => {
+  const cardRefs = React.useRef<Array<HTMLButtonElement | null>>([]);
+
+  const focusTemplateByIndex = React.useCallback(
+    (targetIndex: number) => {
+      if (templates.length === 0) return;
+      const normalized = (targetIndex + templates.length) % templates.length;
+      cardRefs.current[normalized]?.focus();
+    },
+    [templates.length]
+  );
+
+  const handleTemplateKeyDown = React.useCallback(
+    (
+      e: React.KeyboardEvent<HTMLButtonElement>,
+      templateId: string,
+      index: number
+    ) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        onSelect(templateId);
+        return;
+      }
+
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        focusTemplateByIndex(index + 1);
+        return;
+      }
+
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        focusTemplateByIndex(index - 1);
+      }
+    },
+    [focusTemplateByIndex, onSelect]
+  );
+
   if (templates.length === 0) {
     return (
       <div className='text-center py-12'>
@@ -34,34 +71,27 @@ export const TemplateGrid = ({
   }
 
   return (
-    <div
-      role='radiogroup'
-      aria-label='Choose a template'
-      className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'
-    >
+    <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'>
       {templates.map((template, index) => (
-        <div
+        <button
+          type='button'
           key={template.id}
-          role='radio'
+          ref={(node) => {
+            cardRefs.current[index] = node;
+          }}
           tabIndex={
             selectedTemplate === template.id ||
             (selectedTemplate === null && index === 0)
               ? 0
               : -1
           }
-          aria-checked={selectedTemplate === template.id}
           aria-label={`${template.name} template`}
+          aria-current={selectedTemplate === template.id ? 'true' : undefined}
           onClick={() => onSelect(template.id)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              onSelect(template.id);
-            }
-          }}
+          onKeyDown={(e) => handleTemplateKeyDown(e, template.id, index)}
           className={cn(
-            'group cursor-pointer transition-all duration-300 overflow-hidden',
+            'group relative cursor-pointer overflow-hidden text-left transition-all duration-300',
             'hover:shadow-lg hover:-translate-y-1',
-            'relative',
             'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
             selectedTemplate === template.id && 'shadow-lg'
           )}
@@ -89,7 +119,7 @@ export const TemplateGrid = ({
               {template.name}
             </p>
           </div>
-        </div>
+        </button>
       ))}
     </div>
   );

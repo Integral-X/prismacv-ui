@@ -19,6 +19,10 @@ function formatDateRange(
   return startStr;
 }
 
+function withAlpha(color: string, opacityPercent: number): string {
+  return `color-mix(in srgb, ${color} ${opacityPercent}%, transparent)`;
+}
+
 export function CreativeTemplate({ cv, accentColor }: TemplateProps) {
   const {
     personalInfo,
@@ -48,7 +52,7 @@ export function CreativeTemplate({ cv, accentColor }: TemplateProps) {
                     className='absolute left-0 top-1.5 h-2 w-2 rounded-full'
                     style={{ backgroundColor: accentColor }}
                   />
-                  <p className='text-sm font-semibold text-gray-900'>
+                  <p className='text-sm font-semibold text-content-primary'>
                     {exp.title}
                   </p>
                   <p
@@ -58,11 +62,11 @@ export function CreativeTemplate({ cv, accentColor }: TemplateProps) {
                     {exp.company}
                     {exp.location && ` · ${exp.location}`}
                   </p>
-                  <p className='text-xs text-gray-500'>
+                  <p className='text-xs text-content-tertiary'>
                     {formatDateRange(exp.startDate, exp.endDate, exp.current)}
                   </p>
                   {exp.description && (
-                    <p className='mt-1 text-xs leading-relaxed text-gray-600'>
+                    <p className='mt-1 text-xs leading-relaxed text-content-secondary'>
                       {exp.description}
                     </p>
                   )}
@@ -78,14 +82,14 @@ export function CreativeTemplate({ cv, accentColor }: TemplateProps) {
                     className='absolute left-0 top-1.5 h-2 w-2 rounded-full'
                     style={{ backgroundColor: accentColor }}
                   />
-                  <p className='text-sm font-semibold text-gray-900'>
+                  <p className='text-sm font-semibold text-content-primary'>
                     {edu.degree}
                     {edu.field && ` in ${edu.field}`}
                   </p>
                   <p className='text-xs' style={{ color: accentColor }}>
                     {edu.institution}
                   </p>
-                  <p className='text-xs text-gray-500'>
+                  <p className='text-xs text-content-tertiary'>
                     {formatDateRange(edu.startDate, edu.endDate, false)}
                   </p>
                 </div>
@@ -100,11 +104,11 @@ export function CreativeTemplate({ cv, accentColor }: TemplateProps) {
                     className='absolute left-0 top-1.5 h-2 w-2 rounded-full'
                     style={{ backgroundColor: accentColor }}
                   />
-                  <p className='text-sm font-semibold text-gray-900'>
+                  <p className='text-sm font-semibold text-content-primary'>
                     {proj.name}
                   </p>
                   {proj.description && (
-                    <p className='mt-0.5 text-xs text-gray-600'>
+                    <p className='mt-0.5 text-xs text-content-secondary'>
                       {proj.description}
                     </p>
                   )}
@@ -122,7 +126,7 @@ export function CreativeTemplate({ cv, accentColor }: TemplateProps) {
         {/* Narrow right sidebar */}
         <div
           className='col-span-2 space-y-5 p-6'
-          style={{ backgroundColor: `${accentColor}08` }}
+          style={{ backgroundColor: withAlpha(accentColor, 8) }}
         >
           {skills.length > 0 && (
             <SideSection title='Skills' color={accentColor}>
@@ -138,14 +142,16 @@ export function CreativeTemplate({ cv, accentColor }: TemplateProps) {
               <div className='space-y-2'>
                 {certifications.map((cert) => (
                   <div key={cert.id}>
-                    <p className='text-xs font-semibold text-gray-800'>
+                    <p className='text-xs font-semibold text-content-primary'>
                       {cert.name}
                     </p>
                     {cert.issuer && (
-                      <p className='text-xs text-gray-500'>{cert.issuer}</p>
+                      <p className='text-xs text-content-tertiary'>
+                        {cert.issuer}
+                      </p>
                     )}
                     {cert.issueDate && (
-                      <p className='text-xs text-gray-400'>
+                      <p className='text-xs text-content-tertiary'>
                         {formatDate(cert.issueDate)}
                       </p>
                     )}
@@ -162,10 +168,10 @@ export function CreativeTemplate({ cv, accentColor }: TemplateProps) {
                     key={lang.id}
                     className='flex items-center justify-between'
                   >
-                    <span className='text-xs font-medium text-gray-700'>
+                    <span className='text-xs font-medium text-content-secondary'>
                       {lang.name}
                     </span>
-                    <span className='text-xs text-gray-500'>
+                    <span className='text-xs text-content-tertiary'>
                       {lang.proficiency}
                     </span>
                   </div>
@@ -257,7 +263,7 @@ function TimelineSection({
       >
         {title}
       </h2>
-      <div className='border-l-2' style={{ borderColor: `${color}30` }}>
+      <div className='border-l-2' style={{ borderColor: withAlpha(color, 30) }}>
         {children}
       </div>
     </div>

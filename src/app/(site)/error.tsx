@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle } from 'lucide-react';
+import { captureUiException } from '@/shared/monitoring/sentry';
 
 export default function SiteError({
   error,
@@ -12,6 +13,10 @@ export default function SiteError({
   reset: () => void;
 }) {
   useEffect(() => {
+    captureUiException(error, {
+      tags: { boundary: 'site' },
+      extra: { digest: error.digest },
+    });
     console.error('Site error:', error); // eslint-disable-line no-console
   }, [error]);
 

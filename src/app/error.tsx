@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle } from 'lucide-react';
+import { captureUiException } from '@/shared/monitoring/sentry';
 
 export default function GlobalError({
   error,
@@ -12,6 +13,10 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
+    captureUiException(error, {
+      tags: { boundary: 'global' },
+      extra: { digest: error.digest },
+    });
     console.error('Global error:', error); // eslint-disable-line no-console
   }, [error]);
 

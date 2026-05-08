@@ -27,12 +27,12 @@ export const Hero = () => {
                 className='w-auto h-auto'
               />
             </div>
-            <main className='text-[48px] font-medium leading-none'>
+            <section className='text-[48px] font-medium leading-none'>
               <h1 className='inline'>
                 <span className='inline text-primary'>PrismaCV</span> Builder
                 makes your profile stand out at leading companies.
               </h1>
-            </main>
+            </section>
 
             <p className='text-[16px] font-normal leading-none text-muted-foreground max-w-xl mx-auto lg:mx-0'>
               Stand out from the crowd with our easy-to-use resume builder.
@@ -49,8 +49,11 @@ export const Hero = () => {
               <Button
                 variant='outline'
                 className='w-full sm:w-auto border-primary text-primary hover:bg-primary/10 rounded-md'
+                asChild
               >
-                Test your resume score
+                <a href='/login?redirect=%2Fats-scorer'>
+                  Test your resume score
+                </a>
               </Button>
             </div>
           </div>

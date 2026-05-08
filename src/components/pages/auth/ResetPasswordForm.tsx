@@ -39,9 +39,6 @@ export const ResetPasswordForm = ({
     try {
       setIsLoading(true);
       await onSubmit?.(data);
-    } catch (error) {
-      // Error handling - TODO: Add toast notification
-      void error;
     } finally {
       setIsLoading(false);
     }

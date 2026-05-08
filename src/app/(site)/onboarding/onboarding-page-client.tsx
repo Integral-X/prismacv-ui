@@ -35,7 +35,7 @@ export function OnboardingPageClient() {
       id: 'upload',
       title: 'Upload Existing CV',
       description:
-        "Have a resume? We'll parse it and fill in the details for you.",
+        'Upload PDF or Word and we will map your experience, education, skills, and projects automatically.',
       icon: <Upload className='w-10 h-10' strokeWidth={1.5} />,
     },
     {

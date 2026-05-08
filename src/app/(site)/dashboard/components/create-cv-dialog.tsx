@@ -50,6 +50,7 @@ export function CreateCvDialog({
         role='dialog'
         aria-modal='true'
         aria-labelledby='create-cv-dialog-title'
+        aria-describedby='create-cv-dialog-description'
         className='bg-surface-card mx-4 w-full max-w-md rounded-lg p-6 shadow-xl'
       >
         <h2
@@ -58,6 +59,12 @@ export function CreateCvDialog({
         >
           Create New CV
         </h2>
+        <p
+          id='create-cv-dialog-description'
+          className='text-content-secondary mb-4 text-sm'
+        >
+          Give your CV a title now. You can rename it later in the editor.
+        </p>
         <form onSubmit={handleSubmit}>
           <label
             htmlFor='cv-title'

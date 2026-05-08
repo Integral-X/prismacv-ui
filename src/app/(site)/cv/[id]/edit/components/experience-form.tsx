@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { toast } from 'sonner';
 import { experienceSchema } from '@/lib/validations/cv';
 import type { Experience } from '@/modules/cv/data/mappers';
+import { GrammarCheckInline } from '@/components/common/grammar-check-inline';
 import { updateSectionAction } from '@/modules/cv/data/actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -41,6 +42,7 @@ export function ExperienceForm({
     register,
     control,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -177,6 +179,11 @@ export function ExperienceForm({
               {...register(`items.${index}.description`)}
               placeholder='Describe your responsibilities...'
               rows={3}
+            />
+            <GrammarCheckInline
+              getText={() => getValues(`items.${index}.description`) ?? ''}
+              context='experience'
+              emptyMessage='Write a short description for this role first.'
             />
           </FieldWrapper>
         </div>

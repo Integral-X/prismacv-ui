@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { toast } from 'sonner';
 import { projectSchema } from '@/lib/validations/cv';
 import type { Project } from '@/modules/cv/data/mappers';
+import { GrammarCheckInline } from '@/components/common/grammar-check-inline';
 import { updateSectionAction } from '@/modules/cv/data/actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -41,6 +42,7 @@ export function ProjectsForm({
     register,
     control,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -154,6 +156,11 @@ export function ProjectsForm({
               {...register(`items.${index}.description`)}
               placeholder='What does this project do?'
               rows={3}
+            />
+            <GrammarCheckInline
+              getText={() => getValues(`items.${index}.description`) ?? ''}
+              context='project'
+              emptyMessage='Write a short project description first.'
             />
           </FieldWrapper>
         </div>

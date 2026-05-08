@@ -69,7 +69,7 @@ const customizationFeatures = [
           strokeWidth='2'
         />
         <circle cx='8' cy='12' r='2' className='fill-primary' />
-        <circle cx='16' cy='12' r='2' fill='#E28957' />
+        <circle cx='16' cy='12' r='2' className='fill-feedback-warning' />
       </svg>
     ),
     title: 'Color Customization',

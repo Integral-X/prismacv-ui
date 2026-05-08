@@ -8,6 +8,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   quality-gates:
     name: Quality Gates
@@ -115,3 +118,22 @@ jobs:
         with:
           name: e2e-test-results
           path: test-results/
+
+  verify:
+    name: Verify
+    runs-on: ubuntu-latest
+    if: always()
+    needs:
+      - quality-gates
+      - build-verification
+      - e2e-tests
+    steps:
+      - name: Enforce required checks
+        run: |
+          if [ "${{ needs.quality-gates.result }}" != "success" ] || \
+             [ "${{ needs.build-verification.result }}" != "success" ] || \
+             [ "${{ needs.e2e-tests.result }}" != "success" ]; then
+            echo "One or more required jobs failed."
+            exit 1
+          fi
+          echo "All required jobs passed."
