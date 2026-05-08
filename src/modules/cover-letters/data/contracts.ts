@@ -24,6 +24,7 @@ export interface GenerateCoverLetterRequest {
   company?: string;
   jobDescription?: string;
   tone?: string;
+  template?: 'classic_professional' | 'impact_story' | 'concise_modern';
 }
 
 // ─── Response contracts ───────────────────────────────────────────────────────

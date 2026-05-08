@@ -15,7 +15,7 @@ interface AuthFormLayoutProps {
  */
 export const AuthFormLayout = ({ children }: AuthFormLayoutProps) => {
   return (
-    <div className='min-h-screen flex flex-col bg-[#F3F4F6] overflow-hidden'>
+    <div className='min-h-screen flex flex-col overflow-hidden bg-surface-page'>
       {/* Header - Logo only */}
       <header className='w-full'>
         <div className='container h-14 flex items-center px-4'>

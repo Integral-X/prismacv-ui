@@ -24,7 +24,7 @@ export const getUploadBorderColor = (state: UploadState): string => {
     case 'success':
       return 'border-green-500';
     default:
-      return 'border-dashed border-gray-300';
+      return 'border-dashed border-border-strong';
   }
 };
 
@@ -40,7 +40,7 @@ export const getUploadBackgroundColor = (state: UploadState): string => {
     case 'success':
       return 'bg-green-50';
     default:
-      return 'bg-white';
+      return 'bg-surface-card';
   }
 };
 
@@ -56,7 +56,7 @@ export const getImportBorderColor = (state: ImportState): string => {
     case 'success':
       return 'border-green-500';
     default:
-      return 'border-dashed border-gray-300';
+      return 'border-dashed border-border-strong';
   }
 };
 
@@ -72,6 +72,6 @@ export const getImportBackgroundColor = (state: ImportState): string => {
     case 'success':
       return 'bg-green-50';
     default:
-      return 'bg-white';
+      return 'bg-surface-card';
   }
 };

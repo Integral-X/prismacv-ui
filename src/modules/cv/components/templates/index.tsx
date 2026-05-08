@@ -18,32 +18,48 @@ const TEMPLATE_MAP: Record<string, TemplateConfig> = {
   classic: {
     layout: 'single',
     category: 'professional',
-    accentColor: '#1a1a2e',
+    accentColor: 'var(--color-content-primary)',
   },
   horizon: {
     layout: 'two-column',
     category: 'professional',
-    accentColor: '#1e40af',
+    accentColor: 'var(--color-primary)',
   },
-  prism: { layout: 'two-column', category: 'modern', accentColor: '#0ea5e9' },
+  prism: {
+    layout: 'two-column',
+    category: 'modern',
+    accentColor: 'var(--color-feedback-info)',
+  },
   executive: {
     layout: 'single',
     category: 'professional',
-    accentColor: '#374151',
+    accentColor: 'var(--color-content-secondary)',
   },
-  nova: { layout: 'single', category: 'modern', accentColor: '#0d9488' },
+  nova: {
+    layout: 'single',
+    category: 'modern',
+    accentColor: 'var(--color-feedback-success)',
+  },
   mosaic: {
     layout: 'two-column',
     category: 'creative',
-    accentColor: '#e11d48',
+    accentColor: 'var(--color-feedback-error)',
   },
   pinnacle: {
     layout: 'two-column',
     category: 'professional',
-    accentColor: '#1e40af',
+    accentColor: 'var(--color-primary)',
   },
-  slate: { layout: 'single', category: 'modern', accentColor: '#475569' },
-  vivid: { layout: 'single', category: 'creative', accentColor: '#c026d3' },
+  slate: {
+    layout: 'single',
+    category: 'modern',
+    accentColor: 'var(--color-content-tertiary)',
+  },
+  vivid: {
+    layout: 'single',
+    category: 'creative',
+    accentColor: 'var(--color-feedback-warning)',
+  },
 };
 
 export interface TemplateProps {

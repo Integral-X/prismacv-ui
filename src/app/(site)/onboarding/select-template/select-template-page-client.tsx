@@ -9,6 +9,7 @@ import { TemplateSelector } from '@/components/pages/onboarding/TemplateSelector
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import {
+  applyImportedCvTemplateAction,
   createCvAction,
   importLinkedInToCvAction,
 } from '@/modules/cv/data/actions';
@@ -18,10 +19,18 @@ export function SelectTemplatePageClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const importId = searchParams.get('importId');
+  const cvId = searchParams.get('cvId');
+  const templateId = searchParams.get('templateId');
   const [selectedTemplate, setSelectedTemplate] = React.useState<string | null>(
-    null
+    templateId
   );
   const [isPending, startTransition] = React.useTransition();
+
+  React.useEffect(() => {
+    if (templateId) {
+      setSelectedTemplate(templateId);
+    }
+  }, [templateId]);
 
   const handleTemplateSelect = (templateId: string) => {
     setSelectedTemplate(templateId);
@@ -31,16 +40,21 @@ export function SelectTemplatePageClient() {
     if (!selectedTemplate) return;
 
     startTransition(async () => {
-      const result = importId
-        ? await importLinkedInToCvAction({
-            importId,
-            title: 'My CV',
+      const result = cvId
+        ? await applyImportedCvTemplateAction({
+            cvId,
             templateId: selectedTemplate,
           })
-        : await createCvAction({
-            title: 'My CV',
-            templateId: selectedTemplate,
-          });
+        : importId
+          ? await importLinkedInToCvAction({
+              importId,
+              title: 'My CV',
+              templateId: selectedTemplate,
+            })
+          : await createCvAction({
+              title: 'My CV',
+              templateId: selectedTemplate,
+            });
 
       if (result.ok && result.redirectTo) {
         router.push(result.redirectTo);

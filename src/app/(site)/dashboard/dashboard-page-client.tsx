@@ -7,6 +7,14 @@ import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
   createCvAction,
   deleteCvAction,
   duplicateCvAction,
@@ -25,6 +33,9 @@ export function DashboardPageClient({ initialData }: DashboardPageClientProps) {
   const [isPending, startTransition] = useTransition();
   const [items, setItems] = useState<CvListItem[]>(initialData.items);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [cvPendingDelete, setCvPendingDelete] = useState<CvListItem | null>(
+    null
+  );
 
   function handleCreate(title: string) {
     startTransition(async () => {
@@ -61,15 +72,23 @@ export function DashboardPageClient({ initialData }: DashboardPageClientProps) {
     });
   }
 
-  function handleDelete(id: string) {
-    // eslint-disable-next-line no-alert
-    if (!window.confirm('Are you sure you want to delete this CV?')) return;
+  function handleDeleteRequest(id: string) {
+    const targetCv = items.find((item) => item.id === id);
+    if (!targetCv) return;
+
+    setCvPendingDelete(targetCv);
+  }
+
+  function handleDeleteConfirm() {
+    if (!cvPendingDelete) return;
+    const deletingId = cvPendingDelete.id;
 
     startTransition(async () => {
-      const result = await deleteCvAction(id);
+      const result = await deleteCvAction(deletingId);
       if (result.ok) {
         toast.success('CV deleted');
-        setItems((prev) => prev.filter((cv) => cv.id !== id));
+        setItems((prev) => prev.filter((cv) => cv.id !== deletingId));
+        setCvPendingDelete(null);
       } else {
         toast.error(result.message);
       }
@@ -96,7 +115,7 @@ export function DashboardPageClient({ initialData }: DashboardPageClientProps) {
               cv={cv}
               onEdit={handleEdit}
               onDuplicate={handleDuplicate}
-              onDelete={handleDelete}
+              onDelete={handleDeleteRequest}
             />
           ))}
         </div>
@@ -108,6 +127,41 @@ export function DashboardPageClient({ initialData }: DashboardPageClientProps) {
         onSubmit={handleCreate}
         isPending={isPending}
       />
+      <Dialog
+        open={cvPendingDelete !== null}
+        onOpenChange={(open) => {
+          if (!open && !isPending) {
+            setCvPendingDelete(null);
+          }
+        }}
+      >
+        <DialogContent aria-describedby='delete-cv-dialog-description'>
+          <DialogHeader>
+            <DialogTitle>Delete this CV?</DialogTitle>
+            <DialogDescription id='delete-cv-dialog-description'>
+              {cvPendingDelete
+                ? `This will permanently remove "${cvPendingDelete.title}" and all of its sections.`
+                : 'This action cannot be undone.'}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant='outline'
+              onClick={() => setCvPendingDelete(null)}
+              disabled={isPending}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant='destructive'
+              onClick={handleDeleteConfirm}
+              disabled={isPending}
+            >
+              {isPending ? 'Deleting...' : 'Delete CV'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -8,8 +8,8 @@ const trackingCards = [
     fullTitle: 'Saved',
     description:
       'Save job opportunities you are interested in and review them later.',
-    bgColor: 'bg-[#B8DFE6]',
-    textColor: 'text-[#4A9BA8]',
+    bgColor: 'bg-primary/15',
+    textColor: 'text-primary',
     icon: (
       <svg
         className='w-6 h-6'
@@ -32,8 +32,8 @@ const trackingCards = [
     title: 'pplied',
     fullTitle: 'Applied',
     description: 'Track all the jobs you have applied for in one place.',
-    bgColor: 'bg-[#C8E6C9]',
-    textColor: 'text-[#4CAF50]',
+    bgColor: 'bg-feedback-success/20',
+    textColor: 'text-feedback-success',
     icon: (
       <svg
         className='w-6 h-6'
@@ -56,8 +56,8 @@ const trackingCards = [
     title: 'nterview',
     fullTitle: 'Interview',
     description: 'Keep your interview dates, notes, and follow-ups organized.',
-    bgColor: 'bg-[#D4C5F9]',
-    textColor: 'text-[#7E57C2]',
+    bgColor: 'bg-feedback-info/20',
+    textColor: 'text-feedback-info',
     icon: (
       <svg
         className='w-6 h-6'
@@ -80,8 +80,8 @@ const trackingCards = [
     title: 'ffer',
     fullTitle: 'Offer',
     description: 'Record the job offers you receive and compare easily.',
-    bgColor: 'bg-[#C8E6C9]',
-    textColor: 'text-[#4CAF50]',
+    bgColor: 'bg-feedback-success/20',
+    textColor: 'text-feedback-success',
     icon: (
       <svg
         className='w-6 h-6'
@@ -105,8 +105,8 @@ const trackingCards = [
     fullTitle: 'Rejected',
     description:
       'See which applications were rejected and learn where to improve.',
-    bgColor: 'bg-[#FFCDD2]',
-    textColor: 'text-[#E57373]',
+    bgColor: 'bg-feedback-error/20',
+    textColor: 'text-feedback-error',
     icon: (
       <svg
         className='w-6 h-6'
@@ -127,13 +127,7 @@ const trackingCards = [
 
 export const JobTracking = () => {
   return (
-    <section
-      className='py-16 md:py-20'
-      style={{
-        background:
-          'linear-gradient(179.84deg, #FFFFFF 0%, rgba(57, 177, 185, 0.15) 100%)',
-      }}
-    >
+    <section className='bg-linear-to-b from-surface-page to-primary/10 py-16 md:py-20'>
       <div className='container mx-auto px-4'>
         {/* Section Title */}
         <div className='text-center mb-12 md:mb-16 max-w-4xl mx-auto'>

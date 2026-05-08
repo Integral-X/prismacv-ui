@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,6 +22,7 @@ import {
 } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { UserProfile } from '@/modules/user/data/mappers';
+import type { BillingProfile } from '@/modules/billing/data/mappers';
 import { updateProfileAction } from '@/modules/user/data/actions';
 import { deleteAccountAction } from '@/modules/user/data/actions';
 
@@ -65,9 +67,10 @@ function ProviderBadge({ provider }: { provider: string }) {
 
 interface SettingsPageClientProps {
   user: UserProfile;
+  billing: BillingProfile;
 }
 
-export function SettingsPageClient({ user }: SettingsPageClientProps) {
+export function SettingsPageClient({ user, billing }: SettingsPageClientProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -115,6 +118,22 @@ export function SettingsPageClient({ user }: SettingsPageClientProps) {
   return (
     <main className='mx-auto max-w-2xl px-4 py-10'>
       <h1 className='mb-8 text-2xl font-bold'>Settings</h1>
+
+      <Card className='mb-6'>
+        <CardHeader>
+          <CardTitle>Plan & usage</CardTitle>
+          <CardDescription>
+            Current plan:{' '}
+            <span className='font-medium uppercase'>{billing.plan}</span> - AI
+            quota {billing.aiQuota.used}/{billing.aiQuota.limit}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button variant='outline' asChild>
+            <Link href='/settings/billing'>Manage billing</Link>
+          </Button>
+        </CardContent>
+      </Card>
 
       {/* Profile Section */}
       <Card className='mb-6'>

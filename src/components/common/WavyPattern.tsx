@@ -17,15 +17,16 @@ export const WavyPattern = ({ className, height = 200 }: WavyPatternProps) => {
         xmlns='http://www.w3.org/2000/svg'
         style={{ height: `${height}px` }}
       >
-        {/* Top wave layer - lighter teal (#B2E1E4) */}
+        {/* Top wave layer */}
         <path
           d='M0,30 C320,80 480,0 720,40 C960,80 1120,10 1440,50 L1440,200 L0,200 Z'
-          fill='#B2E1E4'
+          fill='var(--color-surface-elevated)'
         />
-        {/* Bottom wave layer - darker teal (#59BEC4) */}
+        {/* Bottom wave layer */}
         <path
           d='M0,80 C320,130 480,60 720,100 C960,140 1120,70 1440,110 L1440,200 L0,200 Z'
-          fill='#59BEC4'
+          fill='var(--color-primary)'
+          fillOpacity='0.45'
         />
       </svg>
     </div>

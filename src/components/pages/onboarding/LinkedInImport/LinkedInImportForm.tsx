@@ -62,14 +62,14 @@ export const LinkedInImportForm = ({
           <div
             className={cn(
               'w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300',
-              state === 'error' ? 'bg-red-100' : 'bg-[#0077B5]/10',
-              state === 'hover' && 'scale-110 bg-[#0077B5]/20'
+              state === 'error' ? 'bg-red-100' : 'bg-primary/10',
+              state === 'hover' && 'scale-110 bg-primary/20'
             )}
           >
             {state === 'error' ? (
               <AlertCircle className='w-10 h-10 text-red-600' />
             ) : (
-              <Linkedin className='w-10 h-10 text-[#0077B5]' />
+              <Linkedin className='w-10 h-10 text-primary' />
             )}
           </div>
 

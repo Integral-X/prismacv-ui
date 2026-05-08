@@ -98,6 +98,14 @@ src/modules/<feature>/data/
 
 `executeAuthenticatedRequest()` in `mutations.ts`: attempt with access token -> on 401, read refresh token -> call refresh endpoint -> persist new session -> retry original request. If refresh fails, clear session and throw.
 
+### Route protection matrix
+
+- `src/middleware.ts` protects prefix routes that require an authenticated user session cookie:
+  - `/onboarding`, `/dashboard`, `/cv`, `/settings`, `/ats-scorer`, `/jobs`, `/skills`, `/interview`, `/cover-letters`, `/admin`
+- Public pages (no middleware auth gate): landing and marketing routes, auth routes (`/login`, `/signup`, `/otp`, `/forgot-password`, `/reset-password`), and `/public/cv/[slug]`.
+- `/admin` has a second gate in `src/app/(site)/admin/page.tsx` that checks `getCurrentUser().role === 'admin'` and redirects non-admin users.
+- Backend admin-only APIs (for example `GET /features/refresh`) require a platform-admin JWT audience; regular user sessions are not sufficient.
+
 ### HTTP client
 
 All HTTP calls go through the `HttpClient` interface in `src/shared/http/`. Never call `fetch` directly in feature code.
@@ -237,7 +245,7 @@ Page calls action -> checks `result.ok`:
 ## Environment
 
 - **Env validation**: `src/shared/config/env.ts` validates `NEXT_PUBLIC_API_URL` at module load. Missing it crashes with a clear error. Exported `env.apiBaseUrl` has `/v1/` suffix appended.
-- **Local dev**: create `.env.local` with `NEXT_PUBLIC_API_URL=http://localhost:8080`.
+- **Local dev**: create `.env.local` with `NEXT_PUBLIC_API_URL=http://localhost:3210/api` (same host/port as the Nest `PORT` and `/api` prefix as in backend `.env.example`).
 - **Logging**: Pino at `src/shared/logger/logger.ts`. Security redaction on passwords, tokens, auth headers (`[Redacted]`). Dev: level=debug, pretty-printed. Prod: level=info, JSON. Use `logger`, not `console.log`.
 - **Session**: httpOnly cookies (`access-token`, `refresh-token`, `user-profile`, `session-persistent`). `rememberMe=true` sets `maxAge` (7 days). `rememberMe=false` creates session-only cookies. `secure` flag only in production.
 - **Security headers**: X-Frame-Options: DENY, X-Content-Type-Options: nosniff, Referrer-Policy: origin-when-cross-origin (configured in next.config.ts).

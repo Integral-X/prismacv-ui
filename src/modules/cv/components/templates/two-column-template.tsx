@@ -42,7 +42,7 @@ export function TwoColumnTemplate({ cv, accentColor }: TemplateProps) {
       {/* Two-column body */}
       <div className='grid grid-cols-3 gap-0'>
         {/* Left sidebar */}
-        <div className='col-span-1 space-y-5 bg-gray-50 p-6'>
+        <div className='col-span-1 space-y-5 bg-surface-elevated p-6'>
           {skills.length > 0 && (
             <SidebarSection title='Skills' color={accentColor}>
               <div className='space-y-1'>
@@ -56,9 +56,9 @@ export function TwoColumnTemplate({ cv, accentColor }: TemplateProps) {
             <SidebarSection title='Languages' color={accentColor}>
               <div className='space-y-1'>
                 {languages.map((lang) => (
-                  <div key={lang.id} className='text-xs text-gray-700'>
+                  <div key={lang.id} className='text-xs text-content-secondary'>
                     <span className='font-medium'>{lang.name}</span>
-                    <span className='ml-1 text-gray-500'>
+                    <span className='ml-1 text-content-tertiary'>
                       ({lang.proficiency})
                     </span>
                   </div>
@@ -71,11 +71,13 @@ export function TwoColumnTemplate({ cv, accentColor }: TemplateProps) {
               <div className='space-y-2'>
                 {certifications.map((cert) => (
                   <div key={cert.id}>
-                    <p className='text-xs font-medium text-gray-800'>
+                    <p className='text-xs font-medium text-content-primary'>
                       {cert.name}
                     </p>
                     {cert.issuer && (
-                      <p className='text-xs text-gray-500'>{cert.issuer}</p>
+                      <p className='text-xs text-content-tertiary'>
+                        {cert.issuer}
+                      </p>
                     )}
                   </div>
                 ))}
@@ -92,20 +94,20 @@ export function TwoColumnTemplate({ cv, accentColor }: TemplateProps) {
                 <div key={exp.id} className='mb-3'>
                   <div className='flex items-start justify-between'>
                     <div>
-                      <p className='text-sm font-semibold text-gray-900'>
+                      <p className='text-sm font-semibold text-content-primary'>
                         {exp.title}
                       </p>
-                      <p className='text-xs text-gray-600'>
+                      <p className='text-xs text-content-secondary'>
                         {exp.company}
                         {exp.location && ` · ${exp.location}`}
                       </p>
                     </div>
-                    <span className='shrink-0 text-xs text-gray-500'>
+                    <span className='shrink-0 text-xs text-content-tertiary'>
                       {formatDateRange(exp.startDate, exp.endDate, exp.current)}
                     </span>
                   </div>
                   {exp.description && (
-                    <p className='mt-1 text-xs leading-relaxed text-gray-600'>
+                    <p className='mt-1 text-xs leading-relaxed text-content-secondary'>
                       {exp.description}
                     </p>
                   )}
@@ -119,18 +121,20 @@ export function TwoColumnTemplate({ cv, accentColor }: TemplateProps) {
                 <div key={edu.id} className='mb-3'>
                   <div className='flex items-start justify-between'>
                     <div>
-                      <p className='text-sm font-semibold text-gray-900'>
+                      <p className='text-sm font-semibold text-content-primary'>
                         {edu.degree}
                         {edu.field && (
-                          <span className='font-normal text-gray-700'>
+                          <span className='font-normal text-content-secondary'>
                             {' in '}
                             {edu.field}
                           </span>
                         )}
                       </p>
-                      <p className='text-xs text-gray-600'>{edu.institution}</p>
+                      <p className='text-xs text-content-secondary'>
+                        {edu.institution}
+                      </p>
                     </div>
-                    <span className='shrink-0 text-xs text-gray-500'>
+                    <span className='shrink-0 text-xs text-content-tertiary'>
                       {formatDateRange(edu.startDate, edu.endDate, false)}
                     </span>
                   </div>
@@ -142,11 +146,11 @@ export function TwoColumnTemplate({ cv, accentColor }: TemplateProps) {
             <MainSection title='Projects' color={accentColor}>
               {projects.map((proj) => (
                 <div key={proj.id} className='mb-3'>
-                  <p className='text-sm font-semibold text-gray-900'>
+                  <p className='text-sm font-semibold text-content-primary'>
                     {proj.name}
                   </p>
                   {proj.description && (
-                    <p className='mt-0.5 text-xs leading-relaxed text-gray-600'>
+                    <p className='mt-0.5 text-xs leading-relaxed text-content-secondary'>
                       {proj.description}
                     </p>
                   )}
@@ -260,8 +264,8 @@ function SkillBar({ skill, color }: { skill: Skill; color: string }) {
   const width = LEVEL_WIDTHS[skill.level ?? 'intermediate'] ?? '50%';
   return (
     <div>
-      <span className='text-xs text-gray-700'>{skill.name}</span>
-      <div className='mt-0.5 h-1.5 w-full rounded-full bg-gray-200'>
+      <span className='text-xs text-content-secondary'>{skill.name}</span>
+      <div className='mt-0.5 h-1.5 w-full rounded-full bg-border-subtle'>
         <div
           className='h-full rounded-full'
           style={{ width, backgroundColor: color }}

@@ -2,10 +2,14 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
 import type { CvTemplate } from '@/modules/cv/data/mappers';
+import { createCvAction } from '@/modules/cv/data/actions';
 
 type CategoryFilter = 'all' | 'professional' | 'modern' | 'creative';
 
@@ -17,6 +21,10 @@ export function TemplatesGalleryClient({
   templates,
 }: TemplatesGalleryClientProps) {
   const [activeFilter, setActiveFilter] = useState<CategoryFilter>('all');
+  const [pendingTemplateId, setPendingTemplateId] = useState<string | null>(
+    null
+  );
+  const router = useRouter();
 
   const filtered =
     activeFilter === 'all'
@@ -29,6 +37,39 @@ export function TemplatesGalleryClient({
     { label: 'Modern', value: 'modern' },
     { label: 'Creative', value: 'creative' },
   ];
+
+  const toTemplateSelection = (templateId: string): string =>
+    `/onboarding/select-template?templateId=${encodeURIComponent(templateId)}`;
+
+  function toLoginWithTemplateRedirect(templateId: string): string {
+    const redirectPath = toTemplateSelection(templateId);
+    return `/login?redirect=${encodeURIComponent(redirectPath)}`;
+  }
+
+  async function handleUseTemplate(template: CvTemplate): Promise<void> {
+    setPendingTemplateId(template.id);
+
+    const result = await createCvAction({
+      title: `${template.name} Resume`,
+      templateId: template.id,
+    });
+
+    setPendingTemplateId(null);
+
+    if (result.ok && result.redirectTo) {
+      router.push(result.redirectTo);
+      return;
+    }
+
+    if (!result.ok && result.code === 'unauthorized') {
+      router.push(toLoginWithTemplateRedirect(template.id));
+      return;
+    }
+
+    if (!result.ok) {
+      toast.error(result.message);
+    }
+  }
 
   return (
     <div className='min-h-screen bg-surface-primary'>
@@ -64,7 +105,16 @@ export function TemplatesGalleryClient({
           {filtered.map((template) => (
             <div
               key={template.id}
-              className='group overflow-hidden rounded-lg border border-border-subtle bg-surface-card transition-all hover:shadow-lg'
+              role='button'
+              tabIndex={0}
+              aria-label={`${template.name} template`}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  void handleUseTemplate(template);
+                }
+              }}
+              className='group overflow-hidden rounded-lg border border-border-subtle bg-surface-card transition-all hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2'
             >
               {/* Thumbnail */}
               <div className='relative aspect-[3/4] overflow-hidden bg-surface-elevated'>
@@ -104,6 +154,19 @@ export function TemplatesGalleryClient({
                     </span>
                   )}
                 </div>
+                <Button
+                  size='sm'
+                  className='mt-4 w-full'
+                  onClick={() => {
+                    void handleUseTemplate(template);
+                  }}
+                  disabled={pendingTemplateId !== null}
+                >
+                  {pendingTemplateId === template.id ? (
+                    <Loader2 className='size-4 animate-spin' />
+                  ) : null}
+                  Use this template
+                </Button>
               </div>
             </div>
           ))}

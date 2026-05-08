@@ -56,25 +56,25 @@ export function ClassicTemplate({ cv, accentColor }: TemplateProps) {
             <div key={exp.id} className='mb-3'>
               <div className='flex items-start justify-between'>
                 <div>
-                  <p className='text-sm font-semibold text-gray-900'>
+                  <p className='text-sm font-semibold text-content-primary'>
                     {exp.title}
                   </p>
-                  <p className='text-sm text-gray-700'>
+                  <p className='text-sm text-content-secondary'>
                     {exp.company}
                     {exp.location && (
-                      <span className='text-gray-500'>
+                      <span className='text-content-tertiary'>
                         {' · '}
                         {exp.location}
                       </span>
                     )}
                   </p>
                 </div>
-                <span className='shrink-0 text-xs text-gray-500'>
+                <span className='shrink-0 text-xs text-content-tertiary'>
                   {formatDateRange(exp.startDate, exp.endDate, exp.current)}
                 </span>
               </div>
               {exp.description && (
-                <p className='mt-1 text-xs leading-relaxed text-gray-600'>
+                <p className='mt-1 text-xs leading-relaxed text-content-secondary'>
                   {exp.description}
                 </p>
               )}
@@ -88,23 +88,27 @@ export function ClassicTemplate({ cv, accentColor }: TemplateProps) {
             <div key={edu.id} className='mb-3'>
               <div className='flex items-start justify-between'>
                 <div>
-                  <p className='text-sm font-semibold text-gray-900'>
+                  <p className='text-sm font-semibold text-content-primary'>
                     {edu.degree}
                     {edu.field && (
-                      <span className='font-normal text-gray-700'>
+                      <span className='font-normal text-content-secondary'>
                         {' in '}
                         {edu.field}
                       </span>
                     )}
                   </p>
-                  <p className='text-sm text-gray-700'>{edu.institution}</p>
+                  <p className='text-sm text-content-secondary'>
+                    {edu.institution}
+                  </p>
                 </div>
-                <span className='shrink-0 text-xs text-gray-500'>
+                <span className='shrink-0 text-xs text-content-tertiary'>
                   {formatDateRange(edu.startDate, edu.endDate, false)}
                 </span>
               </div>
               {edu.gpa && (
-                <p className='mt-0.5 text-xs text-gray-500'>GPA: {edu.gpa}</p>
+                <p className='mt-0.5 text-xs text-content-tertiary'>
+                  GPA: {edu.gpa}
+                </p>
               )}
             </div>
           ))}
@@ -119,8 +123,10 @@ export function ClassicTemplate({ cv, accentColor }: TemplateProps) {
         <Section title='Certifications' color={accentColor}>
           {certifications.map((cert) => (
             <div key={cert.id} className='mb-2'>
-              <p className='text-sm font-semibold text-gray-900'>{cert.name}</p>
-              <div className='flex items-center gap-2 text-xs text-gray-500'>
+              <p className='text-sm font-semibold text-content-primary'>
+                {cert.name}
+              </p>
+              <div className='flex items-center gap-2 text-xs text-content-tertiary'>
                 {cert.issuer && <span>{cert.issuer}</span>}
                 {cert.issueDate && <span>{formatDate(cert.issueDate)}</span>}
               </div>
@@ -133,17 +139,17 @@ export function ClassicTemplate({ cv, accentColor }: TemplateProps) {
           {projects.map((proj) => (
             <div key={proj.id} className='mb-3'>
               <div className='flex items-start justify-between'>
-                <p className='text-sm font-semibold text-gray-900'>
+                <p className='text-sm font-semibold text-content-primary'>
                   {proj.name}
                 </p>
                 {proj.startDate && (
-                  <span className='shrink-0 text-xs text-gray-500'>
+                  <span className='shrink-0 text-xs text-content-tertiary'>
                     {formatDateRange(proj.startDate, proj.endDate, false)}
                   </span>
                 )}
               </div>
               {proj.description && (
-                <p className='mt-1 text-xs leading-relaxed text-gray-600'>
+                <p className='mt-1 text-xs leading-relaxed text-content-secondary'>
                   {proj.description}
                 </p>
               )}
@@ -158,9 +164,9 @@ export function ClassicTemplate({ cv, accentColor }: TemplateProps) {
         <Section title='Languages' color={accentColor}>
           <div className='flex flex-wrap gap-x-4 gap-y-1'>
             {languages.map((lang) => (
-              <span key={lang.id} className='text-sm text-gray-700'>
+              <span key={lang.id} className='text-sm text-content-secondary'>
                 {lang.name}
-                <span className='ml-1 text-xs text-gray-500'>
+                <span className='ml-1 text-xs text-content-tertiary'>
                   ({lang.proficiency})
                 </span>
               </span>
@@ -205,7 +211,7 @@ function Header({
         </h1>
       )}
       {contacts.length > 0 && (
-        <div className='mt-1 flex flex-wrap gap-3 text-xs text-gray-600'>
+        <div className='mt-1 flex flex-wrap gap-3 text-xs text-content-secondary'>
           {contacts.map((c, i) => (
             <span key={i} className='flex items-center gap-1'>
               {c.icon}
@@ -215,7 +221,7 @@ function Header({
         </div>
       )}
       {info.summary && (
-        <p className='mt-3 text-sm leading-relaxed text-gray-700'>
+        <p className='mt-3 text-sm leading-relaxed text-content-secondary'>
           {info.summary}
         </p>
       )}
@@ -253,13 +259,15 @@ function SkillsList({ skills }: { skills: Skill[] }) {
       {Object.entries(grouped).map(([category, items]) => (
         <div key={category}>
           {Object.keys(grouped).length > 1 && (
-            <p className='text-xs font-medium text-gray-700'>{category}</p>
+            <p className='text-xs font-medium text-content-secondary'>
+              {category}
+            </p>
           )}
           <div className='mt-1 flex flex-wrap gap-1.5'>
             {items.map((skill) => (
               <span
                 key={skill.id}
-                className='rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-700'
+                className='rounded bg-surface-elevated px-2 py-0.5 text-xs text-content-secondary'
               >
                 {skill.name}
               </span>

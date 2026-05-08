@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { toast } from 'sonner';
 import { educationSchema } from '@/lib/validations/cv';
 import type { Education } from '@/modules/cv/data/mappers';
+import { GrammarCheckInline } from '@/components/common/grammar-check-inline';
 import { updateSectionAction } from '@/modules/cv/data/actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -41,6 +42,7 @@ export function EducationForm({
     register,
     control,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -176,6 +178,11 @@ export function EducationForm({
               {...register(`items.${index}.description`)}
               placeholder='Additional details...'
               rows={3}
+            />
+            <GrammarCheckInline
+              getText={() => getValues(`items.${index}.description`) ?? ''}
+              context='education'
+              emptyMessage='Write a short description for this entry first.'
             />
           </FieldWrapper>
         </div>

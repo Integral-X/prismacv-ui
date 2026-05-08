@@ -8,6 +8,7 @@ export async function Navbar() {
     ? {
         email: currentUser.email,
         name: currentUser.name,
+        isAdmin: currentUser.role === 'admin',
       }
     : null;
 

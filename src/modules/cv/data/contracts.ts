@@ -294,3 +294,20 @@ export interface CustomSectionItemRequest {
 export interface BulkUpsertCustomSectionsRequest {
   items: CustomSectionItemRequest[];
 }
+
+// ─── Share ───────────────────────────────────────────────────────────────────
+
+export interface CvShareResponseContract {
+  id: string;
+  cvId: string;
+  shareSlug: string;
+  isPublic: boolean;
+  viewCount: number;
+  downloadCount: number;
+  lastViewedAt?: string;
+  createdAt: string;
+}
+
+export interface ShareCvRequest {
+  isPublic?: boolean;
+}

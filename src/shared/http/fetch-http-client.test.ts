@@ -1,4 +1,5 @@
 import { logger } from '@/shared/logger/logger';
+import { captureUiException } from '@/shared/monitoring/sentry';
 import { FetchHttpClient } from './fetch-http-client';
 import { HttpError } from './http-error';
 
@@ -9,16 +10,25 @@ jest.mock('@/shared/logger/logger', () => ({
   },
 }));
 
+jest.mock('@/shared/monitoring/sentry', () => ({
+  captureUiException: jest.fn(),
+}));
+
 const fetchMock = jest.fn() as jest.MockedFunction<typeof fetch>;
 
 function createJsonResponse(
   body: unknown,
   init: Pick<Response, 'ok' | 'status' | 'statusText'>
 ): Response {
+  const text = typeof body === 'string' ? body : JSON.stringify(body ?? null);
   return {
     ok: init.ok,
     status: init.status,
     statusText: init.statusText,
+    headers: {
+      get: jest.fn().mockReturnValue(null),
+    },
+    text: jest.fn<Promise<string>, []>().mockResolvedValue(text),
     json: jest.fn<Promise<unknown>, []>().mockResolvedValue(body),
   } as unknown as Response;
 }
@@ -28,6 +38,7 @@ describe('FetchHttpClient', () => {
     fetchMock.mockReset();
     jest.mocked(logger.debug).mockClear();
     jest.mocked(logger.error).mockClear();
+    jest.mocked(captureUiException).mockClear();
     global.fetch = fetchMock;
   });
 
@@ -190,5 +201,20 @@ describe('FetchHttpClient', () => {
     await expect(client.delete('profile')).rejects.toThrow(
       new HttpError(500, 'Internal Server Error', 'Server failed')
     );
+  });
+
+  it('returns undefined for 204 No Content responses', async () => {
+    const client = new FetchHttpClient('https://api.example.com');
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      status: 204,
+      statusText: 'No Content',
+      headers: {
+        get: jest.fn().mockReturnValue(null),
+      },
+      text: jest.fn().mockResolvedValue(''),
+    } as unknown as Response);
+
+    await expect(client.delete<void>('cv/abc/share')).resolves.toBeUndefined();
   });
 });

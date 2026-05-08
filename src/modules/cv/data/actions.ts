@@ -5,6 +5,7 @@ import { HttpError } from '@/shared/http/http-error';
 import type {
   CreateCvRequest,
   ImportLinkedInToCvRequest,
+  ShareCvRequest,
   UpdateCvRequest,
   UpsertPersonalInfoRequest,
 } from './contracts';
@@ -12,9 +13,12 @@ import {
   createCv,
   deleteCv,
   duplicateCv,
+  importCvFromFile,
   importLinkedInProfile,
   importLinkedInToCv,
   exportCvPdf,
+  shareCv,
+  unshareCv,
   updateCertifications,
   updateCv,
   updateCustomSections,
@@ -24,7 +28,9 @@ import {
   updatePersonalInfo,
   updateProjects,
   updateSkills,
+  assertSafeCvId,
 } from './mutations';
+import { getCvShareInfo } from './queries';
 import type {
   Certification,
   CustomSection,
@@ -34,6 +40,7 @@ import type {
   PersonalInfo,
   Project,
   Skill,
+  CvShareInfo,
 } from './mappers';
 import type {
   CertificationItemRequest,
@@ -262,6 +269,45 @@ export async function updateSectionAction<T extends SectionName>(
 
 // ─── Import actions ───────────────────────────────────────────────────────────
 
+export async function importCvFromFileAction(
+  file: File
+): Promise<ActionResult<{ cvId: string }>> {
+  try {
+    const cv = await importCvFromFile(file);
+    revalidatePath('/dashboard');
+
+    return {
+      ok: true,
+      data: { cvId: cv.id },
+      redirectTo: `/onboarding/select-template?cvId=${encodeURIComponent(cv.id)}`,
+    };
+  } catch (error) {
+    return toFailureResult(
+      error,
+      'Could not import that file. Use PDF or DOCX under 5 MB, or try LinkedIn import.'
+    );
+  }
+}
+
+export async function applyImportedCvTemplateAction(input: {
+  cvId: string;
+  templateId: string;
+}): Promise<ActionResult> {
+  try {
+    assertSafeCvId(input.cvId);
+    await updateCv(input.cvId, { templateId: input.templateId });
+    revalidatePath('/dashboard');
+    revalidatePath(`/cv/${input.cvId}/edit`);
+
+    return { ok: true, redirectTo: `/cv/${input.cvId}/edit` };
+  } catch (error) {
+    return toFailureResult(
+      error,
+      'Unable to apply the template. Try again or open the CV from the dashboard.'
+    );
+  }
+}
+
 export async function importLinkedInProfileAction(
   handleOrUrl: string
 ): Promise<ActionResult<{ importId: string }>> {
@@ -315,5 +361,39 @@ export async function exportCvPdfAction(
     return { ok: true, base64: buffer.toString('base64') };
   } catch (error) {
     return toFailureResult(error, 'Unable to export PDF right now.');
+  }
+}
+
+// ─── Share actions ───────────────────────────────────────────────────────────
+
+export async function getCvShareInfoAction(
+  cvId: string
+): Promise<ActionResult<CvShareInfo | null>> {
+  try {
+    const data = await getCvShareInfo(cvId);
+    return { ok: true, data };
+  } catch (error) {
+    return toFailureResult(error, 'Unable to load share settings.');
+  }
+}
+
+export async function shareCvAction(
+  cvId: string,
+  input: ShareCvRequest
+): Promise<ActionResult<CvShareInfo>> {
+  try {
+    const data = await shareCv(cvId, input);
+    return { ok: true, data };
+  } catch (error) {
+    return toFailureResult(error, 'Unable to update sharing.');
+  }
+}
+
+export async function unshareCvAction(cvId: string): Promise<ActionResult> {
+  try {
+    await unshareCv(cvId);
+    return { ok: true };
+  } catch (error) {
+    return toFailureResult(error, 'Unable to remove the share link.');
   }
 }

@@ -113,6 +113,39 @@ export default [
     },
   },
 
+  // Design token enforcement (outside design-system)
+  {
+    files: ['src/**/*.{js,jsx,ts,tsx}'],
+    ignores: ['src/design-system/**'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'Literal[value=/#[0-9A-Fa-f]{3,8}/]',
+          message:
+            'Use design-system tokens instead of hardcoded hex colors.',
+        },
+        {
+          selector: 'TemplateElement[value.raw=/#[0-9A-Fa-f]{3,8}/]',
+          message:
+            'Use design-system tokens instead of hardcoded hex colors.',
+        },
+        {
+          selector:
+            'Literal[value=/\\b(?:bg|text|border|ring|from|to|via)-gray-[0-9]{2,3}\\b/]',
+          message:
+            'Use design-system token classes (content/surface/border) instead of Tailwind gray utilities.',
+        },
+        {
+          selector:
+            'TemplateElement[value.raw=/\\b(?:bg|text|border|ring|from|to|via)-gray-[0-9]{2,3}\\b/]',
+          message:
+            'Use design-system token classes (content/surface/border) instead of Tailwind gray utilities.',
+        },
+      ],
+    },
+  },
+
   // Scripts directory - allow Node.js patterns
   {
     files: ['scripts/**/*.js'],

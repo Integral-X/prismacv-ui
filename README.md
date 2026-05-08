@@ -32,9 +32,9 @@ Copy `.env.example` to `.env.local` and fill in the values.
 
 #### Required
 
-| Variable              | Purpose                                           | Example                     |
-| --------------------- | ------------------------------------------------- | --------------------------- |
-| `NEXT_PUBLIC_API_URL` | Backend API base URL (must include `/api` prefix) | `http://localhost:3000/api` |
+| Variable              | Purpose                                                                                                 | Example                     |
+| --------------------- | ------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `NEXT_PUBLIC_API_URL` | Backend API base URL (must include `/api` prefix; host/port must match backend `PORT` and `API_PREFIX`) | `http://localhost:3210/api` |
 
 #### Optional
 
@@ -56,12 +56,19 @@ See `.env.example` for a ready-to-copy template.
 - **Templates Gallery** — browsable gallery of professional CV templates
 - **Live Preview** — real-time template rendering as you edit
 - **PDF Export** — server-side PDF generation via backend
+- **Shareable link** — optional public read-only CV preview (`/public/cv/...`) with analytics on the backend
+- **ATS scorer** — `/ats-scorer` page: paste resume + job description for keyword match scoring (same engine as optimizer)
 - **LinkedIn Import** — create a CV from LinkedIn profile data
 - **Job Application Tracker** — status tracking with notes per job
 - **Skill Gap Analysis** — role-based learning roadmaps with progress tracking
 - **Interview Prep** — question bank with adaptive difficulty
-- **Grammar Checker** — inline grammar and content feedback in editor
+- **Grammar Checker** — inline checks on summary, experience, education, project descriptions, and cover letter body (`POST /grammar/check`); full-document scores stay in **AI Analysis**
 - **Auth** — signup/login with email + OTP verification, Google & LinkedIn OAuth
+
+## ATS scoring vs CV AI
+
+- **`/ats-scorer`** — Paste **plain resume text** and a **job description** for a quick keyword / section ATS-style score. Does not require a saved CV.
+- **CV editor → Analyze / Optimize** — Runs on your **stored CV** and returns bundled grammar, readability, ATS-style signals, plus job-specific optimization when you paste a JD. Use this while editing a real profile.
 
 ## Project Structure
 
@@ -72,9 +79,12 @@ src/
 ├── design-system/    # Design tokens and CSS generation
 ├── modules/          # Feature modules
 │   ├── ai/           # AI analysis and optimization
+│   ├── ats/          # Standalone ATS scoring (used by /ats-scorer)
 │   ├── auth/         # Authentication data layer
 │   ├── cover-letters/ # Cover letter generation
 │   ├── cv/           # CV editor, preview, templates
+│   ├── features/     # Feature flags (Unleash) read API
+│   ├── grammar/      # Snippet grammar check API
 │   ├── jobs/         # Job tracker
 │   ├── skills/       # Skills and learning roadmap
 │   └── user/         # User profile management

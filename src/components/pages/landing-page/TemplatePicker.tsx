@@ -40,7 +40,7 @@ export const TemplatePicker = () => {
   return (
     <section
       id='templates'
-      className='py-16 md:py-20 bg-linear-to-b from-[#E8F5E9] to-white relative overflow-hidden'
+      className='relative overflow-hidden bg-linear-to-b from-surface-elevated to-surface-page py-16 md:py-20'
     >
       <div className='container mx-auto px-4'>
         {/* Section Title */}
@@ -68,13 +68,13 @@ export const TemplatePicker = () => {
                   <div className='relative'>
                     <Card
                       className={cn(
-                        'overflow-hidden transition-all duration-500 shadow-lg bg-[#E6F5F6] border-0 p-0 py-2',
+                        'overflow-hidden border-0 bg-surface-card p-0 py-2 shadow-lg transition-all duration-500',
                         current === index
                           ? 'scale-100 z-10 border-2 border-primary'
                           : 'scale-90 opacity-70'
                       )}
                     >
-                      <CardContent className='p-0 aspect-3/4 relative bg-[#E6F5F6]'>
+                      <CardContent className='relative aspect-3/4 bg-surface-card p-0'>
                         <Image
                           src={image}
                           alt={`Resume template ${index + 1}`}
@@ -98,7 +98,7 @@ export const TemplatePicker = () => {
                 type='button'
                 onClick={() => api?.scrollTo(index)}
                 className={cn(
-                  'group min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer'
+                  'group min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2'
                 )}
                 aria-label={`Go to slide ${index + 1}`}
                 aria-current={current === index ? 'true' : undefined}

@@ -12,6 +12,7 @@ import {
   MessageSquare,
   BarChart3,
   Trash2,
+  Loader2,
   ExternalLink,
   MapPin,
 } from 'lucide-react';
@@ -23,6 +24,8 @@ import { Badge } from '@/components/ui/badge';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -103,6 +106,10 @@ export function JobsPageClient({
   const [isPending, startTransition] = useTransition();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('board');
+  const [pendingDeleteJobId, setPendingDeleteJobId] = useState<string | null>(
+    null
+  );
+  const [jobPendingDelete, setJobPendingDelete] = useState<Job | null>(null);
 
   const {
     register,
@@ -155,17 +162,30 @@ export function JobsPageClient({
     });
   }
 
-  function handleDelete(jobId: string) {
-    startTransition(async () => {
-      const result = await deleteJobAction(jobId);
-      if (result.ok) {
-        setJobs((prev) => prev.filter((j) => j.id !== jobId));
-        setStats((prev) => ({ ...prev, total: prev.total - 1 }));
-        toast.success(result.message);
-      } else {
-        toast.error(result.message);
-      }
-    });
+  function handleDeleteRequest(jobId: string) {
+    const targetJob = jobs.find((job) => job.id === jobId);
+    if (!targetJob) return;
+
+    setJobPendingDelete(targetJob);
+  }
+
+  async function handleDeleteConfirm() {
+    if (!jobPendingDelete) return;
+
+    const deletingJobId = jobPendingDelete.id;
+    setPendingDeleteJobId(deletingJobId);
+
+    const result = await deleteJobAction(deletingJobId);
+    if (result.ok) {
+      setJobs((prev) => prev.filter((job) => job.id !== deletingJobId));
+      setStats((prev) => ({ ...prev, total: Math.max(prev.total - 1, 0) }));
+      toast.success(result.message);
+      setJobPendingDelete(null);
+    } else {
+      toast.error(result.message);
+    }
+
+    setPendingDeleteJobId(null);
   }
 
   return (
@@ -184,9 +204,16 @@ export function JobsPageClient({
               Add Job
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent aria-describedby='add-job-dialog-description'>
             <DialogHeader>
               <DialogTitle>Add Job Application</DialogTitle>
+              <p
+                id='add-job-dialog-description'
+                className='text-sm text-muted-foreground'
+              >
+                Fill in the job details below to add a new application to your
+                tracker.
+              </p>
             </DialogHeader>
             <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
               <div className='space-y-2'>
@@ -337,8 +364,9 @@ export function JobsPageClient({
                         key={job.id}
                         job={job}
                         onStatusChange={handleStatusChange}
-                        onDelete={handleDelete}
+                        onDelete={handleDeleteRequest}
                         isPending={isPending}
+                        isDeleting={pendingDeleteJobId === job.id}
                       />
                     ))}
                   </div>
@@ -362,14 +390,53 @@ export function JobsPageClient({
                   key={job.id}
                   job={job}
                   onStatusChange={handleStatusChange}
-                  onDelete={handleDelete}
+                  onDelete={handleDeleteRequest}
                   isPending={isPending}
+                  isDeleting={pendingDeleteJobId === job.id}
                 />
               ))
             )}
           </div>
         </TabsContent>
       </Tabs>
+      <Dialog
+        open={jobPendingDelete !== null}
+        onOpenChange={(open) => {
+          if (!open && !pendingDeleteJobId) {
+            setJobPendingDelete(null);
+          }
+        }}
+      >
+        <DialogContent aria-describedby='delete-job-dialog-description'>
+          <DialogHeader>
+            <DialogTitle>Delete this job?</DialogTitle>
+            <DialogDescription id='delete-job-dialog-description'>
+              {jobPendingDelete
+                ? `This will remove "${jobPendingDelete.title}" at "${jobPendingDelete.company}" from your tracker. This action cannot be undone.`
+                : 'This action cannot be undone.'}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant='outline'
+              onClick={() => setJobPendingDelete(null)}
+              disabled={pendingDeleteJobId !== null}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant='destructive'
+              onClick={handleDeleteConfirm}
+              disabled={pendingDeleteJobId !== null}
+            >
+              {pendingDeleteJobId !== null && (
+                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+              )}
+              Delete job
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }
@@ -381,9 +448,16 @@ interface JobCardProps {
   onStatusChange: (id: string, status: string) => void;
   onDelete: (id: string) => void;
   isPending: boolean;
+  isDeleting: boolean;
 }
 
-function JobCard({ job, onStatusChange, onDelete, isPending }: JobCardProps) {
+function JobCard({
+  job,
+  onStatusChange,
+  onDelete,
+  isPending,
+  isDeleting,
+}: JobCardProps) {
   return (
     <Card className='cursor-pointer hover:shadow-md transition-shadow'>
       <CardContent className='p-3 space-y-2'>
@@ -399,9 +473,13 @@ function JobCard({ job, onStatusChange, onDelete, isPending }: JobCardProps) {
             size='icon'
             className='h-6 w-6 shrink-0'
             onClick={() => onDelete(job.id)}
-            disabled={isPending}
+            disabled={isDeleting}
           >
-            <Trash2 className='h-3 w-3' />
+            {isDeleting ? (
+              <Loader2 className='h-3 w-3 animate-spin' />
+            ) : (
+              <Trash2 className='h-3 w-3' />
+            )}
           </Button>
         </div>
         {job.location && (
@@ -424,7 +502,7 @@ function JobCard({ job, onStatusChange, onDelete, isPending }: JobCardProps) {
         <Select
           value={job.status}
           onValueChange={(v) => onStatusChange(job.id, v)}
-          disabled={isPending}
+          disabled={isPending || isDeleting}
         >
           <SelectTrigger className='h-7 text-xs'>
             <SelectValue />
@@ -447,6 +525,7 @@ interface JobListItemProps {
   onStatusChange: (id: string, status: string) => void;
   onDelete: (id: string) => void;
   isPending: boolean;
+  isDeleting: boolean;
 }
 
 function JobListItem({
@@ -454,6 +533,7 @@ function JobListItem({
   onStatusChange,
   onDelete,
   isPending,
+  isDeleting,
 }: JobListItemProps) {
   const config = STATUS_CONFIG[job.status];
 
@@ -481,7 +561,13 @@ function JobListItem({
         <div className='flex items-center gap-2 shrink-0'>
           {job.url && (
             <Button variant='ghost' size='icon' asChild>
-              <a href={job.url} target='_blank' rel='noopener noreferrer'>
+              <a
+                href={job.url}
+                target='_blank'
+                rel='noopener noreferrer'
+                aria-label='Open job listing in a new tab'
+                title='Open job listing'
+              >
                 <ExternalLink className='h-4 w-4' />
               </a>
             </Button>
@@ -489,7 +575,7 @@ function JobListItem({
           <Select
             value={job.status}
             onValueChange={(v) => onStatusChange(job.id, v)}
-            disabled={isPending}
+            disabled={isPending || isDeleting}
           >
             <SelectTrigger className='w-[130px]'>
               <SelectValue />
@@ -506,9 +592,13 @@ function JobListItem({
             variant='ghost'
             size='icon'
             onClick={() => onDelete(job.id)}
-            disabled={isPending}
+            disabled={isDeleting}
           >
-            <Trash2 className='h-4 w-4' />
+            {isDeleting ? (
+              <Loader2 className='h-4 w-4 animate-spin' />
+            ) : (
+              <Trash2 className='h-4 w-4' />
+            )}
           </Button>
         </div>
       </CardContent>

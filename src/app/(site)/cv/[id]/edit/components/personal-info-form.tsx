@@ -1,5 +1,6 @@
 'use client';
 
+import type { ReactNode } from 'react';
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,6 +11,7 @@ import {
 } from '@/lib/validations/cv';
 import type { PersonalInfo } from '@/modules/cv/data/mappers';
 import { updatePersonalInfoAction } from '@/modules/cv/data/actions';
+import { GrammarCheckInline } from '@/components/common/grammar-check-inline';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -31,6 +33,7 @@ export function PersonalInfoForm({
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<PersonalInfoFormData>({
     resolver: zodResolver(personalInfoSchema),
@@ -101,6 +104,11 @@ export function PersonalInfoForm({
           placeholder='A brief professional summary...'
           rows={4}
         />
+        <GrammarCheckInline
+          getText={() => getValues('summary') ?? ''}
+          context='summary'
+          emptyMessage='Write a few sentences in your summary first.'
+        />
       </FieldWrapper>
 
       <div className='flex justify-end'>
@@ -120,7 +128,7 @@ function FieldWrapper({
 }: {
   label: string;
   error?: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <div className='space-y-1.5'>

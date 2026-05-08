@@ -3,6 +3,7 @@ import type {
   CustomSectionResponseContract,
   CvListItemResponseContract,
   CvResponseContract,
+  CvShareResponseContract,
   CvStatusContract,
   EducationResponseContract,
   ExperienceResponseContract,
@@ -163,6 +164,17 @@ export interface CvTemplate {
   category: TemplateCategory;
 }
 
+export interface CvShareInfo {
+  id: string;
+  cvId: string;
+  shareSlug: string;
+  isPublic: boolean;
+  viewCount: number;
+  downloadCount: number;
+  lastViewedAt: Date | null;
+  createdAt: Date;
+}
+
 // ─── Mappers ──────────────────────────────────────────────────────────────────
 
 function toCvStatus(status: CvStatusContract): CvStatus {
@@ -321,6 +333,21 @@ export function toCv(contract: CvResponseContract): Cv {
     projects: contract.projects.map(toProject),
     languages: contract.languages.map(toLanguage),
     customSections: contract.customSections.map(toCustomSection),
+  };
+}
+
+export function toCvShareInfo(contract: CvShareResponseContract): CvShareInfo {
+  return {
+    id: contract.id,
+    cvId: contract.cvId,
+    shareSlug: contract.shareSlug,
+    isPublic: contract.isPublic,
+    viewCount: contract.viewCount,
+    downloadCount: contract.downloadCount,
+    lastViewedAt: contract.lastViewedAt
+      ? new Date(contract.lastViewedAt)
+      : null,
+    createdAt: new Date(contract.createdAt),
   };
 }
 
