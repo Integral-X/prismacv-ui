@@ -29,15 +29,13 @@ interface RouteProps {
 export interface NavbarUser {
   email: string;
   name?: string;
-  /** Platform admin (JWT user with elevated role). */
-  isAdmin?: boolean;
 }
 
 interface NavbarClientProps {
   currentUser: NavbarUser | null;
 }
 
-const landingRouteList: RouteProps[] = [
+const publicRouteList: RouteProps[] = [
   {
     href: '#templates',
     label: 'Templates',
@@ -48,21 +46,6 @@ const landingRouteList: RouteProps[] = [
   },
   {
     href: '#faq',
-    label: 'FAQ',
-  },
-];
-
-const publicRouteList: RouteProps[] = [
-  {
-    href: '/templates',
-    label: 'Templates',
-  },
-  {
-    href: '/pricing',
-    label: 'Pricing',
-  },
-  {
-    href: '/#faq',
     label: 'FAQ',
   },
 ];
@@ -88,29 +71,19 @@ const authenticatedRouteList: RouteProps[] = [
     href: '/interview',
     label: 'Interview',
   },
-  {
-    href: '/ats-scorer',
-    label: 'ATS scorer',
-  },
 ];
 
 export function NavbarClient({ currentUser }: NavbarClientProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const pathname = usePathname();
   const isLandingPage = pathname === '/';
-  const guestRouteList = isLandingPage ? landingRouteList : publicRouteList;
   const showAccountMenu = Boolean(currentUser && !isLandingPage);
   const showGetStarted = isLandingPage || !currentUser;
   const routeList = isLandingPage
-    ? landingRouteList
+    ? publicRouteList
     : currentUser
-      ? [
-          ...authenticatedRouteList,
-          ...(currentUser.isAdmin
-            ? [{ href: '/admin', label: 'Admin' } satisfies RouteProps]
-            : []),
-        ]
-      : guestRouteList;
+      ? authenticatedRouteList
+      : publicRouteList;
 
   return (
     <header className='sticky top-0 z-40 w-full bg-surface-card shadow-(--shadow-sm)'>
@@ -120,8 +93,6 @@ export function NavbarClient({ currentUser }: NavbarClientProps) {
             <a
               rel='noreferrer noopener'
               href='/'
-              aria-label='Go to PrismaCV home page'
-              title='PrismaCV home'
               className='font-bold text-xl flex items-center gap-2'
             >
               <Image

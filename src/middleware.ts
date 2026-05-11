@@ -7,12 +7,10 @@ const PROTECTED_PREFIXES = [
   '/dashboard',
   '/cv',
   '/settings',
-  '/ats-scorer',
   '/jobs',
   '/skills',
   '/interview',
   '/cover-letters',
-  '/admin',
 ];
 
 export function middleware(request: NextRequest) {

@@ -98,7 +98,7 @@ export const TemplatePicker = () => {
                 type='button'
                 onClick={() => api?.scrollTo(index)}
                 className={cn(
-                  'group min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2'
+                  'group min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer'
                 )}
                 aria-label={`Go to slide ${index + 1}`}
                 aria-current={current === index ? 'true' : undefined}

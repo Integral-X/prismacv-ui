@@ -1,11 +1,11 @@
 import 'server-only';
 
-import { apiClient, getApiClient } from '@/shared/http/api-client';
+import { apiClient } from '@/shared/http/api-client';
 import { env } from '@/shared/config/env';
 import { HttpError } from '@/shared/http/http-error';
 import { executeAuthenticatedRequest } from '@/shared/auth/execute-authenticated-request';
 
-export function assertSafeCvId(cvId: string): void {
+function assertSafeCvId(cvId: string): void {
   if (!/^[A-Za-z0-9_-]{1,128}$/.test(cvId)) {
     throw new HttpError(400, 'Bad Request', 'Invalid CV id');
   }
@@ -36,17 +36,14 @@ import type {
   PersonalInfoResponseContract,
   ProjectItemRequest,
   ProjectResponseContract,
-  ShareCvRequest,
   SkillItemRequest,
   SkillResponseContract,
   UpdateCvRequest,
   UpsertPersonalInfoRequest,
-  CvShareResponseContract,
 } from './contracts';
 import {
   toCertification,
   toCv,
-  toCvShareInfo,
   toCustomSection,
   toEducation,
   toExperience,
@@ -57,7 +54,6 @@ import {
   type Certification,
   type CustomSection,
   type Cv,
-  type CvShareInfo,
   type Education,
   type Experience,
   type Language,
@@ -259,19 +255,6 @@ export async function importLinkedInToCv(
   });
 }
 
-export async function importCvFromFile(file: File): Promise<Cv> {
-  return executeAuthenticatedRequest(async (headers) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    const contract = await getApiClient().postFormData<CvResponseContract>(
-      'cv/import/file',
-      formData,
-      { headers }
-    );
-    return toCv(contract);
-  });
-}
-
 export async function exportCvPdf(cvId: string): Promise<Blob> {
   assertSafeCvId(cvId);
 
@@ -299,29 +282,5 @@ export async function exportCvPdf(cvId: string): Promise<Blob> {
     }
 
     return response.blob();
-  });
-}
-
-export async function shareCv(
-  cvId: string,
-  body: ShareCvRequest
-): Promise<CvShareInfo> {
-  assertSafeCvId(cvId);
-
-  return executeAuthenticatedRequest(async (headers) => {
-    const contract = await apiClient.post<
-      CvShareResponseContract,
-      ShareCvRequest
-    >(`cv/${cvId}/share`, body, { headers });
-
-    return toCvShareInfo(contract);
-  });
-}
-
-export async function unshareCv(cvId: string): Promise<void> {
-  assertSafeCvId(cvId);
-
-  return executeAuthenticatedRequest(async (headers) => {
-    await apiClient.delete<void>(`cv/${cvId}/share`, { headers });
   });
 }

@@ -3,25 +3,15 @@
 [![Release Pipeline](https://github.com/Integral-X/prismacv-ui/actions/workflows/main.yml/badge.svg)](https://github.com/Integral-X/prismacv-ui/actions/workflows/main.yml)
 [![PR Validation](https://github.com/Integral-X/prismacv-ui/actions/workflows/pr.yml/badge.svg)](https://github.com/Integral-X/prismacv-ui/actions/workflows/pr.yml)
 
-Next.js frontend for PrismaCV: authenticated CV editing, AI workflows, billing UX, and public marketing pages.
-
-## Current Status
-
-- Feature-ready UI scope is implemented for onboarding, CV editing, AI actions, billing, and account management.
-- Routing and middleware protections are in place for authenticated/user/admin paths.
-- Billing upgrade and plan-aware UI states are wired end to end.
-- Resume templates/examples and legal pages (`/pricing`, `/resume-templates`, `/resume-examples`, policy pages) are live.
-- Unit and Playwright e2e test suites are integrated into CI quality gates.
+AI-powered CV building, job application tracking, and career management platform.
 
 ## Tech Stack
 
 - **Framework**: Next.js 16 (App Router)
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS 4 + shadcn/ui
+- **Styling**: Tailwind CSS 4 + shadcn/ui (new-york)
+- **Auth**: JWT with server-side session management (httpOnly cookies)
 - **Forms**: React Hook Form 7 + Zod
-- **State and Data**: Server Actions + module-scoped data layers
-- **Auth Model**: httpOnly cookie-based session from backend JWT endpoints
-- **Observability**: Sentry for browser/runtime monitoring
 - **Package Manager**: pnpm
 
 ## Getting Started
@@ -30,83 +20,80 @@ Next.js frontend for PrismaCV: authenticated CV editing, AI workflows, billing U
 git clone https://github.com/Integral-X/prismacv-ui.git
 cd prismacv-ui
 pnpm install
-cp .env.example .env.local
+cp .env.example .env.local   # fill in API URL and auth config
 pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Environment Variables
+### Environment Variables
 
-Copy `.env.example` to `.env.local`.
+Copy `.env.example` to `.env.local` and fill in the values.
 
-### Required
+#### Required
 
-| Variable              | Purpose                                                         | Example                     |
-| --------------------- | --------------------------------------------------------------- | --------------------------- |
-| `NEXT_PUBLIC_API_URL` | Backend API base URL (must include `/api`, do not append `/v1`) | `http://localhost:3210/api` |
+| Variable              | Purpose                                           | Example                     |
+| --------------------- | ------------------------------------------------- | --------------------------- |
+| `NEXT_PUBLIC_API_URL` | Backend API base URL (must include `/api` prefix) | `http://localhost:3000/api` |
 
-### Optional
+#### Optional
 
-| Variable                                | Purpose                           |
-| --------------------------------------- | --------------------------------- |
-| `LOG_LEVEL`                             | Frontend logger verbosity         |
-| `NEXT_PUBLIC_SENTRY_DSN`                | Sentry DSN for UI error reporting |
-| `NEXT_PUBLIC_SENTRY_ENVIRONMENT`        | Sentry environment tag            |
-| `NEXT_PUBLIC_SENTRY_RELEASE`            | Sentry release identifier         |
-| `NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE` | Sentry tracing sample rate        |
+| Variable    | Default                       | Purpose                                  |
+| ----------- | ----------------------------- | ---------------------------------------- |
+| `NODE_ENV`  | `development`                 | Environment (`production` in deployment) |
+| `LOG_LEVEL` | `debug` (dev) / `info` (prod) | Logging verbosity                        |
 
-> The UI does not need backend secrets like `JWT_SECRET`; auth is handled through secure cookies set by the API.
+> **Note:** The UI does not need `JWT_SECRET`. Auth is handled entirely via httpOnly cookies set by the backend.
 
-## Core Features
+See `.env.example` for a ready-to-copy template.
 
-- **CV Editor**: personal info, experience, education, skills, projects, certifications, languages, custom sections
-- **AI Workflows**: analyze CV, optimize for job description, grammar checks, ATS scoring
-- **Cover Letters**: template-based generation with CV linkage and optional progressive rendering
-- **Template Experience**: `/templates`, `/resume-templates`, direct "Use this template" CV creation
-- **Public Examples**: seeded showcase entries on `/resume-examples`
-- **Export and Sharing**: PDF export + public read-only CV links
-- **Career Toolkit**: jobs tracker, skills gap assessment, interview prep
-- **Billing UI**: plan management, upgrade flows, quota/plan indicators
-- **Authentication**: email + OTP, refresh sessions, Google/LinkedIn OAuth
+## Features
 
-## ATS Scorer vs CV Analyze/Optimize
-
-- **`/ats-scorer`**: score pasted resume text against a job description without opening a saved CV.
-- **CV editor Analyze/Optimize**: run structured analysis on a stored CV and get job-specific optimization suggestions.
+- **CV Builder** — section-based editor (personal info, experience, education, skills, projects, certifications, languages)
+- **AI Analysis** — grammar, readability, and ATS scoring with actionable suggestions
+- **Job Optimizer** — paste a job description to get match score and missing keywords
+- **Cover Letters** — AI-assisted generation from CV data and job context
+- **Templates Gallery** — browsable gallery of professional CV templates
+- **Live Preview** — real-time template rendering as you edit
+- **PDF Export** — server-side PDF generation via backend
+- **LinkedIn Import** — create a CV from LinkedIn profile data
+- **Job Application Tracker** — status tracking with notes per job
+- **Skill Gap Analysis** — role-based learning roadmaps with progress tracking
+- **Interview Prep** — question bank with adaptive difficulty
+- **Grammar Checker** — inline grammar and content feedback in editor
+- **Auth** — signup/login with email + OTP verification, Google & LinkedIn OAuth
 
 ## Project Structure
 
-```text
+```
 src/
-├── app/               # Next.js routes and layouts
-├── components/        # Shared UI components
-├── design-system/     # Tokens and theme primitives
-├── modules/           # Feature modules (ai, ats, auth, billing, cv, jobs, skills, etc.)
-├── shared/            # HTTP client, auth utilities, shared types
-└── lib/               # Helpers, validators, utility functions
+├── app/              # Next.js routes and layouts
+├── components/       # Shared UI components (shadcn/ui + common)
+├── design-system/    # Design tokens and CSS generation
+├── modules/          # Feature modules
+│   ├── ai/           # AI analysis and optimization
+│   ├── auth/         # Authentication data layer
+│   ├── cover-letters/ # Cover letter generation
+│   ├── cv/           # CV editor, preview, templates
+│   ├── jobs/         # Job tracker
+│   ├── skills/       # Skills and learning roadmap
+│   └── user/         # User profile management
+├── shared/           # Auth utilities, HTTP client, types
+└── lib/              # Validations, helpers, utilities
 ```
 
 ## Development
 
 ```bash
-pnpm dev
-pnpm build
-pnpm lint
-pnpm typecheck
-pnpm format
+pnpm dev             # dev server (turbopack)
+pnpm build           # production build
+pnpm lint            # eslint
+pnpm format          # prettier
+pnpm test            # jest + react testing library
+pnpm test:coverage   # with coverage
 ```
 
-## Testing
-
-```bash
-pnpm test
-pnpm test:e2e
-pnpm verify
-```
-
-- `pnpm verify` runs formatting, lint, typecheck, unit tests, and build.
-- E2E uses Playwright (with accessibility coverage via `@axe-core/playwright` in test suite).
+Pre-commit hooks run formatting + linting automatically.
 
 ## License
 

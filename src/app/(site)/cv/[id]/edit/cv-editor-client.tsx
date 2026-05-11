@@ -14,7 +14,6 @@ import type {
 } from '@/modules/cv/data/mappers';
 import { updateCvAction, exportCvPdfAction } from '@/modules/cv/data/actions';
 import type { UpdateCvRequest } from '@/modules/cv/data/contracts';
-import type { BillingProfile } from '@/modules/billing/data/mappers';
 import { EditorHeader } from './components/editor-header';
 import { SectionWrapper } from './components/section-wrapper';
 import { PersonalInfoForm } from './components/personal-info-form';
@@ -27,20 +26,14 @@ import { LanguagesForm } from './components/languages-form';
 import { CvPreviewPanel } from '@/modules/cv/components/cv-preview-panel';
 import { AiAnalysisPanel } from './components/ai-analysis-panel';
 import { AiOptimizePanel } from './components/ai-optimize-panel';
-import { CvSharePanel } from './components/cv-share-panel';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Sparkles, Target } from 'lucide-react';
 
 interface CvEditorClientProps {
   cv: Cv;
-  billing: BillingProfile;
 }
 
-export function CvEditorClient({
-  cv: initialCv,
-  billing,
-}: CvEditorClientProps) {
+export function CvEditorClient({ cv: initialCv }: CvEditorClientProps) {
   const [cv, setCv] = useState<Cv>(initialCv);
   const [isPending, startTransition] = useTransition();
   const [showAiPanel, setShowAiPanel] = useState(false);
@@ -136,12 +129,6 @@ export function CvEditorClient({
       />
 
       <div className='mx-auto max-w-7xl px-4 py-6'>
-        <div className='mb-4 flex flex-wrap items-center gap-2'>
-          <Badge variant='secondary'>Plan: {billing.plan.toUpperCase()}</Badge>
-          <Badge variant='outline'>
-            AI quota: {billing.aiQuota.used}/{billing.aiQuota.limit}
-          </Badge>
-        </div>
         <div className='grid grid-cols-1 gap-6 lg:grid-cols-3'>
           {/* Left panel — forms */}
           <div className='space-y-4 lg:col-span-2'>
@@ -244,7 +231,6 @@ export function CvEditorClient({
                   onClose={() => setShowOptimizePanel(false)}
                 />
               )}
-              <CvSharePanel cvId={cv.id} />
               <CvPreviewPanel cv={cv} />
             </div>
           </div>
