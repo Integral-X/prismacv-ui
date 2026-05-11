@@ -16,8 +16,7 @@ interface PricingTier {
 const pricingTiers: PricingTier[] = [
   {
     name: 'Free',
-    description:
-      'Ideal for individuals who need quick access to basic features.',
+    description: 'Great for creating your first CV and exploring core tools.',
     monthlyPrice: 0,
     yearlyPrice: 0,
     features: [
@@ -27,12 +26,11 @@ const pricingTiers: PricingTier[] = [
       'Maximum 15 section items',
       'Access to all design tools',
     ],
-    buttonText: 'Get Started Now',
+    buttonText: 'Start Free',
   },
   {
-    name: 'Professional',
-    description:
-      'Ideal for individuals who who need advanced features and tools.',
+    name: 'Pro',
+    description: 'Best for active job seekers who need advanced AI assistance.',
     monthlyPrice: 25,
     yearlyPrice: 19,
     features: [
@@ -43,13 +41,13 @@ const pricingTiers: PricingTier[] = [
       'Pro resume sections',
       'Unlimited section items',
     ],
-    buttonText: 'Get Started Now',
+    buttonText: 'Upgrade to Pro',
     featured: true,
   },
   {
-    name: 'Ultimate',
+    name: 'Team',
     description:
-      'Ideal for individuals who need quick access to basic features.',
+      'Built for teams and power users who collaborate across multiple resumes.',
     monthlyPrice: 30,
     yearlyPrice: 23,
     features: [
@@ -60,7 +58,7 @@ const pricingTiers: PricingTier[] = [
       'Pro resume sections',
       'Unlimited section items',
     ],
-    buttonText: 'Get Started Now',
+    buttonText: 'Upgrade to Team',
   },
 ];
 
@@ -86,6 +84,16 @@ const CheckIcon = ({ featured }: { featured?: boolean }) => (
 
 export const Pricing = () => {
   const [isYearly, setIsYearly] = useState(true);
+
+  const getTierHref = (tierName: string): string => {
+    if (tierName === 'Free') {
+      return '/signup';
+    }
+    const cycle = isYearly ? 'yearly' : 'monthly';
+    return tierName === 'Pro'
+      ? `/settings/billing?plan=PRO&cycle=${cycle}`
+      : `/settings/billing?plan=TEAM&cycle=${cycle}`;
+  };
 
   return (
     <section
@@ -114,7 +122,6 @@ export const Pricing = () => {
               <button
                 type='button'
                 onClick={() => setIsYearly(false)}
-                aria-pressed={!isYearly}
                 className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
                   !isYearly
                     ? 'bg-surface-card text-content-primary shadow-sm'
@@ -126,7 +133,6 @@ export const Pricing = () => {
               <button
                 type='button'
                 onClick={() => setIsYearly(true)}
-                aria-pressed={isYearly}
                 className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
                   isYearly
                     ? 'bg-primary text-content-inverse shadow-sm'
@@ -202,7 +208,7 @@ export const Pricing = () => {
                 }`}
                 asChild
               >
-                <a href='/login'>{tier.buttonText}</a>
+                <a href={getTierHref(tier.name)}>{tier.buttonText}</a>
               </Button>
 
               {/* Features */}

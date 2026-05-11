@@ -70,7 +70,10 @@ export function SkillsPageClient({ categories, roles }: SkillsPageClientProps) {
 
     const validSkills = skillInputs
       .filter((s) => s.name.trim())
-      .map((s) => s.name.trim());
+      .map((s) => ({
+        name: s.name.trim(),
+        level: s.level,
+      }));
     if (validSkills.length === 0) {
       toast.error('Please add at least one skill.');
       return;

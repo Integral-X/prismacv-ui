@@ -66,9 +66,14 @@ export interface LearningRoadmapContract {
 
 // ─── Request contracts ──────────────────────────────────────────────────────
 
+export interface AssessSkillInputRequest {
+  name: string;
+  level?: number;
+}
+
 export interface AssessSkillsRequest {
   targetRole: string;
-  currentSkills?: string[];
+  currentSkills?: AssessSkillInputRequest[];
 }
 
 export interface UpdateProgressRequest {
