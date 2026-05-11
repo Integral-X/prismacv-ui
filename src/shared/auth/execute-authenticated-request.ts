@@ -9,13 +9,34 @@ import {
   shouldPersistSession,
 } from '@/modules/auth/data/session';
 
+async function refreshSessionAndGetAccessToken(): Promise<string> {
+  const refreshToken = await getRefreshToken();
+
+  if (!refreshToken) {
+    await clearAuthSession();
+    throw new HttpError(401, 'Unauthorized', 'Authentication required');
+  }
+
+  try {
+    const { refreshUserToken } = await import('@/modules/auth/data/mutations');
+    const refreshedSession = await refreshUserToken({ refreshToken });
+
+    await persistAuthSession(refreshedSession, await shouldPersistSession());
+
+    return refreshedSession.accessToken;
+  } catch (error) {
+    await clearAuthSession();
+    throw error;
+  }
+}
+
 export async function executeAuthenticatedRequest<T>(
   operation: (headers: Record<string, string>) => Promise<T>
 ): Promise<T> {
-  const accessToken = await getAccessToken();
+  let accessToken = await getAccessToken();
 
   if (!accessToken) {
-    throw new HttpError(401, 'Unauthorized', 'Authentication required');
+    accessToken = await refreshSessionAndGetAccessToken();
   }
 
   try {
@@ -25,26 +46,10 @@ export async function executeAuthenticatedRequest<T>(
       throw error;
     }
 
-    const refreshToken = await getRefreshToken();
+    const refreshedAccessToken = await refreshSessionAndGetAccessToken();
 
-    if (!refreshToken) {
-      await clearAuthSession();
-      throw error;
-    }
-
-    try {
-      const { refreshUserToken } =
-        await import('@/modules/auth/data/mutations');
-      const refreshedSession = await refreshUserToken({ refreshToken });
-
-      await persistAuthSession(refreshedSession, await shouldPersistSession());
-
-      return await operation({
-        Authorization: `Bearer ${refreshedSession.accessToken}`,
-      });
-    } catch (refreshError) {
-      await clearAuthSession();
-      throw refreshError;
-    }
+    return await operation({
+      Authorization: `Bearer ${refreshedAccessToken}`,
+    });
   }
 }

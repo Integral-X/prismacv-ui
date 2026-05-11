@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { Card } from '@/components/ui/card';
 import { AuthFormLayout } from '@/components/layouts/AuthFormLayout';
@@ -10,19 +10,10 @@ import { resetPasswordAction } from '@/modules/auth/data/actions';
 
 export function ResetPasswordPageClient() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const resetToken = searchParams.get('token') ?? '';
-
   const handleReset = async (data: ResetPasswordFormData) => {
-    if (!resetToken) {
-      toast.error('Missing or invalid password reset token.');
-      return;
-    }
-
     const result = await resetPasswordAction({
       confirmPassword: data.confirmPassword,
       newPassword: data.password,
-      resetToken,
     });
 
     if (!result.ok) {

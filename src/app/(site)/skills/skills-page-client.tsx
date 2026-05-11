@@ -80,14 +80,20 @@ export function SkillsPageClient({ categories, roles }: SkillsPageClientProps) {
     }
 
     startTransition(async () => {
-      const result = await assessSkillsAction({
-        targetRole: selectedRole,
-        currentSkills: validSkills,
-      });
-      if (result.ok && result.data) {
-        setAssessment(result.data);
-      } else if (!result.ok) {
-        toast.error(result.message);
+      try {
+        const result = await assessSkillsAction({
+          targetRole: selectedRole,
+          currentSkills: validSkills,
+        });
+        if (result.ok && result.data) {
+          setAssessment(result.data);
+        } else if (result.ok) {
+          toast.error('Something went wrong. Please try again.');
+        } else {
+          toast.error(result.message);
+        }
+      } catch {
+        toast.error('Something went wrong. Please try again.');
       }
     });
   }

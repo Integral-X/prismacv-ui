@@ -58,7 +58,9 @@ export function SelectTemplatePageClient() {
 
       if (result.ok && result.redirectTo) {
         router.push(result.redirectTo);
-      } else if (!result.ok) {
+      } else if (result.ok) {
+        toast.error('Something went wrong. Please try again.');
+      } else {
         toast.error(result.message);
       }
     });

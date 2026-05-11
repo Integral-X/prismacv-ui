@@ -43,7 +43,7 @@ export const Hero = () => {
                 className='w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 rounded-md'
                 asChild
               >
-                <a href='/login'>Build Your Resume</a>
+                <a href='/dashboard'>Build Your Resume</a>
               </Button>
 
               <Button
@@ -51,9 +51,7 @@ export const Hero = () => {
                 className='w-full sm:w-auto border-primary text-primary hover:bg-primary/10 rounded-md'
                 asChild
               >
-                <a href='/login?redirect=%2Fats-scorer'>
-                  Test your resume score
-                </a>
+                <a href='/ats-scorer'>Test your resume score</a>
               </Button>
             </div>
           </div>

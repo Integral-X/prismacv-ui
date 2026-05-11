@@ -16,6 +16,14 @@ export default function OAuthCallbackPage() {
 
     async function handleCallback() {
       try {
+        const decodeOAuthPayload = (encodedToken: string): string => {
+          const normalized = decodeURIComponent(encodedToken)
+            .replace(/-/g, '+')
+            .replace(/_/g, '/');
+          const padding = '='.repeat((4 - (normalized.length % 4)) % 4);
+          return atob(`${normalized}${padding}`);
+        };
+
         const hash = window.location.hash;
         const tokenParam = hash
           .slice(1)
@@ -28,21 +36,27 @@ export default function OAuthCallbackPage() {
         }
 
         const base64 = tokenParam.slice('token='.length);
-        const json = atob(base64.replace(/-/g, '+').replace(/_/g, '/'));
+        const json = decodeOAuthPayload(base64);
         const payload: unknown = JSON.parse(json);
 
+        if (typeof payload !== 'object' || payload === null) {
+          router.replace('/login?error=oauth_failed');
+          return;
+        }
+
+        const candidate = payload as Record<string, unknown>;
+
         if (
-          typeof payload !== 'object' ||
-          payload === null ||
-          !('accessToken' in payload) ||
-          !('refreshToken' in payload) ||
-          !('user' in payload)
+          typeof candidate.accessToken !== 'string' ||
+          typeof candidate.refreshToken !== 'string' ||
+          typeof candidate.user !== 'object' ||
+          candidate.user === null
         ) {
           router.replace('/login?error=oauth_failed');
           return;
         }
 
-        const { accessToken, refreshToken, user } = payload as {
+        const { accessToken, refreshToken, user } = candidate as {
           accessToken: string;
           refreshToken: string;
           user: unknown;
@@ -55,7 +69,7 @@ export default function OAuthCallbackPage() {
         });
 
         if (result.ok) {
-          router.replace(result.redirectTo ?? '/dashboard');
+          window.location.replace(result.redirectTo ?? '/dashboard');
         } else {
           router.replace('/login?error=oauth_failed');
         }

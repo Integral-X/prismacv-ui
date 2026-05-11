@@ -105,9 +105,10 @@ export function SettingsPageClient({ user, billing }: SettingsPageClientProps) {
     startTransition(async () => {
       const result = await deleteAccountAction();
 
-      if (result.ok && result.redirectTo) {
+      if (result.ok) {
         toast.success('Account deleted');
-        router.push(result.redirectTo);
+        // Hard navigation to flush all auth cookies and router cache
+        window.location.href = '/';
       } else if (!result.ok) {
         toast.error(result.message);
         setShowDeleteConfirm(false);

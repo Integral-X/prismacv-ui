@@ -177,4 +177,42 @@ describe('auth mutations', () => {
     await expect(changePassword(changePasswordBody)).rejects.toBe(refreshError);
     expect(clearAuthSessionMock).toHaveBeenCalledTimes(1);
   });
+
+  it('refreshes session when access token cookie is absent but refresh token is present', async () => {
+    // access-token cookie missing (null), but refresh-token exists
+    getAccessTokenMock.mockResolvedValueOnce(null);
+    getRefreshTokenMock.mockResolvedValueOnce('refresh-token');
+    shouldPersistSessionMock.mockResolvedValueOnce(true);
+    postMock
+      .mockResolvedValueOnce({
+        user: userContract,
+        accessToken: 'fresh-access-token',
+        refreshToken: 'fresh-refresh-token',
+      } satisfies UserLoginContract)
+      .mockResolvedValueOnce(changePasswordResponse);
+
+    await expect(changePassword(changePasswordBody)).resolves.toEqual(
+      changePasswordResponse
+    );
+
+    expect(postMock).toHaveBeenNthCalledWith(1, 'auth/user/refresh', {
+      refreshToken: 'refresh-token',
+    });
+    expect(postMock).toHaveBeenNthCalledWith(
+      2,
+      'auth/user/change-password',
+      changePasswordBody,
+      { headers: { Authorization: 'Bearer fresh-access-token' } }
+    );
+  });
+
+  it('clears session and throws when access token is absent and no refresh token exists', async () => {
+    getAccessTokenMock.mockResolvedValueOnce(null);
+    getRefreshTokenMock.mockResolvedValueOnce(null);
+
+    await expect(changePassword(changePasswordBody)).rejects.toMatchObject({
+      statusCode: 401,
+    });
+    expect(clearAuthSessionMock).toHaveBeenCalledTimes(1);
+  });
 });

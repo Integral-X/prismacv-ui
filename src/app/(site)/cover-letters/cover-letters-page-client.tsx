@@ -26,28 +26,38 @@ export function CoverLettersPageClient({
 
   function handleCreate() {
     startTransition(async () => {
-      const result = await createCoverLetterAction({
-        title: 'Untitled Cover Letter',
-      });
+      try {
+        const result = await createCoverLetterAction({
+          title: 'Untitled Cover Letter',
+        });
 
-      if (result.ok && result.data) {
-        setCoverLetters((prev) => [result.data!, ...prev]);
-        router.push(`/cover-letters/${result.data.id}/edit`);
-      } else if (!result.ok) {
-        toast.error(result.message);
+        if (result.ok && result.data) {
+          setCoverLetters((prev) => [result.data!, ...prev]);
+          router.push(`/cover-letters/${result.data.id}/edit`);
+        } else if (result.ok) {
+          toast.error('Something went wrong. Please try again.');
+        } else {
+          toast.error(result.message);
+        }
+      } catch {
+        toast.error('Something went wrong. Please try again.');
       }
     });
   }
 
   function handleDelete(id: string) {
     startTransition(async () => {
-      const result = await deleteCoverLetterAction(id);
+      try {
+        const result = await deleteCoverLetterAction(id);
 
-      if (result.ok) {
-        setCoverLetters((prev) => prev.filter((cl) => cl.id !== id));
-        toast.success('Cover letter deleted');
-      } else {
-        toast.error(result.message);
+        if (result.ok) {
+          setCoverLetters((prev) => prev.filter((cl) => cl.id !== id));
+          toast.success('Cover letter deleted');
+        } else {
+          toast.error(result.message);
+        }
+      } catch {
+        toast.error('Something went wrong. Please try again.');
       }
     });
   }

@@ -15,8 +15,20 @@ const PROTECTED_PREFIXES = [
   '/admin',
 ];
 
+// Guest-only routes — redirect authenticated users away from these
+const GUEST_ONLY_ROUTES = ['/login', '/signup'];
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  const accessToken = request.cookies.get('access-token')?.value;
+  const refreshToken = request.cookies.get('refresh-token')?.value;
+  const isAuthenticated = Boolean(accessToken || refreshToken);
+
+  // Redirect authenticated users away from guest-only pages
+  if (isAuthenticated && GUEST_ONLY_ROUTES.some((r) => pathname === r)) {
+    return NextResponse.redirect(new URL('/dashboard', request.url));
+  }
 
   // Check if the route is protected
   const isProtected = PROTECTED_PREFIXES.some(
@@ -25,10 +37,8 @@ export function middleware(request: NextRequest) {
 
   if (!isProtected) return NextResponse.next();
 
-  // Check for access-token cookie
-  const accessToken = request.cookies.get('access-token')?.value;
-
-  if (!accessToken) {
+  // A valid session can be recovered from refresh-token when access-token is absent.
+  if (!accessToken && !refreshToken) {
     const loginUrl = new URL('/login', request.url);
     const redirectPath = pathname + request.nextUrl.search;
     loginUrl.searchParams.set('redirect', redirectPath);

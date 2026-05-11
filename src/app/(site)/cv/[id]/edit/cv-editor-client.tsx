@@ -84,16 +84,20 @@ export function CvEditorClient({
         toast.error(result.message);
         return;
       }
-      const bytes = Uint8Array.from(atob(result.base64), (c) =>
-        c.charCodeAt(0)
-      );
-      const blob = new Blob([bytes], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${cv.title || 'cv'}.pdf`;
-      a.click();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      try {
+        const bytes = Uint8Array.from(atob(result.base64), (c) =>
+          c.charCodeAt(0)
+        );
+        const blob = new Blob([bytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${cv.title || 'cv'}.pdf`;
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      } catch {
+        toast.error('Failed to decode the PDF. Please try again.');
+      }
     });
   }
 
