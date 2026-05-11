@@ -217,4 +217,39 @@ describe('FetchHttpClient', () => {
 
     await expect(client.delete<void>('cv/abc/share')).resolves.toBeUndefined();
   });
+
+  it('falls back to status text when error response body is not a JSON envelope', async () => {
+    const client = new FetchHttpClient('https://api.example.com');
+
+    // Plain string body — not JSON at all
+    fetchMock.mockResolvedValueOnce({
+      ok: false,
+      status: 503,
+      statusText: 'Service Unavailable',
+      headers: { get: jest.fn().mockReturnValue(null) },
+      text: jest.fn().mockResolvedValue('upstream timeout'),
+    } as unknown as Response);
+
+    await expect(client.get('health')).rejects.toMatchObject({
+      statusCode: 503,
+      message: 'Service Unavailable',
+    });
+  });
+
+  it('falls back gracefully when error response body is empty', async () => {
+    const client = new FetchHttpClient('https://api.example.com');
+
+    fetchMock.mockResolvedValueOnce({
+      ok: false,
+      status: 502,
+      statusText: 'Bad Gateway',
+      headers: { get: jest.fn().mockReturnValue(null) },
+      text: jest.fn().mockResolvedValue(''),
+    } as unknown as Response);
+
+    await expect(client.get('health')).rejects.toMatchObject({
+      statusCode: 502,
+      message: 'Bad Gateway',
+    });
+  });
 });

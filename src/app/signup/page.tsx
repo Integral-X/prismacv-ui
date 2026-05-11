@@ -13,21 +13,25 @@ export default function SignupPage() {
   const router = useRouter();
 
   const handleSignup = async (data: SignupFormData) => {
-    const result = await signupUserAction({
-      email: data.email,
-      name: `${data.firstName} ${data.lastName}`.trim(),
-      password: data.password,
-    });
+    try {
+      const result = await signupUserAction({
+        email: data.email,
+        name: `${data.firstName} ${data.lastName}`.trim(),
+        password: data.password,
+      });
 
-    if (!result.ok) {
-      toast.error(result.message);
-      return;
+      if (!result.ok) {
+        toast.error(result.message);
+        return;
+      }
+
+      router.push(
+        result.redirectTo ??
+          `/otp?mode=signup&email=${encodeURIComponent(data.email)}`
+      );
+    } catch {
+      toast.error('Something went wrong. Please try again.');
     }
-
-    router.push(
-      result.redirectTo ??
-        `/otp?mode=signup&email=${encodeURIComponent(data.email)}`
-    );
   };
 
   return (

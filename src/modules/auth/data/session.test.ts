@@ -1,9 +1,12 @@
 import { cookies } from 'next/headers';
 import {
   clearAuthSession,
+  clearPasswordResetToken,
   getAccessToken,
+  getPasswordResetToken,
   getRefreshToken,
   persistAuthSession,
+  setPasswordResetToken,
   shouldPersistSession,
 } from './session';
 import type { AuthResult } from './mappers';
@@ -163,5 +166,60 @@ describe('auth session', () => {
     await expect(getAccessToken()).resolves.toBe('access-token');
     await expect(getRefreshToken()).resolves.toBe('refresh-token');
     await expect(shouldPersistSession()).resolves.toBe(true);
+  });
+
+  it('stores a short-lived password reset token cookie', async () => {
+    const cookieStore = createCookieStore();
+    mockCookieStore(cookieStore);
+
+    await setPasswordResetToken('reset-token-xyz');
+
+    expect(cookieStore.set).toHaveBeenCalledWith(
+      'password-reset-token',
+      'reset-token-xyz',
+      {
+        httpOnly: true,
+        path: '/',
+        sameSite: 'lax',
+        secure: false,
+        maxAge: 600,
+      }
+    );
+  });
+
+  it('reads a stored password reset token', async () => {
+    const cookieStore = createCookieStore();
+    cookieStore.get.mockImplementation((name) =>
+      name === 'password-reset-token' ? { value: 'reset-token-xyz' } : undefined
+    );
+    mockCookieStore(cookieStore);
+
+    await expect(getPasswordResetToken()).resolves.toBe('reset-token-xyz');
+  });
+
+  it('returns null when password reset token cookie is absent', async () => {
+    const cookieStore = createCookieStore();
+    cookieStore.get.mockReturnValue(undefined);
+    mockCookieStore(cookieStore);
+
+    await expect(getPasswordResetToken()).resolves.toBeNull();
+  });
+
+  it('deletes the password reset token cookie', async () => {
+    const cookieStore = createCookieStore();
+    mockCookieStore(cookieStore);
+
+    await clearPasswordResetToken();
+
+    expect(cookieStore.delete).toHaveBeenCalledWith('password-reset-token');
+  });
+
+  it('also deletes password reset token when clearing the full auth session', async () => {
+    const cookieStore = createCookieStore();
+    mockCookieStore(cookieStore);
+
+    await clearAuthSession();
+
+    expect(cookieStore.delete).toHaveBeenCalledWith('password-reset-token');
   });
 });

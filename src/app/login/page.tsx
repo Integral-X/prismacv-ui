@@ -30,35 +30,39 @@ function LoginPageClient() {
   }, [redirectTo, error]);
 
   const handleLogin = async (data: LoginFormData) => {
-    const result = await loginUserAction({
-      email: data.email,
-      password: data.password,
-      rememberMe: data.rememberMe,
-    });
+    try {
+      const result = await loginUserAction({
+        email: data.email,
+        password: data.password,
+        rememberMe: data.rememberMe,
+      });
 
-    if (!result.ok) {
-      if (result.code === 'email_not_verified' && result.email) {
-        router.push(
-          `/otp?mode=signup&email=${encodeURIComponent(result.email)}`
-        );
+      if (!result.ok) {
+        if (result.code === 'email_not_verified' && result.email) {
+          router.push(
+            `/otp?mode=signup&email=${encodeURIComponent(result.email)}`
+          );
+          return;
+        }
+
+        toast.error(result.message);
         return;
       }
 
-      toast.error(result.message);
-      return;
+      // Redirect to the originally requested page or default
+      // Prevent open redirect: must start with single slash and not be protocol-relative
+      const isSafePath =
+        redirectTo &&
+        redirectTo.startsWith('/') &&
+        !redirectTo.startsWith('//') &&
+        !redirectTo.startsWith('/\\');
+      const destination = isSafePath
+        ? redirectTo
+        : (result.redirectTo ?? '/dashboard');
+      router.push(destination);
+    } catch {
+      toast.error('Something went wrong. Please try again.');
     }
-
-    // Redirect to the originally requested page or default
-    // Prevent open redirect: must start with single slash and not be protocol-relative
-    const isSafePath =
-      redirectTo &&
-      redirectTo.startsWith('/') &&
-      !redirectTo.startsWith('//') &&
-      !redirectTo.startsWith('/\\');
-    const destination = isSafePath
-      ? redirectTo
-      : (result.redirectTo ?? '/dashboard');
-    router.push(destination);
   };
 
   return (

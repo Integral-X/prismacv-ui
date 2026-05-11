@@ -74,7 +74,7 @@ export const FAQ = () => {
                   id={`faq-btn-${index}`}
                   type='button'
                   onClick={() => toggleFAQ(index)}
-                  aria-expanded={openIndex === index}
+                  aria-expanded={openIndex === index ? 'true' : 'false'}
                   aria-controls={`faq-answer-${index}`}
                   className='w-full px-6 py-4 flex items-center justify-between text-left bg-surface-card hover:bg-surface-page transition-colors cursor-pointer'
                 >
@@ -107,7 +107,7 @@ export const FAQ = () => {
                   id={`faq-answer-${index}`}
                   role='region'
                   aria-labelledby={`faq-btn-${index}`}
-                  aria-hidden={openIndex !== index}
+                  aria-hidden={openIndex !== index ? 'true' : 'false'}
                   className={`grid transition-all duration-300 ease-in-out ${
                     openIndex === index
                       ? 'grid-rows-[1fr] opacity-100'

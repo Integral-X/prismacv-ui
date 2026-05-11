@@ -221,12 +221,15 @@ export const SignupForm = ({
           className='text-sm text-content-secondary cursor-pointer select-none leading-tight'
         >
           I agree to the{' '}
-          <Link href='/terms' className='text-interactive-link hover:underline'>
+          <Link
+            href='/terms-of-service'
+            className='text-interactive-link hover:underline'
+          >
             Terms of Service
           </Link>{' '}
           and{' '}
           <Link
-            href='/privacy'
+            href='/privacy-policy'
             className='text-interactive-link hover:underline'
           >
             Privacy Policy

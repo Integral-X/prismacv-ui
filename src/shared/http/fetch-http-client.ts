@@ -101,7 +101,10 @@ export class FetchHttpClient implements HttpClient {
     }
 
     if (!response.ok) {
-      const errorBody = json as ApiErrorEnvelope;
+      const errorBody =
+        json !== null && typeof json === 'object'
+          ? (json as Partial<ApiErrorEnvelope>)
+          : {};
       const safeErrorBody = sanitizeLogPayload(errorBody);
       logger.error({
         method,

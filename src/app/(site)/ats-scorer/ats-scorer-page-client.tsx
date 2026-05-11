@@ -36,14 +36,19 @@ export function AtsScorerPageClient() {
       return;
     }
     setPending(true);
-    const res = await scoreAtsAction({ cvText: cv, jobDescription: jd });
-    setPending(false);
-    if (!res.ok) {
-      toast.error(res.message);
-      return;
+    try {
+      const res = await scoreAtsAction({ cvText: cv, jobDescription: jd });
+      if (!res.ok) {
+        toast.error(res.message);
+        return;
+      }
+      setResult(res.data);
+      toast.success('ATS score ready.');
+    } catch {
+      toast.error('Something went wrong. Please try again.');
+    } finally {
+      setPending(false);
     }
-    setResult(res.data);
-    toast.success('ATS score ready.');
   }
 
   return (

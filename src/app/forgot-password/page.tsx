@@ -12,19 +12,23 @@ export default function ForgotPasswordPage() {
   const router = useRouter();
 
   const handleSubmit = async (data: ForgotPasswordFormData) => {
-    const result = await forgotPasswordAction({
-      email: data.email,
-    });
+    try {
+      const result = await forgotPasswordAction({
+        email: data.email,
+      });
 
-    if (!result.ok) {
-      toast.error(result.message);
-      return;
+      if (!result.ok) {
+        toast.error(result.message);
+        return;
+      }
+
+      router.push(
+        result.redirectTo ??
+          `/otp?mode=reset&email=${encodeURIComponent(data.email)}`
+      );
+    } catch {
+      toast.error('Something went wrong. Please try again.');
     }
-
-    router.push(
-      result.redirectTo ??
-        `/otp?mode=reset&email=${encodeURIComponent(data.email)}`
-    );
   };
 
   return (

@@ -13,9 +13,14 @@ import {
   verifyResetOtp,
   verifySignupOtp,
 } from './mutations';
-import { toUserProfile } from './mappers';
-import type { UserLoginContract } from './contracts';
-import { clearAuthSession, persistAuthSession } from './session';
+import { parseUserProfileFromJson } from './mappers';
+import {
+  clearAuthSession,
+  clearPasswordResetToken,
+  getPasswordResetToken,
+  persistAuthSession,
+  setPasswordResetToken,
+} from './session';
 
 export type AuthActionCode =
   | 'conflict'
@@ -175,11 +180,11 @@ export async function verifyOtpAction(input: {
       otp: input.otp,
     });
 
+    await setPasswordResetToken(result.resetToken);
+
     return {
       ok: true,
-      redirectTo: `/reset-password?token=${encodeURIComponent(
-        result.resetToken
-      )}`,
+      redirectTo: '/reset-password',
     };
   } catch (error) {
     return toFailureResult(error, 'Unable to verify the code right now.', {
@@ -233,12 +238,22 @@ export async function forgotPasswordAction(input: {
 }
 
 export async function resetPasswordAction(input: {
-  resetToken: string;
   newPassword: string;
   confirmPassword: string;
 }): Promise<ActionResult> {
+  const resetToken = await getPasswordResetToken();
+
+  if (!resetToken) {
+    return {
+      ok: false,
+      code: 'unauthorized',
+      message: 'Your reset session has expired. Please request a new code.',
+    };
+  }
+
   try {
-    await resetPassword(input);
+    await resetPassword({ ...input, resetToken });
+    await clearPasswordResetToken();
     await clearAuthSession();
 
     return {
@@ -247,6 +262,10 @@ export async function resetPasswordAction(input: {
       message: 'Password reset successfully. Please sign in.',
     };
   } catch (error) {
+    if (error instanceof HttpError && error.isUnauthorized) {
+      await clearPasswordResetToken();
+    }
+
     return toFailureResult(error, 'Unable to reset your password right now.');
   }
 }
@@ -282,8 +301,23 @@ export async function persistOAuthSessionAction(input: {
   user: unknown;
 }): Promise<ActionResult> {
   try {
-    const contract = input as unknown as UserLoginContract;
-    const user = toUserProfile(contract.user);
+    if (!input.accessToken || !input.refreshToken) {
+      return {
+        ok: false,
+        code: 'unauthorized',
+        message: 'Unable to complete OAuth sign in.',
+      };
+    }
+
+    const user = parseUserProfileFromJson(input.user);
+
+    if (!user) {
+      return {
+        ok: false,
+        code: 'unauthorized',
+        message: 'Unable to complete OAuth sign in.',
+      };
+    }
 
     await persistAuthSession(
       {

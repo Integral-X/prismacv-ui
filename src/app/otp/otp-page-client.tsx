@@ -20,25 +20,29 @@ export function OtpPageClient() {
       return;
     }
 
-    const result = await verifyOtpAction({
-      email,
-      mode,
-      otp: data.code,
-    });
+    try {
+      const result = await verifyOtpAction({
+        email,
+        mode,
+        otp: data.code,
+      });
 
-    if (!result.ok) {
-      toast.error(result.message);
-      return;
+      if (!result.ok) {
+        toast.error(result.message);
+        return;
+      }
+
+      if (result.message) {
+        toast.success(result.message);
+      }
+
+      router.push(
+        result.redirectTo ??
+          (mode === 'reset' ? '/reset-password' : '/onboarding')
+      );
+    } catch {
+      toast.error('Something went wrong. Please try again.');
     }
-
-    if (result.message) {
-      toast.success(result.message);
-    }
-
-    router.push(
-      result.redirectTo ??
-        (mode === 'reset' ? '/reset-password' : '/onboarding')
-    );
   };
 
   const handleResend = async () => {
@@ -47,17 +51,21 @@ export function OtpPageClient() {
       return;
     }
 
-    const result = await resendOtpAction({
-      email,
-      mode,
-    });
+    try {
+      const result = await resendOtpAction({
+        email,
+        mode,
+      });
 
-    if (!result.ok) {
-      toast.error(result.message);
-      return;
+      if (!result.ok) {
+        toast.error(result.message);
+        return;
+      }
+
+      toast.success(result.message ?? 'A new code has been sent.');
+    } catch {
+      toast.error('Something went wrong. Please try again.');
     }
-
-    toast.success(result.message ?? 'A new code has been sent.');
   };
 
   return (

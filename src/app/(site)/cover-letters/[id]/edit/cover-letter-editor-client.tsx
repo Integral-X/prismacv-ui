@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useEffect, useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { ArrowLeft, Save, Sparkles, Loader2 } from 'lucide-react';
@@ -85,12 +85,21 @@ export function CoverLetterEditorClient({
   const [jobDescription, setJobDescription] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [streamOutput, setStreamOutput] = useState(false);
+  const streamAbortRef = useRef(false);
+
+  useEffect(() => {
+    return () => {
+      streamAbortRef.current = true;
+    };
+  }, []);
 
   async function streamGeneratedContent(nextContent: string): Promise<void> {
+    streamAbortRef.current = false;
     const chunkSize = 80;
     setContent('');
 
     for (let index = 0; index < nextContent.length; index += chunkSize) {
+      if (streamAbortRef.current) return;
       const nextSlice = nextContent.slice(0, index + chunkSize);
       setContent(nextSlice);
       await new Promise((resolve) => {

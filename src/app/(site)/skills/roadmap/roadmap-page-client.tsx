@@ -49,39 +49,47 @@ export function RoadmapPageClient({
     setSelectedRole(role);
     const requestedRole = role;
     startTransition(async () => {
-      const result = await fetchRoadmapAction(requestedRole);
-      if (result.ok && result.data) {
-        // Only apply if this is still the selected role (guard against race)
-        setSelectedRole((current) => {
-          if (current === requestedRole) setRoadmap(result.data!);
-          return current;
-        });
-      } else if (!result.ok) {
-        toast.error(result.message);
+      try {
+        const result = await fetchRoadmapAction(requestedRole);
+        if (result.ok && result.data) {
+          // Only apply if this is still the selected role (guard against race)
+          setSelectedRole((current) => {
+            if (current === requestedRole) setRoadmap(result.data!);
+            return current;
+          });
+        } else if (!result.ok) {
+          toast.error(result.message);
+        }
+      } catch {
+        toast.error('Something went wrong. Please try again.');
       }
     });
   }
 
   function handleMarkComplete(skillName: string) {
     startTransition(async () => {
-      const result = await updateSkillProgressAction({
-        skillName,
-        level: 100,
-        status: 'completed',
-      });
-      if (result.ok && result.data) {
-        setProgress((prev) => {
-          const existing = prev.findIndex((p) => p.skillName === skillName);
-          if (existing >= 0) {
-            const updated = [...prev];
-            updated[existing] = result.data!;
-            return updated;
-          }
-          return [...prev, result.data!];
+      try {
+        const result = await updateSkillProgressAction({
+          skillName,
+          level: 100,
+          status: 'completed',
         });
-        toast.success(`${skillName} marked as completed`);
-      } else if (!result.ok) {
-        toast.error(result.message);
+        if (result.ok && result.data) {
+          setProgress((prev) => {
+            const existing = prev.findIndex((p) => p.skillName === skillName);
+            if (existing >= 0) {
+              const updated = [...prev];
+              updated[existing] = result.data!;
+              return updated;
+            }
+            return [...prev, result.data!];
+          });
+          toast.success(`${skillName} marked as completed`);
+        } else if (!result.ok) {
+          toast.error(result.message);
+        }
+      } catch {
+        toast.error('Something went wrong. Please try again.');
       }
     });
   }

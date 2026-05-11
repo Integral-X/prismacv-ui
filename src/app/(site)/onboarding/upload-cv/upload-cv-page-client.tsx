@@ -19,11 +19,17 @@ export function UploadCVPageClient() {
   const handleContinue = () => {
     startTransition(async () => {
       if (selectedFile) {
-        const result = await importCvFromFileAction(selectedFile);
-        if (result.ok && result.redirectTo) {
-          router.push(result.redirectTo);
-        } else if (!result.ok) {
-          toast.error(result.message);
+        try {
+          const result = await importCvFromFileAction(selectedFile);
+          if (result.ok && result.redirectTo) {
+            router.push(result.redirectTo);
+          } else if (result.ok) {
+            toast.error('Something went wrong. Please try again.');
+          } else {
+            toast.error(result.message);
+          }
+        } catch {
+          toast.error('Something went wrong. Please try again.');
         }
         return;
       }

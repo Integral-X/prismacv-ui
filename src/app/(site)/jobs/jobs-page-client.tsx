@@ -175,17 +175,21 @@ export function JobsPageClient({
     const deletingJobId = jobPendingDelete.id;
     setPendingDeleteJobId(deletingJobId);
 
-    const result = await deleteJobAction(deletingJobId);
-    if (result.ok) {
-      setJobs((prev) => prev.filter((job) => job.id !== deletingJobId));
-      setStats((prev) => ({ ...prev, total: Math.max(prev.total - 1, 0) }));
-      toast.success(result.message);
-      setJobPendingDelete(null);
-    } else {
-      toast.error(result.message);
+    try {
+      const result = await deleteJobAction(deletingJobId);
+      if (result.ok) {
+        setJobs((prev) => prev.filter((job) => job.id !== deletingJobId));
+        setStats((prev) => ({ ...prev, total: Math.max(prev.total - 1, 0) }));
+        toast.success(result.message);
+        setJobPendingDelete(null);
+      } else {
+        toast.error(result.message);
+      }
+    } catch {
+      toast.error('Something went wrong. Please try again.');
+    } finally {
+      setPendingDeleteJobId(null);
     }
-
-    setPendingDeleteJobId(null);
   }
 
   return (

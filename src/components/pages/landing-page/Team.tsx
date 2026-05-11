@@ -24,8 +24,7 @@ interface SociaNetworkslProps {
 
 const teamList: TeamProps[] = [
   {
-    imageUrl:
-      'https://media.licdn.com/dms/image/v2/D5603AQG6L8BcesO37w/profile-displayphoto-shrink_800_800/B56ZVm08sZHQAc-/0/1741186913847?e=1764806400&v=beta&t=SfRfhjXAs9MRk3lQKam9VEv2zB2UxTWSuoaCLRmbEnE',
+    imageUrl: 'https://github.com/wrafie.png',
     name: 'Muhammad Waliur Rahman',
     position: 'Technical Project Manager',
     description:
@@ -33,21 +32,12 @@ const teamList: TeamProps[] = [
     socialNetworks: [
       {
         name: 'Linkedin',
-        url: 'https://www.linkedin.com/',
-      },
-      {
-        name: 'Facebook',
-        url: 'https://www.facebook.com/',
-      },
-      {
-        name: 'Instagram',
-        url: 'https://www.instagram.com/',
+        url: 'https://www.linkedin.com/in/wrafie/',
       },
     ],
   },
   {
-    imageUrl:
-      'https://media.licdn.com/dms/image/v2/D4D03AQFBNy0Av7_xOw/profile-displayphoto-crop_800_800/B4DZpuBjaQGQAI-/0/1762782504760?e=1764806400&v=beta&t=qyInkQFpYOz2TkAMSx0YsCEaBe5QBJIU7v8xZlyK26I',
+    imageUrl: 'https://github.com/mahiuddinalkamal.png',
     name: 'Mahiuddin Al Kamal',
     position: 'Software Architect',
     description:
@@ -55,21 +45,20 @@ const teamList: TeamProps[] = [
     socialNetworks: [
       {
         name: 'Linkedin',
-        url: 'https://www.linkedin.com/',
+        url: 'https://www.linkedin.com/in/mahiuddinalkamal',
       },
       {
         name: 'Facebook',
-        url: 'https://www.facebook.com/',
+        url: 'https://www.facebook.com/mahiuddinalkamal',
       },
       {
         name: 'Instagram',
-        url: 'https://www.instagram.com/',
+        url: 'https://www.instagram.com/mahiuddinalkamal',
       },
     ],
   },
   {
-    imageUrl:
-      'https://media.licdn.com/dms/image/v2/C5603AQEIaqi4_-GkBg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1627720669427?e=1764806400&v=beta&t=gMa5aRkmmlHORjPvjqEgposStv-Z8aOJ-0pczGctvWo',
+    imageUrl: 'https://github.com/sadatsajid.png',
     name: 'Asif Sadat',
     position: 'Frontend Lead',
     description:
@@ -77,15 +66,7 @@ const teamList: TeamProps[] = [
     socialNetworks: [
       {
         name: 'Linkedin',
-        url: 'https://www.linkedin.com/',
-      },
-      {
-        name: 'Facebook',
-        url: 'https://www.facebook.com/',
-      },
-      {
-        name: 'Instagram',
-        url: 'https://www.instagram.com/',
+        url: 'https://www.linkedin.com/in/asif-sadat/',
       },
     ],
   },
