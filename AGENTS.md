@@ -15,7 +15,7 @@ This file is the short rulebook. Detailed, authoritative specs live in `docs/`:
 - `docs/api-coverage.md` — backend⇄frontend endpoint matrix (done / wired / left).
 - `docs/roadmap.md` — task-by-task plan, phased by branch.
 
-Project skills in `.claude/skills/` automate the common flows: `feature-module` (data-layer scaffold), `new-screen` (route scaffold), `token-guard` (design-system audit).
+Project skills in `.claude/skills/` automate the common flows: `feature-module` (data-layer scaffold), `new-screen` (route scaffold), `token-guard` (design-system audit), `diagnose` (disciplined debugging loop for hard bugs / perf regressions).
 
 ---
 
