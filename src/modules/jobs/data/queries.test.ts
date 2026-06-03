@@ -13,7 +13,7 @@ jest.mock('@/shared/http/api-client', () => ({
 }));
 
 jest.mock('@/shared/auth/execute-authenticated-request', () => ({
-  executeAuthenticatedRequest: jest.fn(
+  executeAuthenticatedRead: jest.fn(
     (callback: (headers: Record<string, string>) => unknown) =>
       callback({ Authorization: 'Bearer test-token' })
   ),

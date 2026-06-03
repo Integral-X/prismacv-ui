@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import Link from 'next/link';
 import { toast } from 'sonner';
 import { CreditCard, Loader2, Sparkles } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -18,6 +17,8 @@ import {
   createCheckoutSessionAction,
   createPortalSessionAction,
 } from '@/modules/billing/data/actions';
+
+import { SettingsPageHeader } from '../components/settings-page-header';
 
 interface BillingPageClientProps {
   billing: BillingProfile;
@@ -71,23 +72,16 @@ export function BillingPageClient({ billing }: BillingPageClientProps) {
       : 0;
 
   return (
-    <main className='mx-auto max-w-4xl px-4 py-10 space-y-6'>
-      <div className='flex items-center justify-between'>
-        <div>
-          <h1 className='text-2xl font-semibold'>Billing</h1>
-          <p className='text-sm text-muted-foreground'>
-            Manage your subscription and AI usage limits.
-          </p>
-        </div>
-        <Button variant='outline' asChild>
-          <Link href='/settings'>Back to settings</Link>
-        </Button>
-      </div>
+    <div className='space-y-6'>
+      <SettingsPageHeader
+        title='Plan & Subscription'
+        description='Manage your subscription and AI usage limits.'
+      />
 
-      <Card>
+      <Card className='border-subtle shadow-card'>
         <CardHeader>
           <CardTitle className='flex items-center gap-2'>
-            <CreditCard className='size-5' />
+            <CreditCard className='size-5' aria-hidden />
             Current plan
           </CardTitle>
           <CardDescription>
@@ -97,25 +91,25 @@ export function BillingPageClient({ billing }: BillingPageClientProps) {
         <CardContent className='space-y-4'>
           <div className='flex items-center gap-3'>
             <Badge>{formatPlanLabel(billing.plan)}</Badge>
-            {billing.subscription?.status && (
+            {billing.subscription?.status ? (
               <Badge variant='secondary'>{billing.subscription.status}</Badge>
-            )}
+            ) : null}
           </div>
-          <p className='text-sm text-muted-foreground'>
+          <p className='text-sm text-content-secondary'>
             Renewal date:{' '}
             {formatDate(billing.subscription?.currentPeriodEnd ?? null)}
           </p>
           <Button onClick={handleOpenPortal} disabled={isPending}>
-            {isPending && <Loader2 className='size-4 animate-spin' />}
+            {isPending ? <Loader2 className='size-4 animate-spin' /> : null}
             Manage in Stripe portal
           </Button>
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className='border-subtle shadow-card'>
         <CardHeader>
           <CardTitle className='flex items-center gap-2'>
-            <Sparkles className='size-5' />
+            <Sparkles className='size-5' aria-hidden />
             AI quota
           </CardTitle>
           <CardDescription>
@@ -129,14 +123,14 @@ export function BillingPageClient({ billing }: BillingPageClientProps) {
               style={{ width: `${usagePercent}%` }}
             />
           </div>
-          <p className='text-xs text-muted-foreground'>
+          <p className='text-xs text-content-muted'>
             Resets on {billing.aiQuota.periodEnd.toLocaleDateString()} (
             {billing.aiQuota.remaining} remaining)
           </p>
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className='border-subtle shadow-card'>
         <CardHeader>
           <CardTitle>Upgrade plan</CardTitle>
           <CardDescription>
@@ -144,7 +138,7 @@ export function BillingPageClient({ billing }: BillingPageClientProps) {
           </CardDescription>
         </CardHeader>
         <CardContent className='space-y-4'>
-          <div className='inline-flex rounded-md border p-1'>
+          <div className='inline-flex rounded-md border border-subtle p-1'>
             <Button
               type='button'
               variant={!isYearly ? 'default' : 'ghost'}
@@ -177,6 +171,6 @@ export function BillingPageClient({ billing }: BillingPageClientProps) {
           </div>
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

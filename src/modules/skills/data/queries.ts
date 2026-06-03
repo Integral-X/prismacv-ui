@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { apiClient } from '@/shared/http/api-client';
-import { executeAuthenticatedRequest } from '@/shared/auth/execute-authenticated-request';
+import { executeAuthenticatedRead } from '@/shared/auth/execute-authenticated-request';
 import type {
   LearningResourceContract,
   LearningRoadmapContract,
@@ -45,7 +45,7 @@ export async function getResources(
 }
 
 export async function getUserProgress(): Promise<UserSkillProgress[]> {
-  return executeAuthenticatedRequest(async (headers) => {
+  return executeAuthenticatedRead(async (headers) => {
     const contracts = await apiClient.get<UserSkillProgressContract[]>(
       'skills/progress',
       { headers }
@@ -57,7 +57,7 @@ export async function getUserProgress(): Promise<UserSkillProgress[]> {
 export async function getLearningRoadmap(
   role: string
 ): Promise<LearningRoadmap> {
-  return executeAuthenticatedRequest(async (headers) => {
+  return executeAuthenticatedRead(async (headers) => {
     const contract = await apiClient.get<LearningRoadmapContract>(
       'skills/roadmap',
       { headers, params: { role } }

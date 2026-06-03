@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { apiClient } from '@/shared/http/api-client';
-import { executeAuthenticatedRequest } from '@/shared/auth/execute-authenticated-request';
+import { executeAuthenticatedRead } from '@/shared/auth/execute-authenticated-request';
 import type { PaginatedResponse } from '@/shared/http/paginated-response';
 import type {
   JobResponseContract,
@@ -10,7 +10,7 @@ import type {
 import { toJob, toJobStats, type Job, type JobStats } from './mappers';
 
 export async function getJobs(status?: string): Promise<Job[]> {
-  return executeAuthenticatedRequest(async (headers) => {
+  return executeAuthenticatedRead(async (headers) => {
     const params: Record<string, string | number> = { limit: 100 };
     if (status) params.status = status;
 
@@ -26,7 +26,7 @@ export async function getJobs(status?: string): Promise<Job[]> {
 }
 
 export async function getJobById(id: string): Promise<Job> {
-  return executeAuthenticatedRequest(async (headers) => {
+  return executeAuthenticatedRead(async (headers) => {
     const contract = await apiClient.get<JobResponseContract>(`jobs/${id}`, {
       headers,
     });
@@ -36,7 +36,7 @@ export async function getJobById(id: string): Promise<Job> {
 }
 
 export async function getJobStats(): Promise<JobStats> {
-  return executeAuthenticatedRequest(async (headers) => {
+  return executeAuthenticatedRead(async (headers) => {
     const contract = await apiClient.get<JobStatsResponseContract>(
       'jobs/stats',
       { headers }
