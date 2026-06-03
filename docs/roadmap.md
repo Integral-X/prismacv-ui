@@ -42,14 +42,15 @@ Release impact: `docs:` → none. Merges fast.
 
 Release impact: `refactor:` → patch.
 
-### Issues found during Phase 1 (fixed in same branch)
+### Unrelated issues found during Phase 1 (not fixed here)
 
-- [x] `--color-interactive-linkHover` (camelCase) / `--color-interactive-link-hover`
-      (kebab) mismatch — renamed the `tokens.ts` key to `'link-hover'` and
-      regenerated; `hover:text-interactive-link-hover` now resolves correctly.
-- [x] `globals.css` `hsl(var(--primary) / …)` with a hex `--primary` — replaced
-      all occurrences with `color-mix(in oklab, var(--color-primary) N%, transparent)`.
-- [x] `AGENTS.md` §Styling "deprecated" → "removed" to match the deleted exports.
+- `scripts/generate-css-tokens.ts` emits `--color-interactive-linkHover`
+  (camelCase) but `globals.css` `@theme` maps `--color-interactive-link-hover`
+  (kebab) — so `hover:text-interactive-link-hover` currently resolves to nothing.
+- `globals.css` uses `hsl(var(--primary) / …)` while `--primary` is a hex, not
+  HSL channels — the hero/scrollbar tints are effectively invalid.
+- `AGENTS.md` §Styling still describes the UPPERCASE exports as "deprecated";
+  now that they are deleted it should read "removed" (Phase 0 doc reconciliation).
 
 ## Phase 2 — Test coverage backfill (branch: `test/coverage-data-layers`)
 
