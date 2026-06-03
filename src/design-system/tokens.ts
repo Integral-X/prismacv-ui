@@ -93,7 +93,7 @@ export const colors = {
   // Interactive elements
   interactive: {
     link: primitiveColors.cyan[400],
-    linkHover: primitiveColors.cyan[500],
+    'link-hover': primitiveColors.cyan[500],
   },
 
   // Feedback colors

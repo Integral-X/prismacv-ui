@@ -206,7 +206,7 @@ Page calls action -> checks `result.ok`:
 - **shadcn/ui**: components in `src/components/ui/` are generated. Add new ones: `npx shadcn@latest add <name>`. Config: `components.json` (New York style, RSC=true, Lucide icons).
 - **Variants**: use CVA for component variants. `cn()` for conditional class merging.
 - Never hardcode hex values. If a new semantic token is needed, add it to `tokens.ts`, regenerate CSS, then use the Tailwind class.
-- **Single token surface.** Use the lowercase `theme` / `colors` / `spacing` exports. The UPPERCASE `COLORS` / `SPACING` / `DIMENSIONS` exports are **deprecated** — do not use them in new code. Run the `token-guard` skill before committing UI changes. See `docs/design-system.md`.
+- **Single token surface.** Use the lowercase `theme` / `colors` / `spacing` exports. The UPPERCASE `COLORS` / `SPACING` / `DIMENSIONS` exports have been **removed** — do not use them. Run the `token-guard` skill before committing UI changes. See `docs/design-system.md`.
 
 ---
 
