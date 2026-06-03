@@ -6,6 +6,19 @@ PrismaCV — AI-powered career platform. Next.js 16 / React 19 / App Router. Pro
 
 ---
 
+## Canonical docs
+
+This file is the short rulebook. Detailed, authoritative specs live in `docs/`:
+
+- `docs/architecture.md` — ratified architecture (RSC + Server Actions + per-feature data layer), data flow, route protection, co-location convention.
+- `docs/design-system.md` — strict token contract and enforcement.
+- `docs/api-coverage.md` — backend⇄frontend endpoint matrix (done / wired / left).
+- `docs/roadmap.md` — task-by-task plan, phased by branch.
+
+Project skills in `.claude/skills/` automate the common flows: `feature-module` (data-layer scaffold), `new-screen` (route scaffold), `token-guard` (design-system audit).
+
+---
+
 ## Before you write code
 
 1. Check existing patterns in the repository first
@@ -49,6 +62,8 @@ PrismaCV — AI-powered career platform. Next.js 16 / React 19 / App Router. Pro
 - Co-locate code with the feature that owns it
 - No `utils` dumping grounds
 
+> **Screen co-location (the real convention).** Feature screens co-locate their UI inside the route folder: `app/(site)/<route>/page.tsx` (thin RSC entry) + `<route>-page-client.tsx` (`'use client'` root) + `loading.tsx` + a local `components/`. Only `auth`, `landing-page`, and `onboarding` use the older `components/pages/<feature>/` tree below. New screens follow co-location — use the `new-screen` skill. See `docs/architecture.md §4`.
+
 ```
 src/
   app/                       -- route entrypoints only
@@ -56,7 +71,8 @@ src/
     ui/                      -- shadcn/ui primitives (generated, extend via variants)
     common/                  -- shared app components (Navbar, Footer, Icons)
     layouts/                 -- layout wrappers (AuthFormLayout)
-    pages/<feature>/         -- page-specific component trees
+    pages/<feature>/         -- LEGACY: only auth, landing-page, onboarding.
+                             -- New screens co-locate under app/(site)/<route>/.
   design-system/             -- tokens.ts (source of truth) + tokens.css (generated)
   lib/
     utils.ts                 -- cn() helper
@@ -93,6 +109,7 @@ src/modules/<feature>/data/
 - **actions.ts** — Starts with `'use server'`. Returns `ActionResult` discriminated union: `{ ok: true, redirectTo?, message? } | { ok: false, code, message }`. Catches `HttpError` and maps to user-facing error codes. Never throws to the client.
 - **session.ts** — Uses `import 'server-only'` guard. Manages httpOnly cookies (`access-token`, `refresh-token`, `user-profile`, `session-persistent`). Never import in client code.
 - Consumers (Server Components, Server Actions) call `queries.ts` / `mutations.ts` — never the `apiClient` directly.
+- **Async/queue flows**: the backend exposes job-based endpoints (`queue/jobs/*` — async PDF export, AI analyze/optimize, status poll). A `modules/queue/data` layer exists but is **not yet wired to UI**. If you build async flows, drive polling through a Server Action — do not reach for a client data-cache library. See `docs/api-coverage.md` and `docs/roadmap.md` Phase 4.
 
 ### Token refresh
 
@@ -189,6 +206,7 @@ Page calls action -> checks `result.ok`:
 - **shadcn/ui**: components in `src/components/ui/` are generated. Add new ones: `npx shadcn@latest add <name>`. Config: `components.json` (New York style, RSC=true, Lucide icons).
 - **Variants**: use CVA for component variants. `cn()` for conditional class merging.
 - Never hardcode hex values. If a new semantic token is needed, add it to `tokens.ts`, regenerate CSS, then use the Tailwind class.
+- **Single token surface.** Use the lowercase `theme` / `colors` / `spacing` exports. The UPPERCASE `COLORS` / `SPACING` / `DIMENSIONS` exports are **deprecated** — do not use them in new code. Run the `token-guard` skill before committing UI changes. See `docs/design-system.md`.
 
 ---
 
