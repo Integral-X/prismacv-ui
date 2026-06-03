@@ -122,7 +122,7 @@ export function NavbarClient({ currentUser }: NavbarClientProps) {
               href='/'
               aria-label='Go to PrismaCV home page'
               title='PrismaCV home'
-              className='font-bold text-xl flex items-center gap-2'
+              className='flex cursor-pointer items-center gap-2 text-xl font-bold'
             >
               <Image
                 src='/logo.svg'
@@ -181,7 +181,7 @@ export function NavbarClient({ currentUser }: NavbarClientProps) {
               <Button
                 key={route.label}
                 variant='ghost'
-                className='text-[17px]'
+                className='cursor-pointer text-sm'
                 asChild
               >
                 <a rel='noreferrer noopener' href={route.href}>

@@ -52,10 +52,20 @@ export function CvCard({ cv, onEdit, onDuplicate, onDelete }: CvCardProps) {
 
   return (
     <Card
+      role='link'
+      tabIndex={0}
+      aria-label={`Edit ${cv.title}`}
+      onClick={() => onEdit(cv.id)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onEdit(cv.id);
+        }
+      }}
       className={cn(
         'bg-surface-card border-subtle shadow-card',
-        'relative flex flex-col gap-3 p-5',
-        'transition-shadow hover:shadow-lg'
+        'relative flex cursor-pointer flex-col gap-3 p-5',
+        'transition-shadow hover:shadow-md'
       )}
     >
       <div className='flex items-start justify-between'>
@@ -68,9 +78,12 @@ export function CvCard({ cv, onEdit, onDuplicate, onDelete }: CvCardProps) {
         <div ref={menuRef} className='relative'>
           <button
             type='button'
-            onClick={() => setMenuOpen((prev) => !prev)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setMenuOpen((prev) => !prev);
+            }}
             className={cn(
-              'text-content-secondary hover:text-content-primary',
+              'cursor-pointer text-content-secondary hover:text-content-primary',
               'rounded-md p-1 transition-colors'
             )}
             aria-label='CV actions'
@@ -89,12 +102,13 @@ export function CvCard({ cv, onEdit, onDuplicate, onDelete }: CvCardProps) {
             >
               <button
                 type='button'
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setMenuOpen(false);
                   onEdit(cv.id);
                 }}
                 className={cn(
-                  'text-content-primary',
+                  'text-content-primary cursor-pointer',
                   'flex w-full items-center gap-2 px-3 py-2',
                   'text-sm hover:bg-surface-primary'
                 )}
@@ -104,12 +118,13 @@ export function CvCard({ cv, onEdit, onDuplicate, onDelete }: CvCardProps) {
               </button>
               <button
                 type='button'
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setMenuOpen(false);
                   onDuplicate(cv.id);
                 }}
                 className={cn(
-                  'text-content-primary',
+                  'text-content-primary cursor-pointer',
                   'flex w-full items-center gap-2 px-3 py-2',
                   'text-sm hover:bg-surface-primary'
                 )}
@@ -119,12 +134,13 @@ export function CvCard({ cv, onEdit, onDuplicate, onDelete }: CvCardProps) {
               </button>
               <button
                 type='button'
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setMenuOpen(false);
                   onDelete(cv.id);
                 }}
                 className={cn(
-                  'text-feedback-error',
+                  'text-feedback-error cursor-pointer',
                   'flex w-full items-center gap-2 px-3 py-2',
                   'text-sm hover:bg-surface-primary'
                 )}

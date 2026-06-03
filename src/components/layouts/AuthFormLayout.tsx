@@ -15,13 +15,13 @@ interface AuthFormLayoutProps {
  */
 export const AuthFormLayout = ({ children }: AuthFormLayoutProps) => {
   return (
-    <div className='min-h-screen flex flex-col overflow-hidden bg-surface-page'>
+    <div className='relative flex min-h-screen flex-col overflow-hidden bg-surface-page'>
       {/* Header - Logo only */}
-      <header className='w-full'>
-        <div className='container h-14 flex items-center px-4'>
+      <header className='relative z-10 w-full'>
+        <div className='container flex h-14 items-center px-4'>
           <Link
             href='/'
-            className='flex items-center hover:opacity-90 transition-opacity'
+            className='flex items-center transition-opacity hover:opacity-90'
           >
             <Image
               src='/logo.svg'
@@ -35,12 +35,12 @@ export const AuthFormLayout = ({ children }: AuthFormLayoutProps) => {
       </header>
 
       {/* Main - Centered form content (children) */}
-      <main className='flex-1 flex items-center justify-center px-4 py-8'>
+      <main className='relative z-10 flex flex-1 items-center justify-center px-4 py-8'>
         {children}
       </main>
 
       {/* Wavy Pattern Footer */}
-      <div className='mt-auto w-full'>
+      <div className='pointer-events-none absolute inset-x-0 bottom-0'>
         <WavyPattern height={200} />
       </div>
     </div>

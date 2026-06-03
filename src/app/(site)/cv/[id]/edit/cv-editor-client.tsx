@@ -12,9 +12,15 @@ import type {
   Project,
   Language,
 } from '@/modules/cv/data/mappers';
-import { updateCvAction, exportCvPdfAction } from '@/modules/cv/data/actions';
+import { updateCvAction } from '@/modules/cv/data/actions';
 import type { UpdateCvRequest } from '@/modules/cv/data/contracts';
 import type { BillingProfile } from '@/modules/billing/data/mappers';
+import { queuePdfExportAction } from '@/modules/queue/data/actions';
+import {
+  toQueuePdfExportResult,
+  type QueueJobState,
+} from '@/modules/queue/data/mappers';
+import { pollQueueJob } from '@/modules/queue/ui/poll-queue-job';
 import { EditorHeader } from './components/editor-header';
 import { SectionWrapper } from './components/section-wrapper';
 import { PersonalInfoForm } from './components/personal-info-form';
@@ -43,6 +49,7 @@ export function CvEditorClient({
 }: CvEditorClientProps) {
   const [cv, setCv] = useState<Cv>(initialCv);
   const [isPending, startTransition] = useTransition();
+  const [exportState, setExportState] = useState<QueueJobState | null>(null);
   const [showAiPanel, setShowAiPanel] = useState(false);
   const [showOptimizePanel, setShowOptimizePanel] = useState(false);
 
@@ -79,24 +86,50 @@ export function CvEditorClient({
 
   function handleExport() {
     startTransition(async () => {
-      const result = await exportCvPdfAction(cv.id);
-      if (!result.ok) {
-        toast.error(result.message);
+      setExportState('waiting');
+      const queued = await queuePdfExportAction({ cvId: cv.id });
+      if (!queued.ok || !queued.data) {
+        setExportState(null);
+        toast.error(queued.ok ? 'Unable to queue PDF export.' : queued.message);
         return;
       }
+
+      toast.success('PDF export queued.');
+
       try {
-        const bytes = Uint8Array.from(atob(result.base64), (c) =>
-          c.charCodeAt(0)
-        );
-        const blob = new Blob([bytes], { type: 'application/pdf' });
+        const status = await pollQueueJob({
+          jobId: queued.data.jobId,
+          onStatus: (nextStatus) => setExportState(nextStatus.state),
+        });
+
+        if (status.state === 'failed') {
+          toast.error(status.error ?? 'PDF export failed. Please try again.');
+          return;
+        }
+
+        const pdf = toQueuePdfExportResult(status.result);
+        if (!pdf) {
+          toast.error('PDF export finished without a downloadable file.');
+          return;
+        }
+
+        const bytes = Uint8Array.from(atob(pdf.base64), (c) => c.charCodeAt(0));
+        const blob = new Blob([bytes], { type: pdf.contentType });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${cv.title || 'cv'}.pdf`;
+        a.download = pdf.filename || `${cv.title || 'cv'}.pdf`;
         a.click();
         setTimeout(() => URL.revokeObjectURL(url), 1000);
-      } catch {
-        toast.error('Failed to decode the PDF. Please try again.');
+        toast.success('PDF export ready.');
+      } catch (error) {
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : 'Failed to export the PDF. Please try again.'
+        );
+      } finally {
+        setExportState(null);
       }
     });
   }
@@ -137,6 +170,7 @@ export function CvEditorClient({
         onStatusToggle={handleStatusToggle}
         onExport={handleExport}
         isPending={isPending}
+        exportState={exportState}
       />
 
       <div className='mx-auto max-w-7xl px-4 py-6'>
