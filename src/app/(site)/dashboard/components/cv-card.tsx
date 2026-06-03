@@ -143,7 +143,7 @@ export function CvCard({ cv, onEdit, onDuplicate, onDelete }: CvCardProps) {
           className={cn(
             cv.status === 'published'
               ? 'bg-feedback-success/15 text-feedback-success border-feedback-success/30'
-              : 'border-yellow-400/50 text-yellow-600'
+              : 'border-feedback-warning/50 text-feedback-warning'
           )}
         >
           {cv.status === 'published' ? 'Published' : 'Draft'}

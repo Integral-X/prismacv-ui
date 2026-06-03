@@ -69,22 +69,22 @@ const STATUS_CONFIG: Record<
   },
   applied: {
     label: 'Applied',
-    color: 'bg-blue-100 text-blue-700',
+    color: 'bg-feedback-info/15 text-feedback-info',
     icon: <Clock className='h-3 w-3' />,
   },
   interview: {
     label: 'Interview',
-    color: 'bg-yellow-100 text-yellow-700',
+    color: 'bg-feedback-warning/15 text-feedback-warning',
     icon: <MessageSquare className='h-3 w-3' />,
   },
   offer: {
     label: 'Offer',
-    color: 'bg-green-100 text-green-700',
+    color: 'bg-feedback-success/15 text-feedback-success',
     icon: <CheckCircle className='h-3 w-3' />,
   },
   rejected: {
     label: 'Rejected',
-    color: 'bg-red-100 text-red-700',
+    color: 'bg-feedback-error/15 text-feedback-error',
     icon: <XCircle className='h-3 w-3' />,
   },
 };
@@ -313,7 +313,7 @@ export function JobsPageClient({
         <Card>
           <CardContent className='pt-6'>
             <div className='flex items-center gap-2'>
-              <Clock className='h-4 w-4 text-blue-500' />
+              <Clock className='h-4 w-4 text-feedback-info' />
               <span className='text-sm text-muted-foreground'>
                 Applied This Week
               </span>
@@ -324,7 +324,7 @@ export function JobsPageClient({
         <Card>
           <CardContent className='pt-6'>
             <div className='flex items-center gap-2'>
-              <MessageSquare className='h-4 w-4 text-yellow-500' />
+              <MessageSquare className='h-4 w-4 text-feedback-warning' />
               <span className='text-sm text-muted-foreground'>Interviews</span>
             </div>
             <p className='text-2xl font-bold mt-1'>{stats.pendingInterviews}</p>
@@ -333,7 +333,7 @@ export function JobsPageClient({
         <Card>
           <CardContent className='pt-6'>
             <div className='flex items-center gap-2'>
-              <CheckCircle className='h-4 w-4 text-green-500' />
+              <CheckCircle className='h-4 w-4 text-feedback-success' />
               <span className='text-sm text-muted-foreground'>Offers</span>
             </div>
             <p className='text-2xl font-bold mt-1'>{stats.activeOffers}</p>
@@ -497,7 +497,7 @@ function JobCard({
             href={job.url}
             target='_blank'
             rel='noopener noreferrer'
-            className='flex items-center gap-1 text-xs text-blue-600 hover:underline'
+            className='flex items-center gap-1 text-xs text-interactive-link hover:underline'
           >
             <ExternalLink className='h-3 w-3' />
             View listing

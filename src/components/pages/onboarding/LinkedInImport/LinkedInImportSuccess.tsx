@@ -33,8 +33,8 @@ export const LinkedInImportSuccess = ({
         )}
       >
         <div className='flex items-center gap-4'>
-          <div className='shrink-0 w-12 h-12 rounded-full bg-green-100 flex items-center justify-center'>
-            <CheckCircle className='w-6 h-6 text-green-600' />
+          <div className='shrink-0 w-12 h-12 rounded-full bg-feedback-success/15 flex items-center justify-center'>
+            <CheckCircle className='w-6 h-6 text-feedback-success' />
           </div>
           <div className='flex-1 min-w-0'>
             <p className='text-sm font-medium text-content-primary truncate'>
@@ -55,8 +55,8 @@ export const LinkedInImportSuccess = ({
         </div>
 
         {/* Importing status */}
-        <div className='mt-4 flex items-center gap-2 text-sm text-green-700'>
-          <div className='shrink-0 w-2 h-2 rounded-full bg-green-600 animate-pulse' />
+        <div className='mt-4 flex items-center gap-2 text-sm text-feedback-success'>
+          <div className='shrink-0 w-2 h-2 rounded-full bg-feedback-success animate-pulse' />
           <span>Importing your LinkedIn profile...</span>
         </div>
       </div>
