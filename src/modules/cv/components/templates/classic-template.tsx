@@ -154,7 +154,9 @@ export function ClassicTemplate({ cv, accentColor }: TemplateProps) {
                 </p>
               )}
               {proj.url && (
-                <p className='mt-0.5 text-xs text-blue-600'>{proj.url}</p>
+                <p className='mt-0.5 text-xs text-interactive-link'>
+                  {proj.url}
+                </p>
               )}
             </div>
           ))}

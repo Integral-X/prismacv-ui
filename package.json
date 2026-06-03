@@ -60,6 +60,9 @@
     ],
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix"
+    ],
+    "*.{ts,tsx,css}": [
+      "node scripts/token-guard.js"
     ]
   },
   "devDependencies": {
