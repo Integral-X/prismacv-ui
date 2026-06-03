@@ -27,9 +27,11 @@ Release impact: `docs:` → none. Merges fast.
 - [x] Delete the UPPERCASE exports; run `pnpm tokens:generate` (generated
       `tokens.css` unchanged — generation never read the UPPERCASE exports).
 - [x] Sweep the codebase with `token-guard`; fix hex/palette-utility violations.
-      Migrated 10 files (jobs/interview/dashboard/cv-templates/onboarding/badge)
-      onto existing semantic tokens (`feedback.*` via `/15` tint + solid text,
-      `interactive.link`); no new color tokens were needed.
+      Migrated 11 files
+      (jobs/interview/dashboard/cv-templates/onboarding/badge/shared onboarding
+      state helpers) onto existing semantic tokens (`feedback.*` via `/10` or
+      `/15` tint + solid text/border, `interactive.link`); no new color tokens
+      were needed.
 - [x] Fold `token-guard` greps into `lint-staged` (pre-commit gate) —
       `scripts/token-guard.js`, wired under `*.{ts,tsx,css}`.
 - [ ] (Decision, not necessarily this branch) shadcn default tokens vs custom
