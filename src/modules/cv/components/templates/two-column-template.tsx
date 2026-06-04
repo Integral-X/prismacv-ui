@@ -1,5 +1,3 @@
-'use client';
-
 import { Mail, Phone, MapPin, Globe, Linkedin } from 'lucide-react';
 import type { TemplateProps } from './index';
 import type { PersonalInfo, Skill } from '@/modules/cv/data/mappers';
