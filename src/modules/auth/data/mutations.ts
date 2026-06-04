@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { apiClient } from '@/shared/http/api-client';
 import { HttpError } from '@/shared/http/http-error';
 import type {
