@@ -190,6 +190,62 @@ export class FetchHttpClient implements HttpClient {
     return this.execute<T>('GET', endpoint, undefined, config);
   }
 
+  async getBlob(endpoint: string, config: RequestConfig = {}): Promise<Blob> {
+    const url = this.buildUrl(endpoint, config.params);
+    const start = Date.now();
+    const safeUrl = sanitizeUrlForLogging(url);
+
+    logger.debug({ method: 'GET', url: safeUrl });
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: { ...config.headers },
+      cache: config.cache,
+      next: config.next,
+    });
+
+    const correlationId = response.headers.get('x-correlation-id') ?? undefined;
+
+    if (!response.ok) {
+      let errorName = response.statusText;
+      let errorMessage: string | undefined;
+      let errorPath: string | undefined;
+      try {
+        const errorBody = (await response.json()) as Partial<ApiErrorEnvelope>;
+        errorName = errorBody.error ?? response.statusText;
+        errorMessage = errorBody.message;
+        errorPath = errorBody.path;
+      } catch {
+        // non-JSON error body — use status text only
+      }
+      logger.error({
+        method: 'GET',
+        url: safeUrl,
+        status: response.status,
+        durationMs: Date.now() - start,
+        correlationId,
+      });
+      throw new HttpError(
+        response.status,
+        errorName,
+        errorMessage,
+        errorPath,
+        correlationId
+      );
+    }
+
+    logger.debug({
+      method: 'GET',
+      url: safeUrl,
+      status: response.status,
+      durationMs: Date.now() - start,
+      correlationId,
+      data: '[Blob]',
+    });
+
+    return response.blob();
+  }
+
   post<T, B>(endpoint: string, body: B, config?: RequestConfig): Promise<T> {
     return this.execute<T>('POST', endpoint, body, config);
   }

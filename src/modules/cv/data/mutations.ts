@@ -1,7 +1,6 @@
 import 'server-only';
 
 import { apiClient, getApiClient } from '@/shared/http/api-client';
-import { env } from '@/shared/config/env';
 import { HttpError } from '@/shared/http/http-error';
 import { executeAuthenticatedRequest } from '@/shared/auth/execute-authenticated-request';
 
@@ -274,31 +273,12 @@ export async function importCvFromFile(file: File): Promise<Cv> {
 
 export async function exportCvPdf(cvId: string): Promise<Blob> {
   assertSafeCvId(cvId);
+  const safeCvId = encodeURIComponent(cvId);
 
   return executeAuthenticatedRequest(async (headers) => {
-    const baseUrl = env.apiBaseUrl.endsWith('/')
-      ? env.apiBaseUrl
-      : `${env.apiBaseUrl}/`;
-    const safeCvId = encodeURIComponent(cvId);
-    const url = `${baseUrl}cv/${safeCvId}/export/pdf`;
-
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        ...headers,
-        Accept: 'application/pdf',
-      },
+    return apiClient.getBlob(`cv/${safeCvId}/export/pdf`, {
+      headers: { ...headers, Accept: 'application/pdf' },
     });
-
-    if (!response.ok) {
-      throw new HttpError(
-        response.status,
-        response.statusText,
-        'Failed to export PDF'
-      );
-    }
-
-    return response.blob();
   });
 }
 
