@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { getCurrentUser } from '@/modules/auth/data/queries';
+import { getVerifiedCurrentUser } from '@/modules/auth/data/queries';
 import {
   getFeatureFlagList,
   getUnleashServiceStatus,
@@ -22,7 +22,7 @@ export const metadata = {
 };
 
 export default async function AdminPage() {
-  const user = await getCurrentUser();
+  const user = await getVerifiedCurrentUser();
   if (!user) {
     redirect('/login?redirect=/admin');
   }
