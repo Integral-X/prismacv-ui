@@ -1,5 +1,3 @@
-'use client';
-
 import type { Cv } from '@/modules/cv/data/mappers';
 import { ClassicTemplate } from './classic-template';
 import { TwoColumnTemplate } from './two-column-template';

@@ -1,5 +1,3 @@
-'use client';
-
 const trackingCards = [
   {
     id: 1,
