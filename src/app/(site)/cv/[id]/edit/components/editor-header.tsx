@@ -3,9 +3,11 @@
 import { useState, useRef } from 'react';
 import Link from 'next/link';
 import type { Cv } from '@/modules/cv/data/mappers';
+import type { QueueJobState } from '@/modules/queue/data/mappers';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Progress } from '@/components/ui/progress';
 import { ArrowLeft, Download, Loader2, Pencil } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -15,6 +17,7 @@ interface EditorHeaderProps {
   onStatusToggle: () => void;
   onExport: () => void;
   isPending: boolean;
+  exportState: QueueJobState | null;
 }
 
 export function EditorHeader({
@@ -23,10 +26,24 @@ export function EditorHeader({
   onStatusToggle,
   onExport,
   isPending,
+  exportState,
 }: EditorHeaderProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [titleDraft, setTitleDraft] = useState(cv.title);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const isExporting =
+    exportState !== null &&
+    exportState !== 'completed' &&
+    exportState !== 'failed';
+  const exportProgress =
+    exportState === 'waiting' || exportState === 'delayed'
+      ? 25
+      : exportState === 'active'
+        ? 65
+        : exportState === 'completed'
+          ? 100
+          : 10;
 
   function startEditing() {
     setTitleDraft(cv.title);
@@ -111,13 +128,31 @@ export function EditorHeader({
             variant='outline'
             size='sm'
             onClick={onExport}
-            disabled={isPending}
+            disabled={isPending || isExporting}
           >
-            <Download className='size-4' />
-            Export PDF
+            {isExporting ? (
+              <Loader2 className='size-4 animate-spin' />
+            ) : (
+              <Download className='size-4' />
+            )}
+            {isExporting ? 'Exporting' : 'Export PDF'}
           </Button>
         </div>
       </div>
+      {isExporting && (
+        <div className='border-t border-subtle bg-surface-card'>
+          <div className='mx-auto flex max-w-7xl items-center gap-3 px-4 py-2'>
+            <Progress
+              value={exportProgress}
+              className='h-1.5 flex-1'
+              aria-label='PDF export progress'
+            />
+            <span className='text-xs text-content-secondary'>
+              PDF export {exportState.replace('-', ' ')}
+            </span>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

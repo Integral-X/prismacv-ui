@@ -5,9 +5,9 @@ import type {
   QueueAiAnalyzeRequestContract,
   QueueAiOptimizeRequestContract,
   QueueJobAcceptedContract,
-  QueueJobStatusContract,
   QueuePdfExportRequestContract,
 } from './contracts';
+import { toQueueJobStatus, type QueueJobStatus } from './mappers';
 import {
   getQueueJobStatus,
   queueAiAnalyze,
@@ -50,10 +50,10 @@ export async function queueAiOptimizeAction(
 
 export async function getQueueJobStatusAction(
   jobId: string
-): Promise<ActionResult<QueueJobStatusContract>> {
+): Promise<ActionResult<QueueJobStatus>> {
   try {
     const result = await getQueueJobStatus(jobId);
-    return { ok: true, data: result };
+    return { ok: true, data: toQueueJobStatus(result) };
   } catch (error) {
     return toFailureResult(error, 'Unable to fetch queue job status.');
   }

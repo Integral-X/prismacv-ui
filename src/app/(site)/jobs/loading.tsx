@@ -1,34 +1,21 @@
 export default function JobsLoading() {
   return (
-    <div className='container mx-auto px-4 py-8 animate-pulse'>
-      {/* Title skeleton */}
-      <div className='h-8 w-40 bg-surface-elevated rounded mb-6' />
-
-      {/* Stats row */}
-      <div className='grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8'>
-        {[1, 2, 3, 4].map((i) => (
-          <div key={i} className='h-20 rounded-lg bg-surface-elevated' />
-        ))}
-      </div>
-
-      {/* Toolbar */}
-      <div className='flex gap-3 mb-6'>
-        <div className='h-10 w-32 bg-surface-elevated rounded' />
-        <div className='h-10 w-32 bg-surface-elevated rounded' />
-        <div className='ml-auto h-10 w-28 bg-surface-elevated rounded' />
-      </div>
-
-      {/* Kanban columns */}
-      <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4'>
-        {[1, 2, 3, 4, 5].map((col) => (
-          <div key={col} className='space-y-3'>
-            <div className='h-6 w-24 bg-surface-elevated rounded' />
-            {[1, 2].map((card) => (
-              <div key={card} className='h-28 rounded-lg bg-surface-elevated' />
+    <>
+      <div className='h-[88px] shrink-0 animate-pulse' />
+      <div className='flex-1 animate-pulse overflow-y-auto px-6 py-6 lg:px-8 lg:py-8'>
+        <div className='mx-auto max-w-[1600px] rounded-xl border border-subtle bg-surface-card p-6'>
+          <div className='mb-6 h-10 rounded-lg bg-surface-elevated' />
+          <div className='flex gap-4 overflow-hidden'>
+            {[1, 2, 3, 4, 5].map((col) => (
+              <div key={col} className='min-w-[260px] flex-1 space-y-3'>
+                <div className='h-10 rounded-lg bg-surface-elevated' />
+                <div className='h-48 rounded-xl bg-surface-elevated' />
+                <div className='h-32 rounded-xl bg-surface-elevated' />
+              </div>
             ))}
           </div>
-        ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

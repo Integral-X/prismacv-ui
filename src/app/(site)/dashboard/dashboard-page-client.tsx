@@ -2,10 +2,9 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
-import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { Button } from '@/components/ui/button';
+import type { NavbarUser } from '@/components/common/navbar-client';
 import {
   Dialog,
   DialogContent,
@@ -14,53 +13,58 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import {
-  createCvAction,
-  deleteCvAction,
-  duplicateCvAction,
-} from '@/modules/cv/data/actions';
-import type { CvListItem, PaginatedCvList } from '@/modules/cv/data/mappers';
-import { CvCard } from './components/cv-card';
+import { Button } from '@/components/ui/button';
+import { createCvAction, deleteCvAction } from '@/modules/cv/data/actions';
+import type { CvListItem } from '@/modules/cv/data/mappers';
+import type { Job, JobStats } from '@/modules/jobs/data/mappers';
+
 import { CreateCvDialog } from './components/create-cv-dialog';
-import { EmptyState } from './components/empty-state';
+import { DashboardFeatureCards } from './components/dashboard-feature-cards';
+import { DashboardHeader } from './components/dashboard-header';
+import { DashboardHero } from './components/dashboard-hero';
+import { DashboardStatCards } from './components/dashboard-stat-cards';
+import { formatRelativeTime } from './lib/format-relative-time';
 
 interface DashboardPageClientProps {
-  initialData: PaginatedCvList;
+  initialCvs: CvListItem[];
+  initialJobs: Job[];
+  initialStats: JobStats;
+  user: NavbarUser | null;
 }
 
-export function DashboardPageClient({ initialData }: DashboardPageClientProps) {
+export function DashboardPageClient({
+  initialCvs,
+  initialJobs,
+  initialStats,
+  user,
+}: DashboardPageClientProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [items, setItems] = useState<CvListItem[]>(initialData.items);
+  const [cvs, setCvs] = useState(initialCvs);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [cvPendingDelete, setCvPendingDelete] = useState<CvListItem | null>(
     null
   );
 
+  const displayName =
+    user?.name?.trim() || user?.email.split('@')[0] || 'there';
+  const navbarUser: NavbarUser = user ?? {
+    email: 'guest@prismacv.app',
+    name: 'Guest',
+  };
+
+  const latestCv = cvs[0];
+  const cvUpdatedLabel = latestCv
+    ? formatRelativeTime(latestCv.updatedAt)
+    : 'No versions yet';
+
   function handleCreate(title: string) {
     startTransition(async () => {
       const result = await createCvAction({ title });
+
       if (result.ok) {
         toast.success('CV created');
         setDialogOpen(false);
-        if (result.redirectTo) {
-          router.push(result.redirectTo);
-        }
-      } else {
-        toast.error(result.message);
-      }
-    });
-  }
-
-  function handleEdit(id: string) {
-    router.push(`/cv/${id}/edit`);
-  }
-
-  function handleDuplicate(id: string) {
-    startTransition(async () => {
-      const result = await duplicateCvAction(id);
-      if (result.ok) {
-        toast.success('CV duplicated');
         if (result.redirectTo) {
           router.push(result.redirectTo);
         } else {
@@ -72,13 +76,6 @@ export function DashboardPageClient({ initialData }: DashboardPageClientProps) {
     });
   }
 
-  function handleDeleteRequest(id: string) {
-    const targetCv = items.find((item) => item.id === id);
-    if (!targetCv) return;
-
-    setCvPendingDelete(targetCv);
-  }
-
   function handleDeleteConfirm() {
     if (!cvPendingDelete) return;
     const deletingId = cvPendingDelete.id;
@@ -87,7 +84,7 @@ export function DashboardPageClient({ initialData }: DashboardPageClientProps) {
       const result = await deleteCvAction(deletingId);
       if (result.ok) {
         toast.success('CV deleted');
-        setItems((prev) => prev.filter((cv) => cv.id !== deletingId));
+        setCvs((prev) => prev.filter((cv) => cv.id !== deletingId));
         setCvPendingDelete(null);
       } else {
         toast.error(result.message);
@@ -96,30 +93,27 @@ export function DashboardPageClient({ initialData }: DashboardPageClientProps) {
   }
 
   return (
-    <div className='mx-auto w-full max-w-6xl px-4 py-8'>
-      <div className='mb-8 flex items-center justify-between'>
-        <h1 className='text-content-primary text-3xl font-bold'>My CVs</h1>
-        <Button onClick={() => setDialogOpen(true)} disabled={isPending}>
-          <Plus className='mr-2 h-4 w-4' />
-          Create New CV
-        </Button>
-      </div>
+    <>
+      <DashboardHeader user={navbarUser} />
 
-      {items.length === 0 ? (
-        <EmptyState onCreate={() => setDialogOpen(true)} />
-      ) : (
-        <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
-          {items.map((cv) => (
-            <CvCard
-              key={cv.id}
-              cv={cv}
-              onEdit={handleEdit}
-              onDuplicate={handleDuplicate}
-              onDelete={handleDeleteRequest}
-            />
-          ))}
+      <div className='flex-1 overflow-y-auto px-6 py-6 lg:px-8 lg:py-8'>
+        <div className='mx-auto flex w-full max-w-6xl flex-col gap-6'>
+          <DashboardHero
+            userName={displayName}
+            hasResumes={cvs.length > 0}
+            onCreateResume={() => setDialogOpen(true)}
+            isPending={isPending}
+          />
+
+          <DashboardStatCards
+            stats={initialStats}
+            cvCount={cvs.length}
+            cvUpdatedLabel={cvUpdatedLabel}
+          />
+
+          <DashboardFeatureCards jobs={initialJobs} cvs={cvs} />
         </div>
-      )}
+      </div>
 
       <CreateCvDialog
         open={dialogOpen}
@@ -127,6 +121,7 @@ export function DashboardPageClient({ initialData }: DashboardPageClientProps) {
         onSubmit={handleCreate}
         isPending={isPending}
       />
+
       <Dialog
         open={cvPendingDelete !== null}
         onOpenChange={(open) => {
@@ -140,7 +135,7 @@ export function DashboardPageClient({ initialData }: DashboardPageClientProps) {
             <DialogTitle>Delete this CV?</DialogTitle>
             <DialogDescription id='delete-cv-dialog-description'>
               {cvPendingDelete
-                ? `This will permanently remove "${cvPendingDelete.title}" and all of its sections.`
+                ? `This will permanently remove "${cvPendingDelete.title}".`
                 : 'This action cannot be undone.'}
             </DialogDescription>
           </DialogHeader>
@@ -162,6 +157,6 @@ export function DashboardPageClient({ initialData }: DashboardPageClientProps) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </>
   );
 }
