@@ -1,7 +1,11 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { HttpError } from '@/shared/http/http-error';
+import {
+  toFailureResult,
+  type ActionFailureResult,
+  type ActionResult,
+} from '@/shared/action-result';
 import type {
   CreateCvRequest,
   ImportLinkedInToCvRequest,
@@ -51,77 +55,6 @@ import type {
   ProjectItemRequest,
   SkillItemRequest,
 } from './contracts';
-
-// ─── Action types ─────────────────────────────────────────────────────────────
-
-export type CvActionCode =
-  | 'not_found'
-  | 'forbidden'
-  | 'conflict'
-  | 'unauthorized'
-  | 'unknown';
-
-export interface ActionSuccessResult<T = undefined> {
-  ok: true;
-  message?: string;
-  redirectTo?: string;
-  data?: T;
-}
-
-export interface ActionFailureResult {
-  ok: false;
-  code: CvActionCode;
-  message: string;
-}
-
-export type ActionResult<T = undefined> =
-  | ActionSuccessResult<T>
-  | ActionFailureResult;
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function getErrorMessage(error: unknown, fallback: string): string {
-  if (error instanceof HttpError) {
-    return error.serverMessage ?? error.message;
-  }
-
-  if (error instanceof Error && error.message) {
-    return error.message;
-  }
-
-  return fallback;
-}
-
-function toFailureResult(
-  error: unknown,
-  fallbackMessage: string
-): ActionFailureResult {
-  if (error instanceof HttpError) {
-    const message = getErrorMessage(error, fallbackMessage);
-
-    if (error.isNotFound) {
-      return { ok: false, code: 'not_found', message };
-    }
-
-    if (error.isForbidden) {
-      return { ok: false, code: 'forbidden', message };
-    }
-
-    if (error.isConflict) {
-      return { ok: false, code: 'conflict', message };
-    }
-
-    if (error.isUnauthorized) {
-      return { ok: false, code: 'unauthorized', message };
-    }
-  }
-
-  return {
-    ok: false,
-    code: 'unknown',
-    message: getErrorMessage(error, fallbackMessage),
-  };
-}
 
 // ─── CV actions ───────────────────────────────────────────────────────────────
 

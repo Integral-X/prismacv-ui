@@ -42,7 +42,7 @@ export function AtsScorerPageClient() {
         toast.error(res.message);
         return;
       }
-      setResult(res.data);
+      setResult(res.data ?? null);
       toast.success('ATS score ready.');
     } catch {
       toast.error('Something went wrong. Please try again.');
