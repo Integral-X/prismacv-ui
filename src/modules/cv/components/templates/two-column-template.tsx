@@ -155,7 +155,7 @@ export function TwoColumnTemplate({ cv, accentColor }: TemplateProps) {
                     </p>
                   )}
                   {proj.url && (
-                    <p className='text-xs text-blue-600'>{proj.url}</p>
+                    <p className='text-xs text-interactive-link'>{proj.url}</p>
                   )}
                 </div>
               ))}

@@ -35,9 +35,9 @@ interface InterviewPageClientProps {
 }
 
 const DIFFICULTY_COLORS: Record<string, string> = {
-  easy: 'bg-green-100 text-green-700',
-  medium: 'bg-yellow-100 text-yellow-700',
-  hard: 'bg-red-100 text-red-700',
+  easy: 'bg-feedback-success/15 text-feedback-success',
+  medium: 'bg-feedback-warning/15 text-feedback-warning',
+  hard: 'bg-feedback-error/15 text-feedback-error',
 };
 
 export function InterviewPageClient({
@@ -246,7 +246,7 @@ function QuestionCard({ question }: { question: InterviewQuestion }) {
             )}
             {question.tips && (
               <div className='flex items-start gap-2 text-sm'>
-                <Lightbulb className='h-4 w-4 text-yellow-500 mt-0.5 shrink-0' />
+                <Lightbulb className='h-4 w-4 text-feedback-warning mt-0.5 shrink-0' />
                 <p className='text-muted-foreground'>{question.tips}</p>
               </div>
             )}
@@ -306,7 +306,7 @@ function PracticeCard({
             )}
             {question.tips && (
               <div className='flex items-start gap-2 text-sm'>
-                <Lightbulb className='h-4 w-4 text-yellow-500 mt-0.5 shrink-0' />
+                <Lightbulb className='h-4 w-4 text-feedback-warning mt-0.5 shrink-0' />
                 <p>{question.tips}</p>
               </div>
             )}

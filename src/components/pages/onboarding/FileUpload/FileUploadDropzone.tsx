@@ -80,13 +80,13 @@ export const FileUploadDropzone = ({
           <div
             className={cn(
               'w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300',
-              state === 'error' ? 'bg-red-100' : 'bg-primary/10',
+              state === 'error' ? 'bg-feedback-error/15' : 'bg-primary/10',
               state === 'hover' && 'scale-110',
               state === 'dragover' && 'scale-110 bg-primary/20'
             )}
           >
             {state === 'error' ? (
-              <AlertCircle className='w-10 h-10 text-red-600' />
+              <AlertCircle className='w-10 h-10 text-feedback-error' />
             ) : (
               <Upload
                 className={cn(
@@ -103,7 +103,7 @@ export const FileUploadDropzone = ({
               {state === 'error' ? 'Upload Failed' : 'Drag & drop your CV here'}
             </h3>
             {state === 'error' ? (
-              <p className='text-sm text-red-600'>{errorMessage}</p>
+              <p className='text-sm text-feedback-error'>{errorMessage}</p>
             ) : (
               <p className='text-sm text-content-secondary'>
                 or click to browse

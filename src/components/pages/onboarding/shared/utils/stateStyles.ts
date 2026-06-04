@@ -20,9 +20,9 @@ export const getUploadBorderColor = (state: UploadState): string => {
     case 'dragover':
       return 'border-primary';
     case 'error':
-      return 'border-red-500';
+      return 'border-feedback-error';
     case 'success':
-      return 'border-green-500';
+      return 'border-feedback-success';
     default:
       return 'border-dashed border-border-strong';
   }
@@ -36,9 +36,9 @@ export const getUploadBackgroundColor = (state: UploadState): string => {
     case 'dragover':
       return 'bg-primary/5';
     case 'error':
-      return 'bg-red-50';
+      return 'bg-feedback-error/10';
     case 'success':
-      return 'bg-green-50';
+      return 'bg-feedback-success/10';
     default:
       return 'bg-surface-card';
   }
@@ -52,9 +52,9 @@ export const getImportBorderColor = (state: ImportState): string => {
     case 'hover':
       return 'border-primary/50';
     case 'error':
-      return 'border-red-500';
+      return 'border-feedback-error';
     case 'success':
-      return 'border-green-500';
+      return 'border-feedback-success';
     default:
       return 'border-dashed border-border-strong';
   }
@@ -68,9 +68,9 @@ export const getImportBackgroundColor = (state: ImportState): string => {
     case 'hover':
       return 'bg-primary/5';
     case 'error':
-      return 'bg-red-50';
+      return 'bg-feedback-error/10';
     case 'success':
-      return 'bg-green-50';
+      return 'bg-feedback-success/10';
     default:
       return 'bg-surface-card';
   }

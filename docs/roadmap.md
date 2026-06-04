@@ -18,15 +18,41 @@ Release impact: `docs:` → none. Merges fast.
 
 ## Phase 1 — Strict design system (branch: `refactor/design-tokens-single-surface`)
 
-- [ ] Mark UPPERCASE `COLORS` / `SPACING` / `DIMENSIONS` exports deprecated.
-- [ ] Migrate remaining consumers to the lowercase `theme` / `colors` objects.
-- [ ] Delete the UPPERCASE exports; run `pnpm tokens:generate`.
-- [ ] Sweep the codebase with `token-guard`; fix hex/palette-utility violations.
-- [ ] Fold `token-guard` greps into `lint-staged` (pre-commit gate).
+- [x] Mark UPPERCASE `COLORS` / `SPACING` / `DIMENSIONS` exports deprecated.
+      (Collapsed into the delete below — the exports had **zero consumers** in
+      `src/`, `e2e/`, `test/`, or `scripts/`, so there was nothing to deprecate
+      through a transition.)
+- [x] Migrate remaining consumers to the lowercase `theme` / `colors` objects.
+      (No-op: zero remaining consumers, per above.)
+- [x] Delete the UPPERCASE exports; run `pnpm tokens:generate` (generated
+      `tokens.css` unchanged — generation never read the UPPERCASE exports).
+- [x] Sweep the codebase with `token-guard`; fix hex/palette-utility violations.
+      Migrated 11 files
+      (jobs/interview/dashboard/cv-templates/onboarding/badge/shared onboarding
+      state helpers) onto existing semantic tokens (`feedback.*` via `/10` or
+      `/15` tint + solid text/border, `interactive.link`); no new color tokens
+      were needed.
+- [x] Fold `token-guard` greps into `lint-staged` (pre-commit gate) —
+      `scripts/token-guard.js`, wired under `*.{ts,tsx,css}`.
 - [ ] (Decision, not necessarily this branch) shadcn default tokens vs custom
-      semantic tokens — consolidate or document the coexistence.
+      semantic tokens — consolidate or document the coexistence. **Deferred (not
+      this branch).** `src/app/globals.css` still defines shadcn's default set
+      (`--primary: #069ea8`, …) alongside the custom semantic tokens. It is the
+      token-definition/`@theme` mapping layer (sibling of `tokens.css`), so it is
+      exempt from the `token-guard` sweep rather than churned here, per
+      design-system.md §4.
 
 Release impact: `refactor:` → patch.
+
+### Unrelated issues found during Phase 1 (not fixed here)
+
+- `scripts/generate-css-tokens.ts` emits `--color-interactive-linkHover`
+  (camelCase) but `globals.css` `@theme` maps `--color-interactive-link-hover`
+  (kebab) — so `hover:text-interactive-link-hover` currently resolves to nothing.
+- `globals.css` uses `hsl(var(--primary) / …)` while `--primary` is a hex, not
+  HSL channels — the hero/scrollbar tints are effectively invalid.
+- `AGENTS.md` §Styling still describes the UPPERCASE exports as "deprecated";
+  now that they are deleted it should read "removed" (Phase 0 doc reconciliation).
 
 ## Phase 2 — Test coverage backfill (branch: `test/coverage-data-layers`)
 

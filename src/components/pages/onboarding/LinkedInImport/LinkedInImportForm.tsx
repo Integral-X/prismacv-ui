@@ -62,12 +62,12 @@ export const LinkedInImportForm = ({
           <div
             className={cn(
               'w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300',
-              state === 'error' ? 'bg-red-100' : 'bg-primary/10',
+              state === 'error' ? 'bg-feedback-error/15' : 'bg-primary/10',
               state === 'hover' && 'scale-110 bg-primary/20'
             )}
           >
             {state === 'error' ? (
-              <AlertCircle className='w-10 h-10 text-red-600' />
+              <AlertCircle className='w-10 h-10 text-feedback-error' />
             ) : (
               <Linkedin className='w-10 h-10 text-primary' />
             )}
@@ -81,7 +81,7 @@ export const LinkedInImportForm = ({
                 : 'Drop your LinkedIn profile here'}
             </h3>
             {state === 'error' && (
-              <p className='text-sm text-red-600'>{errorMessage}</p>
+              <p className='text-sm text-feedback-error'>{errorMessage}</p>
             )}
           </div>
 
@@ -99,7 +99,8 @@ export const LinkedInImportForm = ({
                 onKeyDown={onKeyDown}
                 className={cn(
                   'pl-10 pr-4 py-6 text-base',
-                  state === 'error' && 'border-red-500 focus:border-red-500'
+                  state === 'error' &&
+                    'border-feedback-error focus:border-feedback-error'
                 )}
                 aria-label='LinkedIn profile URL'
               />
