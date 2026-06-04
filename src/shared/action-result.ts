@@ -42,7 +42,5 @@ export function toFailureResult(
     return { ok: false, code: 'unknown', message };
   }
 
-  const message =
-    error instanceof Error && error.message ? error.message : fallbackMessage;
-  return { ok: false, code: 'unknown', message };
+  return { ok: false, code: 'unknown', message: fallbackMessage };
 }

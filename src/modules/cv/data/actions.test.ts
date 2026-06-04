@@ -187,7 +187,7 @@ describe('cv actions', () => {
       expect(result).toEqual({
         ok: false,
         code: 'unknown',
-        message: 'Network failure',
+        message: 'Unable to create your CV right now.',
       });
     });
 
