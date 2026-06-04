@@ -37,7 +37,12 @@ export function toFailureResult(
     if (error.isConflict) return { ok: false, code: 'conflict', message };
     if (error.isUnauthorized)
       return { ok: false, code: 'unauthorized', message };
+
+    // Unmapped HTTP status (e.g. 500) — preserve the server message.
+    return { ok: false, code: 'unknown', message };
   }
 
-  return { ok: false, code: 'unknown', message: fallbackMessage };
+  const message =
+    error instanceof Error && error.message ? error.message : fallbackMessage;
+  return { ok: false, code: 'unknown', message };
 }
