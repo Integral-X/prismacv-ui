@@ -112,9 +112,25 @@ describe('ai actions', () => {
       });
     });
 
-    it('maps failures to the unknown fallback for optimization', async () => {
+    it('maps a 500 HttpError to unknown with the server message', async () => {
       mutations.optimizeCvForJob.mockRejectedValueOnce(
         new HttpError(500, 'Internal', 'Model timeout')
+      );
+
+      const result = await optimizeCvAction('cv_001', {
+        jobDescription: 'x',
+      });
+
+      expect(result).toEqual({
+        ok: false,
+        code: 'unknown',
+        message: 'Model timeout',
+      });
+    });
+
+    it('maps a generic error to unknown with the fallback message', async () => {
+      mutations.optimizeCvForJob.mockRejectedValueOnce(
+        new Error('Network failure')
       );
 
       const result = await optimizeCvAction('cv_001', {
