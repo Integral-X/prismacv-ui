@@ -65,7 +65,9 @@ export function CvCard({ cv, onEdit, onDuplicate, onDelete }: CvCardProps) {
       className={cn(
         'bg-surface-card border-subtle shadow-card',
         'relative flex cursor-pointer flex-col gap-3 p-5',
-        'transition-shadow hover:shadow-md'
+        'transition-[box-shadow,transform] duration-200 ease-out',
+        'hover:shadow-(--shadow-cardHover) hover:-translate-y-1',
+        'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none'
       )}
     >
       <div className='flex items-start justify-between'>
