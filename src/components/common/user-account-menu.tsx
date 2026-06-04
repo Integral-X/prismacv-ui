@@ -11,6 +11,8 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
+import { cn } from '@/lib/utils';
+
 import type { NavbarUser } from './navbar-client';
 
 function getUserInitials(user: NavbarUser): string {
@@ -27,7 +29,17 @@ function getUserInitials(user: NavbarUser): string {
   return user.email.slice(0, 2).toUpperCase();
 }
 
-export function UserAccountMenu({ user }: { user: NavbarUser }) {
+interface UserAccountMenuProps {
+  user: NavbarUser;
+  triggerClassName?: string;
+  avatarClassName?: string;
+}
+
+export function UserAccountMenu({
+  user,
+  triggerClassName,
+  avatarClassName,
+}: UserAccountMenuProps) {
   const initials = getUserInitials(user);
   const displayName = user.name?.trim() || 'PrismaCV user';
 
@@ -38,11 +50,23 @@ export function UserAccountMenu({ user }: { user: NavbarUser }) {
           type='button'
           variant='ghost'
           size='icon'
-          className='h-10 w-10 rounded-full p-0'
+          className={cn(
+            triggerClassName ?? 'size-9 overflow-hidden rounded-full p-0'
+          )}
           aria-label='Open user menu'
         >
-          <Avatar className='h-9 w-9 border border-border'>
-            <AvatarFallback className='bg-primary text-primary-foreground text-sm font-semibold'>
+          <Avatar
+            className={cn(
+              'shrink-0 border border-border',
+              avatarClassName ?? 'size-full'
+            )}
+          >
+            <AvatarFallback
+              className={cn(
+                'bg-primary text-primary-foreground font-semibold',
+                avatarClassName ? 'text-xs' : 'text-sm'
+              )}
+            >
               {initials}
             </AvatarFallback>
           </Avatar>

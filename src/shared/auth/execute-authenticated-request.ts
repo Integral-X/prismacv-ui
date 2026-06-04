@@ -9,11 +9,24 @@ import {
   shouldPersistSession,
 } from '@/modules/auth/data/session';
 
-async function refreshSessionAndGetAccessToken(): Promise<string> {
+interface ExecuteAuthenticatedRequestOptions {
+  /**
+   * When true, refresh/clear flows update httpOnly cookies (Server Actions /
+   * mutations). When false, tokens are refreshed in-memory only so RSC reads
+   * do not violate Next.js cookie mutation rules.
+   */
+  mutateSession?: boolean;
+}
+
+async function refreshSessionAndGetAccessToken(
+  mutateSession: boolean
+): Promise<string> {
   const refreshToken = await getRefreshToken();
 
   if (!refreshToken) {
-    await clearAuthSession();
+    if (mutateSession) {
+      await clearAuthSession();
+    }
     throw new HttpError(401, 'Unauthorized', 'Authentication required');
   }
 
@@ -21,22 +34,28 @@ async function refreshSessionAndGetAccessToken(): Promise<string> {
     const { refreshUserToken } = await import('@/modules/auth/data/mutations');
     const refreshedSession = await refreshUserToken({ refreshToken });
 
-    await persistAuthSession(refreshedSession, await shouldPersistSession());
+    if (mutateSession) {
+      await persistAuthSession(refreshedSession, await shouldPersistSession());
+    }
 
     return refreshedSession.accessToken;
   } catch (error) {
-    await clearAuthSession();
+    if (mutateSession) {
+      await clearAuthSession();
+    }
     throw error;
   }
 }
 
-export async function executeAuthenticatedRequest<T>(
-  operation: (headers: Record<string, string>) => Promise<T>
+async function executeAuthenticatedRequestInternal<T>(
+  operation: (headers: Record<string, string>) => Promise<T>,
+  options: ExecuteAuthenticatedRequestOptions
 ): Promise<T> {
+  const mutateSession = options.mutateSession ?? false;
   let accessToken = await getAccessToken();
 
   if (!accessToken) {
-    accessToken = await refreshSessionAndGetAccessToken();
+    accessToken = await refreshSessionAndGetAccessToken(mutateSession);
   }
 
   try {
@@ -46,10 +65,29 @@ export async function executeAuthenticatedRequest<T>(
       throw error;
     }
 
-    const refreshedAccessToken = await refreshSessionAndGetAccessToken();
+    const refreshedAccessToken =
+      await refreshSessionAndGetAccessToken(mutateSession);
 
     return await operation({
       Authorization: `Bearer ${refreshedAccessToken}`,
     });
   }
+}
+
+/** Server reads (RSC, queries) — never mutates cookies. */
+export async function executeAuthenticatedRead<T>(
+  operation: (headers: Record<string, string>) => Promise<T>
+): Promise<T> {
+  return executeAuthenticatedRequestInternal(operation, {
+    mutateSession: false,
+  });
+}
+
+/** Writes and Server Actions — may refresh or clear the session cookies. */
+export async function executeAuthenticatedRequest<T>(
+  operation: (headers: Record<string, string>) => Promise<T>
+): Promise<T> {
+  return executeAuthenticatedRequestInternal(operation, {
+    mutateSession: true,
+  });
 }

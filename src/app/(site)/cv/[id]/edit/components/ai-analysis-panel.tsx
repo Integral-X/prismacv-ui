@@ -14,8 +14,13 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { analyzeCvAction } from '@/modules/ai/data/actions';
 import type { CvAnalysisResult } from '@/modules/ai/data/mappers';
+import { queueAiAnalyzeAction } from '@/modules/queue/data/actions';
+import {
+  toQueueCvAnalysisResult,
+  type QueueJobState,
+} from '@/modules/queue/data/mappers';
+import { pollQueueJob } from '@/modules/queue/ui/poll-queue-job';
 
 interface AiAnalysisPanelProps {
   cvId: string;
@@ -37,16 +42,45 @@ const SEVERITY_COLOR = {
 export function AiAnalysisPanel({ cvId, onClose }: AiAnalysisPanelProps) {
   const [isPending, startTransition] = useTransition();
   const [result, setResult] = useState<CvAnalysisResult | null>(null);
+  const [jobState, setJobState] = useState<QueueJobState | null>(null);
 
   function handleAnalyze() {
     startTransition(async () => {
-      const response = await analyzeCvAction(cvId);
-      if (response.ok && response.data) {
-        setResult(response.data);
-      } else if (response.ok && !response.data) {
-        toast.error('Analysis returned no data. Please try again.');
-      } else if (!response.ok) {
-        toast.error(response.message);
+      setJobState('waiting');
+      const queued = await queueAiAnalyzeAction({ cvId });
+      if (!queued.ok || !queued.data) {
+        setJobState(null);
+        toast.error(
+          queued.ok ? 'Unable to queue CV analysis.' : queued.message
+        );
+        return;
+      }
+
+      try {
+        const status = await pollQueueJob({
+          jobId: queued.data.jobId,
+          onStatus: (nextStatus) => setJobState(nextStatus.state),
+        });
+
+        if (status.state === 'failed') {
+          toast.error(status.error ?? 'CV analysis failed. Please try again.');
+          return;
+        }
+
+        const analysis = toQueueCvAnalysisResult(status.result);
+        if (!analysis) {
+          toast.error('Analysis returned no data. Please try again.');
+          return;
+        }
+
+        setResult(analysis);
+        toast.success('CV analysis complete.');
+      } catch (error) {
+        toast.error(
+          error instanceof Error ? error.message : 'Unable to analyze your CV.'
+        );
+      } finally {
+        setJobState(null);
       }
     });
   }
@@ -104,8 +138,18 @@ export function AiAnalysisPanel({ cvId, onClose }: AiAnalysisPanelProps) {
         )}
 
         {isPending && (
-          <div className='flex items-center justify-center py-8'>
-            <Loader2 className='size-6 animate-spin text-brand-primary' />
+          <div className='space-y-3 py-8'>
+            <div className='flex items-center justify-center'>
+              <Loader2 className='size-6 animate-spin text-brand-primary' />
+            </div>
+            {jobState && (
+              <div className='space-y-2'>
+                <Progress value={jobState === 'active' ? 65 : 25} />
+                <p className='text-center text-xs text-content-secondary'>
+                  Analysis {jobState.replace('-', ' ')}
+                </p>
+              </div>
+            )}
           </div>
         )}
 

@@ -6,7 +6,10 @@ import {
   persistAuthSession,
   shouldPersistSession,
 } from '@/modules/auth/data/session';
-import { executeAuthenticatedRequest } from './execute-authenticated-request';
+import {
+  executeAuthenticatedRead,
+  executeAuthenticatedRequest,
+} from './execute-authenticated-request';
 
 jest.mock('@/modules/auth/data/session', () => ({
   clearAuthSession: jest.fn(),
@@ -148,5 +151,57 @@ describe('executeAuthenticatedRequest', () => {
       serverError
     );
     expect(operation).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('executeAuthenticatedRead', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('does not clear session when refresh token is absent', async () => {
+    getAccessTokenMock.mockResolvedValueOnce(null);
+    getRefreshTokenMock.mockResolvedValueOnce(null);
+
+    await expect(executeAuthenticatedRead(jest.fn())).rejects.toMatchObject({
+      statusCode: 401,
+    });
+    expect(clearAuthSessionMock).not.toHaveBeenCalled();
+  });
+
+  it('refreshes in memory without persisting session cookies', async () => {
+    const refreshUserTokenMock = await getRefreshUserTokenMock();
+
+    getAccessTokenMock.mockResolvedValueOnce(null);
+    getRefreshTokenMock.mockResolvedValueOnce('refresh-token');
+    refreshUserTokenMock.mockResolvedValueOnce({
+      user: userProfile,
+      accessToken: 'fresh-access-token',
+      refreshToken: 'fresh-refresh-token',
+    });
+    const operation = jest.fn().mockResolvedValueOnce('result');
+
+    const result = await executeAuthenticatedRead(operation);
+
+    expect(result).toBe('result');
+    expect(persistAuthSessionMock).not.toHaveBeenCalled();
+    expect(operation).toHaveBeenCalledWith({
+      Authorization: 'Bearer fresh-access-token',
+    });
+  });
+
+  it('does not clear session when refresh fails', async () => {
+    const refreshUserTokenMock = await getRefreshUserTokenMock();
+
+    getAccessTokenMock.mockResolvedValueOnce(null);
+    getRefreshTokenMock.mockResolvedValueOnce('stale-refresh-token');
+    refreshUserTokenMock.mockRejectedValueOnce(
+      new HttpError(401, 'Unauthorized')
+    );
+
+    await expect(executeAuthenticatedRead(jest.fn())).rejects.toMatchObject({
+      statusCode: 401,
+    });
+    expect(clearAuthSessionMock).not.toHaveBeenCalled();
   });
 });

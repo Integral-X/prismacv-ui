@@ -9,8 +9,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
-import { optimizeCvAction } from '@/modules/ai/data/actions';
 import type { CvOptimizationResult } from '@/modules/ai/data/mappers';
+import { queueAiOptimizeAction } from '@/modules/queue/data/actions';
+import {
+  toQueueCvOptimizationResult,
+  type QueueJobState,
+} from '@/modules/queue/data/mappers';
+import { pollQueueJob } from '@/modules/queue/ui/poll-queue-job';
 
 interface AiOptimizePanelProps {
   cvId: string;
@@ -22,6 +27,7 @@ export function AiOptimizePanel({ cvId, onClose }: AiOptimizePanelProps) {
   const [result, setResult] = useState<CvOptimizationResult | null>(null);
   const [jobTitle, setJobTitle] = useState('');
   const [jobDescription, setJobDescription] = useState('');
+  const [jobState, setJobState] = useState<QueueJobState | null>(null);
 
   function handleOptimize() {
     if (!jobTitle.trim() || !jobDescription.trim()) {
@@ -29,15 +35,46 @@ export function AiOptimizePanel({ cvId, onClose }: AiOptimizePanelProps) {
       return;
     }
     startTransition(async () => {
-      const response = await optimizeCvAction(cvId, {
+      setJobState('waiting');
+      const queued = await queueAiOptimizeAction({
+        cvId,
         jobDescription: `${jobTitle.trim()}\n\n${jobDescription.trim()}`,
       });
-      if (response.ok && response.data) {
-        setResult(response.data);
-      } else if (response.ok && !response.data) {
-        toast.error('Optimization returned no data. Please try again.');
-      } else if (!response.ok) {
-        toast.error(response.message);
+      if (!queued.ok || !queued.data) {
+        setJobState(null);
+        toast.error(
+          queued.ok ? 'Unable to queue CV optimization.' : queued.message
+        );
+        return;
+      }
+
+      try {
+        const status = await pollQueueJob({
+          jobId: queued.data.jobId,
+          onStatus: (nextStatus) => setJobState(nextStatus.state),
+        });
+
+        if (status.state === 'failed') {
+          toast.error(
+            status.error ?? 'CV optimization failed. Please try again.'
+          );
+          return;
+        }
+
+        const optimization = toQueueCvOptimizationResult(status.result);
+        if (!optimization) {
+          toast.error('Optimization returned no data. Please try again.');
+          return;
+        }
+
+        setResult(optimization);
+        toast.success('CV optimization complete.');
+      } catch (error) {
+        toast.error(
+          error instanceof Error ? error.message : 'Unable to optimize your CV.'
+        );
+      } finally {
+        setJobState(null);
       }
     });
   }
@@ -60,6 +97,14 @@ export function AiOptimizePanel({ cvId, onClose }: AiOptimizePanelProps) {
         >
           <X className='size-4' />
         </Button>
+        {isPending && jobState && (
+          <div className='space-y-2'>
+            <Progress value={jobState === 'active' ? 65 : 25} />
+            <p className='text-center text-xs text-content-secondary'>
+              Optimization {jobState.replace('-', ' ')}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Input */}
