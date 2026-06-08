@@ -58,15 +58,29 @@ Release impact: `refactor:` → patch.
 
 Every `data/` file ships a co-located `.test.ts` (AGENTS.md rule). Missing today:
 
-- [ ] `modules/ai/data` — mappers + actions
-- [ ] `modules/jobs/data` — mappers + queries + mutations + actions
-- [ ] `modules/skills/data` — mappers + queries + actions
-- [ ] `modules/interview/data` — mappers + queries
-- [ ] `modules/cover-letters/data` — mappers + queries + mutations
-- [ ] `modules/billing/data` — mappers + queries + actions
+- [x] `modules/ai/data` — mappers + actions + mutations
+- [x] `modules/jobs/data` — mappers + queries + mutations + actions
+- [x] `modules/skills/data` — mappers + queries + actions + mutations
+- [x] `modules/interview/data` — mappers + queries
+- [x] `modules/cover-letters/data` — mappers + queries + mutations + actions
+- [x] `modules/billing/data` — mappers + queries + actions + mutations
 
-Use the `feature-module` skill's test template. Mock `apiClient`, use
-`satisfies <Contract>` on fixtures, assert behavior not implementation.
+Used the `feature-module` skill's test template. Mocked `apiClient` +
+`executeAuthenticatedRequest`/`revalidatePath` at the boundary, `satisfies
+<Contract>` on fixtures, asserted behavior not implementation. 21 suites / 100+
+tests added across two commits. `pnpm verify` passes (35 suites / 162 tests).
+
+### Still untested (pre-existing, outside Phase 2 scope)
+
+- `ats/data` — mutations, actions
+- `auth/data` — actions
+- `cv/data` — mappers, mutations
+- `features/data` — mutations, actions, feature-actions
+- `grammar/data` — mutations, actions
+- `user/data` — mutations
+- `legal/data` — legal-content (static content, low test value)
+
+Backfill in a follow-up `test:` branch.
 
 Release impact: `test:` → none.
 
