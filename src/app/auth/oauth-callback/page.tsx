@@ -24,7 +24,21 @@ export default function OAuthCallbackPage() {
           return atob(`${normalized}${padding}`);
         };
 
+        // Read the fragment then immediately scrub it from the URL so the
+        // raw token payload does not linger in the address bar or browser
+        // history while the async persistOAuthSessionAction call is in-flight.
+        //
+        // NOTE: The root risk (tokens passing through the client URL at all)
+        // requires a backend fix: switch the OAuth callback to a server-side
+        // redirect that sets httpOnly session cookies directly, rather than
+        // encoding tokens in the URL fragment.
         const hash = window.location.hash;
+        history.replaceState(
+          null,
+          '',
+          window.location.pathname + window.location.search
+        );
+
         const tokenParam = hash
           .slice(1)
           .split('&')

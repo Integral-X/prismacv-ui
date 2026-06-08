@@ -1,8 +1,6 @@
 import 'server-only';
 
 import { apiClient } from '@/shared/http/api-client';
-import { env } from '@/shared/config/env';
-import { HttpError } from '@/shared/http/http-error';
 import { executeAuthenticatedRequest } from '@/shared/auth/execute-authenticated-request';
 import type {
   AvatarUploadResponseContract,
@@ -28,37 +26,12 @@ export async function uploadAvatar(file: File): Promise<string> {
   return executeAuthenticatedRequest(async (headers) => {
     const formData = new FormData();
     formData.append('avatar', file);
-
-    const url = `${env.apiBaseUrl}users/me/avatar`;
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        Authorization: headers.Authorization,
-      },
-      body: formData,
-    });
-
-    if (!response.ok) {
-      let errorMessage: string | undefined;
-      let errorName: string = response.statusText;
-      try {
-        const errorBody = (await response.json()) as {
-          error?: string;
-          message?: string;
-        };
-        errorName = errorBody.error ?? response.statusText;
-        errorMessage = errorBody.message;
-      } catch {
-        // non-JSON error response
-      }
-      throw new HttpError(response.status, errorName, errorMessage);
-    }
-
-    const json = (await response.json()) as {
-      data: AvatarUploadResponseContract;
-    };
-    return json.data.avatarUrl;
+    const contract = await apiClient.postFormData<AvatarUploadResponseContract>(
+      'users/me/avatar',
+      formData,
+      { headers }
+    );
+    return contract.avatarUrl;
   });
 }
 

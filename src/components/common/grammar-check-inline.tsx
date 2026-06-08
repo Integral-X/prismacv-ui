@@ -40,6 +40,7 @@ export function GrammarCheckInline({
         toast.error(result.message);
         return;
       }
+      if (!result.data) return;
       setSummary(result.data.summary);
       setIssues(
         result.data.issues.map((i) => ({
