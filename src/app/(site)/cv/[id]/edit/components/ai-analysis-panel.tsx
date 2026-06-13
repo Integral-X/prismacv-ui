@@ -21,6 +21,8 @@ import {
   type QueueJobState,
 } from '@/modules/queue/data/mappers';
 import { pollQueueJob } from '@/modules/queue/ui/poll-queue-job';
+import { useFlushPendingEdits } from '@/modules/cv/editor/editor-provider';
+import { SuggestionCard } from './suggestion-card';
 
 interface AiAnalysisPanelProps {
   cvId: string;
@@ -43,9 +45,12 @@ export function AiAnalysisPanel({ cvId, onClose }: AiAnalysisPanelProps) {
   const [isPending, startTransition] = useTransition();
   const [result, setResult] = useState<CvAnalysisResult | null>(null);
   const [jobState, setJobState] = useState<QueueJobState | null>(null);
+  const flushPendingEdits = useFlushPendingEdits();
 
   function handleAnalyze() {
     startTransition(async () => {
+      // Persist any pending inline edits so the AI analyses current content.
+      await flushPendingEdits();
       setJobState('waiting');
       const queued = await queueAiAnalyzeAction({ cvId });
       if (!queued.ok || !queued.data) {
@@ -232,22 +237,7 @@ export function AiAnalysisPanel({ cvId, onClose }: AiAnalysisPanelProps) {
                 </h4>
                 <div className='space-y-2'>
                   {result.suggestions.map((suggestion, idx) => (
-                    <div
-                      key={idx}
-                      className='rounded-md border border-border-subtle p-2.5'
-                    >
-                      <p className='text-xs text-content-primary'>
-                        {suggestion.message}
-                      </p>
-                      {suggestion.suggestedText && (
-                        <p className='mt-1 rounded bg-feedback-success/10 p-1.5 text-xs text-feedback-success'>
-                          {suggestion.suggestedText}
-                        </p>
-                      )}
-                      <Badge variant='secondary' className='mt-1 text-[10px]'>
-                        {suggestion.section} · {suggestion.type}
-                      </Badge>
-                    </div>
+                    <SuggestionCard key={idx} suggestion={suggestion} />
                   ))}
                 </div>
               </div>

@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
+import { X } from 'lucide-react';
 import type {
   Cv,
   PersonalInfo,
@@ -21,7 +22,8 @@ import {
   type QueueJobState,
 } from '@/modules/queue/data/mappers';
 import { pollQueueJob } from '@/modules/queue/ui/poll-queue-job';
-import { EditorHeader } from './components/editor-header';
+import { EditorHeader, type EditorPanel } from './components/editor-header';
+import { EditorMicroRail } from './components/editor-micro-rail';
 import { SectionWrapper } from './components/section-wrapper';
 import { PersonalInfoForm } from './components/personal-info-form';
 import { ExperienceForm } from './components/experience-form';
@@ -31,17 +33,25 @@ import { CertificationsForm } from './components/certifications-form';
 import { ProjectsForm } from './components/projects-form';
 import { LanguagesForm } from './components/languages-form';
 import { CvPreviewPanel } from '@/modules/cv/components/cv-preview-panel';
+import { templateSupportsInlineEditing } from '@/modules/cv/components/templates';
 import { AiAnalysisPanel } from './components/ai-analysis-panel';
 import { AiOptimizePanel } from './components/ai-optimize-panel';
 import { CvSharePanel } from './components/cv-share-panel';
-import { Button } from '@/components/ui/button';
+import { EditorProvider, useLiveCv } from '@/modules/cv/editor/editor-provider';
+import { ErrorBoundary } from '@/components/common/error-boundary';
 import { Badge } from '@/components/ui/badge';
-import { Sparkles, Target } from 'lucide-react';
 
 interface CvEditorClientProps {
   cv: Cv;
   billing: BillingProfile;
 }
+
+const PANEL_TITLES: Record<EditorPanel, string> = {
+  edit: 'Content',
+  analyze: 'Analyze',
+  optimize: 'Optimize',
+  share: 'Share',
+};
 
 export function CvEditorClient({
   cv: initialCv,
@@ -50,8 +60,20 @@ export function CvEditorClient({
   const [cv, setCv] = useState<Cv>(initialCv);
   const [isPending, startTransition] = useTransition();
   const [exportState, setExportState] = useState<QueueJobState | null>(null);
-  const [showAiPanel, setShowAiPanel] = useState(false);
-  const [showOptimizePanel, setShowOptimizePanel] = useState(false);
+  const [activePanel, setActivePanel] = useState<EditorPanel | null>('edit');
+  const [isPreview, setIsPreview] = useState(false);
+
+  // The two-column template edits personal info and experience inline on the
+  // document; other templates fall back to the rail forms for those sections.
+  const inlineEditing = templateSupportsInlineEditing(cv.templateId);
+  const isExporting =
+    exportState !== null &&
+    exportState !== 'completed' &&
+    exportState !== 'failed';
+
+  function togglePanel(panel: EditorPanel) {
+    setActivePanel((current) => (current === panel ? null : panel));
+  }
 
   function handleTitleChange(title: string) {
     startTransition(async () => {
@@ -116,10 +138,10 @@ export function CvEditorClient({
         const bytes = Uint8Array.from(atob(pdf.base64), (c) => c.charCodeAt(0));
         const blob = new Blob([bytes], { type: pdf.contentType });
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = pdf.filename || `${cv.title || 'cv'}.pdf`;
-        a.click();
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = pdf.filename || `${cv.title || 'cv'}.pdf`;
+        anchor.click();
         setTimeout(() => URL.revokeObjectURL(url), 1000);
         toast.success('PDF export ready.');
       } catch (error) {
@@ -163,131 +185,197 @@ export function CvEditorClient({
   }
 
   return (
-    <div className='min-h-screen bg-surface-primary'>
-      <EditorHeader
-        cv={cv}
-        onTitleChange={handleTitleChange}
-        onStatusToggle={handleStatusToggle}
-        onExport={handleExport}
-        isPending={isPending}
-        exportState={exportState}
-      />
+    <EditorProvider cv={cv}>
+      <div className='flex h-dvh flex-col overflow-hidden bg-surface-primary'>
+        <EditorHeader
+          cv={cv}
+          onTitleChange={handleTitleChange}
+          onStatusToggle={handleStatusToggle}
+          isPending={isPending}
+          activePanel={activePanel}
+          onTogglePanel={togglePanel}
+        />
 
-      <div className='mx-auto max-w-7xl px-4 py-6'>
-        <div className='mb-4 flex flex-wrap items-center gap-2'>
-          <Badge variant='secondary'>Plan: {billing.plan.toUpperCase()}</Badge>
-          <Badge variant='outline'>
-            AI quota: {billing.aiQuota.used}/{billing.aiQuota.limit}
-          </Badge>
-        </div>
-        <div className='grid grid-cols-1 gap-6 lg:grid-cols-3'>
-          {/* Left panel — forms */}
-          <div className='space-y-4 lg:col-span-2'>
-            <SectionWrapper
-              title='Personal Info'
-              count={cv.personalInfo ? 1 : 0}
-              defaultOpen
-            >
-              <PersonalInfoForm
-                cvId={cv.id}
-                initialData={cv.personalInfo}
-                onSaved={handlePersonalInfoSaved}
-              />
-            </SectionWrapper>
+        <div className='flex min-h-0 flex-1'>
+          <EditorMicroRail
+            isPreview={isPreview}
+            onTogglePreview={() => setIsPreview((value) => !value)}
+            onExport={handleExport}
+            isExporting={isExporting}
+            shareActive={activePanel === 'share'}
+            onToggleShare={() => togglePanel('share')}
+          />
 
-            <SectionWrapper title='Experience' count={cv.experiences.length}>
-              <ExperienceForm
-                cvId={cv.id}
-                initialData={cv.experiences}
-                onSaved={handleExperiencesSaved}
-              />
-            </SectionWrapper>
+          {activePanel && (
+            <aside className='flex w-96 shrink-0 flex-col overflow-hidden border-r border-subtle bg-surface-primary'>
+              <div className='flex items-center justify-between border-b border-subtle px-4 py-3'>
+                <h2 className='text-sm font-semibold text-content-primary'>
+                  {PANEL_TITLES[activePanel]}
+                </h2>
+                <button
+                  type='button'
+                  onClick={() => setActivePanel(null)}
+                  aria-label='Close panel'
+                  className='rounded p-1 text-content-secondary hover:bg-surface-card'
+                >
+                  <X className='size-4' />
+                </button>
+              </div>
 
-            <SectionWrapper title='Education' count={cv.education.length}>
-              <EducationForm
-                cvId={cv.id}
-                initialData={cv.education}
-                onSaved={handleEducationSaved}
-              />
-            </SectionWrapper>
-
-            <SectionWrapper title='Skills' count={cv.skills.length}>
-              <SkillsForm
-                cvId={cv.id}
-                initialData={cv.skills}
-                onSaved={handleSkillsSaved}
-              />
-            </SectionWrapper>
-
-            <SectionWrapper
-              title='Certifications'
-              count={cv.certifications.length}
-            >
-              <CertificationsForm
-                cvId={cv.id}
-                initialData={cv.certifications}
-                onSaved={handleCertificationsSaved}
-              />
-            </SectionWrapper>
-
-            <SectionWrapper title='Projects' count={cv.projects.length}>
-              <ProjectsForm
-                cvId={cv.id}
-                initialData={cv.projects}
-                onSaved={handleProjectsSaved}
-              />
-            </SectionWrapper>
-
-            <SectionWrapper title='Languages' count={cv.languages.length}>
-              <LanguagesForm
-                cvId={cv.id}
-                initialData={cv.languages}
-                onSaved={handleLanguagesSaved}
-              />
-            </SectionWrapper>
-          </div>
-
-          {/* Right panel — AI analysis & live preview */}
-          <div className='lg:col-span-1'>
-            <div className='sticky top-20 space-y-4'>
-              {!showAiPanel && !showOptimizePanel && (
-                <div className='flex gap-2'>
-                  <Button
-                    variant='outline'
-                    onClick={() => setShowAiPanel(true)}
-                    className='flex flex-1 items-center justify-center gap-2 border-dashed'
-                  >
-                    <Sparkles className='size-4' />
-                    Analyze
-                  </Button>
-                  <Button
-                    variant='outline'
-                    onClick={() => setShowOptimizePanel(true)}
-                    className='flex flex-1 items-center justify-center gap-2 border-dashed'
-                  >
-                    <Target className='size-4' />
-                    Optimize
-                  </Button>
+              <div className='flex-1 overflow-y-auto p-4'>
+                <div className='mb-4 flex flex-wrap items-center gap-2'>
+                  <Badge variant='secondary'>
+                    {billing.plan.toUpperCase()}
+                  </Badge>
+                  <Badge variant='outline'>
+                    AI {billing.aiQuota.used}/{billing.aiQuota.limit}
+                  </Badge>
                 </div>
-              )}
-              {showAiPanel && (
-                <AiAnalysisPanel
-                  cvId={cv.id}
-                  onClose={() => setShowAiPanel(false)}
-                />
-              )}
-              {showOptimizePanel && (
-                <AiOptimizePanel
-                  cvId={cv.id}
-                  onClose={() => setShowOptimizePanel(false)}
-                />
-              )}
-              <CvSharePanel cvId={cv.id} />
-              <CvPreviewPanel cv={cv} />
-            </div>
+
+                {activePanel === 'edit' &&
+                  (inlineEditing ? (
+                    <p className='px-1 text-xs leading-relaxed text-content-secondary'>
+                      Edit your CV directly on the document — click any text to
+                      change it, and use the add/remove controls in each
+                      section.
+                    </p>
+                  ) : (
+                    <div className='space-y-4'>
+                      <SectionWrapper
+                        title='Personal Info'
+                        count={cv.personalInfo ? 1 : 0}
+                        defaultOpen
+                      >
+                        <PersonalInfoForm
+                          cvId={cv.id}
+                          initialData={cv.personalInfo}
+                          onSaved={handlePersonalInfoSaved}
+                        />
+                      </SectionWrapper>
+
+                      <SectionWrapper
+                        title='Experience'
+                        count={cv.experiences.length}
+                      >
+                        <ExperienceForm
+                          cvId={cv.id}
+                          initialData={cv.experiences}
+                          onSaved={handleExperiencesSaved}
+                        />
+                      </SectionWrapper>
+
+                      <SectionWrapper
+                        title='Education'
+                        count={cv.education.length}
+                      >
+                        <EducationForm
+                          cvId={cv.id}
+                          initialData={cv.education}
+                          onSaved={handleEducationSaved}
+                        />
+                      </SectionWrapper>
+
+                      <SectionWrapper title='Skills' count={cv.skills.length}>
+                        <SkillsForm
+                          cvId={cv.id}
+                          initialData={cv.skills}
+                          onSaved={handleSkillsSaved}
+                        />
+                      </SectionWrapper>
+
+                      <SectionWrapper
+                        title='Certifications'
+                        count={cv.certifications.length}
+                      >
+                        <CertificationsForm
+                          cvId={cv.id}
+                          initialData={cv.certifications}
+                          onSaved={handleCertificationsSaved}
+                        />
+                      </SectionWrapper>
+
+                      <SectionWrapper
+                        title='Projects'
+                        count={cv.projects.length}
+                      >
+                        <ProjectsForm
+                          cvId={cv.id}
+                          initialData={cv.projects}
+                          onSaved={handleProjectsSaved}
+                        />
+                      </SectionWrapper>
+
+                      <SectionWrapper
+                        title='Languages'
+                        count={cv.languages.length}
+                      >
+                        <LanguagesForm
+                          cvId={cv.id}
+                          initialData={cv.languages}
+                          onSaved={handleLanguagesSaved}
+                        />
+                      </SectionWrapper>
+                    </div>
+                  ))}
+
+                {activePanel === 'analyze' && (
+                  <ErrorBoundary
+                    boundary='editor-analyze'
+                    label='analysis panel'
+                  >
+                    <AiAnalysisPanel
+                      cvId={cv.id}
+                      onClose={() => setActivePanel(null)}
+                    />
+                  </ErrorBoundary>
+                )}
+
+                {activePanel === 'optimize' && (
+                  <ErrorBoundary
+                    boundary='editor-optimize'
+                    label='optimization panel'
+                  >
+                    <AiOptimizePanel
+                      cvId={cv.id}
+                      onClose={() => setActivePanel(null)}
+                    />
+                  </ErrorBoundary>
+                )}
+
+                {activePanel === 'share' && (
+                  <ErrorBoundary boundary='editor-share' label='share panel'>
+                    <CvSharePanel cvId={cv.id} />
+                  </ErrorBoundary>
+                )}
+              </div>
+            </aside>
+          )}
+
+          {/* Document canvas — the critical core; isolate template crashes
+              so a bad render degrades here instead of blanking the editor. */}
+          <div className='flex min-h-0 flex-1 flex-col bg-surface-elevated'>
+            <ErrorBoundary boundary='editor-document' label='document preview'>
+              <DocumentPreview cv={cv} isPreview={isPreview} />
+            </ErrorBoundary>
           </div>
         </div>
       </div>
-    </div>
+    </EditorProvider>
+  );
+}
+
+/**
+ * Renders the document canvas from the live editor draft (merged via `useLiveCv`)
+ * rather than the stale server prop, so toggling to Preview reflects in-progress
+ * inline edits. Lives inside `EditorProvider` so it can read the store.
+ */
+function DocumentPreview({ cv, isPreview }: { cv: Cv; isPreview: boolean }) {
+  const liveCv = useLiveCv(cv);
+  return (
+    <CvPreviewPanel
+      cv={liveCv}
+      mode={isPreview ? 'preview' : 'edit'}
+      initialScale={0.85}
+    />
   );
 }

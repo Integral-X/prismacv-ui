@@ -10,7 +10,13 @@ import {
   SkillGroups,
 } from './resume-sections';
 
-export function CreativeTemplate({ cv, accentColor }: TemplateProps) {
+/**
+ * Display-only two-column resume (wide main + narrow sidebar) in the Enhancv
+ * style. Pure and server-renderable — used by the preview, print, and public CV
+ * paths so they ship none of the editor's client JS. The inline-editable
+ * counterpart lives in `two-column-editable.tsx`.
+ */
+export function TwoColumnDisplay({ cv, accentColor }: TemplateProps) {
   const {
     personalInfo,
     experiences,
@@ -28,7 +34,42 @@ export function CreativeTemplate({ cv, accentColor }: TemplateProps) {
       )}
 
       <div className='mt-6 grid grid-cols-3 gap-8'>
-        {/* Sidebar (narrow, left) */}
+        {/* Main column (wide, left) */}
+        <div className='col-span-2 space-y-5'>
+          {personalInfo?.summary && (
+            <Section title='Summary'>
+              <p className='text-xs leading-relaxed text-content-secondary'>
+                {personalInfo.summary}
+              </p>
+            </Section>
+          )}
+
+          {experiences.length > 0 && (
+            <Section title='Experience'>
+              {experiences.map((exp) => (
+                <ExperienceEntry
+                  key={exp.id}
+                  experience={exp}
+                  accentColor={accentColor}
+                />
+              ))}
+            </Section>
+          )}
+
+          {projects.length > 0 && (
+            <Section title='Projects'>
+              {projects.map((project) => (
+                <ProjectEntry
+                  key={project.id}
+                  project={project}
+                  accentColor={accentColor}
+                />
+              ))}
+            </Section>
+          )}
+        </div>
+
+        {/* Side column (narrow, right) */}
         <div className='col-span-1 space-y-5'>
           {skills.length > 0 && (
             <Section title='Skills'>
@@ -63,41 +104,6 @@ export function CreativeTemplate({ cv, accentColor }: TemplateProps) {
                   <LanguageEntry key={language.id} language={language} />
                 ))}
               </div>
-            </Section>
-          )}
-        </div>
-
-        {/* Main column (wide, right) */}
-        <div className='col-span-2 space-y-5'>
-          {personalInfo?.summary && (
-            <Section title='Summary'>
-              <p className='text-xs leading-relaxed text-content-secondary'>
-                {personalInfo.summary}
-              </p>
-            </Section>
-          )}
-
-          {experiences.length > 0 && (
-            <Section title='Experience'>
-              {experiences.map((exp) => (
-                <ExperienceEntry
-                  key={exp.id}
-                  experience={exp}
-                  accentColor={accentColor}
-                />
-              ))}
-            </Section>
-          )}
-
-          {projects.length > 0 && (
-            <Section title='Projects'>
-              {projects.map((project) => (
-                <ProjectEntry
-                  key={project.id}
-                  project={project}
-                  accentColor={accentColor}
-                />
-              ))}
             </Section>
           )}
         </div>

@@ -16,6 +16,8 @@ import {
   type QueueJobState,
 } from '@/modules/queue/data/mappers';
 import { pollQueueJob } from '@/modules/queue/ui/poll-queue-job';
+import { useFlushPendingEdits } from '@/modules/cv/editor/editor-provider';
+import { SuggestionCard } from './suggestion-card';
 
 interface AiOptimizePanelProps {
   cvId: string;
@@ -28,6 +30,7 @@ export function AiOptimizePanel({ cvId, onClose }: AiOptimizePanelProps) {
   const [jobTitle, setJobTitle] = useState('');
   const [jobDescription, setJobDescription] = useState('');
   const [jobState, setJobState] = useState<QueueJobState | null>(null);
+  const flushPendingEdits = useFlushPendingEdits();
 
   function handleOptimize() {
     if (!jobTitle.trim() || !jobDescription.trim()) {
@@ -35,6 +38,8 @@ export function AiOptimizePanel({ cvId, onClose }: AiOptimizePanelProps) {
       return;
     }
     startTransition(async () => {
+      // Persist any pending inline edits so the AI optimises current content.
+      await flushPendingEdits();
       setJobState('waiting');
       const queued = await queueAiOptimizeAction({
         cvId,
@@ -230,17 +235,7 @@ export function AiOptimizePanel({ cvId, onClose }: AiOptimizePanelProps) {
               </h4>
               <div className='space-y-2'>
                 {result.suggestions.map((s, idx) => (
-                  <div
-                    key={idx}
-                    className='rounded-md border border-border-subtle p-2.5'
-                  >
-                    <p className='text-xs text-content-primary'>{s.message}</p>
-                    {s.suggestedText && (
-                      <p className='mt-1 rounded bg-feedback-success/10 p-1.5 text-xs text-feedback-success'>
-                        {s.suggestedText}
-                      </p>
-                    )}
-                  </div>
+                  <SuggestionCard key={idx} suggestion={s} />
                 ))}
               </div>
             </div>

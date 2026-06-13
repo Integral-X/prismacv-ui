@@ -1,23 +1,47 @@
 'use client';
 
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { ZoomIn, ZoomOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { Cv } from '@/modules/cv/data/mappers';
 import { CvPreview } from './cv-preview';
+import { PaginatedSheet } from './paginated-sheet';
+import type { RenderMode } from './templates';
+
+// Code-split: the inline-editing renderer (and the editor store it pulls in) is
+// only fetched in edit mode, so the preview/print/public paths never load it.
+const EditableTemplateRenderer = dynamic(
+  () =>
+    import('./templates/editable-template-renderer').then((module) => ({
+      default: module.EditableTemplateRenderer,
+    })),
+  {
+    ssr: false,
+    loading: () => (
+      <div className='mx-auto h-[297mm] w-[210mm] animate-pulse rounded bg-surface-card shadow-lg' />
+    ),
+  }
+);
 
 interface CvPreviewPanelProps {
   cv: Cv;
+  mode?: RenderMode;
+  initialScale?: number;
 }
 
-export function CvPreviewPanel({ cv }: CvPreviewPanelProps) {
-  const [scale, setScale] = useState(0.4);
+export function CvPreviewPanel({
+  cv,
+  mode,
+  initialScale = 0.4,
+}: CvPreviewPanelProps) {
+  const [scale, setScale] = useState(initialScale);
 
   return (
     <div className='flex h-full flex-col'>
       <div className='flex items-center justify-between border-b border-subtle px-4 py-2'>
         <span className='text-sm font-medium text-content-secondary'>
-          Preview
+          {mode === 'edit' ? 'Editing' : 'Preview'}
         </span>
         <div className='flex items-center gap-2'>
           <Button
@@ -52,7 +76,13 @@ export function CvPreviewPanel({ cv }: CvPreviewPanelProps) {
             transformOrigin: 'top center',
           }}
         >
-          <CvPreview cv={cv} templateId={cv.templateId} />
+          <PaginatedSheet>
+            {mode === 'edit' ? (
+              <EditableTemplateRenderer cv={cv} />
+            ) : (
+              <CvPreview cv={cv} templateId={cv.templateId} />
+            )}
+          </PaginatedSheet>
         </div>
       </div>
     </div>

@@ -1,8 +1,6 @@
-'use client';
-
 import type { Cv } from '@/modules/cv/data/mappers';
 import { ClassicTemplate } from './classic-template';
-import { TwoColumnTemplate } from './two-column-template';
+import { TwoColumnDisplay } from './two-column-display';
 import { CreativeTemplate } from './creative-template';
 
 type TemplateLayout = 'single' | 'two-column';
@@ -62,6 +60,9 @@ const TEMPLATE_MAP: Record<string, TemplateConfig> = {
   },
 };
 
+/** Whether the editor renders this template inline (edit) or read-only. */
+export type RenderMode = 'edit' | 'preview';
+
 export interface TemplateProps {
   cv: Cv;
   accentColor: string;
@@ -72,6 +73,23 @@ export function resolveTemplate(templateId: string | null | undefined) {
   return config;
 }
 
+/**
+ * Whether the resolved template has an inline-editable counterpart. Only the
+ * two-column template is ported so far; classic/creative still use the rail
+ * forms. Drives both the fallback editor and the edit-mode renderer.
+ */
+export function templateSupportsInlineEditing(
+  templateId: string | null | undefined
+): boolean {
+  const config = resolveTemplate(templateId);
+  return config.category !== 'creative' && config.layout === 'two-column';
+}
+
+/**
+ * Display renderer — pure and server-safe. Used by the preview, print, and
+ * public CV paths so they never ship the editor's client JS. Edit-mode
+ * rendering goes through `EditableTemplateRenderer`.
+ */
 export function TemplateRenderer({
   cv,
   templateId,
@@ -86,7 +104,7 @@ export function TemplateRenderer({
   }
 
   if (config.layout === 'two-column') {
-    return <TwoColumnTemplate cv={cv} accentColor={config.accentColor} />;
+    return <TwoColumnDisplay cv={cv} accentColor={config.accentColor} />;
   }
 
   return <ClassicTemplate cv={cv} accentColor={config.accentColor} />;
