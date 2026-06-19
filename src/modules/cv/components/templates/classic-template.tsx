@@ -1,4 +1,4 @@
-import type { TemplateProps } from './index';
+import type { TemplateProps } from "./index";
 import {
   CertificationEntry,
   EducationEntry,
@@ -8,7 +8,7 @@ import {
   ResumeHeader,
   Section,
   SkillGroups,
-} from './resume-sections';
+} from "./resume-sections";
 
 export function ClassicTemplate({ cv, accentColor }: TemplateProps) {
   const {
@@ -22,21 +22,21 @@ export function ClassicTemplate({ cv, accentColor }: TemplateProps) {
   } = cv;
 
   return (
-    <div className='mx-auto min-h-[297mm] w-[210mm] space-y-5 bg-white p-10 text-content-primary shadow-lg'>
+    <div className="mx-auto min-h-[297mm] w-[210mm] space-y-5 bg-white p-10 text-content-primary shadow-lg">
       {personalInfo && (
         <ResumeHeader info={personalInfo} accentColor={accentColor} />
       )}
 
       {personalInfo?.summary && (
-        <Section title='Summary'>
-          <p className='text-xs leading-relaxed text-content-secondary'>
+        <Section title="Summary">
+          <p className="text-xs leading-relaxed text-content-secondary">
             {personalInfo.summary}
           </p>
         </Section>
       )}
 
       {experiences.length > 0 && (
-        <Section title='Experience'>
+        <Section title="Experience">
           {experiences.map((exp) => (
             <ExperienceEntry
               key={exp.id}
@@ -48,7 +48,7 @@ export function ClassicTemplate({ cv, accentColor }: TemplateProps) {
       )}
 
       {education.length > 0 && (
-        <Section title='Education'>
+        <Section title="Education">
           {education.map((entry) => (
             <EducationEntry
               key={entry.id}
@@ -60,13 +60,13 @@ export function ClassicTemplate({ cv, accentColor }: TemplateProps) {
       )}
 
       {skills.length > 0 && (
-        <Section title='Skills'>
+        <Section title="Skills">
           <SkillGroups skills={skills} accentColor={accentColor} />
         </Section>
       )}
 
       {projects.length > 0 && (
-        <Section title='Projects'>
+        <Section title="Projects">
           {projects.map((project) => (
             <ProjectEntry
               key={project.id}
@@ -78,7 +78,7 @@ export function ClassicTemplate({ cv, accentColor }: TemplateProps) {
       )}
 
       {certifications.length > 0 && (
-        <Section title='Certifications'>
+        <Section title="Certifications">
           {certifications.map((cert) => (
             <CertificationEntry key={cert.id} certification={cert} />
           ))}
@@ -86,8 +86,8 @@ export function ClassicTemplate({ cv, accentColor }: TemplateProps) {
       )}
 
       {languages.length > 0 && (
-        <Section title='Languages'>
-          <div className='space-y-1'>
+        <Section title="Languages">
+          <div className="space-y-1">
             {languages.map((language) => (
               <LanguageEntry key={language.id} language={language} />
             ))}

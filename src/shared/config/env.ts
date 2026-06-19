@@ -2,11 +2,11 @@ function getApiBaseUrl(): string {
   const raw = process.env.NEXT_PUBLIC_API_URL;
   if (!raw) {
     throw new Error(
-      'Missing required environment variables: NEXT_PUBLIC_API_URL.\n' +
-        'Check your .env.local file.'
+      "Missing required environment variables: NEXT_PUBLIC_API_URL.\n" +
+        "Check your .env.local file."
     );
   }
-  return `${raw.replace(/\/$/, '')}/v1/`;
+  return `${raw.replace(/\/$/, "")}/v1/`;
 }
 
 export const env = {

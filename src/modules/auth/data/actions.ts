@@ -1,8 +1,8 @@
-'use server';
+"use server";
 
-import { redirect } from 'next/navigation';
+import { redirect } from "next/navigation";
 
-import { HttpError } from '@/shared/http/http-error';
+import { HttpError } from "@/shared/http/http-error";
 import {
   changePassword,
   forgotPassword,
@@ -12,23 +12,23 @@ import {
   signupUser,
   verifyResetOtp,
   verifySignupOtp,
-} from './mutations';
-import { parseUserProfileFromJson } from './mappers';
+} from "./mutations";
+import { parseUserProfileFromJson } from "./mappers";
 import {
   clearAuthSession,
   clearPasswordResetToken,
   getPasswordResetToken,
   persistAuthSession,
   setPasswordResetToken,
-} from './session';
+} from "./session";
 
 export type AuthActionCode =
-  | 'conflict'
-  | 'email_not_verified'
-  | 'invalid_credentials'
-  | 'rate_limited'
-  | 'unauthorized'
-  | 'unknown';
+  | "conflict"
+  | "email_not_verified"
+  | "invalid_credentials"
+  | "rate_limited"
+  | "unauthorized"
+  | "unknown";
 
 export interface ActionSuccessResult {
   ok: true;
@@ -64,7 +64,7 @@ function toFailureResult(
     email?: string;
     unauthorizedCode?: Extract<
       AuthActionCode,
-      'email_not_verified' | 'invalid_credentials' | 'unauthorized'
+      "email_not_verified" | "invalid_credentials" | "unauthorized"
     >;
   } = {}
 ): ActionFailureResult {
@@ -72,17 +72,17 @@ function toFailureResult(
     const message = getErrorMessage(error, fallbackMessage);
 
     if (error.isConflict) {
-      return { ok: false, code: 'conflict', email: options.email, message };
+      return { ok: false, code: "conflict", email: options.email, message };
     }
 
     if (error.isTooManyRequests) {
-      return { ok: false, code: 'rate_limited', email: options.email, message };
+      return { ok: false, code: "rate_limited", email: options.email, message };
     }
 
     if (error.isUnauthorized) {
       return {
         ok: false,
-        code: options.unauthorizedCode ?? 'unauthorized',
+        code: options.unauthorizedCode ?? "unauthorized",
         email: options.email,
         message,
       };
@@ -91,7 +91,7 @@ function toFailureResult(
 
   return {
     ok: false,
-    code: 'unknown',
+    code: "unknown",
     email: options.email,
     message: getErrorMessage(error, fallbackMessage),
   };
@@ -112,25 +112,25 @@ export async function loginUserAction(input: {
 
     return {
       ok: true,
-      redirectTo: '/dashboard',
+      redirectTo: "/dashboard",
     };
   } catch (error) {
     const message = getErrorMessage(
       error,
-      'Unable to sign you in right now. Please try again.'
+      "Unable to sign you in right now. Please try again."
     );
 
-    if (message.toLowerCase().includes('not verified')) {
+    if (message.toLowerCase().includes("not verified")) {
       return {
         ok: false,
-        code: 'email_not_verified',
+        code: "email_not_verified",
         email: input.email,
         message,
       };
     }
 
-    return toFailureResult(error, 'Unable to sign you in right now.', {
-      unauthorizedCode: 'invalid_credentials',
+    return toFailureResult(error, "Unable to sign you in right now.", {
+      unauthorizedCode: "invalid_credentials",
     });
   }
 }
@@ -148,7 +148,7 @@ export async function signupUserAction(input: {
       redirectTo: `/otp?mode=signup&email=${encodeURIComponent(input.email)}`,
     };
   } catch (error) {
-    return toFailureResult(error, 'Unable to create your account right now.', {
+    return toFailureResult(error, "Unable to create your account right now.", {
       email: input.email,
     });
   }
@@ -157,10 +157,10 @@ export async function signupUserAction(input: {
 export async function verifyOtpAction(input: {
   email: string;
   otp: string;
-  mode: 'reset' | 'signup';
+  mode: "reset" | "signup";
 }): Promise<ActionResult> {
   try {
-    if (input.mode === 'signup') {
+    if (input.mode === "signup") {
       const result = await verifySignupOtp({
         email: input.email,
         otp: input.otp,
@@ -171,7 +171,7 @@ export async function verifyOtpAction(input: {
       return {
         ok: true,
         message: result.message,
-        redirectTo: '/dashboard',
+        redirectTo: "/dashboard",
       };
     }
 
@@ -184,10 +184,10 @@ export async function verifyOtpAction(input: {
 
     return {
       ok: true,
-      redirectTo: '/reset-password',
+      redirectTo: "/reset-password",
     };
   } catch (error) {
-    return toFailureResult(error, 'Unable to verify the code right now.', {
+    return toFailureResult(error, "Unable to verify the code right now.", {
       email: input.email,
     });
   }
@@ -195,10 +195,10 @@ export async function verifyOtpAction(input: {
 
 export async function resendOtpAction(input: {
   email: string;
-  mode: 'reset' | 'signup';
+  mode: "reset" | "signup";
 }): Promise<ActionResult> {
   try {
-    if (input.mode === 'signup') {
+    if (input.mode === "signup") {
       const result = await resendSignupOtp({ email: input.email });
 
       return {
@@ -214,7 +214,7 @@ export async function resendOtpAction(input: {
       message: result.message,
     };
   } catch (error) {
-    return toFailureResult(error, 'Unable to resend the code right now.', {
+    return toFailureResult(error, "Unable to resend the code right now.", {
       email: input.email,
     });
   }
@@ -231,7 +231,7 @@ export async function forgotPasswordAction(input: {
       redirectTo: `/otp?mode=reset&email=${encodeURIComponent(input.email)}`,
     };
   } catch (error) {
-    return toFailureResult(error, 'Unable to start password reset right now.', {
+    return toFailureResult(error, "Unable to start password reset right now.", {
       email: input.email,
     });
   }
@@ -246,8 +246,8 @@ export async function resetPasswordAction(input: {
   if (!resetToken) {
     return {
       ok: false,
-      code: 'unauthorized',
-      message: 'Your reset session has expired. Please request a new code.',
+      code: "unauthorized",
+      message: "Your reset session has expired. Please request a new code.",
     };
   }
 
@@ -258,15 +258,15 @@ export async function resetPasswordAction(input: {
 
     return {
       ok: true,
-      redirectTo: '/login',
-      message: 'Password reset successfully. Please sign in.',
+      redirectTo: "/login",
+      message: "Password reset successfully. Please sign in.",
     };
   } catch (error) {
     if (error instanceof HttpError && error.isUnauthorized) {
       await clearPasswordResetToken();
     }
 
-    return toFailureResult(error, 'Unable to reset your password right now.');
+    return toFailureResult(error, "Unable to reset your password right now.");
   }
 }
 
@@ -280,19 +280,19 @@ export async function changePasswordAction(input: {
     await clearAuthSession();
     return {
       ok: true,
-      message: 'Password changed successfully. Please sign in again.',
-      redirectTo: '/login',
+      message: "Password changed successfully. Please sign in again.",
+      redirectTo: "/login",
     };
   } catch (error) {
-    return toFailureResult(error, 'Failed to change password', {
-      unauthorizedCode: 'invalid_credentials',
+    return toFailureResult(error, "Failed to change password", {
+      unauthorizedCode: "invalid_credentials",
     });
   }
 }
 
 export async function logoutUserAction(): Promise<void> {
   await clearAuthSession();
-  redirect('/login');
+  redirect("/login");
 }
 
 export async function persistOAuthSessionAction(input: {
@@ -304,8 +304,8 @@ export async function persistOAuthSessionAction(input: {
     if (!input.accessToken || !input.refreshToken) {
       return {
         ok: false,
-        code: 'unauthorized',
-        message: 'Unable to complete OAuth sign in.',
+        code: "unauthorized",
+        message: "Unable to complete OAuth sign in.",
       };
     }
 
@@ -314,8 +314,8 @@ export async function persistOAuthSessionAction(input: {
     if (!user) {
       return {
         ok: false,
-        code: 'unauthorized',
-        message: 'Unable to complete OAuth sign in.',
+        code: "unauthorized",
+        message: "Unable to complete OAuth sign in.",
       };
     }
 
@@ -328,8 +328,8 @@ export async function persistOAuthSessionAction(input: {
       true
     );
 
-    return { ok: true, redirectTo: '/dashboard' };
+    return { ok: true, redirectTo: "/dashboard" };
   } catch (error) {
-    return toFailureResult(error, 'Unable to complete OAuth sign in.');
+    return toFailureResult(error, "Unable to complete OAuth sign in.");
   }
 }

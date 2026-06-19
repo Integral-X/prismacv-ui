@@ -1,11 +1,11 @@
 import type {
   InterviewDifficultyContract,
   InterviewQuestionContract,
-} from './contracts';
+} from "./contracts";
 
 // ─── Domain types ─────────────────────────────────────────────────────────────
 
-export type InterviewDifficulty = 'easy' | 'medium' | 'hard';
+export type InterviewDifficulty = "easy" | "medium" | "hard";
 
 export interface InterviewQuestion {
   id: string;
@@ -21,9 +21,9 @@ export interface InterviewQuestion {
 
 const DIFFICULTY_MAP: Record<InterviewDifficultyContract, InterviewDifficulty> =
   {
-    EASY: 'easy',
-    MEDIUM: 'medium',
-    HARD: 'hard',
+    EASY: "easy",
+    MEDIUM: "medium",
+    HARD: "hard",
   };
 
 export function toInterviewQuestion(
@@ -35,7 +35,7 @@ export function toInterviewQuestion(
     sampleAnswer: c.sampleAnswer ?? null,
     category: c.category,
     role: c.role,
-    difficulty: DIFFICULTY_MAP[c.difficulty] ?? 'medium',
+    difficulty: DIFFICULTY_MAP[c.difficulty] ?? "medium",
     tips: c.tips ?? null,
   };
 }

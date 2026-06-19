@@ -1,43 +1,43 @@
-import { HttpError } from '@/shared/http/http-error';
+import { HttpError } from "@/shared/http/http-error";
 import {
   assessSkillsAction,
   fetchRoadmapAction,
   updateSkillProgressAction,
-} from './actions';
+} from "./actions";
 import type {
   LearningRoadmap,
   SkillGapResult,
   UserSkillProgress,
-} from './mappers';
+} from "./mappers";
 
-jest.mock('next/cache', () => ({
+jest.mock("next/cache", () => ({
   revalidatePath: jest.fn(),
 }));
 
-jest.mock('./mutations', () => ({
+jest.mock("./mutations", () => ({
   assessSkills: jest.fn(),
   updateSkillProgress: jest.fn(),
 }));
 
-jest.mock('./queries', () => ({
+jest.mock("./queries", () => ({
   getLearningRoadmap: jest.fn(),
 }));
 
-const mutations = jest.requireMock('./mutations') as {
+const mutations = jest.requireMock("./mutations") as {
   assessSkills: jest.Mock;
   updateSkillProgress: jest.Mock;
 };
 
-const queries = jest.requireMock('./queries') as {
+const queries = jest.requireMock("./queries") as {
   getLearningRoadmap: jest.Mock;
 };
 
-const { revalidatePath } = jest.requireMock('next/cache') as {
+const { revalidatePath } = jest.requireMock("next/cache") as {
   revalidatePath: jest.Mock;
 };
 
 const gapResult: SkillGapResult = {
-  targetRole: 'Backend Engineer',
+  targetRole: "Backend Engineer",
   overallReadiness: 70,
   requiredSkills: [],
   strengths: [],
@@ -45,107 +45,107 @@ const gapResult: SkillGapResult = {
 };
 
 const progress: UserSkillProgress = {
-  id: 'prog_001',
-  skillName: 'React',
+  id: "prog_001",
+  skillName: "React",
   level: 3,
-  status: 'completed',
+  status: "completed",
   startedAt: null,
   completedAt: null,
 };
 
 const roadmap: LearningRoadmap = {
-  targetRole: 'DevOps Engineer',
+  targetRole: "DevOps Engineer",
   totalSkills: 0,
   completedSkills: 0,
   milestones: [],
 };
 
-describe('skills actions', () => {
+describe("skills actions", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe('assessSkillsAction', () => {
-    it('returns the assessment result on success', async () => {
+  describe("assessSkillsAction", () => {
+    it("returns the assessment result on success", async () => {
       mutations.assessSkills.mockResolvedValueOnce(gapResult);
 
       const result = await assessSkillsAction({
-        targetRole: 'Backend Engineer',
+        targetRole: "Backend Engineer",
       });
 
       expect(result).toEqual({ ok: true, data: gapResult });
       expect(mutations.assessSkills).toHaveBeenCalledWith({
-        targetRole: 'Backend Engineer',
+        targetRole: "Backend Engineer",
       });
     });
 
-    it('maps a generic error to the unknown fallback', async () => {
-      mutations.assessSkills.mockRejectedValueOnce(new Error('boom'));
+    it("maps a generic error to the unknown fallback", async () => {
+      mutations.assessSkills.mockRejectedValueOnce(new Error("boom"));
 
-      const result = await assessSkillsAction({ targetRole: 'x' });
+      const result = await assessSkillsAction({ targetRole: "x" });
 
       expect(result).toEqual({
         ok: false,
-        code: 'unknown',
-        message: 'Unable to assess your skills.',
+        code: "unknown",
+        message: "Unable to assess your skills.",
       });
     });
   });
 
-  describe('updateSkillProgressAction', () => {
-    it('returns progress and revalidates the skills and roadmap pages', async () => {
+  describe("updateSkillProgressAction", () => {
+    it("returns progress and revalidates the skills and roadmap pages", async () => {
       mutations.updateSkillProgress.mockResolvedValueOnce(progress);
 
-      const result = await updateSkillProgressAction({ skillName: 'React' });
+      const result = await updateSkillProgressAction({ skillName: "React" });
 
       expect(result).toEqual({
         ok: true,
         data: progress,
-        message: 'Progress updated.',
+        message: "Progress updated.",
       });
-      expect(revalidatePath).toHaveBeenCalledWith('/skills');
-      expect(revalidatePath).toHaveBeenCalledWith('/skills/roadmap');
+      expect(revalidatePath).toHaveBeenCalledWith("/skills");
+      expect(revalidatePath).toHaveBeenCalledWith("/skills/roadmap");
     });
 
-    it('maps a 401 HttpError to unauthorized and skips revalidation', async () => {
+    it("maps a 401 HttpError to unauthorized and skips revalidation", async () => {
       mutations.updateSkillProgress.mockRejectedValueOnce(
-        new HttpError(401, 'Unauthorized', 'Session expired')
+        new HttpError(401, "Unauthorized", "Session expired")
       );
 
-      const result = await updateSkillProgressAction({ skillName: 'React' });
+      const result = await updateSkillProgressAction({ skillName: "React" });
 
       expect(result).toEqual({
         ok: false,
-        code: 'unauthorized',
-        message: 'Session expired',
+        code: "unauthorized",
+        message: "Session expired",
       });
       expect(revalidatePath).not.toHaveBeenCalled();
     });
   });
 
-  describe('fetchRoadmapAction', () => {
-    it('returns the roadmap from the query on success', async () => {
+  describe("fetchRoadmapAction", () => {
+    it("returns the roadmap from the query on success", async () => {
       queries.getLearningRoadmap.mockResolvedValueOnce(roadmap);
 
-      const result = await fetchRoadmapAction('DevOps Engineer');
+      const result = await fetchRoadmapAction("DevOps Engineer");
 
       expect(result).toEqual({ ok: true, data: roadmap });
       expect(queries.getLearningRoadmap).toHaveBeenCalledWith(
-        'DevOps Engineer'
+        "DevOps Engineer"
       );
     });
 
-    it('maps a 404 HttpError to not_found', async () => {
+    it("maps a 404 HttpError to not_found", async () => {
       queries.getLearningRoadmap.mockRejectedValueOnce(
-        new HttpError(404, 'Not Found', 'No roadmap for role')
+        new HttpError(404, "Not Found", "No roadmap for role")
       );
 
-      const result = await fetchRoadmapAction('Unknown Role');
+      const result = await fetchRoadmapAction("Unknown Role");
 
       expect(result).toEqual({
         ok: false,
-        code: 'not_found',
-        message: 'No roadmap for role',
+        code: "not_found",
+        message: "No roadmap for role",
       });
     });
   });

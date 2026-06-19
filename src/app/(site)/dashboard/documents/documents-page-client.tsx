@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useState, useTransition } from 'react';
-import { Plus } from 'lucide-react';
-import { toast } from 'sonner';
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
+import { Plus } from "lucide-react";
+import { toast } from "sonner";
 
-import type { NavbarUser } from '@/components/common/navbar-client';
-import { Button } from '@/components/ui/button';
+import type { NavbarUser } from "@/components/common/navbar-client";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -14,19 +14,19 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   createCvAction,
   deleteCvAction,
   duplicateCvAction,
-} from '@/modules/cv/data/actions';
-import type { CvListItem } from '@/modules/cv/data/mappers';
+} from "@/modules/cv/data/actions";
+import type { CvListItem } from "@/modules/cv/data/mappers";
 
-import { CreateCvDialog } from '../components/create-cv-dialog';
-import { CvCard } from '../components/cv-card';
-import { DashboardHeader } from '../components/dashboard-header';
-import { DashboardPageContent } from '../components/dashboard-page-content';
-import { EmptyState } from '../components/empty-state';
+import { CreateCvDialog } from "../components/create-cv-dialog";
+import { CvCard } from "../components/cv-card";
+import { DashboardHeader } from "../components/dashboard-header";
+import { DashboardPageContent } from "../components/dashboard-page-content";
+import { EmptyState } from "../components/empty-state";
 
 interface DocumentsPageClientProps {
   initialCvs: CvListItem[];
@@ -46,8 +46,8 @@ export function DocumentsPageClient({
   );
 
   const navbarUser: NavbarUser = user ?? {
-    email: 'guest@prismacv.app',
-    name: 'Guest',
+    email: "guest@prismacv.app",
+    name: "Guest",
   };
 
   function handleCreate(title: string) {
@@ -55,7 +55,7 @@ export function DocumentsPageClient({
       const result = await createCvAction({ title });
 
       if (result.ok) {
-        toast.success('CV created');
+        toast.success("CV created");
         setDialogOpen(false);
         if (result.redirectTo) {
           router.push(result.redirectTo);
@@ -76,7 +76,7 @@ export function DocumentsPageClient({
     startTransition(async () => {
       const result = await duplicateCvAction(id);
       if (result.ok) {
-        toast.success('CV duplicated');
+        toast.success("CV duplicated");
         router.refresh();
       } else {
         toast.error(result.message);
@@ -91,7 +91,7 @@ export function DocumentsPageClient({
     startTransition(async () => {
       const result = await deleteCvAction(deletingId);
       if (result.ok) {
-        toast.success('CV deleted');
+        toast.success("CV deleted");
         setCvs((prev) => prev.filter((cv) => cv.id !== deletingId));
         setCvPendingDelete(null);
       } else {
@@ -102,25 +102,25 @@ export function DocumentsPageClient({
 
   return (
     <>
-      <DashboardHeader user={navbarUser} title='My Document' />
+      <DashboardHeader user={navbarUser} title="My Document" />
 
-      <DashboardPageContent cardClassName='flex flex-col gap-6'>
-        <div className='flex flex-wrap items-center justify-between gap-4'>
+      <DashboardPageContent cardClassName="flex flex-col gap-6">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h2 className='text-lg font-semibold text-content-primary'>
+            <h2 className="text-lg font-semibold text-content-primary">
               Your resumes
             </h2>
-            <p className='mt-1 text-sm text-content-secondary'>
+            <p className="mt-1 text-sm text-content-secondary">
               Create, edit, and manage all of your CV versions in one place.
             </p>
           </div>
           {cvs.length > 0 ? (
             <Button
-              type='button'
+              type="button"
               onClick={() => setDialogOpen(true)}
               disabled={isPending}
             >
-              <Plus className='size-4' />
+              <Plus className="size-4" />
               Create CV
             </Button>
           ) : null}
@@ -129,7 +129,7 @@ export function DocumentsPageClient({
         {cvs.length === 0 ? (
           <EmptyState onCreate={() => setDialogOpen(true)} />
         ) : (
-          <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3'>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {cvs.map((cv) => (
               <CvCard
                 key={cv.id}
@@ -161,29 +161,29 @@ export function DocumentsPageClient({
           }
         }}
       >
-        <DialogContent aria-describedby='delete-cv-dialog-description'>
+        <DialogContent aria-describedby="delete-cv-dialog-description">
           <DialogHeader>
             <DialogTitle>Delete this CV?</DialogTitle>
-            <DialogDescription id='delete-cv-dialog-description'>
+            <DialogDescription id="delete-cv-dialog-description">
               {cvPendingDelete
                 ? `This will permanently remove "${cvPendingDelete.title}".`
-                : 'This action cannot be undone.'}
+                : "This action cannot be undone."}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button
-              variant='outline'
+              variant="outline"
               onClick={() => setCvPendingDelete(null)}
               disabled={isPending}
             >
               Cancel
             </Button>
             <Button
-              variant='destructive'
+              variant="destructive"
               onClick={handleDeleteConfirm}
               disabled={isPending}
             >
-              {isPending ? 'Deleting...' : 'Delete CV'}
+              {isPending ? "Deleting..." : "Delete CV"}
             </Button>
           </DialogFooter>
         </DialogContent>

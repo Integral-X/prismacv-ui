@@ -1,12 +1,12 @@
-import 'server-only';
+import "server-only";
 
-import { apiClient } from '@/shared/http/api-client';
-import { executeAuthenticatedRead } from '@/shared/auth/execute-authenticated-request';
+import { apiClient } from "@/shared/http/api-client";
+import { executeAuthenticatedRead } from "@/shared/auth/execute-authenticated-request";
 import type {
   CoverLetterResponseContract,
   PaginatedCoverLettersContract,
-} from './contracts';
-import { toCoverLetter, type CoverLetter } from './mappers';
+} from "./contracts";
+import { toCoverLetter, type CoverLetter } from "./mappers";
 
 export async function fetchCoverLetters(
   page = 1,
@@ -14,7 +14,7 @@ export async function fetchCoverLetters(
 ): Promise<{ data: CoverLetter[]; total: number; totalPages: number }> {
   return executeAuthenticatedRead(async (headers) => {
     const contract = await apiClient.get<PaginatedCoverLettersContract>(
-      'cover-letters',
+      "cover-letters",
       { headers, params: { page, limit } }
     );
 

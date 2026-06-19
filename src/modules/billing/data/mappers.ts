@@ -3,9 +3,9 @@ import type {
   BillingProfileContract,
   BillingQuotaContract,
   BillingSubscriptionContract,
-} from './contracts';
+} from "./contracts";
 
-export type BillingPlan = 'free' | 'pro' | 'team';
+export type BillingPlan = "free" | "pro" | "team";
 
 export interface BillingSubscription {
   id: string;
@@ -31,9 +31,9 @@ export interface BillingProfile {
 }
 
 function toBillingPlan(plan: BillingPlanContract): BillingPlan {
-  if (plan === 'PRO') return 'pro';
-  if (plan === 'TEAM') return 'team';
-  return 'free';
+  if (plan === "PRO") return "pro";
+  if (plan === "TEAM") return "team";
+  return "free";
 }
 
 function toSubscription(

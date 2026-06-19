@@ -1,4 +1,4 @@
-import type { UserProfileResponseContract } from './contracts';
+import type { UserProfileResponseContract } from "./contracts";
 
 export interface UserProfile {
   id: string;

@@ -1,13 +1,13 @@
-import { apiClient } from '@/shared/http/api-client';
-import type { PaginatedResponse } from '@/shared/http/paginated-response';
+import { apiClient } from "@/shared/http/api-client";
+import type { PaginatedResponse } from "@/shared/http/paginated-response";
 import {
   getInterviewCategories,
   getInterviewQuestions,
   getInterviewRoles,
-} from './queries';
-import type { InterviewQuestionContract } from './contracts';
+} from "./queries";
+import type { InterviewQuestionContract } from "./contracts";
 
-jest.mock('@/shared/http/api-client', () => ({
+jest.mock("@/shared/http/api-client", () => ({
   apiClient: {
     get: jest.fn(),
   },
@@ -16,11 +16,11 @@ jest.mock('@/shared/http/api-client', () => ({
 const getMock = jest.mocked(apiClient.get);
 
 const questionContract: InterviewQuestionContract = {
-  id: 'q_001',
-  question: 'Explain event loop.',
-  category: 'JavaScript',
-  role: 'Frontend Engineer',
-  difficulty: 'HARD',
+  id: "q_001",
+  question: "Explain event loop.",
+  category: "JavaScript",
+  role: "Frontend Engineer",
+  difficulty: "HARD",
 };
 
 function paginated(
@@ -39,75 +39,75 @@ function paginated(
   };
 }
 
-describe('interview queries', () => {
+describe("interview queries", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe('getInterviewQuestions', () => {
-    it('requests with empty params and maps the question list', async () => {
+  describe("getInterviewQuestions", () => {
+    it("requests with empty params and maps the question list", async () => {
       getMock.mockResolvedValueOnce(paginated([questionContract]));
 
       const result = await getInterviewQuestions();
 
-      expect(getMock).toHaveBeenCalledWith('interview/questions', {
+      expect(getMock).toHaveBeenCalledWith("interview/questions", {
         params: {},
       });
-      expect(result[0].difficulty).toBe('hard');
+      expect(result[0].difficulty).toBe("hard");
     });
 
-    it('forwards provided filters including the random flag', async () => {
+    it("forwards provided filters including the random flag", async () => {
       getMock.mockResolvedValueOnce(paginated([]));
 
       await getInterviewQuestions({
-        role: 'Frontend Engineer',
-        category: 'JavaScript',
-        difficulty: 'HARD',
+        role: "Frontend Engineer",
+        category: "JavaScript",
+        difficulty: "HARD",
         random: true,
         limit: 5,
       });
 
-      expect(getMock).toHaveBeenCalledWith('interview/questions', {
+      expect(getMock).toHaveBeenCalledWith("interview/questions", {
         params: {
-          role: 'Frontend Engineer',
-          category: 'JavaScript',
-          difficulty: 'HARD',
+          role: "Frontend Engineer",
+          category: "JavaScript",
+          difficulty: "HARD",
           random: true,
           limit: 5,
         },
       });
     });
 
-    it('omits the random flag when it is false', async () => {
+    it("omits the random flag when it is false", async () => {
       getMock.mockResolvedValueOnce(paginated([]));
 
       await getInterviewQuestions({ random: false });
 
-      expect(getMock).toHaveBeenCalledWith('interview/questions', {
+      expect(getMock).toHaveBeenCalledWith("interview/questions", {
         params: {},
       });
     });
   });
 
-  describe('getInterviewRoles', () => {
-    it('returns the raw role list', async () => {
-      getMock.mockResolvedValueOnce(['Frontend Engineer']);
+  describe("getInterviewRoles", () => {
+    it("returns the raw role list", async () => {
+      getMock.mockResolvedValueOnce(["Frontend Engineer"]);
 
       const result = await getInterviewRoles();
 
-      expect(getMock).toHaveBeenCalledWith('interview/roles');
-      expect(result).toEqual(['Frontend Engineer']);
+      expect(getMock).toHaveBeenCalledWith("interview/roles");
+      expect(result).toEqual(["Frontend Engineer"]);
     });
   });
 
-  describe('getInterviewCategories', () => {
-    it('returns the raw category list', async () => {
-      getMock.mockResolvedValueOnce(['JavaScript', 'System Design']);
+  describe("getInterviewCategories", () => {
+    it("returns the raw category list", async () => {
+      getMock.mockResolvedValueOnce(["JavaScript", "System Design"]);
 
       const result = await getInterviewCategories();
 
-      expect(getMock).toHaveBeenCalledWith('interview/categories');
-      expect(result).toEqual(['JavaScript', 'System Design']);
+      expect(getMock).toHaveBeenCalledWith("interview/categories");
+      expect(result).toEqual(["JavaScript", "System Design"]);
     });
   });
 });

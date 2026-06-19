@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 const PX_PER_MM = 96 / 25.4;
 
@@ -56,20 +56,20 @@ export function PaginatedSheet({ children }: { children: ReactNode }) {
   const breaks = pageBreakOffsets(pageCount, A4_PAGE_HEIGHT_PX);
 
   return (
-    <div ref={ref} className='relative mx-auto w-[210mm]'>
+    <div ref={ref} className="relative mx-auto w-[210mm]">
       {children}
       {breaks.map((offset, index) => (
         <div
           key={offset}
           aria-hidden
-          className='pointer-events-none absolute inset-x-0 flex items-center gap-3'
+          className="pointer-events-none absolute inset-x-0 flex items-center gap-3"
           style={{ top: offset }}
         >
-          <div className='h-0 flex-1 border-t border-dashed border-subtle' />
-          <span className='rounded-full bg-surface-elevated px-2 py-0.5 text-[10px] font-medium text-content-tertiary shadow-sm'>
+          <div className="h-0 flex-1 border-t border-dashed border-subtle" />
+          <span className="rounded-full bg-surface-elevated px-2 py-0.5 text-[10px] font-medium text-content-tertiary shadow-sm">
             Page {index + 2}
           </span>
-          <div className='h-0 flex-1 border-t border-dashed border-subtle' />
+          <div className="h-0 flex-1 border-t border-dashed border-subtle" />
         </div>
       ))}
     </div>

@@ -1,4 +1,4 @@
-import type { CoverLetterResponseContract } from './contracts';
+import type { CoverLetterResponseContract } from "./contracts";
 
 // ─── Domain model ─────────────────────────────────────────────────────────────
 

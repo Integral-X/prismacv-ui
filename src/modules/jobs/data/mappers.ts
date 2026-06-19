@@ -3,16 +3,16 @@ import type {
   JobResponseContract,
   JobStatsResponseContract,
   JobStatusContract,
-} from './contracts';
+} from "./contracts";
 
 // ─── Domain types ─────────────────────────────────────────────────────────────
 
 export type JobStatus =
-  | 'saved'
-  | 'applied'
-  | 'interview'
-  | 'offer'
-  | 'rejected';
+  | "saved"
+  | "applied"
+  | "interview"
+  | "offer"
+  | "rejected";
 
 export interface JobNote {
   id: string;
@@ -49,19 +49,19 @@ export interface JobStats {
 // ─── Mappers ──────────────────────────────────────────────────────────────────
 
 const STATUS_MAP: Record<JobStatusContract, JobStatus> = {
-  SAVED: 'saved',
-  APPLIED: 'applied',
-  INTERVIEW: 'interview',
-  OFFER: 'offer',
-  REJECTED: 'rejected',
+  SAVED: "saved",
+  APPLIED: "applied",
+  INTERVIEW: "interview",
+  OFFER: "offer",
+  REJECTED: "rejected",
 };
 
 export const REVERSE_STATUS_MAP: Record<JobStatus, JobStatusContract> = {
-  saved: 'SAVED',
-  applied: 'APPLIED',
-  interview: 'INTERVIEW',
-  offer: 'OFFER',
-  rejected: 'REJECTED',
+  saved: "SAVED",
+  applied: "APPLIED",
+  interview: "INTERVIEW",
+  offer: "OFFER",
+  rejected: "REJECTED",
 };
 
 export function toJobNote(contract: JobNoteResponseContract): JobNote {
@@ -83,7 +83,7 @@ export function toJob(contract: JobResponseContract): Job {
     salaryMin: contract.salaryMin ?? null,
     salaryMax: contract.salaryMax ?? null,
     salaryCurrency: contract.salaryCurrency ?? null,
-    status: STATUS_MAP[contract.status] ?? 'saved',
+    status: STATUS_MAP[contract.status] ?? "saved",
     appliedAt: contract.appliedAt ? new Date(contract.appliedAt) : null,
     notes: contract.notes ?? null,
     createdAt: new Date(contract.createdAt),

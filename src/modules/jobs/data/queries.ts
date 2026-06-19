@@ -1,13 +1,13 @@
-import 'server-only';
+import "server-only";
 
-import { apiClient } from '@/shared/http/api-client';
-import { executeAuthenticatedRead } from '@/shared/auth/execute-authenticated-request';
-import type { PaginatedResponse } from '@/shared/http/paginated-response';
+import { apiClient } from "@/shared/http/api-client";
+import { executeAuthenticatedRead } from "@/shared/auth/execute-authenticated-request";
+import type { PaginatedResponse } from "@/shared/http/paginated-response";
 import type {
   JobResponseContract,
   JobStatsResponseContract,
-} from './contracts';
-import { toJob, toJobStats, type Job, type JobStats } from './mappers';
+} from "./contracts";
+import { toJob, toJobStats, type Job, type JobStats } from "./mappers";
 
 export async function getJobs(status?: string): Promise<Job[]> {
   return executeAuthenticatedRead(async (headers) => {
@@ -16,7 +16,7 @@ export async function getJobs(status?: string): Promise<Job[]> {
 
     const response = await apiClient.get<
       PaginatedResponse<JobResponseContract>
-    >('jobs', {
+    >("jobs", {
       headers,
       params,
     });
@@ -38,7 +38,7 @@ export async function getJobById(id: string): Promise<Job> {
 export async function getJobStats(): Promise<JobStats> {
   return executeAuthenticatedRead(async (headers) => {
     const contract = await apiClient.get<JobStatsResponseContract>(
-      'jobs/stats',
+      "jobs/stats",
       { headers }
     );
 

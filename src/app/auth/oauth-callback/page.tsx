@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { useRouter } from 'next/navigation';
-import { Loader2 } from 'lucide-react';
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
-import { persistOAuthSessionAction } from '@/modules/auth/data/actions';
+import { persistOAuthSessionAction } from "@/modules/auth/data/actions";
 
 export default function OAuthCallbackPage() {
   const router = useRouter();
@@ -18,9 +18,9 @@ export default function OAuthCallbackPage() {
       try {
         const decodeOAuthPayload = (encodedToken: string): string => {
           const normalized = decodeURIComponent(encodedToken)
-            .replace(/-/g, '+')
-            .replace(/_/g, '/');
-          const padding = '='.repeat((4 - (normalized.length % 4)) % 4);
+            .replace(/-/g, "+")
+            .replace(/_/g, "/");
+          const padding = "=".repeat((4 - (normalized.length % 4)) % 4);
           return atob(`${normalized}${padding}`);
         };
 
@@ -35,38 +35,38 @@ export default function OAuthCallbackPage() {
         const hash = window.location.hash;
         history.replaceState(
           null,
-          '',
+          "",
           window.location.pathname + window.location.search
         );
 
         const tokenParam = hash
           .slice(1)
-          .split('&')
-          .find((p) => p.startsWith('token='));
+          .split("&")
+          .find((p) => p.startsWith("token="));
 
         if (!tokenParam) {
-          router.replace('/login?error=oauth_failed');
+          router.replace("/login?error=oauth_failed");
           return;
         }
 
-        const base64 = tokenParam.slice('token='.length);
+        const base64 = tokenParam.slice("token=".length);
         const json = decodeOAuthPayload(base64);
         const payload: unknown = JSON.parse(json);
 
-        if (typeof payload !== 'object' || payload === null) {
-          router.replace('/login?error=oauth_failed');
+        if (typeof payload !== "object" || payload === null) {
+          router.replace("/login?error=oauth_failed");
           return;
         }
 
         const candidate = payload as Record<string, unknown>;
 
         if (
-          typeof candidate.accessToken !== 'string' ||
-          typeof candidate.refreshToken !== 'string' ||
-          typeof candidate.user !== 'object' ||
+          typeof candidate.accessToken !== "string" ||
+          typeof candidate.refreshToken !== "string" ||
+          typeof candidate.user !== "object" ||
           candidate.user === null
         ) {
-          router.replace('/login?error=oauth_failed');
+          router.replace("/login?error=oauth_failed");
           return;
         }
 
@@ -83,12 +83,12 @@ export default function OAuthCallbackPage() {
         });
 
         if (result.ok) {
-          window.location.replace(result.redirectTo ?? '/dashboard');
+          window.location.replace(result.redirectTo ?? "/dashboard");
         } else {
-          router.replace('/login?error=oauth_failed');
+          router.replace("/login?error=oauth_failed");
         }
       } catch {
-        router.replace('/login?error=oauth_failed');
+        router.replace("/login?error=oauth_failed");
       }
     }
 
@@ -96,10 +96,10 @@ export default function OAuthCallbackPage() {
   }, [router]);
 
   return (
-    <div className='flex min-h-screen items-center justify-center'>
-      <div className='flex flex-col items-center gap-4'>
-        <Loader2 className='h-8 w-8 animate-spin text-content-secondary' />
-        <p className='text-sm text-content-secondary'>Completing sign in...</p>
+    <div className="flex min-h-screen items-center justify-center">
+      <div className="flex flex-col items-center gap-4">
+        <Loader2 className="h-8 w-8 animate-spin text-content-secondary" />
+        <p className="text-sm text-content-secondary">Completing sign in...</p>
       </div>
     </div>
   );

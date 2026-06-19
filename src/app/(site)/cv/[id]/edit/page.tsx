@@ -1,10 +1,10 @@
-import { notFound } from 'next/navigation';
-import { getCvById } from '@/modules/cv/data/queries';
-import { getBillingProfile } from '@/modules/billing/data/queries';
-import { HttpError } from '@/shared/http/http-error';
-import { CvEditorClient } from './cv-editor-client';
+import { notFound } from "next/navigation";
+import { getCvById } from "@/modules/cv/data/queries";
+import { getBillingProfile } from "@/modules/billing/data/queries";
+import { HttpError } from "@/shared/http/http-error";
+import { CvEditorClient } from "./cv-editor-client";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 interface CvEditPageProps {
   params: Promise<{ id: string }>;

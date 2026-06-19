@@ -1,34 +1,34 @@
-import { apiClient } from '@/shared/http/api-client';
-import type { PaginatedResponse } from '@/shared/http/paginated-response';
-import { getJobById, getJobStats, getJobs } from './queries';
+import { apiClient } from "@/shared/http/api-client";
+import type { PaginatedResponse } from "@/shared/http/paginated-response";
+import { getJobById, getJobStats, getJobs } from "./queries";
 import type {
   JobResponseContract,
   JobStatsResponseContract,
-} from './contracts';
+} from "./contracts";
 
-jest.mock('@/shared/http/api-client', () => ({
+jest.mock("@/shared/http/api-client", () => ({
   apiClient: {
     get: jest.fn(),
   },
 }));
 
-jest.mock('@/shared/auth/execute-authenticated-request', () => ({
+jest.mock("@/shared/auth/execute-authenticated-request", () => ({
   executeAuthenticatedRead: jest.fn(
     (callback: (headers: Record<string, string>) => unknown) =>
-      callback({ Authorization: 'Bearer test-token' })
+      callback({ Authorization: "Bearer test-token" })
   ),
 }));
 
 const getMock = jest.mocked(apiClient.get);
 
 const jobContract: JobResponseContract = {
-  id: 'job_001',
-  title: 'Senior Engineer',
-  company: 'Acme Corp',
+  id: "job_001",
+  title: "Senior Engineer",
+  company: "Acme Corp",
   isRemote: true,
-  status: 'APPLIED',
-  createdAt: '2026-04-01T10:00:00.000Z',
-  updatedAt: '2026-04-12T14:00:00.000Z',
+  status: "APPLIED",
+  createdAt: "2026-04-01T10:00:00.000Z",
+  updatedAt: "2026-04-12T14:00:00.000Z",
 };
 
 function paginated(
@@ -47,53 +47,53 @@ function paginated(
   };
 }
 
-describe('jobs queries', () => {
+describe("jobs queries", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe('getJobs', () => {
-    it('fetches jobs with a default limit and maps them to domain jobs', async () => {
+  describe("getJobs", () => {
+    it("fetches jobs with a default limit and maps them to domain jobs", async () => {
       getMock.mockResolvedValueOnce(paginated([jobContract]));
 
       const result = await getJobs();
 
-      expect(getMock).toHaveBeenCalledWith('jobs', {
-        headers: { Authorization: 'Bearer test-token' },
+      expect(getMock).toHaveBeenCalledWith("jobs", {
+        headers: { Authorization: "Bearer test-token" },
         params: { limit: 100 },
       });
       expect(result).toHaveLength(1);
-      expect(result[0].id).toBe('job_001');
-      expect(result[0].status).toBe('applied');
+      expect(result[0].id).toBe("job_001");
+      expect(result[0].status).toBe("applied");
     });
 
-    it('forwards a status filter as a query param', async () => {
+    it("forwards a status filter as a query param", async () => {
       getMock.mockResolvedValueOnce(paginated([]));
 
-      await getJobs('APPLIED');
+      await getJobs("APPLIED");
 
-      expect(getMock).toHaveBeenCalledWith('jobs', {
-        headers: { Authorization: 'Bearer test-token' },
-        params: { limit: 100, status: 'APPLIED' },
+      expect(getMock).toHaveBeenCalledWith("jobs", {
+        headers: { Authorization: "Bearer test-token" },
+        params: { limit: 100, status: "APPLIED" },
       });
     });
   });
 
-  describe('getJobById', () => {
-    it('fetches a single job by id and maps it', async () => {
+  describe("getJobById", () => {
+    it("fetches a single job by id and maps it", async () => {
       getMock.mockResolvedValueOnce(jobContract);
 
-      const result = await getJobById('job_001');
+      const result = await getJobById("job_001");
 
-      expect(getMock).toHaveBeenCalledWith('jobs/job_001', {
-        headers: { Authorization: 'Bearer test-token' },
+      expect(getMock).toHaveBeenCalledWith("jobs/job_001", {
+        headers: { Authorization: "Bearer test-token" },
       });
-      expect(result.company).toBe('Acme Corp');
+      expect(result.company).toBe("Acme Corp");
     });
   });
 
-  describe('getJobStats', () => {
-    it('fetches and returns the job statistics', async () => {
+  describe("getJobStats", () => {
+    it("fetches and returns the job statistics", async () => {
       const stats: JobStatsResponseContract = {
         total: 7,
         byStatus: { saved: 3, applied: 4 },
@@ -105,8 +105,8 @@ describe('jobs queries', () => {
 
       const result = await getJobStats();
 
-      expect(getMock).toHaveBeenCalledWith('jobs/stats', {
-        headers: { Authorization: 'Bearer test-token' },
+      expect(getMock).toHaveBeenCalledWith("jobs/stats", {
+        headers: { Authorization: "Bearer test-token" },
       });
       expect(result.total).toBe(7);
       expect(result.appliedThisWeek).toBe(2);

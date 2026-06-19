@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { Switch } from '@/components/ui/switch';
-import { cn } from '@/lib/utils';
+import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
 
 interface SettingsToggleRowProps {
   title: string;
@@ -23,13 +23,13 @@ export function SettingsToggleRow({
   return (
     <div
       className={cn(
-        'flex items-center justify-between gap-4 border-b border-subtle py-4 last:border-b-0 last:pb-0 first:pt-0',
+        "flex items-center justify-between gap-4 border-b border-subtle py-4 last:border-b-0 last:pb-0 first:pt-0",
         className
       )}
     >
-      <div className='min-w-0'>
-        <p className='font-medium text-content-primary'>{title}</p>
-        <p className='text-sm text-content-secondary'>{description}</p>
+      <div className="min-w-0">
+        <p className="font-medium text-content-primary">{title}</p>
+        <p className="text-sm text-content-secondary">{description}</p>
       </div>
       <Switch
         checked={checked}

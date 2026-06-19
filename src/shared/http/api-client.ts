@@ -1,5 +1,5 @@
-import { env } from '@/shared/config/env';
-import { FetchHttpClient } from './fetch-http-client';
+import { env } from "@/shared/config/env";
+import { FetchHttpClient } from "./fetch-http-client";
 
 let _apiClient: FetchHttpClient | null = null;
 

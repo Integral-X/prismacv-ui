@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { usePersonalInfoField } from '@/modules/cv/editor/editor-provider';
-import type { PersonalInfoField } from '@/modules/cv/editor/editor-model';
+import { usePersonalInfoField } from "@/modules/cv/editor/editor-provider";
+import type { PersonalInfoField } from "@/modules/cv/editor/editor-model";
 import {
   InlineEditableText,
   type InlineEditableTextProps,
-} from './inline-editable-text';
+} from "./inline-editable-text";
 
 interface EditableTextProps extends Omit<
   InlineEditableTextProps,
-  'value' | 'onChange'
+  "value" | "onChange"
 > {
   field: PersonalInfoField;
 }

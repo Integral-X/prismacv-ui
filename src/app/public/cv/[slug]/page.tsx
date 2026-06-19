@@ -1,9 +1,9 @@
-import { notFound } from 'next/navigation';
-import { getPublicCv } from '@/modules/cv/data/queries';
-import { HttpError } from '@/shared/http/http-error';
-import { PublicCvClient } from './public-cv-client';
+import { notFound } from "next/navigation";
+import { getPublicCv } from "@/modules/cv/data/queries";
+import { HttpError } from "@/shared/http/http-error";
+import { PublicCvClient } from "./public-cv-client";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 interface PublicCvPageProps {
   params: Promise<{ slug: string }>;

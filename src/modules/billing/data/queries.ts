@@ -1,13 +1,13 @@
-import 'server-only';
+import "server-only";
 
-import { executeAuthenticatedRead } from '@/shared/auth/execute-authenticated-request';
-import { apiClient } from '@/shared/http/api-client';
-import type { BillingProfileContract } from './contracts';
-import { toBillingProfile, type BillingProfile } from './mappers';
+import { executeAuthenticatedRead } from "@/shared/auth/execute-authenticated-request";
+import { apiClient } from "@/shared/http/api-client";
+import type { BillingProfileContract } from "./contracts";
+import { toBillingProfile, type BillingProfile } from "./mappers";
 
 export async function getBillingProfile(): Promise<BillingProfile> {
   return executeAuthenticatedRead(async (headers) => {
-    const contract = await apiClient.get<BillingProfileContract>('billing/me', {
+    const contract = await apiClient.get<BillingProfileContract>("billing/me", {
       headers,
     });
     return toBillingProfile(contract);

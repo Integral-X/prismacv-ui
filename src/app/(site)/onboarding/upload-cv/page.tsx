@@ -1,8 +1,8 @@
-import { UploadCVPageClient } from './upload-cv-page-client';
+import { UploadCVPageClient } from "./upload-cv-page-client";
 
 export default function UploadCVPage() {
   return (
-    <div className='min-h-screen flex flex-col bg-background'>
+    <div className="min-h-screen flex flex-col bg-background">
       <UploadCVPageClient />
     </div>
   );

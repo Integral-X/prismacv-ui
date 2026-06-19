@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { AlertTriangle } from 'lucide-react';
-import { captureUiException } from '@/shared/monitoring/sentry';
+import { useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { AlertTriangle } from "lucide-react";
+import { captureUiException } from "@/shared/monitoring/sentry";
 
 export default function SiteError({
   error,
@@ -14,29 +14,29 @@ export default function SiteError({
 }) {
   useEffect(() => {
     captureUiException(error, {
-      tags: { boundary: 'site' },
+      tags: { boundary: "site" },
       extra: { digest: error.digest },
     });
-    console.error('Site error:', error); // eslint-disable-line no-console
+    console.error("Site error:", error); // eslint-disable-line no-console
   }, [error]);
 
   return (
     <div
-      className='flex-1 flex items-center justify-center px-4 py-16'
-      role='alert'
-      aria-live='assertive'
+      className="flex-1 flex items-center justify-center px-4 py-16"
+      role="alert"
+      aria-live="assertive"
     >
-      <div className='text-center max-w-md'>
-        <div className='mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-feedback-error/10'>
-          <AlertTriangle className='h-8 w-8 text-feedback-error' />
+      <div className="text-center max-w-md">
+        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-feedback-error/10">
+          <AlertTriangle className="h-8 w-8 text-feedback-error" />
         </div>
-        <h1 className='text-2xl font-semibold text-content-primary mb-2'>
+        <h1 className="text-2xl font-semibold text-content-primary mb-2">
           Something went wrong
         </h1>
-        <p className='text-content-secondary mb-6'>
+        <p className="text-content-secondary mb-6">
           An unexpected error occurred. Please try again.
         </p>
-        <Button onClick={reset} variant='default'>
+        <Button onClick={reset} variant="default">
           Try again
         </Button>
       </div>

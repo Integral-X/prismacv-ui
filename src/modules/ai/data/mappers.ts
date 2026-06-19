@@ -4,15 +4,15 @@ import type {
   CvOptimizationResultContract,
   CvSuggestionContract,
   SectionRecommendationContract,
-} from './contracts';
+} from "./contracts";
 
 // ─── Domain types ─────────────────────────────────────────────────────────────
 
-export type IssueSeverity = 'low' | 'medium' | 'high';
-export type IssueType = 'grammar' | 'readability' | 'ats' | 'content';
-export type SuggestionType = 'improvement' | 'addition' | 'removal';
-export type RecommendationAction = 'add' | 'improve' | 'remove';
-export type RecommendationPriority = 'low' | 'medium' | 'high';
+export type IssueSeverity = "low" | "medium" | "high";
+export type IssueType = "grammar" | "readability" | "ats" | "content";
+export type SuggestionType = "improvement" | "addition" | "removal";
+export type RecommendationAction = "add" | "improve" | "remove";
+export type RecommendationPriority = "low" | "medium" | "high";
 
 export interface CvIssue {
   section: string;

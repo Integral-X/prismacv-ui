@@ -55,7 +55,7 @@ export interface ExampleRequest {
 ### mappers.ts
 
 ```ts
-import type { ExampleResponseContract } from './contracts';
+import type { ExampleResponseContract } from "./contracts";
 
 export interface Example {
   id: string;
@@ -73,19 +73,19 @@ export function toExample(contract: ExampleResponseContract): Example {
 ### mutations.ts (write)
 
 ```ts
-import 'server-only';
+import "server-only";
 
-import { apiClient } from '@/shared/http/api-client';
-import { executeAuthenticatedRequest } from '@/shared/auth/execute-authenticated-request';
-import type { ExampleRequest, ExampleResponseContract } from './contracts';
-import { toExample, type Example } from './mappers';
+import { apiClient } from "@/shared/http/api-client";
+import { executeAuthenticatedRequest } from "@/shared/auth/execute-authenticated-request";
+import type { ExampleRequest, ExampleResponseContract } from "./contracts";
+import { toExample, type Example } from "./mappers";
 
 export async function createExample(body: ExampleRequest): Promise<Example> {
   return executeAuthenticatedRequest(async (headers) => {
     const contract = await apiClient.post<
       ExampleResponseContract,
       ExampleRequest
-    >('<base-path>', body, { headers });
+    >("<base-path>", body, { headers });
 
     return toExample(contract);
   });
@@ -95,12 +95,12 @@ export async function createExample(body: ExampleRequest): Promise<Example> {
 ### queries.ts (read)
 
 ```ts
-import 'server-only';
+import "server-only";
 
-import { apiClient } from '@/shared/http/api-client';
-import { executeAuthenticatedRequest } from '@/shared/auth/execute-authenticated-request';
-import type { ExampleResponseContract } from './contracts';
-import { toExample, type Example } from './mappers';
+import { apiClient } from "@/shared/http/api-client";
+import { executeAuthenticatedRequest } from "@/shared/auth/execute-authenticated-request";
+import type { ExampleResponseContract } from "./contracts";
+import { toExample, type Example } from "./mappers";
 
 export async function getExample(id: string): Promise<Example> {
   return executeAuthenticatedRequest(async (headers) => {
@@ -121,14 +121,14 @@ For paginated list endpoints, type the response as
 ### actions.ts
 
 ```ts
-'use server';
+"use server";
 
-import { HttpError } from '@/shared/http/http-error';
-import { createExample } from './mutations';
-import type { ExampleRequest } from './contracts';
-import type { Example } from './mappers';
+import { HttpError } from "@/shared/http/http-error";
+import { createExample } from "./mutations";
+import type { ExampleRequest } from "./contracts";
+import type { Example } from "./mappers";
 
-export type ExampleActionCode = 'unauthorized' | 'validation' | 'unknown';
+export type ExampleActionCode = "unauthorized" | "validation" | "unknown";
 
 export type ExampleActionResult =
   | { ok: true; data: Example }
@@ -138,13 +138,13 @@ function toFailure(error: unknown, fallback: string): ExampleActionResult {
   if (error instanceof HttpError && error.isUnauthorized) {
     return {
       ok: false,
-      code: 'unauthorized',
+      code: "unauthorized",
       message: error.serverMessage ?? error.message,
     };
   }
   return {
     ok: false,
-    code: 'unknown',
+    code: "unknown",
     message: error instanceof Error && error.message ? error.message : fallback,
   };
 }
@@ -155,7 +155,7 @@ export async function createExampleAction(
   try {
     return { ok: true, data: await createExample(input) };
   } catch (error) {
-    return toFailure(error, 'Unable to complete this action right now.');
+    return toFailure(error, "Unable to complete this action right now.");
   }
 }
 ```
@@ -163,16 +163,16 @@ export async function createExampleAction(
 ### mappers.test.ts
 
 ```ts
-import { toExample } from './mappers';
+import { toExample } from "./mappers";
 
-describe('toExample', () => {
-  it('maps contract fields into domain shape', () => {
+describe("toExample", () => {
+  it("maps contract fields into domain shape", () => {
     const result = toExample({
-      id: 'abc',
+      id: "abc",
       // ...
     });
 
-    expect(result.id).toBe('abc');
+    expect(result.id).toBe("abc");
   });
 });
 ```

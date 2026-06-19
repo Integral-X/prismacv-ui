@@ -1,7 +1,7 @@
-import { cookies } from 'next/headers';
-import { getCurrentUser, isAuthenticated } from './queries';
+import { cookies } from "next/headers";
+import { getCurrentUser, isAuthenticated } from "./queries";
 
-jest.mock('next/headers', () => ({
+jest.mock("next/headers", () => ({
   cookies: jest.fn(),
 }));
 
@@ -25,12 +25,12 @@ function mockCookieStore(cookieStore: CookieStore): void {
     );
 }
 
-describe('auth queries', () => {
+describe("auth queries", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it('returns null when the user profile cookie is missing', async () => {
+  it("returns null when the user profile cookie is missing", async () => {
     const cookieStore = createCookieStore();
     cookieStore.get.mockReturnValue(undefined);
     mockCookieStore(cookieStore);
@@ -38,46 +38,46 @@ describe('auth queries', () => {
     await expect(getCurrentUser()).resolves.toBeNull();
   });
 
-  it('returns null when the user profile cookie contains malformed JSON', async () => {
+  it("returns null when the user profile cookie contains malformed JSON", async () => {
     const cookieStore = createCookieStore();
-    cookieStore.get.mockReturnValue({ value: 'not-json' });
+    cookieStore.get.mockReturnValue({ value: "not-json" });
     mockCookieStore(cookieStore);
 
     await expect(getCurrentUser()).resolves.toBeNull();
   });
 
-  it('parses the current user from a valid user profile cookie', async () => {
+  it("parses the current user from a valid user profile cookie", async () => {
     const cookieStore = createCookieStore();
     cookieStore.get.mockReturnValue({
       value: JSON.stringify({
-        id: 'user_123',
-        email: 'candidate@example.com',
-        name: 'Candidate',
-        role: 'regular',
+        id: "user_123",
+        email: "candidate@example.com",
+        name: "Candidate",
+        role: "regular",
         emailVerified: true,
-        createdAt: '2026-04-23T10:00:00.000Z',
-        updatedAt: '2026-04-23T11:00:00.000Z',
+        createdAt: "2026-04-23T10:00:00.000Z",
+        updatedAt: "2026-04-23T11:00:00.000Z",
       }),
     });
     mockCookieStore(cookieStore);
 
     await expect(getCurrentUser()).resolves.toEqual({
-      id: 'user_123',
-      email: 'candidate@example.com',
-      name: 'Candidate',
-      role: 'regular',
+      id: "user_123",
+      email: "candidate@example.com",
+      name: "Candidate",
+      role: "regular",
       emailVerified: true,
-      createdAt: new Date('2026-04-23T10:00:00.000Z'),
-      updatedAt: new Date('2026-04-23T11:00:00.000Z'),
+      createdAt: new Date("2026-04-23T10:00:00.000Z"),
+      updatedAt: new Date("2026-04-23T11:00:00.000Z"),
     });
   });
 
-  it('checks authentication by access token cookie presence', async () => {
+  it("checks authentication by access token cookie presence", async () => {
     const cookieStore = createCookieStore();
     cookieStore.has.mockReturnValue(true);
     mockCookieStore(cookieStore);
 
     await expect(isAuthenticated()).resolves.toBe(true);
-    expect(cookieStore.has).toHaveBeenCalledWith('access-token');
+    expect(cookieStore.has).toHaveBeenCalledWith("access-token");
   });
 });

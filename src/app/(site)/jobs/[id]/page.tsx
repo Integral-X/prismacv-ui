@@ -1,9 +1,9 @@
-import { notFound } from 'next/navigation';
-import { getJobById } from '@/modules/jobs/data/queries';
-import { HttpError } from '@/shared/http/http-error';
-import { JobDetailClient } from './job-detail-client';
+import { notFound } from "next/navigation";
+import { getJobById } from "@/modules/jobs/data/queries";
+import { HttpError } from "@/shared/http/http-error";
+import { JobDetailClient } from "./job-detail-client";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 interface JobDetailPageProps {
   params: Promise<{ id: string }>;

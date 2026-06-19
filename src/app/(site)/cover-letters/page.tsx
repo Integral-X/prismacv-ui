@@ -1,7 +1,7 @@
-import { fetchCoverLetters } from '@/modules/cover-letters/data/queries';
-import { CoverLettersPageClient } from './cover-letters-page-client';
+import { fetchCoverLetters } from "@/modules/cover-letters/data/queries";
+import { CoverLettersPageClient } from "./cover-letters-page-client";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function CoverLettersPage() {
   const { data: coverLetters } = await fetchCoverLetters();

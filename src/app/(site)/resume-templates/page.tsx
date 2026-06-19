@@ -1,16 +1,16 @@
-import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import { Footer } from '@/components/common/Footer';
-import { getTemplates } from '@/modules/cv/data/queries';
-import { HttpError } from '@/shared/http/http-error';
-import { TemplatesGalleryClient } from '../templates/templates-gallery-client';
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { Footer } from "@/components/common/Footer";
+import { getTemplates } from "@/modules/cv/data/queries";
+import { HttpError } from "@/shared/http/http-error";
+import { TemplatesGalleryClient } from "../templates/templates-gallery-client";
 
 export const metadata: Metadata = {
-  title: 'Resume Templates | PrismaCV',
-  description: 'Browse modern and professional resume templates from PrismaCV.',
+  title: "Resume Templates | PrismaCV",
+  description: "Browse modern and professional resume templates from PrismaCV.",
 };
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function ResumeTemplatesPage() {
   try {

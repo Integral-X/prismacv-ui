@@ -1,44 +1,44 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from "@playwright/test";
 import {
   expectRedirectToLogin,
   hasLoginCredentials,
   loginAsTestUser,
   runA11yAudit,
-} from './helpers/e2e-test-utils';
+} from "./helpers/e2e-test-utils";
 
 const onboardingProtectedPaths = [
-  '/onboarding',
-  '/onboarding/upload-cv',
-  '/onboarding/import-linkedin',
-  '/onboarding/select-template',
+  "/onboarding",
+  "/onboarding/upload-cv",
+  "/onboarding/import-linkedin",
+  "/onboarding/select-template",
 ];
 
 const onboardingFlowPaths = [
   {
-    path: '/onboarding/upload-cv',
+    path: "/onboarding/upload-cv",
     heading: /bring your cv/i,
   },
   {
-    path: '/onboarding/import-linkedin',
+    path: "/onboarding/import-linkedin",
     heading: /import from linkedin/i,
   },
   {
-    path: '/onboarding/select-template',
+    path: "/onboarding/select-template",
     heading: /job-winning templates for you/i,
   },
 ];
 
-test.describe('Onboarding flows', () => {
+test.describe("Onboarding flows", () => {
   for (const path of onboardingProtectedPaths) {
     test(`redirects unauthenticated users from ${path}`, async ({ page }) => {
       await expectRedirectToLogin(page, path);
     });
   }
 
-  test.describe('Authenticated onboarding pages', () => {
+  test.describe("Authenticated onboarding pages", () => {
     test.skip(
       !hasLoginCredentials,
-      'Set E2E_TEST_USER_EMAIL and E2E_TEST_USER_PASSWORD to run authenticated onboarding checks.'
+      "Set E2E_TEST_USER_EMAIL and E2E_TEST_USER_PASSWORD to run authenticated onboarding checks."
     );
 
     for (const flow of onboardingFlowPaths) {
@@ -47,7 +47,7 @@ test.describe('Onboarding flows', () => {
       }) => {
         await loginAsTestUser(page, flow.path);
         await expect(
-          page.getByRole('heading', { level: 1, name: flow.heading })
+          page.getByRole("heading", { level: 1, name: flow.heading })
         ).toBeVisible();
         await runA11yAudit(page);
       });

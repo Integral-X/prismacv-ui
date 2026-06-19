@@ -1,11 +1,11 @@
 // ─── Shared ──────────────────────────────────────────────────────────────────
 
 export type JobStatusContract =
-  | 'SAVED'
-  | 'APPLIED'
-  | 'INTERVIEW'
-  | 'OFFER'
-  | 'REJECTED';
+  | "SAVED"
+  | "APPLIED"
+  | "INTERVIEW"
+  | "OFFER"
+  | "REJECTED";
 
 // ─── Response contracts ─────────────────────────────────────────────────────
 

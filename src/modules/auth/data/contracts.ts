@@ -1,6 +1,6 @@
 // ─── Shared ──────────────────────────────────────────────────────────────────
 
-export type UserRoleContract = 'REGULAR' | 'PLATFORM_ADMIN';
+export type UserRoleContract = "REGULAR" | "PLATFORM_ADMIN";
 
 export interface UserProfileContract {
   id: string;

@@ -3,10 +3,10 @@ import type {
   GrammarIssueContract,
   GrammarIssueSeverityContract,
   GrammarIssueTypeContract,
-} from './contracts';
+} from "./contracts";
 
-export type GrammarIssueType = 'grammar' | 'style' | 'impact';
-export type GrammarIssueSeverity = 'error' | 'warning' | 'info';
+export type GrammarIssueType = "grammar" | "style" | "impact";
+export type GrammarIssueSeverity = "error" | "warning" | "info";
 
 export interface GrammarIssue {
   type: GrammarIssueType;

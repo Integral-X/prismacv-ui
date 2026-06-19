@@ -1,22 +1,22 @@
-const REDACTED = '[Redacted]';
+const REDACTED = "[Redacted]";
 
 const SENSITIVE_SEGMENTS = [
-  'password',
-  'token',
-  'authorization',
-  'cookie',
-  'secret',
-  'apikey',
-  'accessToken',
-  'refreshToken',
+  "password",
+  "token",
+  "authorization",
+  "cookie",
+  "secret",
+  "apikey",
+  "accessToken",
+  "refreshToken",
 ];
 
 function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 function shouldRedactKey(key: string): boolean {
-  const normalized = key.replace(/[^a-z0-9]/gi, '').toLowerCase();
+  const normalized = key.replace(/[^a-z0-9]/gi, "").toLowerCase();
   return SENSITIVE_SEGMENTS.some((segment) =>
     normalized.includes(segment.toLowerCase())
   );
@@ -33,16 +33,16 @@ export function sanitizeLogPayload<T>(value: T, depth = 0): T {
     return value;
   }
 
-  if (typeof value === 'string') {
+  if (typeof value === "string") {
     return sanitizeString(value) as T;
   }
 
   if (
     value === null ||
     value === undefined ||
-    typeof value === 'number' ||
-    typeof value === 'boolean' ||
-    typeof value === 'bigint'
+    typeof value === "number" ||
+    typeof value === "boolean" ||
+    typeof value === "bigint"
   ) {
     return value;
   }

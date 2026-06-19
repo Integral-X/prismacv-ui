@@ -6,7 +6,7 @@ import type {
   SkillGapResponseContract,
   SkillCategoryContract,
   UserSkillProgressContract,
-} from './contracts';
+} from "./contracts";
 
 // ─── Domain types ─────────────────────────────────────────────────────────────
 

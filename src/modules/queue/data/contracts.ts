@@ -6,15 +6,15 @@ export interface QueueJobAcceptedContract {
 export interface QueueJobStatusContract {
   id: string;
   state:
-    | 'waiting'
-    | 'active'
-    | 'completed'
-    | 'failed'
-    | 'delayed'
-    | 'paused'
-    | 'waiting-children'
-    | 'unknown';
-  type: 'pdf_export' | 'ai_analyze' | 'ai_optimize' | string;
+    | "waiting"
+    | "active"
+    | "completed"
+    | "failed"
+    | "delayed"
+    | "paused"
+    | "waiting-children"
+    | "unknown";
+  type: "pdf_export" | "ai_analyze" | "ai_optimize" | string;
   result?: unknown;
   error?: string | null;
   processedOn: string | null;

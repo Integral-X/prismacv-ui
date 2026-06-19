@@ -1,5 +1,5 @@
-import * as Sentry from '@sentry/nextjs';
-import { sanitizeLogPayload } from '@/shared/logger/sanitize-log-payload';
+import * as Sentry from "@sentry/nextjs";
+import { sanitizeLogPayload } from "@/shared/logger/sanitize-log-payload";
 
 type PrimitiveTag = string | number | boolean;
 
@@ -63,7 +63,7 @@ export function captureUiException(
     exception instanceof Error
       ? exception
       : new Error(
-          typeof exception === 'string' ? exception : 'Unknown UI error'
+          typeof exception === "string" ? exception : "Unknown UI error"
         );
 
   Sentry.withScope((scope) => {
@@ -74,7 +74,7 @@ export function captureUiException(
     }
 
     if (context?.extra) {
-      scope.setContext('extra', sanitizeLogPayload(context.extra));
+      scope.setContext("extra", sanitizeLogPayload(context.extra));
     }
 
     Sentry.captureException(error);

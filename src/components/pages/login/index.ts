@@ -1,3 +1,3 @@
-export { LoginForm } from './LoginForm';
-export { SocialAuthButtons } from './SocialAuthButtons';
-export type { LoginFormData } from './types';
+export { LoginForm } from "./LoginForm";
+export { SocialAuthButtons } from "./SocialAuthButtons";
+export type { LoginFormData } from "./types";

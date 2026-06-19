@@ -15,7 +15,7 @@
 // lint-staged passes the staged file paths as arguments. Any violation exits
 // non-zero, which blocks the commit.
 
-const fs = require('fs');
+const fs = require("fs");
 
 const RAW_COLOR = /#[0-9a-fA-F]{3,8}\b|rgba?\(|hsla?\(/;
 const PALETTE_UTILITY =
@@ -23,7 +23,7 @@ const PALETTE_UTILITY =
 const DEPRECATED_UPPERCASE = /\b(COLORS|SPACING|DIMENSIONS)\b/;
 
 const isExempt = (file) =>
-  file.includes('src/design-system/') || file.endsWith('src/app/globals.css');
+  file.includes("src/design-system/") || file.endsWith("src/app/globals.css");
 
 const files = process.argv
   .slice(2)
@@ -34,12 +34,12 @@ const violations = [];
 for (const file of files) {
   let contents;
   try {
-    contents = fs.readFileSync(file, 'utf8');
+    contents = fs.readFileSync(file, "utf8");
   } catch {
     continue;
   }
 
-  contents.split('\n').forEach((line, index) => {
+  contents.split("\n").forEach((line, index) => {
     const where = `${file}:${index + 1}`;
     if (RAW_COLOR.test(line)) {
       violations.push(`${where} — raw color literal → ${line.trim()}`);
@@ -54,13 +54,13 @@ for (const file of files) {
 }
 
 if (violations.length > 0) {
-  console.error('\n✖ token-guard: design-system violations found:\n');
+  console.error("\n✖ token-guard: design-system violations found:\n");
   for (const violation of violations) {
     console.error(`  ${violation}`);
   }
   console.error(
-    '\nUse a semantic token class (see docs/design-system.md §3). If none fits,' +
-      ' add a token to src/design-system/tokens.ts and run `pnpm tokens:generate`.\n'
+    "\nUse a semantic token class (see docs/design-system.md §3). If none fits," +
+      " add a token to src/design-system/tokens.ts and run `pnpm tokens:generate`.\n"
   );
   process.exit(1);
 }

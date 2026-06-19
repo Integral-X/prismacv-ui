@@ -1,5 +1,5 @@
-import type { Cv } from '@/modules/cv/data/mappers';
-import { TemplateRenderer } from './templates';
+import type { Cv } from "@/modules/cv/data/mappers";
+import { TemplateRenderer } from "./templates";
 
 interface CvPreviewProps {
   cv: Cv;

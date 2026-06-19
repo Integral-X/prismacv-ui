@@ -1,7 +1,7 @@
 import type {
   CourseCategory,
   CourseSuggestion,
-} from './course-suggestions-data';
+} from "./course-suggestions-data";
 
 export function filterCourseSuggestions(
   courses: CourseSuggestion[],
@@ -20,7 +20,7 @@ export function filterCourseSuggestions(
     }
 
     if (
-      options.category !== 'All' &&
+      options.category !== "All" &&
       !course.categories.includes(options.category)
     ) {
       return false;
@@ -34,7 +34,7 @@ export function filterCourseSuggestions(
       course.platform,
       ...course.categories,
     ]
-      .join(' ')
+      .join(" ")
       .toLowerCase();
 
     return haystack.includes(query);

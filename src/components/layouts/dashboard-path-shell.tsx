@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import type { ReactNode } from 'react';
-import { usePathname } from 'next/navigation';
+import type { ReactNode } from "react";
+import { usePathname } from "next/navigation";
 
 interface DashboardPathShellProps {
   children: ReactNode;
@@ -16,14 +16,14 @@ export function DashboardPathShell({
 
   // The CV editor is a full-bleed surface: its own top toolbar replaces the
   // global navbar (Enhancv-style single bar).
-  const isFullBleed = pathname.startsWith('/cv/') && pathname.endsWith('/edit');
+  const isFullBleed = pathname.startsWith("/cv/") && pathname.endsWith("/edit");
 
   if (isFullBleed) {
     return (
       <main
-        id='main-content'
+        id="main-content"
         tabIndex={-1}
-        className='flex min-h-0 flex-1 flex-col'
+        className="flex min-h-0 flex-1 flex-col"
       >
         {children}
       </main>
@@ -31,17 +31,17 @@ export function DashboardPathShell({
   }
 
   const usesAppShell =
-    pathname === '/dashboard' ||
-    pathname.startsWith('/dashboard/') ||
-    pathname === '/jobs' ||
-    pathname.startsWith('/jobs/');
+    pathname === "/dashboard" ||
+    pathname.startsWith("/dashboard/") ||
+    pathname === "/jobs" ||
+    pathname.startsWith("/jobs/");
 
   if (usesAppShell) {
     return (
       <main
-        id='main-content'
+        id="main-content"
         tabIndex={-1}
-        className='flex min-h-0 flex-1 flex-col'
+        className="flex min-h-0 flex-1 flex-col"
       >
         {children}
       </main>
@@ -51,7 +51,7 @@ export function DashboardPathShell({
   return (
     <>
       {navbar}
-      <main id='main-content' tabIndex={-1} className='flex flex-1 flex-col'>
+      <main id="main-content" tabIndex={-1} className="flex flex-1 flex-col">
         {children}
       </main>
     </>

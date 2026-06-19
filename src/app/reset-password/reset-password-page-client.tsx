@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
-import { Card } from '@/components/ui/card';
-import { AuthFormLayout } from '@/components/layouts/AuthFormLayout';
-import { ResetPasswordForm } from '@/components/pages/auth/ResetPasswordForm';
-import type { ResetPasswordFormData } from '@/lib/validations/auth';
-import { resetPasswordAction } from '@/modules/auth/data/actions';
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Card } from "@/components/ui/card";
+import { AuthFormLayout } from "@/components/layouts/AuthFormLayout";
+import { ResetPasswordForm } from "@/components/pages/auth/ResetPasswordForm";
+import type { ResetPasswordFormData } from "@/lib/validations/auth";
+import { resetPasswordAction } from "@/modules/auth/data/actions";
 
 export function ResetPasswordPageClient() {
   const router = useRouter();
@@ -25,13 +25,13 @@ export function ResetPasswordPageClient() {
       toast.success(result.message);
     }
 
-    router.push(result.redirectTo ?? '/login');
+    router.push(result.redirectTo ?? "/login");
   };
 
   return (
     <AuthFormLayout>
-      <Card className='w-full max-w-[440px] bg-surface-card shadow-card p-8'>
-        <h2 className='text-xl font-semibold text-content-primary mb-4'>
+      <Card className="w-full max-w-[440px] bg-surface-card shadow-card p-8">
+        <h2 className="text-xl font-semibold text-content-primary mb-4">
           Create new password
         </h2>
         <ResetPasswordForm onSubmit={handleReset} />

@@ -1,6 +1,6 @@
-import { getCurrentUser } from '@/modules/auth/data/queries';
+import { getCurrentUser } from "@/modules/auth/data/queries";
 
-import { NavbarClient, type NavbarUser } from './navbar-client';
+import { NavbarClient, type NavbarUser } from "./navbar-client";
 
 export async function Navbar() {
   const currentUser = await getCurrentUser();
@@ -8,7 +8,7 @@ export async function Navbar() {
     ? {
         email: currentUser.email,
         name: currentUser.name,
-        isAdmin: currentUser.role === 'admin',
+        isAdmin: currentUser.role === "admin",
       }
     : null;
 

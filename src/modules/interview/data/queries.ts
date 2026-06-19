@@ -1,9 +1,9 @@
-import 'server-only';
+import "server-only";
 
-import { apiClient } from '@/shared/http/api-client';
-import type { PaginatedResponse } from '@/shared/http/paginated-response';
-import type { InterviewQuestionContract } from './contracts';
-import { toInterviewQuestion, type InterviewQuestion } from './mappers';
+import { apiClient } from "@/shared/http/api-client";
+import type { PaginatedResponse } from "@/shared/http/paginated-response";
+import type { InterviewQuestionContract } from "./contracts";
+import { toInterviewQuestion, type InterviewQuestion } from "./mappers";
 
 export async function getInterviewQuestions(params?: {
   role?: string;
@@ -21,15 +21,15 @@ export async function getInterviewQuestions(params?: {
 
   const response = await apiClient.get<
     PaginatedResponse<InterviewQuestionContract>
-  >('interview/questions', { params: queryParams });
+  >("interview/questions", { params: queryParams });
 
   return response.data.map(toInterviewQuestion);
 }
 
 export async function getInterviewRoles(): Promise<string[]> {
-  return apiClient.get<string[]>('interview/roles');
+  return apiClient.get<string[]>("interview/roles");
 }
 
 export async function getInterviewCategories(): Promise<string[]> {
-  return apiClient.get<string[]>('interview/categories');
+  return apiClient.get<string[]>("interview/categories");
 }

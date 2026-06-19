@@ -1,11 +1,11 @@
-import type { Job } from '@/modules/jobs/data/mappers';
+import type { Job } from "@/modules/jobs/data/mappers";
 
 import type {
   JobDateFilter,
   JobSourceFilter,
   JobTrackerFilters,
   JobTypeFilter,
-} from './job-tracker-types';
+} from "./job-tracker-types";
 
 function jobDueTimestamp(job: Job): number {
   const date = job.appliedAt ?? job.updatedAt;
@@ -13,11 +13,11 @@ function jobDueTimestamp(job: Job): number {
 }
 
 export function detectJobSource(url: string | null): JobSourceFilter | null {
-  if (!url) return 'other';
+  if (!url) return "other";
   const normalized = url.toLowerCase();
-  if (normalized.includes('linkedin')) return 'linkedin';
-  if (normalized.includes('facebook')) return 'facebook';
-  return 'other';
+  if (normalized.includes("linkedin")) return "linkedin";
+  if (normalized.includes("facebook")) return "facebook";
+  return "other";
 }
 
 function matchesDateFilter(job: Job, filters: JobDateFilter[]): boolean {
@@ -37,8 +37,8 @@ function matchesJobTypeFilter(job: Job, filters: JobTypeFilter[]): boolean {
   if (filters.length === 0) return true;
 
   return filters.some((filter) => {
-    if (filter === 'remote') return job.isRemote;
-    if (filter === 'onsite') return !job.isRemote && Boolean(job.location);
+    if (filter === "remote") return job.isRemote;
+    if (filter === "onsite") return !job.isRemote && Boolean(job.location);
     return !job.isRemote;
   });
 }
@@ -57,8 +57,8 @@ export function filterAndSortJobs(
 
   let result = jobs.filter((job) => {
     if (query.length > 0) {
-      const haystack = [job.title, job.company, job.location ?? '']
-        .join(' ')
+      const haystack = [job.title, job.company, job.location ?? ""]
+        .join(" ")
         .toLowerCase();
       if (!haystack.includes(query)) return false;
     }
@@ -70,11 +70,11 @@ export function filterAndSortJobs(
     );
   });
 
-  if (filters.sort === 'dueDateAsc') {
+  if (filters.sort === "dueDateAsc") {
     result = [...result].sort(
       (a, b) => jobDueTimestamp(a) - jobDueTimestamp(b)
     );
-  } else if (filters.sort === 'dueDateDesc') {
+  } else if (filters.sort === "dueDateDesc") {
     result = [...result].sort(
       (a, b) => jobDueTimestamp(b) - jobDueTimestamp(a)
     );
@@ -84,18 +84,18 @@ export function filterAndSortJobs(
 }
 
 export function formatTrackerDate(date: Date): string {
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
 export function formatColumnCount(count: number): string {
-  return count.toString().padStart(2, '0');
+  return count.toString().padStart(2, "0");
 }
 
 export function titleFromJobUrl(url: string): string {
   try {
-    const hostname = new URL(url).hostname.replace(/^www\./, '');
+    const hostname = new URL(url).hostname.replace(/^www\./, "");
     return `Role at ${hostname}`;
   } catch {
-    return 'Job posting';
+    return "Job posting";
   }
 }

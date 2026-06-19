@@ -32,7 +32,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -84,7 +84,7 @@ jobs:
       contents: write
       packages: write
     env:
-      HUSKY: '0'
+      HUSKY: "0"
 
     steps:
       - name: Checkout code
@@ -98,7 +98,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

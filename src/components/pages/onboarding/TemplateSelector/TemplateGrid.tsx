@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import Image from 'next/image';
-import { Check } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Template } from './types';
+import * as React from "react";
+import Image from "next/image";
+import { Check } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Template } from "./types";
 
 interface TemplateGridProps {
   templates: Template[];
@@ -37,19 +37,19 @@ export const TemplateGrid = ({
       templateId: string,
       index: number
     ) => {
-      if (e.key === 'Enter' || e.key === ' ') {
+      if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         onSelect(templateId);
         return;
       }
 
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") {
         e.preventDefault();
         focusTemplateByIndex(index + 1);
         return;
       }
 
-      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
         e.preventDefault();
         focusTemplateByIndex(index - 1);
       }
@@ -59,11 +59,11 @@ export const TemplateGrid = ({
 
   if (templates.length === 0) {
     return (
-      <div className='text-center py-12'>
-        <p className='text-content-muted mb-4'>
+      <div className="text-center py-12">
+        <p className="text-content-muted mb-4">
           No templates match your filters
         </p>
-        <Button variant='outline' onClick={onClearFilters}>
+        <Button variant="outline" onClick={onClearFilters}>
           Clear filters
         </Button>
       </div>
@@ -71,10 +71,10 @@ export const TemplateGrid = ({
   }
 
   return (
-    <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'>
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {templates.map((template, index) => (
         <button
-          type='button'
+          type="button"
           key={template.id}
           ref={(node) => {
             cardRefs.current[index] = node;
@@ -86,36 +86,36 @@ export const TemplateGrid = ({
               : -1
           }
           aria-label={`${template.name} template`}
-          aria-current={selectedTemplate === template.id ? 'true' : undefined}
+          aria-current={selectedTemplate === template.id ? "true" : undefined}
           onClick={() => onSelect(template.id)}
           onKeyDown={(e) => handleTemplateKeyDown(e, template.id, index)}
           className={cn(
-            'group relative cursor-pointer overflow-hidden text-left transition-all duration-300',
-            'hover:shadow-lg hover:-translate-y-1',
-            'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
-            selectedTemplate === template.id && 'shadow-lg'
+            "group relative cursor-pointer overflow-hidden text-left transition-all duration-300",
+            "hover:shadow-lg hover:-translate-y-1",
+            "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+            selectedTemplate === template.id && "shadow-lg"
           )}
         >
           {/* Template Image */}
-          <div className='relative aspect-3/4 overflow-hidden'>
+          <div className="relative aspect-3/4 overflow-hidden">
             <Image
               src={template.image}
               alt={`${template.name} template`}
               fill
-              className='object-contain group-hover:scale-105 transition-transform duration-300'
+              className="object-contain group-hover:scale-105 transition-transform duration-300"
             />
           </div>
 
           {/* Selection Indicator */}
           {selectedTemplate === template.id && (
-            <div className='absolute top-1 right-2 w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-lg z-10'>
-              <Check className='w-5 h-5 text-white' />
+            <div className="absolute top-1 right-2 w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-lg z-10">
+              <Check className="w-5 h-5 text-white" />
             </div>
           )}
 
           {/* Template Name */}
-          <div className='p-4'>
-            <p className='text-sm font-medium text-content-primary text-center'>
+          <div className="p-4">
+            <p className="text-sm font-medium text-content-primary text-center">
               {template.name}
             </p>
           </div>

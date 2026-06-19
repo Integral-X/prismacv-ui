@@ -1,19 +1,19 @@
-'use server';
+"use server";
 
-import { type ActionResult, toFailureResult } from '@/shared/action-result';
+import { type ActionResult, toFailureResult } from "@/shared/action-result";
 import type {
   QueueAiAnalyzeRequestContract,
   QueueAiOptimizeRequestContract,
   QueueJobAcceptedContract,
   QueuePdfExportRequestContract,
-} from './contracts';
-import { toQueueJobStatus, type QueueJobStatus } from './mappers';
+} from "./contracts";
+import { toQueueJobStatus, type QueueJobStatus } from "./mappers";
 import {
   getQueueJobStatus,
   queueAiAnalyze,
   queueAiOptimize,
   queuePdfExport,
-} from './mutations';
+} from "./mutations";
 
 export async function queuePdfExportAction(
   input: QueuePdfExportRequestContract
@@ -22,7 +22,7 @@ export async function queuePdfExportAction(
     const result = await queuePdfExport(input);
     return { ok: true, data: result };
   } catch (error) {
-    return toFailureResult(error, 'Unable to queue PDF export.');
+    return toFailureResult(error, "Unable to queue PDF export.");
   }
 }
 
@@ -33,7 +33,7 @@ export async function queueAiAnalyzeAction(
     const result = await queueAiAnalyze(input);
     return { ok: true, data: result };
   } catch (error) {
-    return toFailureResult(error, 'Unable to queue CV analysis.');
+    return toFailureResult(error, "Unable to queue CV analysis.");
   }
 }
 
@@ -44,7 +44,7 @@ export async function queueAiOptimizeAction(
     const result = await queueAiOptimize(input);
     return { ok: true, data: result };
   } catch (error) {
-    return toFailureResult(error, 'Unable to queue CV optimization.');
+    return toFailureResult(error, "Unable to queue CV optimization.");
   }
 }
 
@@ -55,6 +55,6 @@ export async function getQueueJobStatusAction(
     const result = await getQueueJobStatus(jobId);
     return { ok: true, data: toQueueJobStatus(result) };
   } catch (error) {
-    return toFailureResult(error, 'Unable to fetch queue job status.');
+    return toFailureResult(error, "Unable to fetch queue job status.");
   }
 }

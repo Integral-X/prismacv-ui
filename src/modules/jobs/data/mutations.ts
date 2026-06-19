@@ -1,7 +1,7 @@
-import 'server-only';
+import "server-only";
 
-import { apiClient } from '@/shared/http/api-client';
-import { executeAuthenticatedRequest } from '@/shared/auth/execute-authenticated-request';
+import { apiClient } from "@/shared/http/api-client";
+import { executeAuthenticatedRequest } from "@/shared/auth/execute-authenticated-request";
 import type {
   CreateJobNoteRequest,
   CreateJobRequest,
@@ -9,15 +9,15 @@ import type {
   JobResponseContract,
   UpdateJobRequest,
   UpdateJobStatusRequest,
-} from './contracts';
-import { toJob, toJobNote, type Job, type JobNote } from './mappers';
+} from "./contracts";
+import { toJob, toJobNote, type Job, type JobNote } from "./mappers";
 
 export async function createJob(body: CreateJobRequest): Promise<Job> {
   return executeAuthenticatedRequest(async (headers) => {
     const contract = await apiClient.post<
       JobResponseContract,
       CreateJobRequest
-    >('jobs', body, { headers });
+    >("jobs", body, { headers });
 
     return toJob(contract);
   });

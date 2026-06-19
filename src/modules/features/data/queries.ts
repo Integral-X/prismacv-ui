@@ -1,20 +1,20 @@
-import 'server-only';
+import "server-only";
 
-import { apiClient } from '@/shared/http/api-client';
+import { apiClient } from "@/shared/http/api-client";
 import type {
   FeatureFlagContract,
   FeaturesListPayload,
   UnleashStatusPayload,
-} from './contracts';
+} from "./contracts";
 
 export async function getFeatureFlagList(): Promise<FeatureFlagContract[]> {
-  const payload = await apiClient.get<FeaturesListPayload>('features');
+  const payload = await apiClient.get<FeaturesListPayload>("features");
   return payload.data;
 }
 
 export async function getUnleashServiceStatus(): Promise<
-  UnleashStatusPayload['unleash']
+  UnleashStatusPayload["unleash"]
 > {
-  const payload = await apiClient.get<UnleashStatusPayload>('features/status');
+  const payload = await apiClient.get<UnleashStatusPayload>("features/status");
   return payload.unleash;
 }

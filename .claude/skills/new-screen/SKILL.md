@@ -45,10 +45,10 @@ For dynamic routes, params come in as a Promise and must be awaited.
 ### page.tsx (server entry, static route)
 
 ```tsx
-import { getThings } from '@/modules/<feature>/data/queries';
-import { ThingsPageClient } from './things-page-client';
+import { getThings } from "@/modules/<feature>/data/queries";
+import { ThingsPageClient } from "./things-page-client";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function ThingsPage() {
   const things = await getThings();
@@ -59,12 +59,12 @@ export default async function ThingsPage() {
 ### page.tsx (dynamic route, with not-found handling)
 
 ```tsx
-import { notFound } from 'next/navigation';
-import { getThingById } from '@/modules/<feature>/data/queries';
-import { HttpError } from '@/shared/http/http-error';
-import { ThingDetailClient } from './thing-detail-client';
+import { notFound } from "next/navigation";
+import { getThingById } from "@/modules/<feature>/data/queries";
+import { HttpError } from "@/shared/http/http-error";
+import { ThingDetailClient } from "./thing-detail-client";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -85,9 +85,9 @@ export default async function ThingPage({ params }: PageProps) {
 ### \*-page-client.tsx
 
 ```tsx
-'use client';
+"use client";
 
-import type { Thing } from '@/modules/<feature>/data/mappers';
+import type { Thing } from "@/modules/<feature>/data/mappers";
 
 interface ThingsPageClientProps {
   initialThings: Thing[];
@@ -95,7 +95,7 @@ interface ThingsPageClientProps {
 
 export function ThingsPageClient({ initialThings }: ThingsPageClientProps) {
   // local state + interactivity here; consume ui/ primitives, semantic tokens only
-  return <div className='container mx-auto px-4 py-8'>{/* ... */}</div>;
+  return <div className="container mx-auto px-4 py-8">{/* ... */}</div>;
 }
 ```
 
@@ -104,11 +104,11 @@ export function ThingsPageClient({ initialThings }: ThingsPageClientProps) {
 ```tsx
 export default function ThingsLoading() {
   return (
-    <div className='container mx-auto px-4 py-8 animate-pulse'>
-      <div className='h-8 w-48 bg-surface-elevated rounded mb-6' />
-      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
+    <div className="container mx-auto px-4 py-8 animate-pulse">
+      <div className="h-8 w-48 bg-surface-elevated rounded mb-6" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {[1, 2, 3].map((i) => (
-          <div key={i} className='h-40 rounded-lg bg-surface-elevated' />
+          <div key={i} className="h-40 rounded-lg bg-surface-elevated" />
         ))}
       </div>
     </div>

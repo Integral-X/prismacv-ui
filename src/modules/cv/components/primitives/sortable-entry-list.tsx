@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 import {
   DndContext,
   PointerSensor,
@@ -8,14 +8,14 @@ import {
   useSensor,
   useSensors,
   type DragEndEvent,
-} from '@dnd-kit/core';
+} from "@dnd-kit/core";
 import {
   SortableContext,
   useSortable,
   verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { GripVertical } from 'lucide-react';
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { GripVertical } from "lucide-react";
 
 interface SortableEntryListProps<T extends { id: string }> {
   items: T[];
@@ -89,16 +89,16 @@ function SortableEntry({ id, children }: { id: string; children: ReactNode }) {
         transition,
         opacity: isDragging ? 0.5 : 1,
       }}
-      className='group/sortable relative'
+      className="group/sortable relative"
     >
       <button
-        type='button'
+        type="button"
         {...attributes}
         {...listeners}
-        aria-label='Drag to reorder'
-        className='absolute top-0 -left-5 cursor-grab text-content-tertiary opacity-30 transition-opacity group-hover/sortable:opacity-100'
+        aria-label="Drag to reorder"
+        className="absolute top-0 -left-5 cursor-grab text-content-tertiary opacity-30 transition-opacity group-hover/sortable:opacity-100"
       >
-        <GripVertical className='size-3.5' />
+        <GripVertical className="size-3.5" />
       </button>
       {children}
     </div>

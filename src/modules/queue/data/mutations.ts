@@ -1,14 +1,14 @@
-import 'server-only';
+import "server-only";
 
-import { executeAuthenticatedRequest } from '@/shared/auth/execute-authenticated-request';
-import { apiClient } from '@/shared/http/api-client';
+import { executeAuthenticatedRequest } from "@/shared/auth/execute-authenticated-request";
+import { apiClient } from "@/shared/http/api-client";
 import type {
   QueueAiAnalyzeRequestContract,
   QueueAiOptimizeRequestContract,
   QueueJobAcceptedContract,
   QueueJobStatusContract,
   QueuePdfExportRequestContract,
-} from './contracts';
+} from "./contracts";
 
 export async function queuePdfExport(
   input: QueuePdfExportRequestContract
@@ -17,7 +17,7 @@ export async function queuePdfExport(
     return apiClient.post<
       QueueJobAcceptedContract,
       QueuePdfExportRequestContract
-    >('queue/jobs/pdf-export', input, { headers });
+    >("queue/jobs/pdf-export", input, { headers });
   });
 }
 
@@ -28,7 +28,7 @@ export async function queueAiAnalyze(
     return apiClient.post<
       QueueJobAcceptedContract,
       QueueAiAnalyzeRequestContract
-    >('queue/jobs/ai/analyze', input, { headers });
+    >("queue/jobs/ai/analyze", input, { headers });
   });
 }
 
@@ -39,7 +39,7 @@ export async function queueAiOptimize(
     return apiClient.post<
       QueueJobAcceptedContract,
       QueueAiOptimizeRequestContract
-    >('queue/jobs/ai/optimize', input, { headers });
+    >("queue/jobs/ai/optimize", input, { headers });
   });
 }
 

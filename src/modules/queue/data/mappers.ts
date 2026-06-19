@@ -4,17 +4,17 @@ import type {
   CvOptimizationResultContract,
   CvSuggestionContract,
   SectionRecommendationContract,
-} from '@/modules/ai/data/contracts';
+} from "@/modules/ai/data/contracts";
 import {
   toCvAnalysis,
   toCvOptimization,
   type CvAnalysisResult,
   type CvOptimizationResult,
-} from '@/modules/ai/data/mappers';
-import type { QueueJobStatusContract } from './contracts';
+} from "@/modules/ai/data/mappers";
+import type { QueueJobStatusContract } from "./contracts";
 
-export type QueueJobState = QueueJobStatusContract['state'];
-export type QueueJobType = 'pdf_export' | 'ai_analyze' | 'ai_optimize';
+export type QueueJobState = QueueJobStatusContract["state"];
+export type QueueJobType = "pdf_export" | "ai_analyze" | "ai_optimize";
 
 export interface QueueJobStatus<TResult = unknown> {
   id: string;
@@ -28,15 +28,15 @@ export interface QueueJobStatus<TResult = unknown> {
 
 export interface QueuePdfExportResult {
   filename: string;
-  contentType: 'application/pdf' | string;
+  contentType: "application/pdf" | string;
   base64: string;
 }
 
-const ISSUE_TYPES = new Set(['grammar', 'readability', 'ats', 'content']);
-const ISSUE_SEVERITIES = new Set(['low', 'medium', 'high']);
-const SUGGESTION_TYPES = new Set(['improvement', 'addition', 'removal']);
-const RECOMMENDATION_ACTIONS = new Set(['add', 'improve', 'remove']);
-const RECOMMENDATION_PRIORITIES = new Set(['low', 'medium', 'high']);
+const ISSUE_TYPES = new Set(["grammar", "readability", "ats", "content"]);
+const ISSUE_SEVERITIES = new Set(["low", "medium", "high"]);
+const SUGGESTION_TYPES = new Set(["improvement", "addition", "removal"]);
+const RECOMMENDATION_ACTIONS = new Set(["add", "improve", "remove"]);
+const RECOMMENDATION_PRIORITIES = new Set(["low", "medium", "high"]);
 
 export function toQueueJobStatus(
   contract: QueueJobStatusContract
@@ -60,9 +60,9 @@ export function toQueuePdfExportResult(
   }
 
   if (
-    typeof value.filename !== 'string' ||
-    typeof value.contentType !== 'string' ||
-    typeof value.base64 !== 'string'
+    typeof value.filename !== "string" ||
+    typeof value.contentType !== "string" ||
+    typeof value.base64 !== "string"
   ) {
     return null;
   }
@@ -95,12 +95,12 @@ export function toQueueCvOptimizationResult(
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 function isStringArray(value: unknown): value is string[] {
   return (
-    Array.isArray(value) && value.every((item) => typeof item === 'string')
+    Array.isArray(value) && value.every((item) => typeof item === "string")
   );
 }
 
@@ -110,13 +110,13 @@ function isCvIssueContract(value: unknown): value is CvIssueContract {
   }
 
   return (
-    typeof value.section === 'string' &&
-    typeof value.type === 'string' &&
+    typeof value.section === "string" &&
+    typeof value.type === "string" &&
     ISSUE_TYPES.has(value.type) &&
-    typeof value.severity === 'string' &&
+    typeof value.severity === "string" &&
     ISSUE_SEVERITIES.has(value.severity) &&
-    typeof value.message === 'string' &&
-    (value.suggestion === undefined || typeof value.suggestion === 'string')
+    typeof value.message === "string" &&
+    (value.suggestion === undefined || typeof value.suggestion === "string")
   );
 }
 
@@ -126,14 +126,14 @@ function isCvSuggestionContract(value: unknown): value is CvSuggestionContract {
   }
 
   return (
-    typeof value.section === 'string' &&
-    typeof value.type === 'string' &&
+    typeof value.section === "string" &&
+    typeof value.type === "string" &&
     SUGGESTION_TYPES.has(value.type) &&
-    typeof value.message === 'string' &&
+    typeof value.message === "string" &&
     (value.originalText === undefined ||
-      typeof value.originalText === 'string') &&
+      typeof value.originalText === "string") &&
     (value.suggestedText === undefined ||
-      typeof value.suggestedText === 'string')
+      typeof value.suggestedText === "string")
   );
 }
 
@@ -145,11 +145,11 @@ function isSectionRecommendationContract(
   }
 
   return (
-    typeof value.section === 'string' &&
-    typeof value.action === 'string' &&
+    typeof value.section === "string" &&
+    typeof value.action === "string" &&
     RECOMMENDATION_ACTIONS.has(value.action) &&
-    typeof value.message === 'string' &&
-    typeof value.priority === 'string' &&
+    typeof value.message === "string" &&
+    typeof value.priority === "string" &&
     RECOMMENDATION_PRIORITIES.has(value.priority)
   );
 }
@@ -162,10 +162,10 @@ function isCvAnalysisResultContract(
   }
 
   return (
-    typeof value.overallScore === 'number' &&
-    typeof value.grammarScore === 'number' &&
-    typeof value.readabilityScore === 'number' &&
-    typeof value.atsScore === 'number' &&
+    typeof value.overallScore === "number" &&
+    typeof value.grammarScore === "number" &&
+    typeof value.readabilityScore === "number" &&
+    typeof value.atsScore === "number" &&
     Array.isArray(value.issues) &&
     value.issues.every(isCvIssueContract) &&
     Array.isArray(value.suggestions) &&
@@ -181,7 +181,7 @@ function isCvOptimizationResultContract(
   }
 
   return (
-    typeof value.matchScore === 'number' &&
+    typeof value.matchScore === "number" &&
     isStringArray(value.missingKeywords) &&
     Array.isArray(value.suggestions) &&
     value.suggestions.every(isCvSuggestionContract) &&
