@@ -43,32 +43,40 @@
 
 ## CV (`cv`)
 
-| Method          | Endpoint                 | UI                                 | Status                          |
-| --------------- | ------------------------ | ---------------------------------- | ------------------------------- |
-| POST            | `cv` (create)            | dashboard create dialog            | ✅                              |
-| GET             | `cv` (list)              | `/dashboard`                       | ✅                              |
-| GET             | `cv/templates`           | `/templates`, `/cv/[id]/templates` | ✅                              |
-| GET             | `cv/:id`                 | `/cv/[id]/edit`                    | ✅                              |
-| PATCH           | `cv/:id`                 | editor                             | ✅                              |
-| DELETE          | `cv/:id`                 | dashboard cv-card                  | ✅                              |
-| POST            | `cv/:id/duplicate`       | dashboard cv-card                  | ✅                              |
-| POST            | `cv/import/linkedin`     | `/onboarding/import-linkedin`      | ✅                              |
-| POST            | `cv/import/file`         | `/onboarding/upload-cv`            | ✅                              |
-| GET             | `cv/:id/export/pdf`      | editor header (sync export)        | ✅                              |
-| POST/GET/DELETE | `cv/:id/share`           | cv-share-panel                     | ✅                              |
-| GET             | `cv/public/:slug`        | `/public/cv/[slug]`                | ✅                              |
-| PUT             | `cv/:id/personal-info`   | personal-info-form                 | ✅                              |
-| PUT             | `cv/:id/experiences`     | experience-form                    | ✅                              |
-| PUT             | `cv/:id/education`       | education-form                     | ✅                              |
-| PUT             | `cv/:id/skills`          | skills-form                        | ✅                              |
-| PUT             | `cv/:id/certifications`  | certifications-form                | ✅                              |
-| PUT             | `cv/:id/projects`        | projects-form                      | ✅                              |
-| PUT             | `cv/:id/languages`       | languages-form                     | ✅                              |
-| PUT             | `cv/:id/custom-sections` | (form)                             | 🟡 verify a dedicated UI exists |
+| Method          | Endpoint                 | UI                                 | Status                                                         |
+| --------------- | ------------------------ | ---------------------------------- | -------------------------------------------------------------- |
+| POST            | `cv` (create)            | dashboard create dialog            | ✅                                                             |
+| GET             | `cv` (list)              | `/dashboard`                       | ✅                                                             |
+| GET             | `cv/templates`           | `/templates`, `/cv/[id]/templates` | ✅                                                             |
+| GET             | `cv/:id`                 | `/cv/[id]/edit`                    | ✅                                                             |
+| PATCH           | `cv/:id`                 | editor                             | ✅                                                             |
+| DELETE          | `cv/:id`                 | dashboard cv-card                  | ✅                                                             |
+| POST            | `cv/:id/duplicate`       | dashboard cv-card                  | ✅                                                             |
+| POST            | `cv/import/linkedin`     | `/onboarding/import-linkedin`      | ✅                                                             |
+| POST            | `cv/import/file`         | `/onboarding/upload-cv`            | ✅                                                             |
+| GET             | `cv/:id/export/pdf`      | editor header (sync export)        | ✅                                                             |
+| POST/GET/DELETE | `cv/:id/share`           | cv-share-panel                     | ✅                                                             |
+| GET             | `cv/public/:slug`        | `/public/cv/[slug]`                | ✅                                                             |
+| PUT             | `cv/:id/personal-info`   | personal-info-form                 | ✅                                                             |
+| PUT             | `cv/:id/experiences`     | experience-form                    | ✅                                                             |
+| PUT             | `cv/:id/education`       | education-form                     | ✅                                                             |
+| PUT             | `cv/:id/skills`          | skills-form                        | ✅                                                             |
+| PUT             | `cv/:id/certifications`  | certifications-form                | ✅                                                             |
+| PUT             | `cv/:id/projects`        | projects-form                      | ✅                                                             |
+| PUT             | `cv/:id/languages`       | languages-form                     | ✅                                                             |
+| PUT             | `cv/:id/custom-sections` | (form)                             | 🟡 verify a dedicated UI exists                                |
+| PUT             | `cv/:id/layout`          | inline editor (section layout)     | ✅ (Phase 6; autosave + optimistic — the documented exception) |
 
 Editor data model: **section-level PUT via Server Actions, no autosave, no
 optimistic state.** This is by design under the current architecture — see
 [architecture.md §1](./architecture.md).
+
+> **Exception — section layout persistence** (`PUT cv/:id/layout`): uses
+> **autosave + optimistic state** by deliberate decision (owner, 2026-06-19).
+> Drag-reorder / hide / inline-rename need instant feedback; a server round-trip
+> per interaction is unacceptable here. The "no autosave / no optimistic" rule
+> still governs the section **forms** — layout is the only opt-out. Details:
+> [backend-support-cv-editor.md](./backend-support-cv-editor.md).
 
 ## AI / ATS / Grammar
 

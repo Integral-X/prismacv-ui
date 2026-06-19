@@ -69,20 +69,19 @@ export function DashboardSidebar({
       className='flex h-full w-60 shrink-0 flex-col border-r border-subtle bg-surface-card'
       aria-label='Dashboard navigation'
     >
-      <div className='px-5 pt-5 pb-4'>
+      <div className='flex justify-center px-5 pt-5 pb-4'>
         <Link
           href='/dashboard'
-          className='flex items-center gap-2 text-lg font-bold tracking-tight text-primary'
+          className='transition-opacity hover:opacity-90'
+          aria-label='Go to dashboard'
         >
           <Image
             src='/logo.svg'
-            alt=''
-            width={28}
-            height={28}
-            className='size-7'
-            aria-hidden
+            alt='PrismaCV'
+            width={120}
+            height={32}
+            className='h-8 w-auto'
           />
-          PRISMACV
         </Link>
       </div>
 
