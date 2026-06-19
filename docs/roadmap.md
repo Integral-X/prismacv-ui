@@ -123,9 +123,83 @@ Release impact: `feat:` → minor (or `refactor:` if deleting).
 - [ ] Introduce a **scoped** client-cache layer (TanStack Query or the installed
       Zustand) for editor + AI panels only — not app-wide.
 - [ ] Progressive rendering for `cover-letters/generate` and `ai/.../optimize`.
-- [ ] Optional editor autosave + optimistic section edits.
+- [ ] Optional editor autosave + optimistic **section-form** edits (app-wide via
+      the cache layer). Distinct from Phase 6, which already did autosave +
+      optimistic for the **layout blob** locally, without this cache layer.
 
 Release impact: `feat:` → minor. Architecture-altering — needs explicit sign-off.
+
+## Phase 6 — CV section-layout persistence (branch: `feat/cv-section-layout`)
+
+Make the inline editor's section layout (reorder across columns, hide/restore,
+rename headings) durable and honored on export/public, replacing the interim
+`localStorage` seam. Spec: [backend-support-cv-editor.md](./backend-support-cv-editor.md).
+
+> **Independent of Phase 5.** This ships **autosave + optimistic state** for the
+> layout blob only — by owner decision (2026-06-19), an explicit exception to the
+> "no autosave / no optimistic" editor rule. It does **not** introduce the
+> app-wide client-cache layer Phase 5 is gated on: the implementation is local
+> component `useState` + a **debounced Server Action**, scoped to the layout blob.
+> The section **forms** keep the default no-autosave model.
+
+**Phase 0 — Lock the wire shape (both repos agree first):**
+
+- [x] Freeze the canonical blob: `{ mainOrder: string[]; sideOrder: string[];
+hidden: string[]; titles: Record<string,string> }`. Keys are opaque strings
+      (section keys + custom-section ids). Whole blob nullable; `null` = defaults.
+      `PUT` replaces the whole blob (no partial-patch semantics). **Frozen
+      2026-06-19** — full field rules + render semantics in
+      [backend-support-cv-editor.md](./backend-support-cv-editor.md) § "Phase 0 —
+      FROZEN contract".
+
+**Backend prerequisite (`prismacv-backend`, lands first — inert `null` column is safe to merge alone):**
+
+- [x] B1 — `layout Json?` on `model Cv` + reversible migration
+      (`20260619143937_add_cv_layout`). Schema-validated; not yet applied (no DB
+      in dev sandbox).
+- [x] B2 — `PUT cv/:id/layout` (mirrors section-PUT stack) + structural-only
+      `UpsertLayoutRequestDto` (opaque keys, bounded sizes); `layout` on
+      `CvResponseDto` + emitted from `cvToResponse` (so GET + public return it).
+- [x] B3 — `buildCvHtml` honors layout (order / hidden / titles) for sync export,
+      async queue, and public; byte-identical default render when `null`.
+      Single-column (two-column PDF parity deferred — separate template redesign).
+- [x] B4 — unit tests: builder (12), DTO validation (12), service `updateLayout`
+      (3), mapper `layoutToResponse` + `cvToResponse` (5) — **46 CV-suite tests
+      green** in-sandbox. e2e (`cv-layout.e2e-spec.ts`, HTTP round-trip + 400
+      rejection) written; runs in an env with deps + app bootstrap.
+
+**Frontend (`prismacv-ui`):**
+
+- [x] F1 — `contracts.ts`: `SectionLayoutContract` + `layout?` on
+      `CvResponseContract` + `UpsertLayoutRequest`. `mappers.ts`: `SectionLayout`
+      domain type (`string[]` keys — opaque, custom-id-ready), `toSectionLayout`
+      (copies arrays + titles object), wired into `toCv` (`layout` → `null` when
+      absent). New `mappers.test.ts` (4). Fixed 5 existing `Cv`-literal fixtures.
+      Typecheck + lint clean. (Widening the editor's `LayoutSectionKey` moved to
+      F3, where the hook is rewritten — keeps F1 a pure data-layer change.)
+- [x] F2 — `updateCvLayout` in `mutations.ts` (`assertSafeCvId` guard + PUT
+      `cv/:id/layout` → `toSectionLayout`) and `updateCvLayoutAction` in
+      `actions.ts` (shared `ActionResult<SectionLayout>`, `HttpError` mapping).
+      Tests: new `mutations.test.ts` (3) + `actions.test.ts` (+2). **No
+      `revalidatePath`** — matches the sibling section actions and avoids fighting
+      F3's optimistic editor state (revised from the earlier plan).
+- [x] F3 — folded layout into the **existing editor store + autosave engine**
+      (not a parallel debounce): `layout` is now a `SectionKey`, seeded from the
+      server CV via `reconcileSectionLayout`, mutated optimistically through store
+      setters, and saved by `controller.schedule('layout')` → `updateCvLayoutAction`.
+      `useSectionLayout`/`useSectionTitle` moved to `editor-provider`; titles folded
+      into the blob; `LayoutSectionKey` kept as the 7 built-ins (editor vocabulary;
+      data layer stays `string[]`). **localStorage seam fully deleted.** Tests:
+      `section-layout.test.ts` (10) + store layout (6) + model (2). **114 CV-module
+      tests green**, typecheck + lint + token-guard clean. - Refinement: **optimistic-keep-on-failure** (mark `failed`, retry via the
+      engine) — matches the ratified section model, not rollback/toast.
+- [x] F4 — localStorage removal + token-guard done in F3. **`pnpm verify` fully
+      green** (format + lint + typecheck + **307 tests** + production build).
+      `api-coverage.md` row flipped ⏳ → ✅. No one-shot migration — the interim seam
+      was per-browser/disposable by design. (Also formatted 4 pre-existing editor
+      files whose format debt was blocking the pre-push hook.)
+
+Release impact: `feat:` → minor (FE) / `feat:` → minor (BE).
 
 ## Cross-repo follow-up (separate, `prismacv-backend`)
 
@@ -136,6 +210,8 @@ Release impact: `feat:` → minor. Architecture-altering — needs explicit sign
 
 Phases 0→2 are pure risk-reduction (docs, tokens, tests) and unblock everyone.
 Phase 3 closes honesty gaps in the coverage matrix. Phase 4 is the first real
-feature decision. Phase 5 is deliberately last and gated, because it's the only
-work that can reverse the ratified architecture — and you don't pay that cost on
-spec.
+feature decision. Phase 6 (section-layout persistence) is an independent feature
+branch — its only hard ordering is BE-before-FE (the column must exist before the
+FE wires to it); it does not depend on Phase 5. Phase 5 is deliberately last and
+gated, because it's the only work that can reverse the ratified architecture
+app-wide — and you don't pay that cost on spec.

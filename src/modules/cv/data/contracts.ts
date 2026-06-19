@@ -1,23 +1,23 @@
 // ─── Shared ──────────────────────────────────────────────────────────────────
 
-export type CvStatusContract = 'DRAFT' | 'PUBLISHED';
+export type CvStatusContract = "DRAFT" | "PUBLISHED";
 
 export type SkillLevelContract =
-  | 'BEGINNER'
-  | 'INTERMEDIATE'
-  | 'ADVANCED'
-  | 'EXPERT';
+  | "BEGINNER"
+  | "INTERMEDIATE"
+  | "ADVANCED"
+  | "EXPERT";
 
 export type LanguageProficiencyContract =
-  | 'BASIC'
-  | 'INTERMEDIATE'
-  | 'ADVANCED'
-  | 'FLUENT'
-  | 'NATIVE';
+  | "BASIC"
+  | "INTERMEDIATE"
+  | "ADVANCED"
+  | "FLUENT"
+  | "NATIVE";
 
-export type TemplateLayout = 'single' | 'two-column';
+export type TemplateLayout = "single" | "two-column";
 
-export type TemplateCategory = 'professional' | 'modern' | 'creative';
+export type TemplateCategory = "professional" | "modern" | "creative";
 
 // ─── Response contracts ─────────────────────────────────────────────────────
 
@@ -99,6 +99,16 @@ export interface CustomSectionResponseContract {
   sortOrder: number;
 }
 
+// Per-CV section layout. Keys are opaque strings (built-in section keys +
+// custom-section ids). See docs/backend-support-cv-editor.md § "Phase 0 — FROZEN
+// contract". Backend column is nullable; `null` = never customized.
+export interface SectionLayoutContract {
+  mainOrder: string[];
+  sideOrder: string[];
+  hidden: string[];
+  titles: Record<string, string>;
+}
+
 export interface CvResponseContract {
   id: string;
   title: string;
@@ -116,6 +126,7 @@ export interface CvResponseContract {
   projects: ProjectResponseContract[];
   languages: LanguageResponseContract[];
   customSections: CustomSectionResponseContract[];
+  layout?: SectionLayoutContract;
 }
 
 export interface CvListItemResponseContract {
@@ -293,6 +304,15 @@ export interface CustomSectionItemRequest {
 
 export interface BulkUpsertCustomSectionsRequest {
   items: CustomSectionItemRequest[];
+}
+
+// Full replace of the section layout — all four fields required (send [] / {}
+// when empty). Mirrors `PUT cv/:id/layout`.
+export interface UpsertLayoutRequest {
+  mainOrder: string[];
+  sideOrder: string[];
+  hidden: string[];
+  titles: Record<string, string>;
 }
 
 // ─── Share ───────────────────────────────────────────────────────────────────

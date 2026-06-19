@@ -13,25 +13,26 @@ import type {
   PaginationMetaContract,
   PersonalInfoResponseContract,
   ProjectResponseContract,
+  SectionLayoutContract,
   SkillLevelContract,
   SkillResponseContract,
   TemplateContract,
   TemplateCategory,
   TemplateLayout,
-} from './contracts';
+} from "./contracts";
 
 // ─── Domain types ─────────────────────────────────────────────────────────────
 
-export type CvStatus = 'draft' | 'published';
+export type CvStatus = "draft" | "published";
 
-export type SkillLevel = 'beginner' | 'intermediate' | 'advanced' | 'expert';
+export type SkillLevel = "beginner" | "intermediate" | "advanced" | "expert";
 
 export type LanguageProficiency =
-  | 'basic'
-  | 'intermediate'
-  | 'advanced'
-  | 'fluent'
-  | 'native';
+  | "basic"
+  | "intermediate"
+  | "advanced"
+  | "fluent"
+  | "native";
 
 export interface PersonalInfo {
   id: string;
@@ -111,6 +112,14 @@ export interface CustomSection {
   sortOrder: number;
 }
 
+// Section keys are opaque strings (built-in keys + custom-section ids).
+export interface SectionLayout {
+  mainOrder: string[];
+  sideOrder: string[];
+  hidden: string[];
+  titles: Record<string, string>;
+}
+
 export interface Cv {
   id: string;
   title: string;
@@ -128,6 +137,7 @@ export interface Cv {
   projects: Project[];
   languages: Language[];
   customSections: CustomSection[];
+  layout: SectionLayout | null;
 }
 
 export interface CvListItem {
@@ -179,18 +189,18 @@ export interface CvShareInfo {
 
 function toCvStatus(status: CvStatusContract): CvStatus {
   const map: Record<CvStatusContract, CvStatus> = {
-    DRAFT: 'draft',
-    PUBLISHED: 'published',
+    DRAFT: "draft",
+    PUBLISHED: "published",
   };
   return map[status];
 }
 
 function toSkillLevel(level: SkillLevelContract): SkillLevel {
   const map: Record<SkillLevelContract, SkillLevel> = {
-    BEGINNER: 'beginner',
-    INTERMEDIATE: 'intermediate',
-    ADVANCED: 'advanced',
-    EXPERT: 'expert',
+    BEGINNER: "beginner",
+    INTERMEDIATE: "intermediate",
+    ADVANCED: "advanced",
+    EXPERT: "expert",
   };
   return map[level];
 }
@@ -199,11 +209,11 @@ function toLanguageProficiency(
   proficiency: LanguageProficiencyContract
 ): LanguageProficiency {
   const map: Record<LanguageProficiencyContract, LanguageProficiency> = {
-    BASIC: 'basic',
-    INTERMEDIATE: 'intermediate',
-    ADVANCED: 'advanced',
-    FLUENT: 'fluent',
-    NATIVE: 'native',
+    BASIC: "basic",
+    INTERMEDIATE: "intermediate",
+    ADVANCED: "advanced",
+    FLUENT: "fluent",
+    NATIVE: "native",
   };
   return map[proficiency];
 }
@@ -313,6 +323,17 @@ export function toCustomSection(
   };
 }
 
+export function toSectionLayout(
+  contract: SectionLayoutContract
+): SectionLayout {
+  return {
+    mainOrder: [...contract.mainOrder],
+    sideOrder: [...contract.sideOrder],
+    hidden: [...contract.hidden],
+    titles: { ...contract.titles },
+  };
+}
+
 export function toCv(contract: CvResponseContract): Cv {
   return {
     id: contract.id,
@@ -333,6 +354,7 @@ export function toCv(contract: CvResponseContract): Cv {
     projects: contract.projects.map(toProject),
     languages: contract.languages.map(toLanguage),
     customSections: contract.customSections.map(toCustomSection),
+    layout: contract.layout ? toSectionLayout(contract.layout) : null,
   };
 }
 

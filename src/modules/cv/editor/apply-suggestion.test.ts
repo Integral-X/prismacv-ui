@@ -1,11 +1,12 @@
-import type { CvSuggestion } from '@/modules/ai/data/mappers';
-import type { EditorDocument } from './editor-model';
-import { resolveSuggestionTarget } from './apply-suggestion';
+import type { CvSuggestion } from "@/modules/ai/data/mappers";
+import type { EditorDocument } from "./editor-model";
+import { resolveSuggestionTarget } from "./apply-suggestion";
+import { defaultSectionLayout } from "./section-layout";
 
 function buildDoc(overrides: Partial<EditorDocument> = {}): EditorDocument {
   return {
-    cvId: 'cv_1',
-    templateId: 'horizon',
+    cvId: "cv_1",
+    templateId: "horizon",
     personalInfo: null,
     experiences: [],
     education: [],
@@ -13,55 +14,56 @@ function buildDoc(overrides: Partial<EditorDocument> = {}): EditorDocument {
     certifications: [],
     projects: [],
     languages: [],
+    layout: defaultSectionLayout(),
     ...overrides,
   };
 }
 
 function suggestion(overrides: Partial<CvSuggestion> = {}): CvSuggestion {
   return {
-    section: 'summary',
-    type: 'improvement',
-    message: 'Tighten the summary.',
+    section: "summary",
+    type: "improvement",
+    message: "Tighten the summary.",
     originalText: null,
-    suggestedText: 'A sharper summary.',
+    suggestedText: "A sharper summary.",
     ...overrides,
   };
 }
 
-describe('resolveSuggestionTarget', () => {
-  it('returns null when there is no suggested text', () => {
+describe("resolveSuggestionTarget", () => {
+  it("returns null when there is no suggested text", () => {
     expect(
       resolveSuggestionTarget(buildDoc(), suggestion({ suggestedText: null }))
     ).toBeNull();
     expect(
-      resolveSuggestionTarget(buildDoc(), suggestion({ suggestedText: '   ' }))
+      resolveSuggestionTarget(buildDoc(), suggestion({ suggestedText: "   " }))
     ).toBeNull();
   });
 
-  it('targets the summary for summary/profile sections', () => {
+  it("targets the summary for summary/profile sections", () => {
     expect(
-      resolveSuggestionTarget(buildDoc(), suggestion({ section: 'Summary' }))
-    ).toEqual({ kind: 'summary' });
+      resolveSuggestionTarget(buildDoc(), suggestion({ section: "Summary" }))
+    ).toEqual({ kind: "summary" });
     expect(
       resolveSuggestionTarget(
         buildDoc(),
-        suggestion({ section: 'Professional Profile' })
+        suggestion({ section: "Professional Profile" })
       )
-    ).toEqual({ kind: 'summary' });
+    ).toEqual({ kind: "summary" });
   });
 
-  it('matches an experience description by its original text', () => {
+  it("matches an experience description by its original text", () => {
     const doc = buildDoc({
       experiences: [
         {
-          id: 'exp_1',
-          company: 'A',
-          title: 'Engineer',
+          id: "exp_1",
+          company: "A",
+          title: "Engineer",
           location: null,
-          startDate: new Date('2024-01-01T00:00:00.000Z'),
+          startDate: new Date("2024-01-01T00:00:00.000Z"),
           endDate: null,
           current: false,
-          description: 'Led   the\nplatform migration.',
+          description: "Led   the\nplatform migration.",
           sortOrder: 0,
         },
       ],
@@ -70,29 +72,29 @@ describe('resolveSuggestionTarget', () => {
     const target = resolveSuggestionTarget(
       doc,
       suggestion({
-        section: 'experience',
-        type: 'improvement',
+        section: "experience",
+        type: "improvement",
         // Whitespace differs from the stored value — normalization must still match.
-        originalText: 'Led the platform migration.',
-        suggestedText: 'Drove a zero-downtime platform migration for 2M users.',
+        originalText: "Led the platform migration.",
+        suggestedText: "Drove a zero-downtime platform migration for 2M users.",
       })
     );
 
     expect(target).toEqual({
-      kind: 'description',
-      section: 'experiences',
-      entryId: 'exp_1',
+      kind: "description",
+      section: "experiences",
+      entryId: "exp_1",
     });
   });
 
-  it('matches a project description across sections', () => {
+  it("matches a project description across sections", () => {
     const doc = buildDoc({
       projects: [
         {
-          id: 'proj_1',
-          name: 'Atlas',
+          id: "proj_1",
+          name: "Atlas",
           url: null,
-          description: 'A mapping toolkit.',
+          description: "A mapping toolkit.",
           startDate: null,
           endDate: null,
           sortOrder: 0,
@@ -103,31 +105,31 @@ describe('resolveSuggestionTarget', () => {
     const target = resolveSuggestionTarget(
       doc,
       suggestion({
-        section: 'projects',
-        originalText: 'A mapping toolkit.',
-        suggestedText: 'An open-source geospatial mapping toolkit.',
+        section: "projects",
+        originalText: "A mapping toolkit.",
+        suggestedText: "An open-source geospatial mapping toolkit.",
       })
     );
 
     expect(target).toEqual({
-      kind: 'description',
-      section: 'projects',
-      entryId: 'proj_1',
+      kind: "description",
+      section: "projects",
+      entryId: "proj_1",
     });
   });
 
-  it('returns null for a description suggestion with no matching entry', () => {
+  it("returns null for a description suggestion with no matching entry", () => {
     const doc = buildDoc({
       experiences: [
         {
-          id: 'exp_1',
-          company: 'A',
-          title: 'Engineer',
+          id: "exp_1",
+          company: "A",
+          title: "Engineer",
           location: null,
-          startDate: new Date('2024-01-01T00:00:00.000Z'),
+          startDate: new Date("2024-01-01T00:00:00.000Z"),
           endDate: null,
           current: false,
-          description: 'Built internal tools.',
+          description: "Built internal tools.",
           sortOrder: 0,
         },
       ],
@@ -137,19 +139,19 @@ describe('resolveSuggestionTarget', () => {
       resolveSuggestionTarget(
         doc,
         suggestion({
-          section: 'experience',
-          originalText: 'Something the AI hallucinated.',
-          suggestedText: 'A rewrite.',
+          section: "experience",
+          originalText: "Something the AI hallucinated.",
+          suggestedText: "A rewrite.",
         })
       )
     ).toBeNull();
   });
 
-  it('returns null for a non-summary suggestion lacking original text', () => {
+  it("returns null for a non-summary suggestion lacking original text", () => {
     expect(
       resolveSuggestionTarget(
         buildDoc(),
-        suggestion({ section: 'experience', originalText: null })
+        suggestion({ section: "experience", originalText: null })
       )
     ).toBeNull();
   });

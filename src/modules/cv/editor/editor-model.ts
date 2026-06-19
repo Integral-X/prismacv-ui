@@ -7,7 +7,7 @@ import type {
   PersonalInfo,
   Project,
   Skill,
-} from '@/modules/cv/data/mappers';
+} from "@/modules/cv/data/mappers";
 import type {
   CertificationItemRequest,
   EducationItemRequest,
@@ -17,8 +17,13 @@ import type {
   ProjectItemRequest,
   SkillItemRequest,
   SkillLevelContract,
+  UpsertLayoutRequest,
   UpsertPersonalInfoRequest,
-} from '@/modules/cv/data/contracts';
+} from "@/modules/cv/data/contracts";
+import {
+  reconcileSectionLayout,
+  type EditorSectionLayout,
+} from "./section-layout";
 
 /**
  * The editor document model — a form-draft view of a CV held in the editor
@@ -29,22 +34,24 @@ import type {
  */
 
 export type SectionKey =
-  | 'personalInfo'
-  | 'experiences'
-  | 'education'
-  | 'skills'
-  | 'certifications'
-  | 'projects'
-  | 'languages';
+  | "personalInfo"
+  | "experiences"
+  | "education"
+  | "skills"
+  | "certifications"
+  | "projects"
+  | "languages"
+  | "layout";
 
 export const SECTION_KEYS: readonly SectionKey[] = [
-  'personalInfo',
-  'experiences',
-  'education',
-  'skills',
-  'certifications',
-  'projects',
-  'languages',
+  "personalInfo",
+  "experiences",
+  "education",
+  "skills",
+  "certifications",
+  "projects",
+  "languages",
+  "layout",
 ];
 
 export interface EditorDocument {
@@ -57,34 +64,35 @@ export interface EditorDocument {
   certifications: Certification[];
   projects: Project[];
   languages: Language[];
+  layout: EditorSectionLayout;
 }
 
 /** Editable scalar fields of personal info (everything except the id). */
-export type PersonalInfoField = Exclude<keyof PersonalInfo, 'id'>;
+export type PersonalInfoField = Exclude<keyof PersonalInfo, "id">;
 
 /** Plain-text editable fields of an experience entry. */
 export type ExperienceTextField =
-  | 'company'
-  | 'title'
-  | 'location'
-  | 'description';
+  | "company"
+  | "title"
+  | "location"
+  | "description";
 
 /** Plain-text editable fields of an education entry. */
 export type EducationTextField =
-  | 'institution'
-  | 'degree'
-  | 'field'
-  | 'gpa'
-  | 'description';
+  | "institution"
+  | "degree"
+  | "field"
+  | "gpa"
+  | "description";
 
 /** Plain-text editable fields of a project entry. */
-export type ProjectTextField = 'name' | 'url' | 'description';
+export type ProjectTextField = "name" | "url" | "description";
 
 /** Plain-text editable fields of a certification entry. */
-export type CertificationTextField = 'name' | 'issuer' | 'credentialUrl';
+export type CertificationTextField = "name" | "issuer" | "credentialUrl";
 
 /** Plain-text editable fields of a skill entry. */
-export type SkillTextField = 'name' | 'category';
+export type SkillTextField = "name" | "category";
 
 export function toEditorDocument(cv: Cv): EditorDocument {
   return {
@@ -97,6 +105,7 @@ export function toEditorDocument(cv: Cv): EditorDocument {
     certifications: cv.certifications,
     projects: cv.projects,
     languages: cv.languages,
+    layout: reconcileSectionLayout(cv.layout),
   };
 }
 
@@ -116,12 +125,13 @@ export function toLiveCv(cv: Cv, doc: EditorDocument): Cv {
     certifications: doc.certifications,
     projects: doc.projects,
     languages: doc.languages,
+    layout: doc.layout,
   };
 }
 
 export function emptyPersonalInfo(): PersonalInfo {
   return {
-    id: '',
+    id: "",
     fullName: null,
     email: null,
     phone: null,
@@ -136,8 +146,8 @@ export function emptyPersonalInfo(): PersonalInfo {
 export function emptyExperience(id: string, sortOrder: number): Experience {
   return {
     id,
-    company: '',
-    title: '',
+    company: "",
+    title: "",
     location: null,
     startDate: new Date(),
     endDate: null,
@@ -150,8 +160,8 @@ export function emptyExperience(id: string, sortOrder: number): Experience {
 export function emptyEducation(id: string, sortOrder: number): Education {
   return {
     id,
-    institution: '',
-    degree: '',
+    institution: "",
+    degree: "",
     field: null,
     startDate: new Date(),
     endDate: null,
@@ -164,7 +174,7 @@ export function emptyEducation(id: string, sortOrder: number): Education {
 export function emptyProject(id: string, sortOrder: number): Project {
   return {
     id,
-    name: '',
+    name: "",
     description: null,
     url: null,
     startDate: null,
@@ -179,7 +189,7 @@ export function emptyCertification(
 ): Certification {
   return {
     id,
-    name: '',
+    name: "",
     issuer: null,
     issueDate: null,
     expiryDate: null,
@@ -189,11 +199,11 @@ export function emptyCertification(
 }
 
 export function emptySkill(id: string, sortOrder: number): Skill {
-  return { id, name: '', level: 'intermediate', category: null, sortOrder };
+  return { id, name: "", level: "intermediate", category: null, sortOrder };
 }
 
 export function emptyLanguage(id: string, sortOrder: number): Language {
-  return { id, name: '', proficiency: 'intermediate', sortOrder };
+  return { id, name: "", proficiency: "intermediate", sortOrder };
 }
 
 function nullToUndefined<T>(value: T | null): T | undefined {
@@ -316,4 +326,17 @@ export function toLanguageRequests(
     proficiency: entry.proficiency.toUpperCase() as LanguageProficiencyContract,
     sortOrder: index,
   }));
+}
+
+/** Denormalise the draft's layout into its PUT payload (full replace, arrays
+ *  copied so the store's state is never aliased into the request). */
+export function toLayoutRequest(
+  layout: EditorSectionLayout
+): UpsertLayoutRequest {
+  return {
+    mainOrder: [...layout.mainOrder],
+    sideOrder: [...layout.sideOrder],
+    hidden: [...layout.hidden],
+    titles: { ...layout.titles },
+  };
 }

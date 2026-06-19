@@ -1,12 +1,12 @@
-import 'server-only';
+import "server-only";
 
-import { apiClient, getApiClient } from '@/shared/http/api-client';
-import { HttpError } from '@/shared/http/http-error';
-import { executeAuthenticatedRequest } from '@/shared/auth/execute-authenticated-request';
+import { apiClient, getApiClient } from "@/shared/http/api-client";
+import { HttpError } from "@/shared/http/http-error";
+import { executeAuthenticatedRequest } from "@/shared/auth/execute-authenticated-request";
 
 export function assertSafeCvId(cvId: string): void {
   if (!/^[A-Za-z0-9_-]{1,128}$/.test(cvId)) {
-    throw new HttpError(400, 'Bad Request', 'Invalid CV id');
+    throw new HttpError(400, "Bad Request", "Invalid CV id");
   }
 }
 import type {
@@ -38,10 +38,12 @@ import type {
   ShareCvRequest,
   SkillItemRequest,
   SkillResponseContract,
+  SectionLayoutContract,
   UpdateCvRequest,
+  UpsertLayoutRequest,
   UpsertPersonalInfoRequest,
   CvShareResponseContract,
-} from './contracts';
+} from "./contracts";
 import {
   toCertification,
   toCv,
@@ -52,6 +54,7 @@ import {
   toLanguage,
   toPersonalInfo,
   toProject,
+  toSectionLayout,
   toSkill,
   type Certification,
   type CustomSection,
@@ -62,15 +65,16 @@ import {
   type Language,
   type PersonalInfo,
   type Project,
+  type SectionLayout,
   type Skill,
-} from './mappers';
+} from "./mappers";
 
 // ─── CV mutations ─────────────────────────────────────────────────────────────
 
 export async function createCv(body: CreateCvRequest): Promise<Cv> {
   return executeAuthenticatedRequest(async (headers) => {
     const contract = await apiClient.post<CvResponseContract, CreateCvRequest>(
-      'cv',
+      "cv",
       body,
       { headers }
     );
@@ -222,6 +226,21 @@ export async function updateCustomSections(
   });
 }
 
+export async function updateCvLayout(
+  cvId: string,
+  body: UpsertLayoutRequest
+): Promise<SectionLayout> {
+  assertSafeCvId(cvId);
+  return executeAuthenticatedRequest(async (headers) => {
+    const contract = await apiClient.put<
+      SectionLayoutContract,
+      UpsertLayoutRequest
+    >(`cv/${cvId}/layout`, body, { headers });
+
+    return toSectionLayout(contract);
+  });
+}
+
 // ─── Import / Export ──────────────────────────────────────────────────────────
 
 export async function importLinkedInProfile(
@@ -231,14 +250,14 @@ export async function importLinkedInProfile(
     const contract = await apiClient.post<
       LinkedInImportResponseContract,
       ImportLinkedInProfileRequest
-    >('oauth/linkedin/import', { handleOrUrl }, { headers });
+    >("oauth/linkedin/import", { handleOrUrl }, { headers });
 
     const importId = contract.source.importId;
     if (!importId) {
       throw new HttpError(
         500,
-        'Something went wrong. Please try again.',
-        'Import ID missing from response'
+        "Something went wrong. Please try again.",
+        "Import ID missing from response"
       );
     }
     return { importId };
@@ -252,7 +271,7 @@ export async function importLinkedInToCv(
     const contract = await apiClient.post<
       CvResponseContract,
       ImportLinkedInToCvRequest
-    >('cv/import/linkedin', body, { headers });
+    >("cv/import/linkedin", body, { headers });
 
     return toCv(contract);
   });
@@ -261,9 +280,9 @@ export async function importLinkedInToCv(
 export async function importCvFromFile(file: File): Promise<Cv> {
   return executeAuthenticatedRequest(async (headers) => {
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
     const contract = await getApiClient().postFormData<CvResponseContract>(
-      'cv/import/file',
+      "cv/import/file",
       formData,
       { headers }
     );
@@ -277,7 +296,7 @@ export async function exportCvPdf(cvId: string): Promise<Blob> {
 
   return executeAuthenticatedRequest(async (headers) => {
     return apiClient.getBlob(`cv/${safeCvId}/export/pdf`, {
-      headers: { ...headers, Accept: 'application/pdf' },
+      headers: { ...headers, Accept: "application/pdf" },
     });
   });
 }

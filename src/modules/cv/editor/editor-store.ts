@@ -1,4 +1,4 @@
-import { createStore } from 'zustand/vanilla';
+import { createStore } from "zustand/vanilla";
 import type {
   Certification,
   Cv,
@@ -9,7 +9,7 @@ import type {
   PersonalInfo,
   Project,
   Skill,
-} from '@/modules/cv/data/mappers';
+} from "@/modules/cv/data/mappers";
 import {
   emptyCertification,
   emptyEducation,
@@ -28,7 +28,13 @@ import {
   type ProjectTextField,
   type SectionKey,
   type SkillTextField,
-} from './editor-model';
+} from "./editor-model";
+import {
+  DEFAULT_MAIN_ORDER,
+  SECTION_TITLES,
+  type EditorSectionLayout,
+  type LayoutSectionKey,
+} from "./section-layout";
 
 /**
  * Per-section save lifecycle. Blind last-write-wins for v1 (no version guard,
@@ -36,7 +42,7 @@ import {
  * moment it is edited, `saving` while its PUT is in flight, `saved` on success,
  * and `failed` when retries are exhausted or auth expired.
  */
-export type SaveState = 'saved' | 'saving' | 'unsaved' | 'failed';
+export type SaveState = "saved" | "saving" | "unsaved" | "failed";
 
 export interface EditorState {
   doc: EditorDocument;
@@ -116,6 +122,21 @@ export interface EditorState {
   reorderCertifications: (from: number, to: number) => void;
   reorderLanguages: (from: number, to: number) => void;
 
+  /** Reorder a section within one layout column (drag-and-drop). */
+  reorderLayoutColumn: (
+    column: "main" | "side",
+    from: number,
+    to: number
+  ) => void;
+  /** Remove a section from its column and move it to the hidden tray. */
+  hideLayoutSection: (key: LayoutSectionKey) => void;
+  /** Restore a hidden section to the end of its default column. */
+  showLayoutSection: (key: LayoutSectionKey) => void;
+  /** Override a section heading; clearing or matching the default removes it. */
+  setSectionTitle: (key: LayoutSectionKey, value: string) => void;
+  /** Reconcile the layout from an authoritative result. */
+  applyLayout: (layout: EditorSectionLayout) => void;
+
   markSaving: (section: SectionKey) => void;
   markSaved: (section: SectionKey) => void;
   markUnsaved: (section: SectionKey) => void;
@@ -124,7 +145,7 @@ export interface EditorState {
 
 function initialSaveState(): Record<SectionKey, SaveState> {
   return Object.fromEntries(
-    SECTION_KEYS.map((section) => [section, 'saved'])
+    SECTION_KEYS.map((section) => [section, "saved"])
   ) as Record<SectionKey, SaveState>;
 }
 
@@ -138,13 +159,13 @@ function nextLocalExperienceId(): string {
 function withExperiences(
   state: EditorState,
   experiences: Experience[]
-): Pick<EditorState, 'doc' | 'dirtySections' | 'sectionSave'> {
+): Pick<EditorState, "doc" | "dirtySections" | "sectionSave"> {
   const dirtySections = new Set(state.dirtySections);
-  dirtySections.add('experiences');
+  dirtySections.add("experiences");
   return {
     doc: { ...state.doc, experiences },
     dirtySections,
-    sectionSave: { ...state.sectionSave, experiences: 'unsaved' },
+    sectionSave: { ...state.sectionSave, experiences: "unsaved" },
   };
 }
 
@@ -170,13 +191,13 @@ function nextLocalEducationId(): string {
 function withEducation(
   state: EditorState,
   education: Education[]
-): Pick<EditorState, 'doc' | 'dirtySections' | 'sectionSave'> {
+): Pick<EditorState, "doc" | "dirtySections" | "sectionSave"> {
   const dirtySections = new Set(state.dirtySections);
-  dirtySections.add('education');
+  dirtySections.add("education");
   return {
     doc: { ...state.doc, education },
     dirtySections,
-    sectionSave: { ...state.sectionSave, education: 'unsaved' },
+    sectionSave: { ...state.sectionSave, education: "unsaved" },
   };
 }
 
@@ -194,12 +215,12 @@ function mapEducation(
 }
 
 type ListSectionKey =
-  | 'experiences'
-  | 'education'
-  | 'projects'
-  | 'certifications'
-  | 'skills'
-  | 'languages';
+  | "experiences"
+  | "education"
+  | "projects"
+  | "certifications"
+  | "skills"
+  | "languages";
 
 let localEntryCount = 0;
 function nextLocalId(prefix: string): string {
@@ -212,13 +233,13 @@ function withList<K extends ListSectionKey>(
   state: EditorState,
   section: K,
   items: EditorDocument[K]
-): Pick<EditorState, 'doc' | 'dirtySections' | 'sectionSave'> {
+): Pick<EditorState, "doc" | "dirtySections" | "sectionSave"> {
   const dirtySections = new Set(state.dirtySections);
   dirtySections.add(section);
   return {
     doc: { ...state.doc, [section]: items },
     dirtySections,
-    sectionSave: { ...state.sectionSave, [section]: 'unsaved' },
+    sectionSave: { ...state.sectionSave, [section]: "unsaved" },
   };
 }
 
@@ -239,6 +260,20 @@ function moveItem<T>(items: readonly T[], from: number, to: number): T[] {
   return next;
 }
 
+/** Replace the layout blob, marking the layout section dirty + unsaved. */
+function withLayout(
+  state: EditorState,
+  layout: EditorSectionLayout
+): Pick<EditorState, "doc" | "dirtySections" | "sectionSave"> {
+  const dirtySections = new Set(state.dirtySections);
+  dirtySections.add("layout");
+  return {
+    doc: { ...state.doc, layout },
+    dirtySections,
+    sectionSave: { ...state.sectionSave, layout: "unsaved" },
+  };
+}
+
 export type EditorStore = ReturnType<typeof createEditorStore>;
 
 /**
@@ -257,11 +292,11 @@ export function createEditorStore(cv: Cv) {
         const base = state.doc.personalInfo ?? emptyPersonalInfo();
         const nextInfo: PersonalInfo = { ...base, [field]: value };
         const dirtySections = new Set(state.dirtySections);
-        dirtySections.add('personalInfo');
+        dirtySections.add("personalInfo");
         return {
           doc: { ...state.doc, personalInfo: nextInfo },
           dirtySections,
-          sectionSave: { ...state.sectionSave, personalInfo: 'unsaved' },
+          sectionSave: { ...state.sectionSave, personalInfo: "unsaved" },
         };
       }),
 
@@ -366,7 +401,7 @@ export function createEditorStore(cv: Cv) {
       set((state) =>
         withList(
           state,
-          'projects',
+          "projects",
           mapById(state.doc.projects, entryId, (entry) => ({
             ...entry,
             [field]: value,
@@ -377,7 +412,7 @@ export function createEditorStore(cv: Cv) {
       set((state) =>
         withList(
           state,
-          'projects',
+          "projects",
           mapById(state.doc.projects, entryId, (entry) => ({
             ...entry,
             startDate: value,
@@ -388,7 +423,7 @@ export function createEditorStore(cv: Cv) {
       set((state) =>
         withList(
           state,
-          'projects',
+          "projects",
           mapById(state.doc.projects, entryId, (entry) => ({
             ...entry,
             endDate: value,
@@ -397,16 +432,16 @@ export function createEditorStore(cv: Cv) {
       ),
     addProject: () =>
       set((state) =>
-        withList(state, 'projects', [
+        withList(state, "projects", [
           ...state.doc.projects,
-          emptyProject(nextLocalId('project'), state.doc.projects.length),
+          emptyProject(nextLocalId("project"), state.doc.projects.length),
         ])
       ),
     removeProject: (entryId) =>
       set((state) =>
         withList(
           state,
-          'projects',
+          "projects",
           state.doc.projects.filter((entry) => entry.id !== entryId)
         )
       ),
@@ -417,7 +452,7 @@ export function createEditorStore(cv: Cv) {
       set((state) =>
         withList(
           state,
-          'certifications',
+          "certifications",
           mapById(state.doc.certifications, entryId, (entry) => ({
             ...entry,
             [field]: value,
@@ -428,7 +463,7 @@ export function createEditorStore(cv: Cv) {
       set((state) =>
         withList(
           state,
-          'certifications',
+          "certifications",
           mapById(state.doc.certifications, entryId, (entry) => ({
             ...entry,
             issueDate: value,
@@ -439,7 +474,7 @@ export function createEditorStore(cv: Cv) {
       set((state) =>
         withList(
           state,
-          'certifications',
+          "certifications",
           mapById(state.doc.certifications, entryId, (entry) => ({
             ...entry,
             expiryDate: value,
@@ -448,10 +483,10 @@ export function createEditorStore(cv: Cv) {
       ),
     addCertification: () =>
       set((state) =>
-        withList(state, 'certifications', [
+        withList(state, "certifications", [
           ...state.doc.certifications,
           emptyCertification(
-            nextLocalId('certification'),
+            nextLocalId("certification"),
             state.doc.certifications.length
           ),
         ])
@@ -460,7 +495,7 @@ export function createEditorStore(cv: Cv) {
       set((state) =>
         withList(
           state,
-          'certifications',
+          "certifications",
           state.doc.certifications.filter((entry) => entry.id !== entryId)
         )
       ),
@@ -471,7 +506,7 @@ export function createEditorStore(cv: Cv) {
       set((state) =>
         withList(
           state,
-          'skills',
+          "skills",
           mapById(state.doc.skills, entryId, (entry) => ({
             ...entry,
             [field]: value,
@@ -480,10 +515,10 @@ export function createEditorStore(cv: Cv) {
       ),
     addSkill: (category) =>
       set((state) =>
-        withList(state, 'skills', [
+        withList(state, "skills", [
           ...state.doc.skills,
           {
-            ...emptySkill(nextLocalId('skill'), state.doc.skills.length),
+            ...emptySkill(nextLocalId("skill"), state.doc.skills.length),
             category: category ?? null,
           },
         ])
@@ -492,7 +527,7 @@ export function createEditorStore(cv: Cv) {
       set((state) =>
         withList(
           state,
-          'skills',
+          "skills",
           state.doc.skills.filter((entry) => entry.id !== entryId)
         )
       ),
@@ -503,7 +538,7 @@ export function createEditorStore(cv: Cv) {
       set((state) =>
         withList(
           state,
-          'languages',
+          "languages",
           mapById(state.doc.languages, entryId, (entry) => ({
             ...entry,
             name: value,
@@ -514,7 +549,7 @@ export function createEditorStore(cv: Cv) {
       set((state) =>
         withList(
           state,
-          'languages',
+          "languages",
           mapById(state.doc.languages, entryId, (entry) => ({
             ...entry,
             proficiency: value,
@@ -523,16 +558,16 @@ export function createEditorStore(cv: Cv) {
       ),
     addLanguage: () =>
       set((state) =>
-        withList(state, 'languages', [
+        withList(state, "languages", [
           ...state.doc.languages,
-          emptyLanguage(nextLocalId('language'), state.doc.languages.length),
+          emptyLanguage(nextLocalId("language"), state.doc.languages.length),
         ])
       ),
     removeLanguage: (entryId) =>
       set((state) =>
         withList(
           state,
-          'languages',
+          "languages",
           state.doc.languages.filter((entry) => entry.id !== entryId)
         )
       ),
@@ -549,24 +584,72 @@ export function createEditorStore(cv: Cv) {
       ),
     reorderProjects: (from, to) =>
       set((state) =>
-        withList(state, 'projects', moveItem(state.doc.projects, from, to))
+        withList(state, "projects", moveItem(state.doc.projects, from, to))
       ),
     reorderCertifications: (from, to) =>
       set((state) =>
         withList(
           state,
-          'certifications',
+          "certifications",
           moveItem(state.doc.certifications, from, to)
         )
       ),
     reorderLanguages: (from, to) =>
       set((state) =>
-        withList(state, 'languages', moveItem(state.doc.languages, from, to))
+        withList(state, "languages", moveItem(state.doc.languages, from, to))
       ),
+
+    reorderLayoutColumn: (column, from, to) =>
+      set((state) => {
+        const layout = state.doc.layout;
+        const field = column === "main" ? "mainOrder" : "sideOrder";
+        return withLayout(state, {
+          ...layout,
+          [field]: moveItem(layout[field], from, to),
+        });
+      }),
+
+    hideLayoutSection: (key) =>
+      set((state) => {
+        const layout = state.doc.layout;
+        if (layout.hidden.includes(key)) return {};
+        return withLayout(state, {
+          ...layout,
+          mainOrder: layout.mainOrder.filter((k) => k !== key),
+          sideOrder: layout.sideOrder.filter((k) => k !== key),
+          hidden: [...layout.hidden, key],
+        });
+      }),
+
+    showLayoutSection: (key) =>
+      set((state) => {
+        const layout = state.doc.layout;
+        if (!layout.hidden.includes(key)) return {};
+        const toMain = DEFAULT_MAIN_ORDER.includes(key);
+        return withLayout(state, {
+          ...layout,
+          hidden: layout.hidden.filter((k) => k !== key),
+          mainOrder: toMain ? [...layout.mainOrder, key] : layout.mainOrder,
+          sideOrder: toMain ? layout.sideOrder : [...layout.sideOrder, key],
+        });
+      }),
+
+    setSectionTitle: (key, value) =>
+      set((state) => {
+        const layout = state.doc.layout;
+        const titles = { ...layout.titles };
+        const trimmed = value.trim();
+        if (!trimmed || trimmed === SECTION_TITLES[key]) delete titles[key];
+        else titles[key] = trimmed;
+        return withLayout(state, { ...layout, titles });
+      }),
+
+    applyLayout: (layout) =>
+      set((state) => ({ doc: { ...state.doc, layout } })),
 
     markSaving: (section) =>
       set((state) => ({
-        sectionSave: { ...state.sectionSave, [section]: 'saving' },
+        sectionSave: { ...state.sectionSave, [section]: "saving" },
       })),
 
     markSaved: (section) =>
@@ -575,18 +658,18 @@ export function createEditorStore(cv: Cv) {
         dirtySections.delete(section);
         return {
           dirtySections,
-          sectionSave: { ...state.sectionSave, [section]: 'saved' },
+          sectionSave: { ...state.sectionSave, [section]: "saved" },
         };
       }),
 
     markUnsaved: (section) =>
       set((state) => ({
-        sectionSave: { ...state.sectionSave, [section]: 'unsaved' },
+        sectionSave: { ...state.sectionSave, [section]: "unsaved" },
       })),
 
     markFailed: (section) =>
       set((state) => ({
-        sectionSave: { ...state.sectionSave, [section]: 'failed' },
+        sectionSave: { ...state.sectionSave, [section]: "failed" },
       })),
   }));
 }
