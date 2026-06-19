@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { cn } from '@/lib/utils';
-import { FieldText } from './field-text';
+import { useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
+import { FieldText } from "./field-text";
 
-type InlineEditableTextTag = 'h1' | 'h2' | 'p' | 'span' | 'div';
+type InlineEditableTextTag = "h1" | "h2" | "p" | "span" | "div";
 
 export interface InlineEditableTextProps {
   value: string;
@@ -29,7 +29,7 @@ export function InlineEditableText({
   onChange,
   ariaLabel,
   placeholder,
-  as = 'span',
+  as = "span",
   className,
   multiline = false,
 }: InlineEditableTextProps) {
@@ -58,11 +58,11 @@ export function InlineEditableText({
         as={as}
         value={value}
         placeholder={placeholder}
-        role='button'
+        role="button"
         tabIndex={0}
         aria-label={ariaLabel}
         className={cn(
-          'cursor-text rounded-sm hover:bg-surface-elevated/60',
+          "cursor-text rounded-sm transition duration-150 hover:bg-primary/5 hover:ring-1 hover:ring-primary/30 focus-visible:bg-primary/5 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/30",
           className
         )}
         onClick={() => setIsEditing(true)}
@@ -74,7 +74,7 @@ export function InlineEditableText({
   // Transparent fill keeps the inherited text colour readable on any surface;
   // the ring is the edit affordance (mirrors the shadcn Input focus style).
   const editingClassName = cn(
-    'w-full rounded-sm bg-transparent outline-none ring-2 ring-ring/50 [field-sizing:content]',
+    "w-full rounded-sm bg-transparent outline-none ring-2 ring-ring/50 transition duration-150 [field-sizing:content]",
     className
   );
 
@@ -85,7 +85,7 @@ export function InlineEditableText({
         aria-label={ariaLabel}
         value={value}
         placeholder={placeholder}
-        className={cn('resize-none', editingClassName)}
+        className={cn("resize-none", editingClassName)}
         onChange={(event) => onChange(event.target.value)}
         onBlur={() => setIsEditing(false)}
       />
@@ -102,7 +102,7 @@ export function InlineEditableText({
       onChange={(event) => onChange(event.target.value)}
       onBlur={() => setIsEditing(false)}
       onKeyDown={(event) => {
-        if (event.key === 'Enter') setIsEditing(false);
+        if (event.key === "Enter") setIsEditing(false);
       }}
     />
   );

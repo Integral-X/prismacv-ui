@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Plus, X } from 'lucide-react';
+import { useState } from "react";
+import { Plus, X } from "lucide-react";
 import {
   useSkillActions,
   useSkillField,
   useSkills,
-} from '@/modules/cv/editor/editor-provider';
-import type { Skill } from '@/modules/cv/data/mappers';
-import { groupSkillsByCategory } from '@/modules/cv/components/templates/resume-sections';
-import { InlineEditableText } from './inline-editable-text';
+} from "@/modules/cv/editor/editor-provider";
+import type { Skill } from "@/modules/cv/data/mappers";
+import { groupSkillsByCategory } from "@/modules/cv/components/templates/resume-sections";
+import { InlineEditableText } from "./inline-editable-text";
 
 /**
  * Inline editor for skills, rendered on the document in edit mode. Mirrors the
@@ -22,12 +22,12 @@ export function EditableSkillList({ accentColor }: { accentColor: string }) {
   const groups = groupSkillsByCategory(skills);
 
   return (
-    <div className='space-y-3'>
+    <div className="space-y-3">
       {groups.map(([category, items]) => (
         <SkillGroupEditor
           // Re-key on the category so a committed rename remounts the group
           // (and its label editor) onto the regrouped skills.
-          key={category ?? '__uncategorized__'}
+          key={category ?? "__uncategorized__"}
           category={category}
           skills={items}
           accentColor={accentColor}
@@ -35,11 +35,11 @@ export function EditableSkillList({ accentColor }: { accentColor: string }) {
       ))}
 
       <button
-        type='button'
+        type="button"
         onClick={() => addSkill(null)}
-        className='flex cursor-pointer items-center gap-1.5 text-xs font-medium text-interactive-link hover:underline'
+        className="mt-2 inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-dashed border-primary/40 px-3 py-1 text-xs font-medium text-primary transition duration-150 hover:border-primary hover:bg-primary/5 active:scale-[0.98]"
       >
-        <Plus className='size-3.5' />
+        <Plus className="size-3.5" />
         Add skill
       </button>
     </div>
@@ -65,17 +65,17 @@ function SkillGroupEditor({
         accentColor={accentColor}
         onCommit={(value) => renameCategory(entryIds, value)}
       />
-      <div className='flex flex-wrap items-center gap-1.5'>
+      <div className="flex flex-wrap items-center gap-1.5">
         {skills.map((skill) => (
           <SkillChip key={skill.id} skill={skill} />
         ))}
         <button
-          type='button'
+          type="button"
           onClick={() => addSkill(category)}
-          aria-label='Add skill to this category'
-          className='flex cursor-pointer items-center rounded border border-dashed border-subtle px-1.5 py-0.5 text-content-tertiary hover:text-content-secondary'
+          aria-label="Add skill to this category"
+          className="flex cursor-pointer items-center rounded border border-dashed border-subtle px-1.5 py-0.5 text-content-tertiary transition-all duration-150 hover:border-primary/40 hover:text-content-secondary active:scale-90"
         >
-          <Plus className='size-3' />
+          <Plus className="size-3" />
         </button>
       </div>
     </div>
@@ -87,25 +87,25 @@ function SkillGroupEditor({
  * reveal the remove control. Styling tracks the read-only chip in `SkillGroups`.
  */
 function SkillChip({ skill }: { skill: Skill }) {
-  const { value, setValue } = useSkillField(skill.id, 'name');
+  const { value, setValue } = useSkillField(skill.id, "name");
   const { removeSkill } = useSkillActions();
 
   return (
-    <span className='group/chip inline-flex items-center gap-1 rounded border border-subtle px-2 py-0.5 text-xs text-content-secondary'>
+    <span className="group/chip inline-flex items-center gap-1 rounded border border-subtle px-2 py-0.5 text-xs text-content-secondary transition-colors duration-150 hover:border-primary/30">
       <InlineEditableText
         value={value}
         onChange={setValue}
-        ariaLabel='Skill name'
-        placeholder='Skill'
-        className='text-xs'
+        ariaLabel="Skill name"
+        placeholder="Skill"
+        className="text-xs"
       />
       <button
-        type='button'
+        type="button"
         onClick={() => removeSkill(skill.id)}
-        aria-label='Remove skill'
-        className='shrink-0 cursor-pointer text-content-tertiary opacity-0 transition-opacity hover:text-feedback-error group-hover/chip:opacity-100'
+        aria-label="Remove skill"
+        className="shrink-0 cursor-pointer text-content-tertiary opacity-0 transition-all duration-150 hover:scale-110 hover:text-feedback-error active:scale-90 group-hover/chip:opacity-100"
       >
-        <X className='size-3' />
+        <X className="size-3" />
       </button>
     </span>
   );
@@ -126,18 +126,18 @@ function CategoryLabelEditor({
   accentColor: string;
   onCommit: (value: string) => void;
 }) {
-  const [draft, setDraft] = useState(category ?? '');
+  const [draft, setDraft] = useState(category ?? "");
 
   return (
     <input
       value={draft}
       onChange={(event) => setDraft(event.target.value)}
       onBlur={() => {
-        if (draft.trim() !== (category ?? '')) onCommit(draft);
+        if (draft.trim() !== (category ?? "")) onCommit(draft);
       }}
-      placeholder='Category'
-      aria-label='Skill category'
-      className='mb-1.5 w-full bg-transparent text-xs font-semibold outline-none placeholder:font-normal placeholder:text-content-tertiary'
+      placeholder="Category"
+      aria-label="Skill category"
+      className="mb-1.5 w-full rounded-sm bg-transparent text-xs font-semibold outline-none transition duration-150 placeholder:font-normal placeholder:text-content-tertiary focus:bg-primary/5 focus:px-1 focus:ring-1 focus:ring-primary/20"
       style={{ color: accentColor }}
     />
   );

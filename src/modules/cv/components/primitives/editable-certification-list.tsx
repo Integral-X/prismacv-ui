@@ -1,20 +1,16 @@
-'use client';
+"use client";
 
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2 } from "lucide-react";
 import {
   useCertificationActions,
   useCertificationField,
   useCertifications,
-} from '@/modules/cv/editor/editor-provider';
-import type { CertificationTextField } from '@/modules/cv/editor/editor-model';
-import type { Certification } from '@/modules/cv/data/mappers';
-import { InlineEditableText } from './inline-editable-text';
-import {
-  DATE_INPUT_CLASS,
-  fromDateInputValue,
-  toDateInputValue,
-} from './date-input';
-import { SortableEntryList } from './sortable-entry-list';
+} from "@/modules/cv/editor/editor-provider";
+import type { CertificationTextField } from "@/modules/cv/editor/editor-model";
+import type { Certification } from "@/modules/cv/data/mappers";
+import { InlineEditableText } from "./inline-editable-text";
+import { MonthYearInput } from "./month-year-input";
+import { SortableEntryList } from "./sortable-entry-list";
 
 interface CertificationFieldProps {
   entryId: string;
@@ -47,7 +43,7 @@ export function EditableCertificationList({
       <SortableEntryList
         items={certifications}
         onReorder={reorder}
-        className='space-y-2'
+        className="space-y-2"
         renderItem={(certification) => (
           <CertificationEditor
             certification={certification}
@@ -57,11 +53,11 @@ export function EditableCertificationList({
       />
 
       <button
-        type='button'
+        type="button"
         onClick={addCertification}
-        className='mt-2 flex cursor-pointer items-center gap-1.5 text-xs font-medium text-interactive-link hover:underline'
+        className="mt-2 inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-dashed border-primary/40 px-3 py-1 text-xs font-medium text-primary transition duration-150 hover:border-primary hover:bg-primary/5 active:scale-[0.98]"
       >
-        <Plus className='size-3.5' />
+        <Plus className="size-3.5" />
         Add certification
       </button>
     </div>
@@ -78,47 +74,40 @@ function CertificationEditor({
   const { removeCertification, setIssueDate } = useCertificationActions();
 
   return (
-    <div className='group'>
-      <div className='flex items-baseline justify-between gap-2'>
+    <div className="group">
+      <div className="flex items-baseline justify-between gap-2">
         <CertificationField
           entryId={certification.id}
-          field='name'
-          ariaLabel='Certification name'
-          placeholder='Certification name'
-          className='text-xs font-semibold text-content-primary'
+          field="name"
+          ariaLabel="Certification name"
+          placeholder="Certification name"
+          className="text-xs font-semibold text-content-primary"
         />
         <button
-          type='button'
+          type="button"
           onClick={() => removeCertification(certification.id)}
-          aria-label='Remove certification'
-          className='shrink-0 cursor-pointer text-content-tertiary opacity-0 transition-opacity hover:text-feedback-error group-hover:opacity-100'
+          aria-label="Remove certification"
+          className="shrink-0 cursor-pointer text-content-tertiary opacity-0 transition-all duration-150 hover:scale-110 hover:text-feedback-error active:scale-90 group-hover:opacity-100"
         >
-          <Trash2 className='size-3.5' />
+          <Trash2 className="size-3.5" />
         </button>
       </div>
 
       <span style={{ color: accentColor }}>
         <CertificationField
           entryId={certification.id}
-          field='issuer'
-          ariaLabel='Issuer'
-          placeholder='Issuer'
-          className='text-xs'
+          field="issuer"
+          ariaLabel="Issuer"
+          placeholder="Issuer"
+          className="text-xs"
         />
       </span>
 
-      <div className='mt-1'>
-        <input
-          type='date'
-          aria-label='Issue date'
-          value={toDateInputValue(certification.issueDate)}
-          onChange={(event) =>
-            setIssueDate(
-              certification.id,
-              fromDateInputValue(event.target.value)
-            )
-          }
-          className={DATE_INPUT_CLASS}
+      <div className="mt-1">
+        <MonthYearInput
+          value={certification.issueDate}
+          onChange={(next) => setIssueDate(certification.id, next)}
+          aria-label="Issue date"
         />
       </div>
     </div>

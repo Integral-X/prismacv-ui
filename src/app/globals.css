@@ -1,6 +1,6 @@
-@import 'tailwindcss';
-@import 'tw-animate-css';
-@import '../design-system/tokens.css';
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "../design-system/tokens.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -184,7 +184,7 @@ html {
 
 /* Hero section background gradient */
 body::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 50%;
@@ -265,5 +265,19 @@ body {
       background: color-mix(in oklab, var(--color-primary) 30%, transparent);
       right: 100px;
     }
+  }
+}
+
+/* Respect users who opt out of motion: collapse transitions and animations to
+   a near-instant duration so the editor's hover/focus micro-interactions don't
+   move for them, while still applying the final styled state. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

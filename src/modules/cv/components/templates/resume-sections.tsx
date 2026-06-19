@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 import {
   Globe,
   Linkedin,
@@ -6,7 +6,7 @@ import {
   MapPin,
   Phone,
   type LucideIcon,
-} from 'lucide-react';
+} from "lucide-react";
 import type {
   Certification,
   Education,
@@ -15,7 +15,7 @@ import type {
   PersonalInfo,
   Project,
   Skill,
-} from '@/modules/cv/data/mappers';
+} from "@/modules/cv/data/mappers";
 
 /**
  * Shared, display-only resume blocks in the Enhancv visual language (white
@@ -26,7 +26,7 @@ import type {
  */
 
 function formatDate(date: Date): string {
-  return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  return date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
 }
 
 export function formatDateRange(
@@ -49,7 +49,7 @@ export function Section({
 }) {
   return (
     <section>
-      <h2 className='mb-2 border-b-2 border-content-primary pb-1 text-xs font-bold uppercase tracking-widest text-content-primary'>
+      <h2 className="mb-2 border-b-2 border-content-primary pb-1 text-xs font-bold uppercase tracking-widest text-content-primary">
         {title}
       </h2>
       {children}
@@ -67,8 +67,8 @@ export function ContactValue({
   accentColor: string;
 }) {
   return (
-    <span className='flex items-center gap-1'>
-      <Icon className='h-3 w-3' style={{ color: accentColor }} />
+    <span className="flex items-center gap-1">
+      <Icon className="h-3 w-3" style={{ color: accentColor }} />
       {value}
     </span>
   );
@@ -84,13 +84,13 @@ export function ResumeHeader({
   accentColor: string;
 }) {
   return (
-    <header className='border-b border-subtle pb-4'>
+    <header className="border-b border-subtle pb-4">
       {info.fullName && (
-        <h1 className='text-3xl font-bold tracking-tight text-content-primary'>
+        <h1 className="text-3xl font-bold tracking-tight text-content-primary">
           {info.fullName}
         </h1>
       )}
-      <div className='mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-content-secondary'>
+      <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-content-secondary">
         {info.phone && (
           <ContactValue
             icon={Phone}
@@ -134,12 +134,12 @@ export function ResumeHeader({
 export function BulletList({ text }: { text: string | null }) {
   if (!text) return null;
   const lines = text
-    .split('\n')
+    .split("\n")
     .map((line) => line.trim())
     .filter(Boolean);
   if (lines.length === 0) return null;
   return (
-    <ul className='mt-1 list-disc space-y-0.5 pl-4 text-xs leading-relaxed text-content-secondary'>
+    <ul className="mt-1 list-disc space-y-0.5 pl-4 text-xs leading-relaxed text-content-secondary">
       {lines.map((line, index) => (
         <li key={`${index}-${line.slice(0, 12)}`}>{line}</li>
       ))}
@@ -155,12 +155,12 @@ export function ExperienceEntry({
   accentColor: string;
 }) {
   return (
-    <div className='mb-3'>
-      <div className='flex items-baseline justify-between gap-2'>
-        <p className='text-sm font-bold text-content-primary'>
+    <div className="mb-3">
+      <div className="flex items-baseline justify-between gap-2">
+        <p className="text-sm font-bold text-content-primary">
           {experience.title}
         </p>
-        <span className='shrink-0 text-xs text-content-tertiary'>
+        <span className="shrink-0 text-xs text-content-tertiary">
           {formatDateRange(
             experience.startDate,
             experience.endDate,
@@ -168,12 +168,12 @@ export function ExperienceEntry({
           )}
         </span>
       </div>
-      <div className='flex items-center gap-2 text-xs'>
-        <span className='font-semibold' style={{ color: accentColor }}>
+      <div className="flex items-center gap-2 text-xs">
+        <span className="font-semibold" style={{ color: accentColor }}>
           {experience.company}
         </span>
         {experience.location && (
-          <span className='text-content-tertiary'>· {experience.location}</span>
+          <span className="text-content-tertiary">· {experience.location}</span>
         )}
       </div>
       <BulletList text={experience.description} />
@@ -189,10 +189,10 @@ export function ProjectEntry({
   accentColor: string;
 }) {
   return (
-    <div className='mb-3'>
-      <p className='text-sm font-bold text-content-primary'>{project.name}</p>
+    <div className="mb-3">
+      <p className="text-sm font-bold text-content-primary">{project.name}</p>
       {project.url && (
-        <p className='text-xs' style={{ color: accentColor }}>
+        <p className="text-xs" style={{ color: accentColor }}>
           {project.url}
         </p>
       )}
@@ -209,22 +209,23 @@ export function EducationEntry({
   accentColor: string;
 }) {
   return (
-    <div className='mb-3'>
-      <p className='text-xs font-bold text-content-primary'>
+    <div className="mb-3">
+      <p className="text-xs font-bold text-content-primary">
         {education.degree}
         {education.field && (
-          <span className='font-normal text-content-secondary'>
-            {' in '}
+          <span className="font-normal text-content-secondary">
+            {" in "}
             {education.field}
           </span>
         )}
       </p>
-      <p className='text-xs' style={{ color: accentColor }}>
+      <p className="text-xs" style={{ color: accentColor }}>
         {education.institution}
       </p>
-      <p className='text-xs text-content-tertiary'>
+      <p className="text-xs text-content-tertiary">
         {formatDateRange(education.startDate, education.endDate, false)}
       </p>
+      <BulletList text={education.description} />
     </div>
   );
 }
@@ -235,12 +236,12 @@ export function CertificationEntry({
   certification: Certification;
 }) {
   return (
-    <div className='mb-2'>
-      <p className='text-xs font-semibold text-content-primary'>
+    <div className="mb-2">
+      <p className="text-xs font-semibold text-content-primary">
         {certification.name}
       </p>
       {certification.issuer && (
-        <p className='text-xs text-content-tertiary'>{certification.issuer}</p>
+        <p className="text-xs text-content-tertiary">{certification.issuer}</p>
       )}
     </div>
   );
@@ -248,9 +249,9 @@ export function CertificationEntry({
 
 export function LanguageEntry({ language }: { language: Language }) {
   return (
-    <p className='text-xs text-content-secondary'>
-      <span className='font-medium'>{language.name}</span>{' '}
-      <span className='text-content-tertiary'>({language.proficiency})</span>
+    <p className="text-xs text-content-secondary">
+      <span className="font-medium">{language.name}</span>{" "}
+      <span className="text-content-tertiary">({language.proficiency})</span>
     </p>
   );
 }
@@ -277,22 +278,22 @@ export function SkillGroups({
 }) {
   const groups = groupSkillsByCategory(skills);
   return (
-    <div className='space-y-3'>
+    <div className="space-y-3">
       {groups.map(([category, items]) => (
-        <div key={category ?? 'general'}>
+        <div key={category ?? "general"}>
           {category && (
             <p
-              className='mb-1.5 text-xs font-semibold'
+              className="mb-1.5 text-xs font-semibold"
               style={{ color: accentColor }}
             >
               {category}
             </p>
           )}
-          <div className='flex flex-wrap gap-1.5'>
+          <div className="flex flex-wrap gap-1.5">
             {items.map((skill) => (
               <span
                 key={skill.id}
-                className='rounded border border-subtle px-2 py-0.5 text-xs text-content-secondary'
+                className="rounded border border-subtle px-2 py-0.5 text-xs text-content-secondary"
               >
                 {skill.name}
               </span>

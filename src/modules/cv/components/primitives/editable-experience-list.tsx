@@ -1,29 +1,17 @@
-'use client';
+"use client";
 
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2 } from "lucide-react";
 import {
   useExperienceActions,
   useExperienceField,
   useExperiences,
-} from '@/modules/cv/editor/editor-provider';
-import type { ExperienceTextField } from '@/modules/cv/editor/editor-model';
-import type { Experience } from '@/modules/cv/data/mappers';
-import { InlineEditableText } from './inline-editable-text';
-import { SortableEntryList } from './sortable-entry-list';
-
-function toDateInputValue(date: Date | null): string {
-  if (!date) return '';
-  return date.toISOString().split('T')[0];
-}
-
-function fromDateInputValue(value: string): Date | null {
-  if (!value) return null;
-  const parsed = new Date(value);
-  return Number.isNaN(parsed.getTime()) ? null : parsed;
-}
-
-const DATE_INPUT_CLASS =
-  'rounded border border-subtle bg-transparent px-1 py-0.5 text-[10px] text-content-tertiary';
+} from "@/modules/cv/editor/editor-provider";
+import type { ExperienceTextField } from "@/modules/cv/editor/editor-model";
+import type { Experience } from "@/modules/cv/data/mappers";
+import { BulletEditor } from "./bullet-editor";
+import { InlineEditableText } from "./inline-editable-text";
+import { MonthYearInput } from "./month-year-input";
+import { SortableEntryList } from "./sortable-entry-list";
 
 interface ExperienceFieldProps {
   entryId: string;
@@ -31,8 +19,6 @@ interface ExperienceFieldProps {
   ariaLabel: string;
   placeholder: string;
   className?: string;
-  multiline?: boolean;
-  as?: 'p' | 'span';
 }
 
 function ExperienceField({ entryId, field, ...props }: ExperienceFieldProps) {
@@ -58,18 +44,18 @@ export function EditableExperienceList({
       <SortableEntryList
         items={experiences}
         onReorder={reorder}
-        className='space-y-4'
+        className="space-y-4"
         renderItem={(experience) => (
           <ExperienceEditor experience={experience} accentColor={accentColor} />
         )}
       />
 
       <button
-        type='button'
+        type="button"
         onClick={addExperience}
-        className='mt-4 flex cursor-pointer items-center gap-1.5 text-xs font-medium text-interactive-link hover:underline'
+        className="mt-4 inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-dashed border-primary/40 px-3 py-1 text-xs font-medium text-primary transition duration-150 hover:border-primary hover:bg-primary/5 active:scale-[0.98]"
       >
-        <Plus className='size-3.5' />
+        <Plus className="size-3.5" />
         Add experience
       </button>
     </div>
@@ -85,75 +71,72 @@ function ExperienceEditor({
 }) {
   const { removeExperience, setStartDate, setEndDate, setCurrent } =
     useExperienceActions();
+  const { value: description, setValue: setDescription } = useExperienceField(
+    experience.id,
+    "description"
+  );
 
   return (
-    <div className='group'>
-      <div className='flex items-baseline justify-between gap-2'>
+    <div className="group">
+      <div className="flex items-baseline justify-between gap-2">
         <ExperienceField
           entryId={experience.id}
-          field='title'
-          ariaLabel='Job title'
-          placeholder='Job title'
-          className='text-sm font-bold text-content-primary'
+          field="title"
+          ariaLabel="Job title"
+          placeholder="Job title"
+          className="text-sm font-bold text-content-primary"
         />
         <button
-          type='button'
+          type="button"
           onClick={() => removeExperience(experience.id)}
-          aria-label='Remove experience'
-          className='shrink-0 cursor-pointer text-content-tertiary opacity-0 transition-opacity hover:text-feedback-error group-hover:opacity-100'
+          aria-label="Remove experience"
+          className="shrink-0 cursor-pointer text-content-tertiary opacity-0 transition-all duration-150 hover:scale-110 hover:text-feedback-error active:scale-90 group-hover:opacity-100"
         >
-          <Trash2 className='size-3.5' />
+          <Trash2 className="size-3.5" />
         </button>
       </div>
 
-      <div className='flex flex-wrap items-center gap-x-2 text-xs'>
+      <div className="flex flex-wrap items-center gap-x-2 text-xs">
         <span style={{ color: accentColor }}>
           <ExperienceField
             entryId={experience.id}
-            field='company'
-            ariaLabel='Company'
-            placeholder='Company'
-            className='font-semibold'
+            field="company"
+            ariaLabel="Company"
+            placeholder="Company"
+            className="font-semibold"
           />
         </span>
-        <span className='text-content-tertiary'>·</span>
+        <span className="text-content-tertiary">·</span>
         <ExperienceField
           entryId={experience.id}
-          field='location'
-          ariaLabel='Location'
-          placeholder='Location'
-          className='text-content-tertiary'
+          field="location"
+          ariaLabel="Location"
+          placeholder="Location"
+          className="text-content-tertiary"
         />
       </div>
 
-      <div className='mt-1 flex flex-wrap items-center gap-2'>
-        <input
-          type='date'
-          aria-label='Start date'
-          value={toDateInputValue(experience.startDate)}
-          onChange={(event) => {
-            const next = fromDateInputValue(event.target.value);
+      <div className="mt-1 flex flex-wrap items-center gap-2">
+        <MonthYearInput
+          value={experience.startDate}
+          onChange={(next) => {
             if (next) setStartDate(experience.id, next);
           }}
-          className={DATE_INPUT_CLASS}
+          aria-label="Start date"
         />
-        <span className='text-[10px] text-content-tertiary'>–</span>
+        <span className="text-[10px] text-content-tertiary">–</span>
         {experience.current ? (
-          <span className='text-[10px] text-content-tertiary'>Present</span>
+          <span className="text-[10px] text-content-tertiary">Present</span>
         ) : (
-          <input
-            type='date'
-            aria-label='End date'
-            value={toDateInputValue(experience.endDate)}
-            onChange={(event) =>
-              setEndDate(experience.id, fromDateInputValue(event.target.value))
-            }
-            className={DATE_INPUT_CLASS}
+          <MonthYearInput
+            value={experience.endDate}
+            onChange={(next) => setEndDate(experience.id, next)}
+            aria-label="End date"
           />
         )}
-        <label className='flex items-center gap-1 text-[10px] text-content-tertiary'>
+        <label className="flex items-center gap-1 text-[10px] text-content-tertiary">
           <input
-            type='checkbox'
+            type="checkbox"
             checked={experience.current}
             onChange={(event) =>
               setCurrent(experience.id, event.target.checked)
@@ -163,14 +146,12 @@ function ExperienceEditor({
         </label>
       </div>
 
-      <ExperienceField
-        entryId={experience.id}
-        field='description'
-        ariaLabel='Description'
-        placeholder='Describe your impact — one bullet per line…'
-        multiline
-        as='p'
-        className='mt-1 text-xs leading-relaxed text-content-secondary'
+      <BulletEditor
+        value={description}
+        onChange={setDescription}
+        placeholder="Describe your impact — one bullet per line…"
+        ariaLabel="Job description"
+        className="mt-1"
       />
     </div>
   );
