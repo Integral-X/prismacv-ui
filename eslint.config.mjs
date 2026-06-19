@@ -1,20 +1,20 @@
-import js from '@eslint/js';
-import globals from 'globals';
-import tsEsLint from 'typescript-eslint';
-import react from 'eslint-plugin-react';
-import reactHooks from 'eslint-plugin-react-hooks';
-import jsxA11y from 'eslint-plugin-jsx-a11y';
-import prettierConfigs from 'eslint-config-prettier';
+import js from "@eslint/js";
+import globals from "globals";
+import tsEsLint from "typescript-eslint";
+import react from "eslint-plugin-react";
+import reactHooks from "eslint-plugin-react-hooks";
+import jsxA11y from "eslint-plugin-jsx-a11y";
+import prettierConfigs from "eslint-config-prettier";
 
 export default [
   // Global ignores
   {
     ignores: [
-      'node_modules/**',
-      '.next/**',
-      'out/**',
-      'build/**',
-      'next-env.d.ts',
+      "node_modules/**",
+      ".next/**",
+      "out/**",
+      "build/**",
+      "next-env.d.ts",
     ],
   },
 
@@ -26,7 +26,7 @@ export default [
 
   // React recommended rules
   {
-    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
+    files: ["**/*.{js,jsx,mjs,cjs,ts,tsx}"],
     plugins: {
       react,
     },
@@ -39,33 +39,33 @@ export default [
     },
     settings: {
       react: {
-        version: 'detect',
+        version: "detect",
       },
     },
     rules: {
-      'react/react-in-jsx-scope': 'off', // Not needed in React 17+
-      'react/prop-types': 'off', // Not needed with TypeScript
-      'react/display-name': 'warn',
+      "react/react-in-jsx-scope": "off", // Not needed in React 17+
+      "react/prop-types": "off", // Not needed with TypeScript
+      "react/display-name": "warn",
     },
   },
 
   // React Hooks rules
   {
-    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
+    files: ["**/*.{js,jsx,mjs,cjs,ts,tsx}"],
     plugins: {
-      'react-hooks': reactHooks,
+      "react-hooks": reactHooks,
     },
     rules: {
-      'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'warn',
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
     },
   },
 
   // JSX Accessibility rules
   {
-    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
+    files: ["**/*.{js,jsx,mjs,cjs,ts,tsx}"],
     plugins: {
-      'jsx-a11y': jsxA11y,
+      "jsx-a11y": jsxA11y,
     },
     rules: {
       ...jsxA11y.configs.recommended.rules,
@@ -74,10 +74,10 @@ export default [
 
   // Language options
   {
-    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
+    files: ["**/*.{js,jsx,mjs,cjs,ts,tsx}"],
     languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
+      ecmaVersion: "latest",
+      sourceType: "module",
       globals: {
         ...globals.browser,
         ...globals.node,
@@ -88,57 +88,57 @@ export default [
 
   // TypeScript files
   {
-    files: ['**/*.{ts,tsx}'],
+    files: ["**/*.{ts,tsx}"],
     languageOptions: {
       parser: tsEsLint.parser,
       parserOptions: {
-        project: './tsconfig.json',
+        project: "./tsconfig.json",
       },
     },
   },
 
   // Project-specific rules
   {
-    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
+    files: ["**/*.{js,jsx,mjs,cjs,ts,tsx}"],
     rules: {
       // General code quality rules
-      'no-console': 'warn',
-      'no-debugger': 'error',
-      'no-alert': 'error',
-      'no-var': 'error',
-      'prefer-const': 'error',
-      'prefer-arrow-callback': 'error',
-      'object-shorthand': 'error',
-      'prefer-template': 'error',
+      "no-console": "warn",
+      "no-debugger": "error",
+      "no-alert": "error",
+      "no-var": "error",
+      "prefer-const": "error",
+      "prefer-arrow-callback": "error",
+      "object-shorthand": "error",
+      "prefer-template": "error",
     },
   },
 
   // Design token enforcement (outside design-system)
   {
-    files: ['src/**/*.{js,jsx,ts,tsx}'],
-    ignores: ['src/design-system/**'],
+    files: ["src/**/*.{js,jsx,ts,tsx}"],
+    ignores: ["src/design-system/**"],
     rules: {
-      'no-restricted-syntax': [
-        'error',
+      "no-restricted-syntax": [
+        "error",
         {
-          selector: 'Literal[value=/#[0-9A-Fa-f]{3,8}/]',
-          message: 'Use design-system tokens instead of hardcoded hex colors.',
+          selector: "Literal[value=/#[0-9A-Fa-f]{3,8}/]",
+          message: "Use design-system tokens instead of hardcoded hex colors.",
         },
         {
-          selector: 'TemplateElement[value.raw=/#[0-9A-Fa-f]{3,8}/]',
-          message: 'Use design-system tokens instead of hardcoded hex colors.',
-        },
-        {
-          selector:
-            'Literal[value=/\\b(?:bg|text|border|ring|from|to|via)-gray-[0-9]{2,3}\\b/]',
-          message:
-            'Use design-system token classes (content/surface/border) instead of Tailwind gray utilities.',
+          selector: "TemplateElement[value.raw=/#[0-9A-Fa-f]{3,8}/]",
+          message: "Use design-system tokens instead of hardcoded hex colors.",
         },
         {
           selector:
-            'TemplateElement[value.raw=/\\b(?:bg|text|border|ring|from|to|via)-gray-[0-9]{2,3}\\b/]',
+            "Literal[value=/\\b(?:bg|text|border|ring|from|to|via)-gray-[0-9]{2,3}\\b/]",
           message:
-            'Use design-system token classes (content/surface/border) instead of Tailwind gray utilities.',
+            "Use design-system token classes (content/surface/border) instead of Tailwind gray utilities.",
+        },
+        {
+          selector:
+            "TemplateElement[value.raw=/\\b(?:bg|text|border|ring|from|to|via)-gray-[0-9]{2,3}\\b/]",
+          message:
+            "Use design-system token classes (content/surface/border) instead of Tailwind gray utilities.",
         },
       ],
     },
@@ -146,22 +146,22 @@ export default [
 
   // Scripts directory - allow Node.js patterns
   {
-    files: ['scripts/**/*.js'],
+    files: ["scripts/**/*.js"],
     rules: {
-      'no-console': 'off',
-      '@typescript-eslint/no-require-imports': 'off',
+      "no-console": "off",
+      "@typescript-eslint/no-require-imports": "off",
     },
   },
 
   // Prettier configuration
   prettierConfigs,
 
-  // Enforce single quotes project-wide (aligned with Prettier singleQuote: true)
+  // Enforce double quotes project-wide (aligned with Prettier singleQuote: false)
   {
-    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
+    files: ["**/*.{js,jsx,mjs,cjs,ts,tsx}"],
     rules: {
-      quotes: ['error', 'single', { avoidEscape: true }],
-      'jsx-quotes': ['error', 'prefer-single'],
+      quotes: ["error", "double", { avoidEscape: true }],
+      "jsx-quotes": ["error", "prefer-double"],
     },
   },
 ];

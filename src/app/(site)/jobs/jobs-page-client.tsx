@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useMemo, useState, useTransition } from 'react';
-import { toast } from 'sonner';
+import { useMemo, useState, useTransition } from "react";
+import { toast } from "sonner";
 
-import type { NavbarUser } from '@/components/common/navbar-client';
-import { DashboardHeader } from '@/app/(site)/dashboard/components/dashboard-header';
+import type { NavbarUser } from "@/components/common/navbar-client";
+import { DashboardHeader } from "@/app/(site)/dashboard/components/dashboard-header";
 import {
   Dialog,
   DialogContent,
@@ -12,29 +12,29 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import type { ManualCreateJobFormData } from '@/lib/validations/jobs';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import type { ManualCreateJobFormData } from "@/lib/validations/jobs";
 import {
   createJobAction,
   deleteJobAction,
   updateJobStatusAction,
-} from '@/modules/jobs/data/actions';
-import type { CvListItem } from '@/modules/cv/data/mappers';
-import type { Job, JobStatus } from '@/modules/jobs/data/mappers';
-import { REVERSE_STATUS_MAP } from '@/modules/jobs/data/mappers';
+} from "@/modules/jobs/data/actions";
+import type { CvListItem } from "@/modules/cv/data/mappers";
+import type { Job, JobStatus } from "@/modules/jobs/data/mappers";
+import { REVERSE_STATUS_MAP } from "@/modules/jobs/data/mappers";
 
-import { JobAddDialog } from './components/job-add-dialog';
-import { JobDetailPanel } from './components/job-detail-panel';
-import { JobKanbanBoard } from './components/job-kanban-board';
-import { JobTrackerToolbar } from './components/job-tracker-toolbar';
-import { mapManualFormToCreateRequest } from './lib/map-job-form-to-request';
+import { JobAddDialog } from "./components/job-add-dialog";
+import { JobDetailPanel } from "./components/job-detail-panel";
+import { JobKanbanBoard } from "./components/job-kanban-board";
+import { JobTrackerToolbar } from "./components/job-tracker-toolbar";
+import { mapManualFormToCreateRequest } from "./lib/map-job-form-to-request";
 import {
   DEFAULT_JOB_TRACKER_FILTERS,
   JOB_TRACKER_COLUMNS,
   type JobTrackerFilters,
-} from './lib/job-tracker-types';
-import { filterAndSortJobs, titleFromJobUrl } from './lib/job-tracker-utils';
+} from "./lib/job-tracker-types";
+import { filterAndSortJobs, titleFromJobUrl } from "./lib/job-tracker-utils";
 
 interface JobsPageClientProps {
   initialJobs: Job[];
@@ -54,12 +54,12 @@ export function JobsPageClient({
   );
   const [isPending, startTransition] = useTransition();
   const [addDialogOpen, setAddDialogOpen] = useState(false);
-  const [addDialogStatus, setAddDialogStatus] = useState<JobStatus>('saved');
+  const [addDialogStatus, setAddDialogStatus] = useState<JobStatus>("saved");
   const [jobPendingDelete, setJobPendingDelete] = useState<Job | null>(null);
 
   const navbarUser: NavbarUser = user ?? {
-    email: 'guest@prismacv.app',
-    name: 'Guest',
+    email: "guest@prismacv.app",
+    name: "Guest",
   };
 
   const visibleJobs = useMemo(
@@ -79,7 +79,7 @@ export function JobsPageClient({
     return grouped;
   }, [visibleJobs]);
 
-  function openAddDialog(status: JobStatus = 'saved') {
+  function openAddDialog(status: JobStatus = "saved") {
     setAddDialogStatus(status);
     setAddDialogOpen(true);
   }
@@ -88,7 +88,7 @@ export function JobsPageClient({
     startTransition(async () => {
       const result = await createJobAction({
         title: titleFromJobUrl(url),
-        company: 'Imported',
+        company: "Imported",
         url,
         status: REVERSE_STATUS_MAP[status],
       });
@@ -161,13 +161,13 @@ export function JobsPageClient({
     <>
       <DashboardHeader
         user={navbarUser}
-        title='Job Tracker'
-        subtitle='Track every opportunity from saved to offer.'
+        title="Job Tracker"
+        subtitle="Track every opportunity from saved to offer."
       />
 
-      <div className='flex-1 overflow-y-auto px-6 py-6 lg:px-8 lg:py-8'>
-        <div className='mx-auto w-full max-w-[1600px]'>
-          <div className='rounded-xl border border-subtle bg-surface-card p-4 shadow-card md:p-6'>
+      <div className="flex-1 overflow-y-auto px-6 py-6 lg:px-8 lg:py-8">
+        <div className="mx-auto w-full max-w-[1600px]">
+          <div className="rounded-xl border border-subtle bg-surface-card p-4 shadow-card md:p-6">
             <JobTrackerToolbar
               filters={filters}
               onSearchChange={(search) =>
@@ -175,7 +175,7 @@ export function JobsPageClient({
               }
               onSortApply={(sort) => setFilters((prev) => ({ ...prev, sort }))}
               onFiltersApply={(next) => setFilters(next)}
-              onAddJob={() => openAddDialog('saved')}
+              onAddJob={() => openAddDialog("saved")}
             />
             <JobKanbanBoard
               jobsByStatus={jobsByStatus}
@@ -222,29 +222,29 @@ export function JobsPageClient({
           }
         }}
       >
-        <DialogContent aria-describedby='delete-job-dialog-description'>
+        <DialogContent aria-describedby="delete-job-dialog-description">
           <DialogHeader>
             <DialogTitle>Delete this job?</DialogTitle>
-            <DialogDescription id='delete-job-dialog-description'>
+            <DialogDescription id="delete-job-dialog-description">
               {jobPendingDelete
                 ? `This will remove "${jobPendingDelete.title}" at "${jobPendingDelete.company}" from your tracker.`
-                : 'This action cannot be undone.'}
+                : "This action cannot be undone."}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button
-              variant='outline'
+              variant="outline"
               onClick={() => setJobPendingDelete(null)}
               disabled={isPending}
             >
               Cancel
             </Button>
             <Button
-              variant='destructive'
+              variant="destructive"
               onClick={handleDeleteConfirm}
               disabled={isPending}
             >
-              {isPending ? 'Deleting...' : 'Delete job'}
+              {isPending ? "Deleting..." : "Delete job"}
             </Button>
           </DialogFooter>
         </DialogContent>

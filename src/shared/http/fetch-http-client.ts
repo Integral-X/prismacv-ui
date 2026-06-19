@@ -1,17 +1,17 @@
-import { logger } from '@/shared/logger/logger';
-import { sanitizeLogPayload } from '@/shared/logger/sanitize-log-payload';
-import { captureUiException } from '@/shared/monitoring/sentry';
-import { HttpError } from './http-error';
-import type { HttpClient } from './http-client';
-import type { ApiEnvelope, ApiErrorEnvelope, RequestConfig } from './types';
+import { logger } from "@/shared/logger/logger";
+import { sanitizeLogPayload } from "@/shared/logger/sanitize-log-payload";
+import { captureUiException } from "@/shared/monitoring/sentry";
+import { HttpError } from "./http-error";
+import type { HttpClient } from "./http-client";
+import type { ApiEnvelope, ApiErrorEnvelope, RequestConfig } from "./types";
 
 const SENSITIVE_QUERY_KEYS = new Set([
-  'token',
-  'access_token',
-  'refresh_token',
-  'password',
-  'secret',
-  'authorization',
+  "token",
+  "access_token",
+  "refresh_token",
+  "password",
+  "secret",
+  "authorization",
 ]);
 
 function sanitizeUrlForLogging(rawUrl: string): string {
@@ -19,7 +19,7 @@ function sanitizeUrlForLogging(rawUrl: string): string {
     const url = new URL(rawUrl);
     for (const key of Array.from(url.searchParams.keys())) {
       if (SENSITIVE_QUERY_KEYS.has(key.toLowerCase())) {
-        url.searchParams.set(key, '[Redacted]');
+        url.searchParams.set(key, "[Redacted]");
       }
     }
     return url.toString();
@@ -32,7 +32,7 @@ export class FetchHttpClient implements HttpClient {
   private readonly baseUrl: string;
 
   constructor(baseUrl: string) {
-    this.baseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+    this.baseUrl = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
   }
 
   private buildUrl(
@@ -73,7 +73,7 @@ export class FetchHttpClient implements HttpClient {
       cache: config.cache,
       next: config.next,
     });
-    const correlationId = response.headers.get('x-correlation-id') ?? undefined;
+    const correlationId = response.headers.get("x-correlation-id") ?? undefined;
 
     const rawText = await response.text();
     let json: unknown = null;
@@ -85,15 +85,15 @@ export class FetchHttpClient implements HttpClient {
           throw new HttpError(
             response.status,
             response.statusText,
-            'Invalid error response from server',
+            "Invalid error response from server",
             undefined,
             correlationId
           );
         }
         throw new HttpError(
           500,
-          'Invalid JSON',
-          'The server returned an invalid response',
+          "Invalid JSON",
+          "The server returned an invalid response",
           undefined,
           correlationId
         );
@@ -102,7 +102,7 @@ export class FetchHttpClient implements HttpClient {
 
     if (!response.ok) {
       const errorBody =
-        json !== null && typeof json === 'object'
+        json !== null && typeof json === "object"
           ? (json as Partial<ApiErrorEnvelope>)
           : {};
       const safeErrorBody = sanitizeLogPayload(errorBody);
@@ -121,7 +121,7 @@ export class FetchHttpClient implements HttpClient {
         ),
         {
           tags: {
-            correlationId: correlationId ?? 'missing',
+            correlationId: correlationId ?? "missing",
             method,
             status: response.status,
           },
@@ -173,7 +173,7 @@ export class FetchHttpClient implements HttpClient {
   ): Promise<T> {
     const url = this.buildUrl(endpoint, config.params);
     const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     };
 
     return this.sendAndParseEnvelope<T>(
@@ -187,7 +187,7 @@ export class FetchHttpClient implements HttpClient {
   }
 
   get<T>(endpoint: string, config?: RequestConfig): Promise<T> {
-    return this.execute<T>('GET', endpoint, undefined, config);
+    return this.execute<T>("GET", endpoint, undefined, config);
   }
 
   async getBlob(endpoint: string, config: RequestConfig = {}): Promise<Blob> {
@@ -195,16 +195,16 @@ export class FetchHttpClient implements HttpClient {
     const start = Date.now();
     const safeUrl = sanitizeUrlForLogging(url);
 
-    logger.debug({ method: 'GET', url: safeUrl });
+    logger.debug({ method: "GET", url: safeUrl });
 
     const response = await fetch(url, {
-      method: 'GET',
+      method: "GET",
       headers: { ...config.headers },
       cache: config.cache,
       next: config.next,
     });
 
-    const correlationId = response.headers.get('x-correlation-id') ?? undefined;
+    const correlationId = response.headers.get("x-correlation-id") ?? undefined;
 
     if (!response.ok) {
       let errorName = response.statusText;
@@ -219,7 +219,7 @@ export class FetchHttpClient implements HttpClient {
         // non-JSON error body — use status text only
       }
       logger.error({
-        method: 'GET',
+        method: "GET",
         url: safeUrl,
         status: response.status,
         durationMs: Date.now() - start,
@@ -235,19 +235,19 @@ export class FetchHttpClient implements HttpClient {
     }
 
     logger.debug({
-      method: 'GET',
+      method: "GET",
       url: safeUrl,
       status: response.status,
       durationMs: Date.now() - start,
       correlationId,
-      data: '[Blob]',
+      data: "[Blob]",
     });
 
     return response.blob();
   }
 
   post<T, B>(endpoint: string, body: B, config?: RequestConfig): Promise<T> {
-    return this.execute<T>('POST', endpoint, body, config);
+    return this.execute<T>("POST", endpoint, body, config);
   }
 
   postFormData<T>(
@@ -257,24 +257,24 @@ export class FetchHttpClient implements HttpClient {
   ): Promise<T> {
     const url = this.buildUrl(endpoint, config.params);
     return this.sendAndParseEnvelope<T>(
-      'POST',
+      "POST",
       url,
       {},
       formData,
       config,
-      '[FormData]'
+      "[FormData]"
     );
   }
 
   put<T, B>(endpoint: string, body: B, config?: RequestConfig): Promise<T> {
-    return this.execute<T>('PUT', endpoint, body, config);
+    return this.execute<T>("PUT", endpoint, body, config);
   }
 
   patch<T, B>(endpoint: string, body: B, config?: RequestConfig): Promise<T> {
-    return this.execute<T>('PATCH', endpoint, body, config);
+    return this.execute<T>("PATCH", endpoint, body, config);
   }
 
   delete<T>(endpoint: string, config?: RequestConfig): Promise<T> {
-    return this.execute<T>('DELETE', endpoint, undefined, config);
+    return this.execute<T>("DELETE", endpoint, undefined, config);
   }
 }

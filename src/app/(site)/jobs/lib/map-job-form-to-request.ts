@@ -1,19 +1,19 @@
 import type {
   CreateJobRequest,
   UpdateJobRequest,
-} from '@/modules/jobs/data/contracts';
+} from "@/modules/jobs/data/contracts";
 import type {
   ManualCreateJobFormData,
   UpdateJobDetailFormData,
-} from '@/lib/validations/jobs';
+} from "@/lib/validations/jobs";
 
-import type { JobSourceOption } from './job-form-constants';
+import type { JobSourceOption } from "./job-form-constants";
 
 interface JobNotesInput {
   expertise?: string;
   appliedDate?: string;
   applicationDeadline?: string;
-  jobType: 'remote' | 'onsite' | 'hybrid';
+  jobType: "remote" | "onsite" | "hybrid";
   description?: string;
 }
 
@@ -39,14 +39,14 @@ function buildNotes(data: JobNotesInput): string | undefined {
   if (data.applicationDeadline) {
     parts.push(`Deadline: ${data.applicationDeadline}`);
   }
-  if (data.jobType === 'hybrid') {
-    parts.push('Work type: Hybrid');
+  if (data.jobType === "hybrid") {
+    parts.push("Work type: Hybrid");
   }
   if (data.description?.trim()) {
     parts.push(data.description.trim());
   }
 
-  return parts.length > 0 ? parts.join('\n\n') : undefined;
+  return parts.length > 0 ? parts.join("\n\n") : undefined;
 }
 
 export function mapManualFormToCreateRequest(
@@ -56,9 +56,9 @@ export function mapManualFormToCreateRequest(
     title: data.title,
     company: data.company,
     location: data.location || undefined,
-    url: sourceToUrlHint(data.source, data.url ?? ''),
+    url: sourceToUrlHint(data.source, data.url ?? ""),
     status: data.status,
-    isRemote: data.jobType === 'remote',
+    isRemote: data.jobType === "remote",
     notes: buildNotes(data),
   };
 }
@@ -71,7 +71,7 @@ export function mapDetailFormToUpdateRequest(
     company: data.company,
     location: data.location || undefined,
     url: data.url || undefined,
-    isRemote: data.jobType === 'remote',
+    isRemote: data.jobType === "remote",
     notes: buildNotes(data),
   };
 }

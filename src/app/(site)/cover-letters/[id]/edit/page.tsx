@@ -1,9 +1,9 @@
-import { notFound } from 'next/navigation';
-import { fetchCoverLetter } from '@/modules/cover-letters/data/queries';
-import { getUserCvs } from '@/modules/cv/data/queries';
-import { CoverLetterEditorClient } from './cover-letter-editor-client';
+import { notFound } from "next/navigation";
+import { fetchCoverLetter } from "@/modules/cover-letters/data/queries";
+import { getUserCvs } from "@/modules/cv/data/queries";
+import { CoverLetterEditorClient } from "./cover-letter-editor-client";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 interface EditCoverLetterPageProps {
   params: Promise<{ id: string }>;

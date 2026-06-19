@@ -1,4 +1,4 @@
-export type BillingPlanContract = 'FREE' | 'PRO' | 'TEAM';
+export type BillingPlanContract = "FREE" | "PRO" | "TEAM";
 
 export interface BillingSubscriptionContract {
   id: string;
@@ -24,8 +24,8 @@ export interface BillingProfileContract {
 }
 
 export interface CreateCheckoutSessionRequestContract {
-  plan: Exclude<BillingPlanContract, 'FREE'>;
-  billingCycle?: 'monthly' | 'yearly';
+  plan: Exclude<BillingPlanContract, "FREE">;
+  billingCycle?: "monthly" | "yearly";
 }
 
 export interface CheckoutSessionContract {

@@ -1,13 +1,13 @@
-export type GrammarIssueTypeContract = 'grammar' | 'style' | 'impact';
+export type GrammarIssueTypeContract = "grammar" | "style" | "impact";
 
-export type GrammarIssueSeverityContract = 'error' | 'warning' | 'info';
+export type GrammarIssueSeverityContract = "error" | "warning" | "info";
 
 export type GrammarContextContract =
-  | 'summary'
-  | 'experience'
-  | 'education'
-  | 'cover_letter'
-  | 'project';
+  | "summary"
+  | "experience"
+  | "education"
+  | "cover_letter"
+  | "project";
 
 export interface GrammarIssueContract {
   type: GrammarIssueTypeContract;

@@ -1,15 +1,15 @@
-import 'server-only';
+import "server-only";
 
-import { apiClient } from '@/shared/http/api-client';
-import { executeAuthenticatedRequest } from '@/shared/auth/execute-authenticated-request';
+import { apiClient } from "@/shared/http/api-client";
+import { executeAuthenticatedRequest } from "@/shared/auth/execute-authenticated-request";
 import type {
   CoverLetterResponseContract,
   CreateCoverLetterRequest,
   UpdateCoverLetterRequest,
   GenerateCoverLetterRequest,
   GeneratedCoverLetterResponseContract,
-} from './contracts';
-import { toCoverLetter, type CoverLetter } from './mappers';
+} from "./contracts";
+import { toCoverLetter, type CoverLetter } from "./mappers";
 
 // ─── Mutations ────────────────────────────────────────────────────────────────
 
@@ -20,7 +20,7 @@ export async function createCoverLetter(
     const contract = await apiClient.post<
       CoverLetterResponseContract,
       CreateCoverLetterRequest
-    >('cover-letters', body, { headers });
+    >("cover-letters", body, { headers });
 
     return toCoverLetter(contract);
   });
@@ -53,6 +53,6 @@ export async function generateCoverLetter(
     return apiClient.post<
       GeneratedCoverLetterResponseContract,
       GenerateCoverLetterRequest
-    >('cover-letters/generate', body, { headers });
+    >("cover-letters/generate", body, { headers });
   });
 }

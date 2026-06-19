@@ -1,12 +1,12 @@
-'use server';
+"use server";
 
-import { ActionResult, toFailureResult } from '@/shared/action-result';
-import { createCheckoutSession, createPortalSession } from './mutations';
-import type { CheckoutSessionContract } from './contracts';
+import { ActionResult, toFailureResult } from "@/shared/action-result";
+import { createCheckoutSession, createPortalSession } from "./mutations";
+import type { CheckoutSessionContract } from "./contracts";
 
 export async function createCheckoutSessionAction(input: {
-  plan: 'PRO' | 'TEAM';
-  billingCycle?: 'monthly' | 'yearly';
+  plan: "PRO" | "TEAM";
+  billingCycle?: "monthly" | "yearly";
 }): Promise<ActionResult<CheckoutSessionContract>> {
   try {
     const session = await createCheckoutSession(input);
@@ -14,7 +14,7 @@ export async function createCheckoutSessionAction(input: {
   } catch (error) {
     return toFailureResult(
       error,
-      'Unable to start checkout session. Please try again.'
+      "Unable to start checkout session. Please try again."
     );
   }
 }
@@ -26,6 +26,6 @@ export async function createPortalSessionAction(): Promise<
     const session = await createPortalSession();
     return { ok: true, data: { url: session.url } };
   } catch (error) {
-    return toFailureResult(error, 'Unable to open billing portal right now.');
+    return toFailureResult(error, "Unable to open billing portal right now.");
   }
 }

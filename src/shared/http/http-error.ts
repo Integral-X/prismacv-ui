@@ -12,7 +12,7 @@ export class HttpError extends Error {
     correlationId?: string
   ) {
     super(error);
-    this.name = 'HttpError';
+    this.name = "HttpError";
     this.statusCode = statusCode;
     this.serverMessage = message;
     this.path = path;

@@ -2,9 +2,9 @@ import type {
   AtsScoreResponseContract,
   KeywordImportanceContract,
   KeywordMatchContract,
-} from './contracts';
+} from "./contracts";
 
-export type KeywordImportance = 'required' | 'preferred' | 'bonus';
+export type KeywordImportance = "required" | "preferred" | "bonus";
 
 export interface KeywordMatch {
   keyword: string;

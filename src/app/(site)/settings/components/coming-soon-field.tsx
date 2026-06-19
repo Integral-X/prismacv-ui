@@ -1,7 +1,7 @@
-import { Info } from 'lucide-react';
+import { Info } from "lucide-react";
 
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface ComingSoonFieldProps {
   id: string;
@@ -15,8 +15,8 @@ export function ComingSoonField({
   placeholder,
 }: ComingSoonFieldProps) {
   return (
-    <div className='space-y-2'>
-      <Label htmlFor={id} className='text-content-primary'>
+    <div className="space-y-2">
+      <Label htmlFor={id} className="text-content-primary">
         {label}
       </Label>
       <Input
@@ -27,9 +27,9 @@ export function ComingSoonField({
       />
       <p
         id={`${id}-hint`}
-        className='flex items-center gap-1.5 text-xs text-content-muted'
+        className="flex items-center gap-1.5 text-xs text-content-muted"
       >
-        <Info className='size-3.5 shrink-0' aria-hidden />
+        <Info className="size-3.5 shrink-0" aria-hidden />
         Coming soon — not saved to your account yet.
       </p>
     </div>

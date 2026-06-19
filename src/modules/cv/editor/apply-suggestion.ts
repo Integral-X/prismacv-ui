@@ -1,5 +1,5 @@
-import type { CvSuggestion } from '@/modules/ai/data/mappers';
-import type { EditorDocument } from './editor-model';
+import type { CvSuggestion } from "@/modules/ai/data/mappers";
+import type { EditorDocument } from "./editor-model";
 
 /**
  * A resolved, applicable AI suggestion: the exact draft location its
@@ -8,16 +8,16 @@ import type { EditorDocument } from './editor-model';
  * `originalText` so we never guess which entry the AI meant.
  */
 export type SuggestionTarget =
-  | { kind: 'summary' }
+  | { kind: "summary" }
   | {
-      kind: 'description';
-      section: 'experiences' | 'projects' | 'education';
+      kind: "description";
+      section: "experiences" | "projects" | "education";
       entryId: string;
     };
 
 /** Collapse whitespace + case so AI-echoed originals match the stored text. */
 function normalize(text: string): string {
-  return text.replace(/\s+/g, ' ').trim().toLowerCase();
+  return text.replace(/\s+/g, " ").trim().toLowerCase();
 }
 
 /**
@@ -35,8 +35,8 @@ export function resolveSuggestionTarget(
   }
 
   const section = suggestion.section.toLowerCase();
-  if (section.includes('summary') || section.includes('profile')) {
-    return { kind: 'summary' };
+  if (section.includes("summary") || section.includes("profile")) {
+    return { kind: "summary" };
   }
 
   // Description rewrites carry the original text; match it to an entry so the
@@ -47,9 +47,9 @@ export function resolveSuggestionTarget(
   const original = normalize(suggestion.originalText);
 
   const lists = [
-    { section: 'experiences', entries: doc.experiences },
-    { section: 'projects', entries: doc.projects },
-    { section: 'education', entries: doc.education },
+    { section: "experiences", entries: doc.experiences },
+    { section: "projects", entries: doc.projects },
+    { section: "education", entries: doc.education },
   ] as const;
 
   for (const list of lists) {
@@ -57,7 +57,7 @@ export function resolveSuggestionTarget(
       (entry) => entry.description && normalize(entry.description) === original
     );
     if (match) {
-      return { kind: 'description', section: list.section, entryId: match.id };
+      return { kind: "description", section: list.section, entryId: match.id };
     }
   }
 

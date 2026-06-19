@@ -1,20 +1,20 @@
-'use server';
+"use server";
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath } from "next/cache";
 import type {
   CreateCoverLetterRequest,
   UpdateCoverLetterRequest,
   GenerateCoverLetterRequest,
   GeneratedCoverLetterResponseContract,
-} from './contracts';
+} from "./contracts";
 import {
   createCoverLetter,
   updateCoverLetter,
   deleteCoverLetter,
   generateCoverLetter,
-} from './mutations';
-import type { CoverLetter } from './mappers';
-import { type ActionResult, toFailureResult } from '@/shared/action-result';
+} from "./mutations";
+import type { CoverLetter } from "./mappers";
+import { type ActionResult, toFailureResult } from "@/shared/action-result";
 
 // ─── Actions ──────────────────────────────────────────────────────────────────
 
@@ -23,10 +23,10 @@ export async function createCoverLetterAction(
 ): Promise<ActionResult<CoverLetter>> {
   try {
     const coverLetter = await createCoverLetter(input);
-    revalidatePath('/cover-letters');
+    revalidatePath("/cover-letters");
     return { ok: true, data: coverLetter };
   } catch (error) {
-    return toFailureResult(error, 'Failed to create cover letter');
+    return toFailureResult(error, "Failed to create cover letter");
   }
 }
 
@@ -36,11 +36,11 @@ export async function updateCoverLetterAction(
 ): Promise<ActionResult<CoverLetter>> {
   try {
     const coverLetter = await updateCoverLetter(id, input);
-    revalidatePath('/cover-letters');
+    revalidatePath("/cover-letters");
     revalidatePath(`/cover-letters/${id}/edit`);
     return { ok: true, data: coverLetter };
   } catch (error) {
-    return toFailureResult(error, 'Failed to update cover letter');
+    return toFailureResult(error, "Failed to update cover letter");
   }
 }
 
@@ -49,10 +49,10 @@ export async function deleteCoverLetterAction(
 ): Promise<ActionResult> {
   try {
     await deleteCoverLetter(id);
-    revalidatePath('/cover-letters');
+    revalidatePath("/cover-letters");
     return { ok: true };
   } catch (error) {
-    return toFailureResult(error, 'Failed to delete cover letter');
+    return toFailureResult(error, "Failed to delete cover letter");
   }
 }
 
@@ -63,6 +63,6 @@ export async function generateCoverLetterAction(
     const result = await generateCoverLetter(input);
     return { ok: true, data: result };
   } catch (error) {
-    return toFailureResult(error, 'Failed to generate cover letter');
+    return toFailureResult(error, "Failed to generate cover letter");
   }
 }

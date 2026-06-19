@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { ListFilter } from 'lucide-react';
+import { useState } from "react";
+import { ListFilter } from "lucide-react";
 
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from "@/components/ui/popover";
 
-import type { JobTrackerFilters } from '../lib/job-tracker-types';
+import type { JobTrackerFilters } from "../lib/job-tracker-types";
 
 interface JobFilterPopoverProps {
   filters: JobTrackerFilters;
@@ -55,35 +55,35 @@ export function JobFilterPopover({ filters, onApply }: JobFilterPopoverProps) {
   return (
     <Popover open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
-        <Button type='button' variant='outline' className='gap-2'>
-          <ListFilter className='size-4' aria-hidden />
+        <Button type="button" variant="outline" className="gap-2">
+          <ListFilter className="size-4" aria-hidden />
           Filter
           {activeCount > 0 ? (
-            <span className='rounded-full bg-primary px-1.5 py-0.5 text-xs text-primary-foreground'>
+            <span className="rounded-full bg-primary px-1.5 py-0.5 text-xs text-primary-foreground">
               {activeCount}
             </span>
           ) : null}
         </Button>
       </PopoverTrigger>
-      <PopoverContent align='end' className='w-80 p-4'>
-        <div className='mb-4 flex items-center justify-between'>
-          <p className='font-semibold text-content-primary'>Filters</p>
+      <PopoverContent align="end" className="w-80 p-4">
+        <div className="mb-4 flex items-center justify-between">
+          <p className="font-semibold text-content-primary">Filters</p>
           <Button
-            type='button'
-            variant='link'
-            className='h-auto px-0 text-sm text-primary'
+            type="button"
+            variant="link"
+            className="h-auto px-0 text-sm text-primary"
             onClick={handleReset}
           >
             Reset all
           </Button>
         </div>
 
-        <FilterSection title='Date applied'>
+        <FilterSection title="Date applied">
           {(
             [
-              ['7', 'Last 7 days'],
-              ['14', 'Last 14 days'],
-              ['30', 'Last 30 days'],
+              ["7", "Last 7 days"],
+              ["14", "Last 14 days"],
+              ["30", "Last 30 days"],
             ] as const
           ).map(([value, label]) => (
             <FilterCheckboxRow
@@ -101,12 +101,12 @@ export function JobFilterPopover({ filters, onApply }: JobFilterPopoverProps) {
           ))}
         </FilterSection>
 
-        <FilterSection title='Job type'>
+        <FilterSection title="Job type">
           {(
             [
-              ['remote', 'Remote'],
-              ['onsite', 'Onsite'],
-              ['hybrid', 'Hybrid'],
+              ["remote", "Remote"],
+              ["onsite", "Onsite"],
+              ["hybrid", "Hybrid"],
             ] as const
           ).map(([value, label]) => (
             <FilterCheckboxRow
@@ -124,12 +124,12 @@ export function JobFilterPopover({ filters, onApply }: JobFilterPopoverProps) {
           ))}
         </FilterSection>
 
-        <FilterSection title='Source'>
+        <FilterSection title="Source">
           {(
             [
-              ['linkedin', 'LinkedIn'],
-              ['facebook', 'Facebook'],
-              ['other', 'Other'],
+              ["linkedin", "LinkedIn"],
+              ["facebook", "Facebook"],
+              ["other", "Other"],
             ] as const
           ).map(([value, label]) => (
             <FilterCheckboxRow
@@ -148,9 +148,9 @@ export function JobFilterPopover({ filters, onApply }: JobFilterPopoverProps) {
         </FilterSection>
 
         <Button
-          type='button'
-          variant='outline'
-          className='mt-2 w-full border-primary text-primary hover:bg-primary/5'
+          type="button"
+          variant="outline"
+          className="mt-2 w-full border-primary text-primary hover:bg-primary/5"
           onClick={handleApply}
         >
           Apply
@@ -168,9 +168,9 @@ function FilterSection({
   children: React.ReactNode;
 }) {
   return (
-    <div className='mb-4'>
-      <p className='mb-2 text-sm font-semibold text-content-primary'>{title}</p>
-      <div className='space-y-2'>{children}</div>
+    <div className="mb-4">
+      <p className="mb-2 text-sm font-semibold text-content-primary">{title}</p>
+      <div className="space-y-2">{children}</div>
     </div>
   );
 }
@@ -187,11 +187,11 @@ function FilterCheckboxRow({
   onCheckedChange: () => void;
 }) {
   return (
-    <div className='flex items-center gap-3'>
+    <div className="flex items-center gap-3">
       <Checkbox id={id} checked={checked} onCheckedChange={onCheckedChange} />
       <label
         htmlFor={id}
-        className='cursor-pointer text-sm text-content-primary'
+        className="cursor-pointer text-sm text-content-primary"
       >
         {label}
       </label>

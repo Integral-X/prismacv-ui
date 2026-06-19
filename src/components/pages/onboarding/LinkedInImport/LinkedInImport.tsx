@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { LinkedInImportProps, ImportedProfile } from './types';
-import { ERROR_DISPLAY_DURATION_MS } from './constants';
+import * as React from "react";
+import { LinkedInImportProps, ImportedProfile } from "./types";
+import { ERROR_DISPLAY_DURATION_MS } from "./constants";
 import {
   validateLinkedInUrl,
   normalizeLinkedInUrl,
   extractLinkedInDisplayName,
-} from '../shared/utils/urlValidation';
-import type { ImportState } from '../shared/utils/stateStyles';
-import { LinkedInImportSuccess } from './LinkedInImportSuccess';
-import { LinkedInImportProgress } from './LinkedInImportProgress';
-import { LinkedInImportForm } from './LinkedInImportForm';
+} from "../shared/utils/urlValidation";
+import type { ImportState } from "../shared/utils/stateStyles";
+import { LinkedInImportSuccess } from "./LinkedInImportSuccess";
+import { LinkedInImportProgress } from "./LinkedInImportProgress";
+import { LinkedInImportForm } from "./LinkedInImportForm";
 
 export const LinkedInImport = ({
   onImport,
@@ -19,9 +19,9 @@ export const LinkedInImport = ({
   importFn,
   className,
 }: LinkedInImportProps) => {
-  const [state, setState] = React.useState<ImportState>('idle');
-  const [linkedInUrl, setLinkedInUrl] = React.useState<string>('');
-  const [errorMessage, setErrorMessage] = React.useState<string>('');
+  const [state, setState] = React.useState<ImportState>("idle");
+  const [linkedInUrl, setLinkedInUrl] = React.useState<string>("");
+  const [errorMessage, setErrorMessage] = React.useState<string>("");
   const [progress, setProgress] = React.useState(0);
   const [importedProfile, setImportedProfile] =
     React.useState<ImportedProfile | null>(null);
@@ -46,17 +46,17 @@ export const LinkedInImport = ({
         clearTimeout(errorResetTimeoutRef.current);
         errorResetTimeoutRef.current = null;
       }
-      setState('error');
-      setErrorMessage(validation.error || 'Invalid LinkedIn URL');
+      setState("error");
+      setErrorMessage(validation.error || "Invalid LinkedIn URL");
       errorResetTimeoutRef.current = setTimeout(() => {
         errorResetTimeoutRef.current = null;
-        setState('idle');
-        setErrorMessage('');
+        setState("idle");
+        setErrorMessage("");
       }, ERROR_DISPLAY_DURATION_MS);
       return;
     }
 
-    setState('importing');
+    setState("importing");
     setProgress(20);
 
     const normalizedUrl = normalizeLinkedInUrl(linkedInUrl);
@@ -68,24 +68,24 @@ export const LinkedInImport = ({
         setProgress(100);
         const displayName = extractLinkedInDisplayName(normalizedUrl);
         setImportedProfile({ url: normalizedUrl, displayName, importId });
-        setState('success');
+        setState("success");
         onImport?.(normalizedUrl, importId);
       } catch (error) {
         if (errorResetTimeoutRef.current !== null) {
           clearTimeout(errorResetTimeoutRef.current);
           errorResetTimeoutRef.current = null;
         }
-        setState('error');
+        setState("error");
         setErrorMessage(
           error instanceof Error
             ? error.message
-            : 'Failed to import LinkedIn profile. Please try again.'
+            : "Failed to import LinkedIn profile. Please try again."
         );
         setProgress(0);
         errorResetTimeoutRef.current = setTimeout(() => {
           errorResetTimeoutRef.current = null;
-          setState('idle');
-          setErrorMessage('');
+          setState("idle");
+          setErrorMessage("");
         }, ERROR_DISPLAY_DURATION_MS);
       }
     } else {
@@ -93,28 +93,28 @@ export const LinkedInImport = ({
       const displayName = extractLinkedInDisplayName(normalizedUrl);
       setProgress(100);
       setImportedProfile({ url: normalizedUrl, displayName });
-      setState('success');
+      setState("success");
       onImport?.(normalizedUrl);
     }
   };
 
   const handleRemove = () => {
     setImportedProfile(null);
-    setLinkedInUrl('');
-    setState('idle');
+    setLinkedInUrl("");
+    setState("idle");
     setProgress(0);
     onRemove?.();
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
       handleImport();
     }
   };
 
   // Success state
-  if (state === 'success' && importedProfile) {
+  if (state === "success" && importedProfile) {
     return (
       <LinkedInImportSuccess
         importedProfile={importedProfile}
@@ -126,7 +126,7 @@ export const LinkedInImport = ({
   }
 
   // Importing state
-  if (state === 'importing') {
+  if (state === "importing") {
     return <LinkedInImportProgress progress={progress} className={className} />;
   }
 
@@ -139,8 +139,8 @@ export const LinkedInImport = ({
       onUrlChange={setLinkedInUrl}
       onImport={handleImport}
       onKeyDown={handleKeyDown}
-      onMouseEnter={() => state === 'idle' && setState('hover')}
-      onMouseLeave={() => state === 'hover' && setState('idle')}
+      onMouseEnter={() => state === "idle" && setState("hover")}
+      onMouseLeave={() => state === "hover" && setState("idle")}
       className={className}
     />
   );

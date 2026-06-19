@@ -2,15 +2,15 @@
 
 export interface CvIssueContract {
   section: string;
-  type: 'grammar' | 'readability' | 'ats' | 'content';
-  severity: 'low' | 'medium' | 'high';
+  type: "grammar" | "readability" | "ats" | "content";
+  severity: "low" | "medium" | "high";
   message: string;
   suggestion?: string;
 }
 
 export interface CvSuggestionContract {
   section: string;
-  type: 'improvement' | 'addition' | 'removal';
+  type: "improvement" | "addition" | "removal";
   message: string;
   originalText?: string;
   suggestedText?: string;
@@ -18,9 +18,9 @@ export interface CvSuggestionContract {
 
 export interface SectionRecommendationContract {
   section: string;
-  action: 'add' | 'improve' | 'remove';
+  action: "add" | "improve" | "remove";
   message: string;
-  priority: 'low' | 'medium' | 'high';
+  priority: "low" | "medium" | "high";
 }
 
 export interface CvAnalysisResultContract {

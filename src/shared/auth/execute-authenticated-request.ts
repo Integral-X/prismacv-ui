@@ -1,13 +1,13 @@
-import 'server-only';
+import "server-only";
 
-import { HttpError } from '@/shared/http/http-error';
+import { HttpError } from "@/shared/http/http-error";
 import {
   clearAuthSession,
   getAccessToken,
   getRefreshToken,
   persistAuthSession,
   shouldPersistSession,
-} from '@/modules/auth/data/session';
+} from "@/modules/auth/data/session";
 
 interface ExecuteAuthenticatedRequestOptions {
   /**
@@ -27,11 +27,11 @@ async function refreshSessionAndGetAccessToken(
     if (mutateSession) {
       await clearAuthSession();
     }
-    throw new HttpError(401, 'Unauthorized', 'Authentication required');
+    throw new HttpError(401, "Unauthorized", "Authentication required");
   }
 
   try {
-    const { refreshUserToken } = await import('@/modules/auth/data/mutations');
+    const { refreshUserToken } = await import("@/modules/auth/data/mutations");
     const refreshedSession = await refreshUserToken({ refreshToken });
 
     if (mutateSession) {

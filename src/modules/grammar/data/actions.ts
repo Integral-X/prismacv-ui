@@ -1,9 +1,9 @@
-'use server';
+"use server";
 
-import { toFailureResult, type ActionResult } from '@/shared/action-result';
-import { checkGrammar } from './mutations';
-import type { CheckGrammarRequest } from './contracts';
-import type { GrammarCheckResult } from './mappers';
+import { toFailureResult, type ActionResult } from "@/shared/action-result";
+import { checkGrammar } from "./mutations";
+import type { CheckGrammarRequest } from "./contracts";
+import type { GrammarCheckResult } from "./mappers";
 
 export async function checkGrammarAction(
   input: CheckGrammarRequest
@@ -12,6 +12,6 @@ export async function checkGrammarAction(
     const data = await checkGrammar(input);
     return { ok: true, data };
   } catch (error) {
-    return toFailureResult(error, 'Unable to check grammar right now.');
+    return toFailureResult(error, "Unable to check grammar right now.");
   }
 }

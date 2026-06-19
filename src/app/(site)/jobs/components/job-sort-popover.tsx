@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { ArrowDown, ArrowUp, SlidersHorizontal } from 'lucide-react';
+import { useState } from "react";
+import { ArrowDown, ArrowUp, SlidersHorizontal } from "lucide-react";
 
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from "@/components/ui/popover";
 
-import type { JobSortOption } from '../lib/job-tracker-types';
+import type { JobSortOption } from "../lib/job-tracker-types";
 
 interface JobSortPopoverProps {
   sort: JobSortOption;
@@ -30,7 +30,7 @@ export function JobSortPopover({ sort, onApply }: JobSortPopoverProps) {
   }
 
   function handleReset() {
-    setDraft('none');
+    setDraft("none");
   }
 
   function handleApply() {
@@ -41,61 +41,61 @@ export function JobSortPopover({ sort, onApply }: JobSortPopoverProps) {
   return (
     <Popover open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
-        <Button type='button' variant='outline' className='gap-2'>
-          <SlidersHorizontal className='size-4' aria-hidden />
+        <Button type="button" variant="outline" className="gap-2">
+          <SlidersHorizontal className="size-4" aria-hidden />
           Sort
         </Button>
       </PopoverTrigger>
-      <PopoverContent align='end' className='w-72 p-4'>
-        <div className='mb-4 flex items-center justify-between'>
-          <p className='font-semibold text-content-primary'>Sort</p>
+      <PopoverContent align="end" className="w-72 p-4">
+        <div className="mb-4 flex items-center justify-between">
+          <p className="font-semibold text-content-primary">Sort</p>
           <Button
-            type='button'
-            variant='link'
-            className='h-auto px-0 text-sm text-primary'
+            type="button"
+            variant="link"
+            className="h-auto px-0 text-sm text-primary"
             onClick={handleReset}
           >
             Reset all
           </Button>
         </div>
-        <div className='space-y-3'>
-          <div className='flex items-center gap-3'>
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
             <Checkbox
-              id='sort-due-date-asc'
-              checked={draft === 'dueDateAsc'}
+              id="sort-due-date-asc"
+              checked={draft === "dueDateAsc"}
               onCheckedChange={(checked) =>
-                setDraft(checked ? 'dueDateAsc' : 'none')
+                setDraft(checked ? "dueDateAsc" : "none")
               }
             />
             <label
-              htmlFor='sort-due-date-asc'
-              className='flex cursor-pointer items-center gap-2 text-sm text-content-primary'
+              htmlFor="sort-due-date-asc"
+              className="flex cursor-pointer items-center gap-2 text-sm text-content-primary"
             >
               Due date
-              <ArrowUp className='size-3.5' aria-hidden />
+              <ArrowUp className="size-3.5" aria-hidden />
             </label>
           </div>
-          <div className='flex items-center gap-3'>
+          <div className="flex items-center gap-3">
             <Checkbox
-              id='sort-due-date-desc'
-              checked={draft === 'dueDateDesc'}
+              id="sort-due-date-desc"
+              checked={draft === "dueDateDesc"}
               onCheckedChange={(checked) =>
-                setDraft(checked ? 'dueDateDesc' : 'none')
+                setDraft(checked ? "dueDateDesc" : "none")
               }
             />
             <label
-              htmlFor='sort-due-date-desc'
-              className='flex cursor-pointer items-center gap-2 text-sm text-content-primary'
+              htmlFor="sort-due-date-desc"
+              className="flex cursor-pointer items-center gap-2 text-sm text-content-primary"
             >
               Due date
-              <ArrowDown className='size-3.5' aria-hidden />
+              <ArrowDown className="size-3.5" aria-hidden />
             </label>
           </div>
         </div>
         <Button
-          type='button'
-          variant='outline'
-          className='mt-4 w-full border-primary text-primary hover:bg-primary/5'
+          type="button"
+          variant="outline"
+          className="mt-4 w-full border-primary text-primary hover:bg-primary/5"
           onClick={handleApply}
         >
           Apply

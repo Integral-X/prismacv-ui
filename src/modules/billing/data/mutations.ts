@@ -1,12 +1,12 @@
-import 'server-only';
+import "server-only";
 
-import { executeAuthenticatedRequest } from '@/shared/auth/execute-authenticated-request';
-import { apiClient } from '@/shared/http/api-client';
+import { executeAuthenticatedRequest } from "@/shared/auth/execute-authenticated-request";
+import { apiClient } from "@/shared/http/api-client";
 import type {
   CheckoutSessionContract,
   CreateCheckoutSessionRequestContract,
   PortalSessionContract,
-} from './contracts';
+} from "./contracts";
 
 export async function createCheckoutSession(
   input: CreateCheckoutSessionRequestContract
@@ -15,14 +15,14 @@ export async function createCheckoutSession(
     return apiClient.post<
       CheckoutSessionContract,
       CreateCheckoutSessionRequestContract
-    >('billing/checkout-session', input, { headers });
+    >("billing/checkout-session", input, { headers });
   });
 }
 
 export async function createPortalSession(): Promise<PortalSessionContract> {
   return executeAuthenticatedRequest(async (headers) => {
     return apiClient.post<PortalSessionContract, Record<string, never>>(
-      'billing/portal-session',
+      "billing/portal-session",
       {},
       {
         headers,

@@ -16,11 +16,11 @@ export const validateFile = (
   maxSizeMB: number
 ): ValidationResult => {
   // Check file type
-  const fileExtension = `.${file.name.split('.').pop()?.toLowerCase()}`;
+  const fileExtension = `.${file.name.split(".").pop()?.toLowerCase()}`;
   if (!acceptedFormats.includes(fileExtension)) {
     return {
       valid: false,
-      error: `Invalid file format. Please upload ${acceptedFormats.join(', ')} files.`,
+      error: `Invalid file format. Please upload ${acceptedFormats.join(", ")} files.`,
     };
   }
 

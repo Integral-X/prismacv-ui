@@ -1,5 +1,5 @@
-import type { SectionKey } from './editor-model';
-import type { SaveState } from './editor-store';
+import type { SectionKey } from "./editor-model";
+import type { SaveState } from "./editor-store";
 
 /**
  * Autosave controller for the CV editor.
@@ -21,7 +21,7 @@ import type { SaveState } from './editor-store';
 
 export type AutosaveOutcome =
   | { ok: true }
-  | { ok: false; kind: 'auth' | 'retryable' | 'fatal' };
+  | { ok: false; kind: "auth" | "retryable" | "fatal" };
 
 export interface AutosaveOptions {
   /** Persist a section (whole-array PUT — idempotent, so replay is safe). */
@@ -98,38 +98,38 @@ export function createAutosaveController(
 
     runtime.inFlight = true;
     runtime.pending = false;
-    options.onStateChange(section, 'saving');
+    options.onStateChange(section, "saving");
 
     let outcome: AutosaveOutcome;
     try {
       outcome = await options.save(section);
     } catch {
-      outcome = { ok: false, kind: 'retryable' };
+      outcome = { ok: false, kind: "retryable" };
     }
 
     runtime.inFlight = false;
 
     if (outcome.ok) {
       runtime.attempts = 0;
-      options.onStateChange(section, 'saved');
+      options.onStateChange(section, "saved");
       if (runtime.pending) void run(section);
       return;
     }
 
-    if (outcome.kind === 'auth') {
-      options.onStateChange(section, 'failed');
+    if (outcome.kind === "auth") {
+      options.onStateChange(section, "failed");
       options.onAuthExpired?.();
       return;
     }
 
-    if (outcome.kind === 'fatal') {
-      options.onStateChange(section, 'failed');
+    if (outcome.kind === "fatal") {
+      options.onStateChange(section, "failed");
       return;
     }
 
     runtime.attempts += 1;
     if (runtime.attempts >= maxAttempts) {
-      options.onStateChange(section, 'failed');
+      options.onStateChange(section, "failed");
       return;
     }
 

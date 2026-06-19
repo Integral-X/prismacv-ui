@@ -1,11 +1,11 @@
 import type {
   CvAnalysisResultContract,
   CvOptimizationResultContract,
-} from './contracts';
-import { toCvAnalysis, toCvOptimization } from './mappers';
+} from "./contracts";
+import { toCvAnalysis, toCvOptimization } from "./mappers";
 
-describe('toCvAnalysis', () => {
-  it('maps scores, issues, and suggestions into the domain shape', () => {
+describe("toCvAnalysis", () => {
+  it("maps scores, issues, and suggestions into the domain shape", () => {
     const contract = {
       overallScore: 78,
       grammarScore: 90,
@@ -13,20 +13,20 @@ describe('toCvAnalysis', () => {
       atsScore: 65,
       issues: [
         {
-          section: 'summary',
-          type: 'grammar',
-          severity: 'high',
-          message: 'Passive voice detected.',
-          suggestion: 'Use active voice.',
+          section: "summary",
+          type: "grammar",
+          severity: "high",
+          message: "Passive voice detected.",
+          suggestion: "Use active voice.",
         },
       ],
       suggestions: [
         {
-          section: 'experience',
-          type: 'improvement',
-          message: 'Quantify achievements.',
-          originalText: 'Led a team',
-          suggestedText: 'Led a team of 6 engineers',
+          section: "experience",
+          type: "improvement",
+          message: "Quantify achievements.",
+          originalText: "Led a team",
+          suggestedText: "Led a team of 6 engineers",
         },
       ],
     } satisfies CvAnalysisResultContract;
@@ -39,19 +39,19 @@ describe('toCvAnalysis', () => {
     expect(result.atsScore).toBe(65);
     expect(result.issues).toHaveLength(1);
     expect(result.issues[0]).toEqual({
-      section: 'summary',
-      type: 'grammar',
-      severity: 'high',
-      message: 'Passive voice detected.',
-      suggestion: 'Use active voice.',
+      section: "summary",
+      type: "grammar",
+      severity: "high",
+      message: "Passive voice detected.",
+      suggestion: "Use active voice.",
     });
-    expect(result.suggestions[0].originalText).toBe('Led a team');
+    expect(result.suggestions[0].originalText).toBe("Led a team");
     expect(result.suggestions[0].suggestedText).toBe(
-      'Led a team of 6 engineers'
+      "Led a team of 6 engineers"
     );
   });
 
-  it('coalesces missing optional issue and suggestion fields to null', () => {
+  it("coalesces missing optional issue and suggestion fields to null", () => {
     const contract = {
       overallScore: 50,
       grammarScore: 50,
@@ -59,17 +59,17 @@ describe('toCvAnalysis', () => {
       atsScore: 50,
       issues: [
         {
-          section: 'skills',
-          type: 'ats',
-          severity: 'low',
-          message: 'Add more keywords.',
+          section: "skills",
+          type: "ats",
+          severity: "low",
+          message: "Add more keywords.",
         },
       ],
       suggestions: [
         {
-          section: 'skills',
-          type: 'addition',
-          message: 'Add a cloud section.',
+          section: "skills",
+          type: "addition",
+          message: "Add a cloud section.",
         },
       ],
     } satisfies CvAnalysisResultContract;
@@ -82,26 +82,26 @@ describe('toCvAnalysis', () => {
   });
 });
 
-describe('toCvOptimization', () => {
-  it('maps match score, keywords, suggestions, and recommendations', () => {
+describe("toCvOptimization", () => {
+  it("maps match score, keywords, suggestions, and recommendations", () => {
     const contract = {
       matchScore: 82,
-      missingKeywords: ['Kubernetes', 'Terraform'],
+      missingKeywords: ["Kubernetes", "Terraform"],
       suggestions: [
         {
-          section: 'summary',
-          type: 'improvement',
-          message: 'Mention cloud experience.',
-          originalText: 'Backend developer',
-          suggestedText: 'Cloud-native backend developer',
+          section: "summary",
+          type: "improvement",
+          message: "Mention cloud experience.",
+          originalText: "Backend developer",
+          suggestedText: "Cloud-native backend developer",
         },
       ],
       sectionRecommendations: [
         {
-          section: 'skills',
-          action: 'add',
-          message: 'Add a DevOps section.',
-          priority: 'high',
+          section: "skills",
+          action: "add",
+          message: "Add a DevOps section.",
+          priority: "high",
         },
       ],
     } satisfies CvOptimizationResultContract;
@@ -109,29 +109,29 @@ describe('toCvOptimization', () => {
     const result = toCvOptimization(contract);
 
     expect(result.matchScore).toBe(82);
-    expect(result.missingKeywords).toEqual(['Kubernetes', 'Terraform']);
+    expect(result.missingKeywords).toEqual(["Kubernetes", "Terraform"]);
     expect(result.suggestions[0].suggestedText).toBe(
-      'Cloud-native backend developer'
+      "Cloud-native backend developer"
     );
     expect(result.sectionRecommendations[0]).toEqual({
-      section: 'skills',
-      action: 'add',
-      message: 'Add a DevOps section.',
-      priority: 'high',
+      section: "skills",
+      action: "add",
+      message: "Add a DevOps section.",
+      priority: "high",
     });
   });
 
-  it('maps empty suggestion and recommendation collections to empty arrays', () => {
+  it("maps empty suggestion and recommendation collections to empty arrays", () => {
     const contract = {
       matchScore: 40,
-      missingKeywords: ['Go'],
+      missingKeywords: ["Go"],
       suggestions: [],
       sectionRecommendations: [],
     } satisfies CvOptimizationResultContract;
 
     const result = toCvOptimization(contract);
 
-    expect(result.missingKeywords).toEqual(['Go']);
+    expect(result.missingKeywords).toEqual(["Go"]);
     expect(result.suggestions).toEqual([]);
     expect(result.sectionRecommendations).toEqual([]);
   });

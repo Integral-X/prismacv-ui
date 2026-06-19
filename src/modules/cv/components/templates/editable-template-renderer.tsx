@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import type { Cv } from '@/modules/cv/data/mappers';
+import type { Cv } from "@/modules/cv/data/mappers";
 import {
   resolveTemplate,
   templateSupportsInlineEditing,
   TemplateRenderer,
-} from './index';
-import { TwoColumnEditable } from './two-column-editable';
+} from "./index";
+import { TwoColumnEditable } from "./two-column-editable";
 
 /**
  * Edit-mode renderer. Mounts the inline-editable template for ported templates

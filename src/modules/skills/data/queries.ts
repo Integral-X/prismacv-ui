@@ -1,13 +1,13 @@
-import 'server-only';
+import "server-only";
 
-import { apiClient } from '@/shared/http/api-client';
-import { executeAuthenticatedRead } from '@/shared/auth/execute-authenticated-request';
+import { apiClient } from "@/shared/http/api-client";
+import { executeAuthenticatedRead } from "@/shared/auth/execute-authenticated-request";
 import type {
   LearningResourceContract,
   LearningRoadmapContract,
   SkillCategoryContract,
   UserSkillProgressContract,
-} from './contracts';
+} from "./contracts";
 import {
   toLearningResource,
   toLearningRoadmap,
@@ -17,16 +17,16 @@ import {
   type LearningRoadmap,
   type SkillCategory,
   type UserSkillProgress,
-} from './mappers';
+} from "./mappers";
 
 export async function getSkillCategories(): Promise<SkillCategory[]> {
   const contracts =
-    await apiClient.get<SkillCategoryContract[]>('skills/categories');
+    await apiClient.get<SkillCategoryContract[]>("skills/categories");
   return contracts.map(toSkillCategory);
 }
 
 export async function getSkillRoles(): Promise<string[]> {
-  return apiClient.get<string[]>('skills/roles');
+  return apiClient.get<string[]>("skills/roles");
 }
 
 export async function getResources(
@@ -38,7 +38,7 @@ export async function getResources(
   if (difficulty) params.difficulty = difficulty;
 
   const contracts = await apiClient.get<LearningResourceContract[]>(
-    'skills/resources',
+    "skills/resources",
     { params }
   );
   return contracts.map(toLearningResource);
@@ -47,7 +47,7 @@ export async function getResources(
 export async function getUserProgress(): Promise<UserSkillProgress[]> {
   return executeAuthenticatedRead(async (headers) => {
     const contracts = await apiClient.get<UserSkillProgressContract[]>(
-      'skills/progress',
+      "skills/progress",
       { headers }
     );
     return contracts.map(toUserSkillProgress);
@@ -59,7 +59,7 @@ export async function getLearningRoadmap(
 ): Promise<LearningRoadmap> {
   return executeAuthenticatedRead(async (headers) => {
     const contract = await apiClient.get<LearningRoadmapContract>(
-      'skills/roadmap',
+      "skills/roadmap",
       { headers, params: { role } }
     );
     return toLearningRoadmap(contract);

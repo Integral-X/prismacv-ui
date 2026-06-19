@@ -1,4 +1,4 @@
-export type KeywordImportanceContract = 'required' | 'preferred' | 'bonus';
+export type KeywordImportanceContract = "required" | "preferred" | "bonus";
 
 export interface KeywordMatchContract {
   keyword: string;

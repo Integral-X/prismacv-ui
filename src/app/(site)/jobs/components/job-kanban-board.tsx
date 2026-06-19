@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import type { Job, JobStatus } from '@/modules/jobs/data/mappers';
+import type { Job, JobStatus } from "@/modules/jobs/data/mappers";
 
-import { JOB_TRACKER_COLUMNS } from '../lib/job-tracker-types';
-import { JobKanbanColumn } from './job-kanban-column';
+import { JOB_TRACKER_COLUMNS } from "../lib/job-tracker-types";
+import { JobKanbanColumn } from "./job-kanban-column";
 
 interface JobKanbanBoardProps {
   jobsByStatus: Record<JobStatus, Job[]>;
@@ -23,7 +23,7 @@ export function JobKanbanBoard({
   isPending,
 }: JobKanbanBoardProps) {
   return (
-    <div className='mt-6 flex gap-4 overflow-x-auto pb-2'>
+    <div className="mt-6 flex gap-4 overflow-x-auto pb-2">
       {JOB_TRACKER_COLUMNS.map((status) => (
         <JobKanbanColumn
           key={status}

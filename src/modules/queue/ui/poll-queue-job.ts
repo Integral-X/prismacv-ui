@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { getQueueJobStatusAction } from '@/modules/queue/data/actions';
-import type { QueueJobStatus } from '@/modules/queue/data/mappers';
+import { getQueueJobStatusAction } from "@/modules/queue/data/actions";
+import type { QueueJobStatus } from "@/modules/queue/data/mappers";
 
 const DEFAULT_INTERVAL_MS = 1500;
 const DEFAULT_TIMEOUT_MS = 120000;
-const TERMINAL_STATES = new Set(['completed', 'failed']);
+const TERMINAL_STATES = new Set(["completed", "failed"]);
 
 export interface PollQueueJobOptions {
   jobId: string;
@@ -30,7 +30,7 @@ export async function pollQueueJob({
     }
 
     if (!response.data) {
-      throw new Error('Queue job status returned no data.');
+      throw new Error("Queue job status returned no data.");
     }
 
     onStatus?.(response.data);
@@ -42,7 +42,7 @@ export async function pollQueueJob({
     await wait(intervalMs);
   }
 
-  throw new Error('The job is taking longer than expected. Try again shortly.');
+  throw new Error("The job is taking longer than expected. Try again shortly.");
 }
 
 function wait(ms: number): Promise<void> {

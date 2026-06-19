@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
 const NavigationMenu = React.forwardRef<
   HTMLDivElement,
@@ -8,13 +8,13 @@ const NavigationMenu = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      'relative z-10 flex max-w-max flex-1 items-center justify-center',
+      "relative z-10 flex max-w-max flex-1 items-center justify-center",
       className
     )}
     {...props}
   />
 ));
-NavigationMenu.displayName = 'NavigationMenu';
+NavigationMenu.displayName = "NavigationMenu";
 
 const NavigationMenuList = React.forwardRef<
   HTMLUListElement,
@@ -23,31 +23,31 @@ const NavigationMenuList = React.forwardRef<
   <ul
     ref={ref}
     className={cn(
-      'group flex flex-1 list-none items-center justify-center',
+      "group flex flex-1 list-none items-center justify-center",
       className
     )}
     {...props}
   />
 ));
-NavigationMenuList.displayName = 'NavigationMenuList';
+NavigationMenuList.displayName = "NavigationMenuList";
 
 const NavigationMenuItem = React.forwardRef<
   HTMLLIElement,
   React.HTMLAttributes<HTMLLIElement>
 >(({ className, ...props }, ref) => (
-  <li ref={ref} className={cn('', className)} {...props} />
+  <li ref={ref} className={cn("", className)} {...props} />
 ));
-NavigationMenuItem.displayName = 'NavigationMenuItem';
+NavigationMenuItem.displayName = "NavigationMenuItem";
 
 const NavigationMenuLink = React.forwardRef<
   HTMLAnchorElement,
   React.AnchorHTMLAttributes<HTMLAnchorElement>
 >(({ className, children, ...props }, ref) => (
-  <a ref={ref} className={cn('', className)} {...props}>
+  <a ref={ref} className={cn("", className)} {...props}>
     {children}
   </a>
 ));
-NavigationMenuLink.displayName = 'NavigationMenuLink';
+NavigationMenuLink.displayName = "NavigationMenuLink";
 
 export {
   NavigationMenu,

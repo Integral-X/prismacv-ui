@@ -1,6 +1,6 @@
 // ─── Response contracts ─────────────────────────────────────────────────────
 
-export type InterviewDifficultyContract = 'EASY' | 'MEDIUM' | 'HARD';
+export type InterviewDifficultyContract = "EASY" | "MEDIUM" | "HARD";
 
 export interface InterviewQuestionContract {
   id: string;

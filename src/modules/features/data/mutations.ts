@@ -1,7 +1,7 @@
-import 'server-only';
+import "server-only";
 
-import { apiClient } from '@/shared/http/api-client';
-import { executeAuthenticatedRequest } from '@/shared/auth/execute-authenticated-request';
+import { apiClient } from "@/shared/http/api-client";
+import { executeAuthenticatedRequest } from "@/shared/auth/execute-authenticated-request";
 
 export interface RefreshUnleashFeaturesPayload {
   success: boolean;
@@ -11,7 +11,7 @@ export interface RefreshUnleashFeaturesPayload {
 
 export async function refreshUnleashFeaturesFromServer(): Promise<RefreshUnleashFeaturesPayload> {
   return executeAuthenticatedRequest(async (headers) => {
-    return apiClient.get<RefreshUnleashFeaturesPayload>('features/refresh', {
+    return apiClient.get<RefreshUnleashFeaturesPayload>("features/refresh", {
       headers,
     });
   });

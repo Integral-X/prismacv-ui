@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Target } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Target } from "lucide-react";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -13,44 +13,44 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 import {
   manualCreateJobSchema,
   quickAddJobSchema,
   type ManualCreateJobFormData,
   type QuickAddJobFormData,
-} from '@/lib/validations/jobs';
-import type { CvListItem } from '@/modules/cv/data/mappers';
-import type { JobStatus } from '@/modules/jobs/data/mappers';
-import { REVERSE_STATUS_MAP } from '@/modules/jobs/data/mappers';
+} from "@/lib/validations/jobs";
+import type { CvListItem } from "@/modules/cv/data/mappers";
+import type { JobStatus } from "@/modules/jobs/data/mappers";
+import { REVERSE_STATUS_MAP } from "@/modules/jobs/data/mappers";
 
-import { titleFromJobUrl } from '../lib/job-tracker-utils';
-import { JOB_COLUMN_THEMES } from './job-column-config';
-import { JobCvPicker } from './job-cv-picker';
-import { JobManualFormFields } from './job-manual-form-fields';
+import { titleFromJobUrl } from "../lib/job-tracker-utils";
+import { JOB_COLUMN_THEMES } from "./job-column-config";
+import { JobCvPicker } from "./job-cv-picker";
+import { JobManualFormFields } from "./job-manual-form-fields";
 
-type AddJobMode = 'quick' | 'manual';
+type AddJobMode = "quick" | "manual";
 
 function createManualDefaults(
   initialStatus: JobStatus,
   cvs: CvListItem[]
 ): ManualCreateJobFormData {
   return {
-    title: '',
-    company: '',
-    location: '',
-    jobType: 'remote',
-    expertise: 'senior',
-    appliedDate: '',
-    applicationDeadline: '',
-    source: 'linkedin',
+    title: "",
+    company: "",
+    location: "",
+    jobType: "remote",
+    expertise: "senior",
+    appliedDate: "",
+    applicationDeadline: "",
+    source: "linkedin",
     status: REVERSE_STATUS_MAP[initialStatus],
-    url: '',
-    description: '',
-    cvId: cvs[0]?.id ?? '',
+    url: "",
+    description: "",
+    cvId: cvs[0]?.id ?? "",
   };
 }
 
@@ -73,11 +73,11 @@ export function JobAddDialog({
   onQuickAdd,
   onManualAdd,
 }: JobAddDialogProps) {
-  const [mode, setMode] = useState<AddJobMode>('quick');
+  const [mode, setMode] = useState<AddJobMode>("quick");
 
   const quickForm = useForm<QuickAddJobFormData>({
     resolver: zodResolver(quickAddJobSchema),
-    defaultValues: { url: '' },
+    defaultValues: { url: "" },
   });
 
   const manualForm = useForm<ManualCreateJobFormData>({
@@ -89,8 +89,8 @@ export function JobAddDialog({
     if (!open) return;
 
     manualForm.reset(createManualDefaults(initialStatus, cvs));
-    quickForm.reset({ url: '' });
-    setMode('quick');
+    quickForm.reset({ url: "" });
+    setMode("quick");
   }, [open, initialStatus, cvs, manualForm, quickForm]);
 
   function handleQuickSubmit(data: QuickAddJobFormData) {
@@ -104,108 +104,108 @@ export function JobAddDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className='max-h-[min(90svh,880px)] max-w-2xl overflow-y-auto'
-        aria-describedby='add-job-dialog-description'
+        className="max-h-[min(90svh,880px)] max-w-2xl overflow-y-auto"
+        aria-describedby="add-job-dialog-description"
       >
-        <DialogHeader className='items-center text-center'>
-          <div className='mb-2 flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary'>
-            <Target className='size-6' aria-hidden />
+        <DialogHeader className="items-center text-center">
+          <div className="mb-2 flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <Target className="size-6" aria-hidden />
           </div>
           <DialogTitle>Add a new job</DialogTitle>
-          <DialogDescription id='add-job-dialog-description'>
-            Paste a job link to add to your job tracker. New jobs start in{' '}
+          <DialogDescription id="add-job-dialog-description">
+            Paste a job link to add to your job tracker. New jobs start in{" "}
             {JOB_COLUMN_THEMES[initialStatus].label}.
           </DialogDescription>
         </DialogHeader>
 
-        <div className='flex gap-2 rounded-lg bg-surface-page p-1'>
+        <div className="flex gap-2 rounded-lg bg-surface-page p-1">
           <Button
-            type='button'
-            variant={mode === 'quick' ? 'default' : 'ghost'}
+            type="button"
+            variant={mode === "quick" ? "default" : "ghost"}
             className={cn(
-              'flex-1',
-              mode !== 'quick' && 'text-content-secondary'
+              "flex-1",
+              mode !== "quick" && "text-content-secondary"
             )}
-            onClick={() => setMode('quick')}
+            onClick={() => setMode("quick")}
           >
             Quick add
           </Button>
           <Button
-            type='button'
-            variant={mode === 'manual' ? 'default' : 'ghost'}
+            type="button"
+            variant={mode === "manual" ? "default" : "ghost"}
             className={cn(
-              'flex-1',
-              mode !== 'manual' && 'text-content-secondary'
+              "flex-1",
+              mode !== "manual" && "text-content-secondary"
             )}
-            onClick={() => setMode('manual')}
+            onClick={() => setMode("manual")}
           >
             Add Manually
           </Button>
         </div>
 
-        {mode === 'quick' ? (
+        {mode === "quick" ? (
           <form
             onSubmit={quickForm.handleSubmit(handleQuickSubmit)}
-            className='space-y-4'
+            className="space-y-4"
           >
-            <div className='space-y-2'>
-              <Label htmlFor='job-post-url'>Job Post Link</Label>
+            <div className="space-y-2">
+              <Label htmlFor="job-post-url">Job Post Link</Label>
               <Input
-                id='job-post-url'
-                type='url'
-                placeholder='https://...'
+                id="job-post-url"
+                type="url"
+                placeholder="https://..."
                 aria-invalid={!!quickForm.formState.errors.url}
-                {...quickForm.register('url')}
+                {...quickForm.register("url")}
               />
               {quickForm.formState.errors.url ? (
-                <p role='alert' className='text-xs text-feedback-error'>
+                <p role="alert" className="text-xs text-feedback-error">
                   {quickForm.formState.errors.url.message}
                 </p>
               ) : null}
-              <p className='text-xs text-content-muted'>
-                We&apos;ll use the link as the listing. Title defaults to{' '}
-                {quickForm.watch('url')
-                  ? `"${titleFromJobUrl(quickForm.watch('url'))}"`
-                  : 'the site name'}
+              <p className="text-xs text-content-muted">
+                We&apos;ll use the link as the listing. Title defaults to{" "}
+                {quickForm.watch("url")
+                  ? `"${titleFromJobUrl(quickForm.watch("url"))}"`
+                  : "the site name"}
                 .
               </p>
             </div>
-            <DialogFooter className='gap-2 sm:justify-between'>
+            <DialogFooter className="gap-2 sm:justify-between">
               <Button
-                type='button'
-                variant='ghost'
+                type="button"
+                variant="ghost"
                 onClick={() => onOpenChange(false)}
                 disabled={isPending}
               >
                 Cancel
               </Button>
-              <Button type='submit' disabled={isPending}>
-                {isPending ? 'Adding...' : 'Add Job'}
+              <Button type="submit" disabled={isPending}>
+                {isPending ? "Adding..." : "Add Job"}
               </Button>
             </DialogFooter>
           </form>
         ) : (
           <form
             onSubmit={manualForm.handleSubmit(handleManualSubmit)}
-            className='space-y-4'
+            className="space-y-4"
           >
             <JobManualFormFields form={manualForm} />
             <JobCvPicker
               cvs={cvs}
-              selectedCvId={manualForm.watch('cvId') ?? ''}
-              onCvChange={(cvId) => manualForm.setValue('cvId', cvId)}
+              selectedCvId={manualForm.watch("cvId") ?? ""}
+              onCvChange={(cvId) => manualForm.setValue("cvId", cvId)}
             />
-            <DialogFooter className='gap-2 sm:justify-between'>
+            <DialogFooter className="gap-2 sm:justify-between">
               <Button
-                type='button'
-                variant='ghost'
+                type="button"
+                variant="ghost"
                 onClick={() => onOpenChange(false)}
                 disabled={isPending}
               >
                 Cancel
               </Button>
-              <Button type='submit' disabled={isPending}>
-                {isPending ? 'Adding...' : 'Add Job'}
+              <Button type="submit" disabled={isPending}>
+                {isPending ? "Adding..." : "Add Job"}
               </Button>
             </DialogFooter>
           </form>

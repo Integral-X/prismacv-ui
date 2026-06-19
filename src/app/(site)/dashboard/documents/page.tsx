@@ -1,9 +1,9 @@
-import { getCurrentUser } from '@/modules/auth/data/queries';
-import { getUserCvs } from '@/modules/cv/data/queries';
+import { getCurrentUser } from "@/modules/auth/data/queries";
+import { getUserCvs } from "@/modules/cv/data/queries";
 
-import { DocumentsPageClient } from './documents-page-client';
+import { DocumentsPageClient } from "./documents-page-client";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function DocumentsPage() {
   const [cvList, user] = await Promise.all([getUserCvs(), getCurrentUser()]);
@@ -16,7 +16,7 @@ export default async function DocumentsPage() {
           ? {
               email: user.email,
               name: user.name,
-              isAdmin: user.role === 'admin',
+              isAdmin: user.role === "admin",
             }
           : null
       }

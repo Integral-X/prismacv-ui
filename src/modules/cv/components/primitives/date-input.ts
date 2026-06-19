@@ -2,8 +2,8 @@
  *  editors (experience, education, projects, certifications). */
 
 export function toDateInputValue(date: Date | null): string {
-  if (!date) return '';
-  return date.toISOString().split('T')[0];
+  if (!date) return "";
+  return date.toISOString().split("T")[0];
 }
 
 export function fromDateInputValue(value: string): Date | null {
@@ -13,4 +13,4 @@ export function fromDateInputValue(value: string): Date | null {
 }
 
 export const DATE_INPUT_CLASS =
-  'rounded border border-subtle bg-transparent px-1 py-0.5 text-[10px] text-content-tertiary';
+  "rounded border border-subtle bg-transparent px-1 py-0.5 text-[10px] text-content-tertiary";

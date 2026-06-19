@@ -1,4 +1,4 @@
-import type { TemplateProps } from './index';
+import type { TemplateProps } from "./index";
 import {
   CertificationEntry,
   EducationEntry,
@@ -8,7 +8,7 @@ import {
   ResumeHeader,
   Section,
   SkillGroups,
-} from './resume-sections';
+} from "./resume-sections";
 
 /**
  * Display-only two-column resume (wide main + narrow sidebar) in the Enhancv
@@ -28,24 +28,24 @@ export function TwoColumnDisplay({ cv, accentColor }: TemplateProps) {
   } = cv;
 
   return (
-    <div className='mx-auto min-h-[297mm] w-[210mm] bg-white p-10 text-content-primary shadow-lg'>
+    <div className="mx-auto min-h-[297mm] w-[210mm] bg-white p-10 text-content-primary shadow-lg">
       {personalInfo && (
         <ResumeHeader info={personalInfo} accentColor={accentColor} />
       )}
 
-      <div className='mt-6 grid grid-cols-3 gap-8'>
+      <div className="mt-6 grid grid-cols-3 gap-8">
         {/* Main column (wide, left) */}
-        <div className='col-span-2 space-y-5'>
+        <div className="col-span-2 space-y-5">
           {personalInfo?.summary && (
-            <Section title='Summary'>
-              <p className='text-xs leading-relaxed text-content-secondary'>
+            <Section title="Summary">
+              <p className="text-xs leading-relaxed text-content-secondary">
                 {personalInfo.summary}
               </p>
             </Section>
           )}
 
           {experiences.length > 0 && (
-            <Section title='Experience'>
+            <Section title="Experience">
               {experiences.map((exp) => (
                 <ExperienceEntry
                   key={exp.id}
@@ -57,7 +57,7 @@ export function TwoColumnDisplay({ cv, accentColor }: TemplateProps) {
           )}
 
           {projects.length > 0 && (
-            <Section title='Projects'>
+            <Section title="Projects">
               {projects.map((project) => (
                 <ProjectEntry
                   key={project.id}
@@ -70,15 +70,15 @@ export function TwoColumnDisplay({ cv, accentColor }: TemplateProps) {
         </div>
 
         {/* Side column (narrow, right) */}
-        <div className='col-span-1 space-y-5'>
+        <div className="col-span-1 space-y-5">
           {skills.length > 0 && (
-            <Section title='Skills'>
+            <Section title="Skills">
               <SkillGroups skills={skills} accentColor={accentColor} />
             </Section>
           )}
 
           {education.length > 0 && (
-            <Section title='Education'>
+            <Section title="Education">
               {education.map((entry) => (
                 <EducationEntry
                   key={entry.id}
@@ -90,7 +90,7 @@ export function TwoColumnDisplay({ cv, accentColor }: TemplateProps) {
           )}
 
           {certifications.length > 0 && (
-            <Section title='Certifications'>
+            <Section title="Certifications">
               {certifications.map((cert) => (
                 <CertificationEntry key={cert.id} certification={cert} />
               ))}
@@ -98,8 +98,8 @@ export function TwoColumnDisplay({ cv, accentColor }: TemplateProps) {
           )}
 
           {languages.length > 0 && (
-            <Section title='Languages'>
-              <div className='space-y-1'>
+            <Section title="Languages">
+              <div className="space-y-1">
                 {languages.map((language) => (
                   <LanguageEntry key={language.id} language={language} />
                 ))}

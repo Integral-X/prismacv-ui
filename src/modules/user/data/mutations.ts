@@ -1,13 +1,13 @@
-import 'server-only';
+import "server-only";
 
-import { apiClient } from '@/shared/http/api-client';
-import { executeAuthenticatedRequest } from '@/shared/auth/execute-authenticated-request';
+import { apiClient } from "@/shared/http/api-client";
+import { executeAuthenticatedRequest } from "@/shared/auth/execute-authenticated-request";
 import type {
   AvatarUploadResponseContract,
   UpdateProfileRequest,
   UserProfileResponseContract,
-} from './contracts';
-import { toUserProfile, type UserProfile } from './mappers';
+} from "./contracts";
+import { toUserProfile, type UserProfile } from "./mappers";
 
 export async function updateProfile(
   body: UpdateProfileRequest
@@ -16,7 +16,7 @@ export async function updateProfile(
     const contract = await apiClient.patch<
       UserProfileResponseContract,
       UpdateProfileRequest
-    >('users/me', body, { headers });
+    >("users/me", body, { headers });
 
     return toUserProfile(contract);
   });
@@ -25,9 +25,9 @@ export async function updateProfile(
 export async function uploadAvatar(file: File): Promise<string> {
   return executeAuthenticatedRequest(async (headers) => {
     const formData = new FormData();
-    formData.append('avatar', file);
+    formData.append("avatar", file);
     const contract = await apiClient.postFormData<AvatarUploadResponseContract>(
-      'users/me/avatar',
+      "users/me/avatar",
       formData,
       { headers }
     );
@@ -37,6 +37,6 @@ export async function uploadAvatar(file: File): Promise<string> {
 
 export async function deleteAccount(): Promise<void> {
   return executeAuthenticatedRequest(async (headers) => {
-    await apiClient.delete<void>('users/me', { headers });
+    await apiClient.delete<void>("users/me", { headers });
   });
 }

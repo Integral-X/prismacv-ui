@@ -1,9 +1,9 @@
-import { notFound } from 'next/navigation';
-import { getCvById, getTemplates } from '@/modules/cv/data/queries';
-import { HttpError } from '@/shared/http/http-error';
-import { TemplateSelectionClient } from './template-selection-client';
+import { notFound } from "next/navigation";
+import { getCvById, getTemplates } from "@/modules/cv/data/queries";
+import { HttpError } from "@/shared/http/http-error";
+import { TemplateSelectionClient } from "./template-selection-client";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 interface TemplateSelectionPageProps {
   params: Promise<{ id: string }>;

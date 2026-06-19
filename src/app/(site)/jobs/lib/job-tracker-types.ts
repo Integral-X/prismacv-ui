@@ -1,12 +1,12 @@
-import type { JobStatus } from '@/modules/jobs/data/mappers';
+import type { JobStatus } from "@/modules/jobs/data/mappers";
 
-export type JobSortOption = 'dueDateAsc' | 'dueDateDesc' | 'none';
+export type JobSortOption = "dueDateAsc" | "dueDateDesc" | "none";
 
-export type JobDateFilter = '7' | '14' | '30';
+export type JobDateFilter = "7" | "14" | "30";
 
-export type JobTypeFilter = 'remote' | 'onsite' | 'hybrid';
+export type JobTypeFilter = "remote" | "onsite" | "hybrid";
 
-export type JobSourceFilter = 'linkedin' | 'facebook' | 'other';
+export type JobSourceFilter = "linkedin" | "facebook" | "other";
 
 export interface JobTrackerFilters {
   search: string;
@@ -17,17 +17,17 @@ export interface JobTrackerFilters {
 }
 
 export const DEFAULT_JOB_TRACKER_FILTERS: JobTrackerFilters = {
-  search: '',
-  sort: 'none',
+  search: "",
+  sort: "none",
   dateApplied: [],
   jobTypes: [],
   sources: [],
 };
 
 export const JOB_TRACKER_COLUMNS: JobStatus[] = [
-  'saved',
-  'applied',
-  'interview',
-  'offer',
-  'rejected',
+  "saved",
+  "applied",
+  "interview",
+  "offer",
+  "rejected",
 ];

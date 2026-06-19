@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import { useRef, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
-import { Loader2 } from 'lucide-react';
-import { toast } from 'sonner';
+import { useRef, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   AVATAR_ACCEPTED_TYPES,
   AVATAR_MAX_BYTES,
-} from '@/lib/validations/user';
-import type { UserProfile } from '@/modules/user/data/mappers';
+} from "@/lib/validations/user";
+import type { UserProfile } from "@/modules/user/data/mappers";
 import {
   removeAvatarAction,
   uploadAvatarAction,
-} from '@/modules/user/data/actions';
+} from "@/modules/user/data/actions";
 
 interface ProfilePhotoCardProps {
   user: UserProfile;
@@ -25,9 +25,9 @@ interface ProfilePhotoCardProps {
 function getInitials(name: string | null, email: string): string {
   if (name) {
     return name
-      .split(' ')
+      .split(" ")
       .map((part) => part[0])
-      .join('')
+      .join("")
       .toUpperCase()
       .slice(0, 2);
   }
@@ -46,7 +46,7 @@ export function ProfilePhotoCard({ user }: ProfilePhotoCardProps) {
 
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
-    event.target.value = '';
+    event.target.value = "";
 
     if (!file) {
       return;
@@ -57,23 +57,23 @@ export function ProfilePhotoCard({ user }: ProfilePhotoCardProps) {
         file.type as (typeof AVATAR_ACCEPTED_TYPES)[number]
       )
     ) {
-      toast.error('Please upload a JPG or PNG image.');
+      toast.error("Please upload a JPG or PNG image.");
       return;
     }
 
     if (file.size > AVATAR_MAX_BYTES) {
-      toast.error('Image must be 2MB or smaller.');
+      toast.error("Image must be 2MB or smaller.");
       return;
     }
 
     const formData = new FormData();
-    formData.append('avatar', file);
+    formData.append("avatar", file);
 
     startTransition(async () => {
       const result = await uploadAvatarAction(formData);
 
       if (result.ok) {
-        toast.success(result.message ?? 'Profile photo updated');
+        toast.success(result.message ?? "Profile photo updated");
         router.refresh();
       } else {
         toast.error(result.message);
@@ -86,7 +86,7 @@ export function ProfilePhotoCard({ user }: ProfilePhotoCardProps) {
       const result = await removeAvatarAction();
 
       if (result.ok) {
-        toast.success(result.message ?? 'Profile photo removed');
+        toast.success(result.message ?? "Profile photo removed");
         router.refresh();
       } else {
         toast.error(result.message);
@@ -94,49 +94,49 @@ export function ProfilePhotoCard({ user }: ProfilePhotoCardProps) {
     });
   }
 
-  const displayName = user.name ?? 'No name set';
+  const displayName = user.name ?? "No name set";
 
   return (
-    <Card className='border-subtle shadow-card'>
-      <CardContent className='flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between'>
-        <div className='flex items-center gap-4'>
-          <Avatar className='size-16 border border-subtle'>
+    <Card className="border-subtle shadow-card">
+      <CardContent className="flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-4">
+          <Avatar className="size-16 border border-subtle">
             {user.avatarUrl ? (
               <AvatarImage src={user.avatarUrl} alt={displayName} />
             ) : null}
-            <AvatarFallback className='bg-surface-elevated text-lg text-content-primary'>
+            <AvatarFallback className="bg-surface-elevated text-lg text-content-primary">
               {getInitials(user.name, user.email)}
             </AvatarFallback>
           </Avatar>
           <div>
-            <p className='font-semibold text-content-primary'>{displayName}</p>
-            <p className='text-sm text-content-muted'>JPG or PNG, max 2MB</p>
+            <p className="font-semibold text-content-primary">{displayName}</p>
+            <p className="text-sm text-content-muted">JPG or PNG, max 2MB</p>
           </div>
         </div>
 
-        <div className='flex flex-wrap gap-3'>
+        <div className="flex flex-wrap gap-3">
           <input
             ref={fileInputRef}
-            type='file'
-            accept={AVATAR_ACCEPTED_TYPES.join(',')}
-            className='sr-only'
-            aria-label='Upload profile photo'
+            type="file"
+            accept={AVATAR_ACCEPTED_TYPES.join(",")}
+            className="sr-only"
+            aria-label="Upload profile photo"
             onChange={handleFileChange}
             disabled={isPending}
           />
           <Button
-            type='button'
-            variant='outline'
+            type="button"
+            variant="outline"
             onClick={handleUploadClick}
             disabled={isPending}
           >
-            {isPending ? <Loader2 className='size-4 animate-spin' /> : null}
+            {isPending ? <Loader2 className="size-4 animate-spin" /> : null}
             Upload Photo
           </Button>
           <Button
-            type='button'
-            variant='outline'
-            className='border-destructive text-destructive hover:bg-destructive/10 hover:text-destructive'
+            type="button"
+            variant="outline"
+            className="border-destructive text-destructive hover:bg-destructive/10 hover:text-destructive"
             onClick={handleRemove}
             disabled={isPending || !user.avatarUrl}
           >

@@ -1,13 +1,13 @@
-import 'server-only';
+import "server-only";
 
-import { apiClient } from '@/shared/http/api-client';
-import { executeAuthenticatedRead } from '@/shared/auth/execute-authenticated-request';
+import { apiClient } from "@/shared/http/api-client";
+import { executeAuthenticatedRead } from "@/shared/auth/execute-authenticated-request";
 import type {
   CvResponseContract,
   CvShareResponseContract,
   PaginatedCvListContract,
   TemplateContract,
-} from './contracts';
+} from "./contracts";
 import {
   toCv,
   toCvShareInfo,
@@ -17,7 +17,7 @@ import {
   type CvShareInfo,
   type CvTemplate,
   type PaginatedCvList,
-} from './mappers';
+} from "./mappers";
 
 // ─── Queries ──────────────────────────────────────────────────────────────────
 
@@ -30,7 +30,7 @@ export async function getUserCvs(
     if (page !== undefined) params.page = page;
     if (limit !== undefined) params.limit = limit;
 
-    const contract = await apiClient.get<PaginatedCvListContract>('cv', {
+    const contract = await apiClient.get<PaginatedCvListContract>("cv", {
       headers,
       params,
     });
@@ -50,7 +50,7 @@ export async function getCvById(id: string): Promise<Cv> {
 }
 
 export async function getTemplates(): Promise<CvTemplate[]> {
-  const contracts = await apiClient.get<TemplateContract[]>('cv/templates');
+  const contracts = await apiClient.get<TemplateContract[]>("cv/templates");
 
   return contracts.map(toTemplate);
 }

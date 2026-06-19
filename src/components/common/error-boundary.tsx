@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { Component, type ErrorInfo, type ReactNode } from 'react';
-import { RotateCw, TriangleAlert } from 'lucide-react';
-import { captureUiException } from '@/shared/monitoring/sentry';
+import { Component, type ErrorInfo, type ReactNode } from "react";
+import { RotateCw, TriangleAlert } from "lucide-react";
+import { captureUiException } from "@/shared/monitoring/sentry";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -51,19 +51,19 @@ export class ErrorBoundary extends Component<
 
     return (
       <div
-        role='alert'
-        className='flex flex-col items-center gap-2 rounded-lg border border-subtle bg-surface-card p-4 text-center'
+        role="alert"
+        className="flex flex-col items-center gap-2 rounded-lg border border-subtle bg-surface-card p-4 text-center"
       >
-        <TriangleAlert className='size-5 text-feedback-error' />
-        <p className='text-sm text-content-secondary'>
-          The {this.props.label ?? 'section'} couldn&apos;t load.
+        <TriangleAlert className="size-5 text-feedback-error" />
+        <p className="text-sm text-content-secondary">
+          The {this.props.label ?? "section"} couldn&apos;t load.
         </p>
         <button
-          type='button'
+          type="button"
           onClick={this.handleRetry}
-          className='flex items-center gap-1.5 text-sm font-medium text-interactive-link hover:underline'
+          className="flex items-center gap-1.5 text-sm font-medium text-interactive-link hover:underline"
         >
-          <RotateCw className='size-3.5' />
+          <RotateCw className="size-3.5" />
           Try again
         </button>
       </div>

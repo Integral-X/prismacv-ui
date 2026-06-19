@@ -1,10 +1,10 @@
-import { getUserCvs } from '@/modules/cv/data/queries';
-import { getJobs, getJobStats } from '@/modules/jobs/data/queries';
-import { getCurrentUser } from '@/modules/auth/data/queries';
+import { getUserCvs } from "@/modules/cv/data/queries";
+import { getJobs, getJobStats } from "@/modules/jobs/data/queries";
+import { getCurrentUser } from "@/modules/auth/data/queries";
 
-import { DashboardPageClient } from './dashboard-page-client';
+import { DashboardPageClient } from "./dashboard-page-client";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
   const [cvList, jobs, stats, user] = await Promise.all([
@@ -24,7 +24,7 @@ export default async function DashboardPage() {
           ? {
               email: user.email,
               name: user.name,
-              isAdmin: user.role === 'admin',
+              isAdmin: user.role === "admin",
             }
           : null
       }

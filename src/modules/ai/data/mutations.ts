@@ -1,18 +1,18 @@
-import 'server-only';
+import "server-only";
 
-import { apiClient } from '@/shared/http/api-client';
-import { executeAuthenticatedRequest } from '@/shared/auth/execute-authenticated-request';
+import { apiClient } from "@/shared/http/api-client";
+import { executeAuthenticatedRequest } from "@/shared/auth/execute-authenticated-request";
 import type {
   CvAnalysisResultContract,
   CvOptimizationResultContract,
   OptimizeCvRequest,
-} from './contracts';
+} from "./contracts";
 import {
   toCvAnalysis,
   toCvOptimization,
   type CvAnalysisResult,
   type CvOptimizationResult,
-} from './mappers';
+} from "./mappers";
 
 export async function analyzeCv(cvId: string): Promise<CvAnalysisResult> {
   return executeAuthenticatedRequest(async (headers) => {
